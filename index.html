@@ -1,132 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>G4S Cumilla</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      min-height: 100vh;
-      background: #f4f6f8;
-    }
+    <meta charset="UTF-8">
+    <title>G4S Cumilla Internal Dashboard</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    /* Sidebar */
-    .sidebar {
-      width: 230px;
-      background: #003a75;
-      color: #fff;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .sidebar h2 {
-      margin-top: 0;
-      font-size: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 10px;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #90e0ef);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+        }
 
-    .sidebar a {
-      display: block;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 8px;
-      margin: 6px 0;
-      border-radius: 4px;
-      transition: background 0.3s;
-    }
+        /* ===== Side Panel ===== */
+        .side-panel {
+            width: 220px;
+            background: #023e8a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+        }
 
-    .sidebar a:hover {
-      background: rgba(255,255,255,0.2);
-    }
+        .side-panel h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 20px;
+            color: #90e0ef;
+        }
 
-    /* Main */
-    .main {
-      flex: 1;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        .side-panel a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            transition: 0.2s;
+        }
 
-    header {
-      background: #0059b3;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 6px;
-    }
+        .side-panel a:hover {
+            background: #0077b6;
+        }
 
-    .cards {
-      margin-top: 25px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+        .side-panel a i {
+            margin-right: 10px; /* space between icon and text */
+            width: 20px; /* align icons nicely */
+            text-align: center;
+        }
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-decoration: none;
-      color: #003a75;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+        /* ===== Main Content ===== */
+        .main-content {
+            margin-left: 220px; /* space for sidebar */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 20px 20px 20px;
+        }
 
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
+        header img {
+            width: 150px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
-    footer {
-      margin-top: 30px;
-      text-align: center;
-      color: #666;
-      font-size: 13px;
-    }
-  </style>
+        header h1 {
+            font-size: 28px;
+            color: #023e8a;
+            text-shadow: 1px 1px 2px #90e0ef;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #0077b6;
+        }
+
+        /* Links container */
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .link-card {
+            flex: 1 1 220px;
+            max-width: 250px;
+            background: linear-gradient(135deg, #00b4d8, #90e0ef);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .link-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .link-card a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: #023e8a;
+            color: #fff;
+            padding: 30px 20px;
+            margin-top: auto;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        footer h3 {
+            margin-bottom: 10px;
+            color: #90e0ef;
+        }
+
+        footer p, footer a {
+            margin: 5px 0;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media(max-width: 800px){
+            body {
+                flex-direction: column;
+            }
+            .side-panel {
+                width: 100%;
+                position: relative;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+            }
+            .side-panel h2 { display: none; }
+            .main-content { margin-left: 0; }
+            .side-panel a {
+                justify-content: center;
+            }
+        }
+
+        @media(max-width: 600px){
+            .link-card {
+                max-width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>G4S Cumilla</h2>
-    <a href="#">Homepage</a>
-    <a href="#">Prepare Resign Application</a>
-    <a href="#">Advance Resignation Application</a>
-    <a href="#">Contact Us</a>
-    <a href="#">Admin Login</a>
-  </div>
-
-  <!-- Main content -->
-  <div class="main">
-    <header>
-      <h1>Application Services</h1>
-      <p>Select the required application below</p>
-    </header>
-
-    <div class="cards">
-      <a href="#" class="card">
-        <h3>Prepare Resign Application</h3>
-        <p>Create a standard resignation application quickly and easily.</p>
-      </a>
-
-      <a href="#" class="card">
-        <h3>Advance Resignation Application</h3>
-        <p>Generate advance or future-dated resignation applications.</p>
-      </a>
+    <!-- Side Panel -->
+    <div class="side-panel">
+        <h2>Menu</h2>
+        <a href="#"><i class="fas fa-home"></i>1st Homepage</a>
+        <a href="#"><i class="fas fa-info-circle"></i>About Us</a>
+        <a href="#"><i class="fas fa-phone"></i>Contact Us</a>
+        <a href="#"><i class="fas fa-user-cog"></i>Contact Site Developer</a>
+        <a href="#"><i class="fas fa-user-shield"></i>Admin Login</a>
+        <a href="#"><i class="fas fa-question-circle"></i>FAQ</a>
     </div>
 
-    <footer>
-      © G4S Cumilla
-    </footer>
-  </div>
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Header -->
+        <header>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6fv3jsDMTW4K3Im-Va96luwyl_0r15s9j8OV0eokWDw&s=10" alt="G4S Logo">
+            <h1>G4S Cumilla Internal Dashboard</h1>
+            <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+        </header>
+
+        <!-- Links -->
+        <div class="links-container">
+            <div class="link-card">
+                <a href="Parent_Folder/ResignApp" target="_blank">Prepare Resignation Letter</a>
+            </div>
+            <div class="link-card">
+                <a href="#" target="_blank">Prepare Advance Resignation Letter</a>
+            </div>
+            <div class="link-card">
+                <a href="#" target="_blank">Prepare Training Sheet</a>
+            </div>
+            <div class="link-card">
+                <a href="#" target="_blank">Other Links</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div>
+                <h3>About Us</h3>
+                <p>G4S Cumilla provides professional security services to ensure safety and protection for clients in the region.</p>
+            </div>
+            <div>
+                <h3>Contact Us</h3>
+                <p>Address: G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
+                <p>Phone: +8801313-209156</p>
+                <p>Email: <a href="mailto:abdullahil.kaufi@bd.g4s.com">abdullahil.kaufi@bd.g4s.com</a></p>
+            </div>
+            <p>© 2026 G4S Cumilla Internal Dashboard. All rights reserved.</p>
+        </footer>
+
+    </div>
 
 </body>
 </html>
