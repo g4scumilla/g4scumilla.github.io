@@ -7,130 +7,114 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      display: flex;
-      min-height: 100vh;
-      background-color: #f4f4f4;
+      background-color: #f9f9f9;
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 220px;
+    /* Header */
+    header {
       background-color: #004080;
       color: white;
       padding: 20px;
-      box-sizing: border-box;
+      text-align: center;
     }
-    .sidebar h2 {
-      margin-top: 0;
-      font-size: 20px;
+    header h1 {
+      margin: 0;
+      font-size: 26px;
     }
-    .sidebar a {
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #0070c0;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
       color: white;
       text-decoration: none;
-      display: block;
-      margin: 10px 0;
+      margin: 0 15px;
+      font-weight: bold;
     }
-    .sidebar a:hover {
+    nav a:hover {
       text-decoration: underline;
     }
 
     /* Main content */
-    .main {
-      flex: 1;
+    .content {
       padding: 40px 20px;
       text-align: center;
     }
-
-    header {
-      background-color: #0070c0;
-      color: white;
-      padding: 20px;
-      margin-bottom: 30px;
+    .content h2 {
+      color: #004080;
     }
-
-    footer {
-      background-color: #f1f1f1;
-      color: gray;
-      padding: 10px;
-      margin-top: 40px;
-      text-align: center;
-      font-size: 12px;
+    .buttons {
+      margin-top: 30px;
     }
-
-    /* Dashboard Buttons */
-    .button {
+    .buttons a {
       display: inline-block;
-      margin: 20px 15px;
-      padding: 25px 50px;
+      margin: 15px;
+      padding: 20px 40px;
       background-color: #0070c0;
       color: white;
-      text-decoration: none;
       font-size: 18px;
-      border-radius: 10px;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
     }
-    .button:hover {
+    .buttons a:hover {
       background-color: #005a90;
       transform: scale(1.05);
     }
 
-    p {
-      font-size: 16px;
-      color: #333;
+    /* Footer */
+    footer {
+      background-color: #f1f1f1;
+      color: gray;
+      text-align: center;
+      padding: 15px;
+      font-size: 12px;
+      margin-top: 40px;
     }
 
     @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-      }
-      .main {
-        padding: 20px 10px;
-      }
-      .button {
+      .buttons a {
         width: 80%;
-        margin: 15px 0;
+        margin: 10px 0;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>Resignation Portal</h2>
+  <header>
+    <h1>G4S Cumilla Internal Dashboard</h1>
+    <p>Quick access to resignation forms and submitted PDFs</p>
+  </header>
+
+  <nav>
     <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+
+  <div class="content">
+    <h2>Resignation Portal</h2>
+    <p>Select a service below:</p>
+
+    <div class="buttons">
+      <a href="Resignation_Form.html" target="_blank">Prepare Resignation Letter</a>
+      <a href="Advance_Resignation_Form.html" target="_blank">Prepare Advance Resignation Letter</a>
+      <a href="Resignation_PDF.html" target="_blank">Find Submitted Resignation PDF Files</a>
+    </div>
   </div>
 
-  <!-- Main content -->
-  <div class="main">
-    <header>
-      <h1>Resignation Dashboard</h1>
-      <p>Select a service below to proceed</p>
-    </header>
-
-    <a class="button" href="Resignation_Form.html" target="_blank">
-      Prepare Resignation Letter
-    </a>
-
-    <a class="button" href="Advance_Resignation_Form.html" target="_blank">
-      Prepare Advance Resignation Letter
-    </a>
-
-    <a class="button" href="Resignation_PDF.html" target="_blank">
-      Find Submitted Resignation PDF Files
-    </a>
-  </div>
-
-  <!-- Footer -->
   <footer>
-    This is a demo website. Not affiliated with any company.
+    Address: G4S Cumilla House, 44/A, Judge Court Road, Cumilla-3500 | Phone: +8801313-209156 | Email: nothingistruehereinourselves@gmail.com <br>
+    © 2026 G4S Cumilla Internal Dashboard. All rights reserved.
   </footer>
+
 </body>
 </html>
