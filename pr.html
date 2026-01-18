@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resignation Application Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f5f7fa;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #003366;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar a:hover {
+      background-color: #00509e;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #00509e;
+      color: #fff;
+      padding: 15px 20px;
+    }
+
+    header h1 {
+      font-size: 22px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .form-box {
+      max-width: 600px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-box h3 {
+      margin-bottom: 15px;
+      color: #003366;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #00509e;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #003f7d;
+    }
+
+    footer {
+      background-color: #e9e9e9;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>পোর্টাল</h2>
+    <a href="#">হোম</a>
+    <a href="#">আবেদন ফরম</a>
+    <a href="#">নির্দেশনা</a>
+    <a href="#">যোগাযোগ</a>
+  </div>
+
+  <div class="main">
+    <header>
+      <h1>পদত্যাগ আবেদন পোর্টাল</h1>
+    </header>
+
+    <div class="content">
+      <div class="form-box">
+        <h3>পদত্যাগ আবেদন ফরম</h3>
+
+        <form>
+          <label>কর্মচারীর নাম</label>
+          <input type="text" required>
+
+          <label>পদবী</label>
+          <input type="text" required>
+
+          <label>কর্মচারী আইডি</label>
+          <input type="text" required>
+
+          <label>ব্রাঞ্চের নাম</label>
+          <input type="text" required>
+
+          <label>পদত্যাগের তারিখ</label>
+          <input type="date" required>
+
+          <label>পদত্যাগের কারণ</label>
+          <textarea required></textarea>
+
+          <button type="submit">আবেদন জমা দিন</button>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      © ২০২৬ Resignation Application Portal
+    </footer>
+  </div>
+
+</body>
+</html>
