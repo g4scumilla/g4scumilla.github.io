@@ -2,119 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Resignation Portal</title>
+  <title>Parent Resignation Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <style>
-    body {
+    /* General resets */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f9f9f9;
     }
 
-    /* Header */
-    header {
-      background-color: #004080;
-      color: white;
+    body {
+      background: #f9f9f9;
       padding: 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-    header p {
-      margin: 5px 0 0;
-      font-size: 14px;
     }
 
-    /* Navigation */
-    nav {
-      background-color: #0070c0;
-      padding: 10px;
-      text-align: center;
+    /* Container */
+    .container {
+      max-width: 800px;
+      width: 95%;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
+
+    h1 {
+      text-align: center;
+      color: #004080;
+      margin-bottom: 20px;
+    }
+
+    /* Form styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin: 10px 0 5px;
       font-weight: bold;
     }
-    nav a:hover {
-      text-decoration: underline;
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 1rem;
     }
 
-    /* Main content */
-    .content {
-      padding: 40px 20px;
-      text-align: center;
+    textarea {
+      resize: vertical;
+      min-height: 100px;
     }
-    .content h2 {
-      color: #004080;
-    }
-    .buttons {
-      margin-top: 30px;
-    }
-    .buttons a {
-      display: inline-block;
-      margin: 15px;
-      padding: 20px 40px;
-      background-color: #0070c0;
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #004080;
       color: white;
-      font-size: 18px;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .buttons a:hover {
-      background-color: #005a90;
-      transform: scale(1.05);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
     }
 
-    /* Footer */
-    footer {
-      background-color: #f1f1f1;
-      color: gray;
-      text-align: center;
-      padding: 15px;
-      font-size: 12px;
-      margin-top: 40px;
+    button:hover {
+      background-color: #0066cc;
     }
 
-    @media (max-width: 768px) {
-      .buttons a {
-        width: 80%;
-        margin: 10px 0;
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      textarea {
+        font-size: 0.9rem;
+      }
+
+      button {
+        font-size: 0.9rem;
       }
     }
   </style>
 </head>
+
 <body>
+  <div class="container">
+    <h1>Parent Resignation Form</h1>
+    <form>
+      <label for="name">Parent Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name">
 
-  <header>
-    <h1>G4S Cumilla Internal Dashboard</h1>
-    <p>Quick access to resignation forms and submitted PDFs</p>
-  </header>
+      <label for="student">Student Name:</label>
+      <input type="text" id="student" name="student" placeholder="Enter student name">
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Us</a>
-    <a href="contact.html">Contact Us</a>
-  </nav>
+      <label for="date">Date of Resignation:</label>
+      <input type="date" id="date" name="date">
 
-  <div class="content">
-    <h2>Resignation Portal</h2>
-    <p>Select a service below:</p>
+      <label for="reason">Reason for Resignation:</label>
+      <textarea id="reason" name="reason" placeholder="Enter your reason here"></textarea>
 
-    <div class="buttons">
-      <a href="resignapp.html" target="_blank">Prepare Resignation Letter</a>
-      <a href="Advance_Resignation_Form.html" target="_blank">Prepare Advance Resignation Letter</a>
-      <a href="resignpdfs.html" target="_blank">Find Submitted Resignation PDF Files</a>
-    </div>
+      <button type="submit">Submit</button>
+    </form>
   </div>
-
-  <footer>
-    Address: G4S Cumilla House, 44/A, Judge Court Road, Cumilla-3500 | Phone: +8801313-209156 | Email: nothingistruehereinourselves@gmail.com <br>
-    © 2026 G4S Cumilla Internal Dashboard. All rights reserved.
-  </footer>
-
 </body>
 </html>
