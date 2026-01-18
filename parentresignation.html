@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resignation Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #004080;
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+    }
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header {
+      background-color: #0070c0;
+      color: white;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      color: gray;
+      padding: 10px;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-block;
+      margin: 15px 10px;
+      padding: 20px 40px;
+      background-color: #0070c0;
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #005a90;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Resignation Portal</h2>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+    <header>
+      <h1>Resignation Portal</h1>
+    </header>
+
+    <p>Choose a service below to proceed:</p>
+
+    <a class="button" href="Resignation_Form.html" target="_blank">
+      Prepare Resignation Letter
+    </a>
+    <a class="button" href="Advance_Resignation_Form.html" target="_blank">
+      Prepare Advance Resignation Letter
+    </a>
+    <a class="button" href="Resignation_PDF.html" target="_blank">
+      Find Submitted Resignation PDF Files
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    This is a demo website. Not affiliated with any company.
+  </footer>
+</body>
+</html>
