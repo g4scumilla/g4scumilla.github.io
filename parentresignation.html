@@ -37,40 +37,64 @@
     /* Main content */
     .main {
       flex: 1;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
     header {
       background-color: #0070c0;
       color: white;
-      padding: 15px;
-      margin-bottom: 20px;
+      padding: 20px;
+      margin-bottom: 30px;
     }
 
     footer {
       background-color: #f1f1f1;
       color: gray;
       padding: 10px;
-      margin-top: 20px;
+      margin-top: 40px;
       text-align: center;
       font-size: 12px;
     }
 
-    /* Buttons */
+    /* Dashboard Buttons */
     .button {
       display: inline-block;
-      margin: 15px 10px;
-      padding: 20px 40px;
+      margin: 20px 15px;
+      padding: 25px 50px;
       background-color: #0070c0;
       color: white;
       text-decoration: none;
       font-size: 18px;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
     .button:hover {
       background-color: #005a90;
+      transform: scale(1.05);
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+      }
+      .main {
+        padding: 20px 10px;
+      }
+      .button {
+        width: 80%;
+        margin: 15px 0;
+      }
     }
   </style>
 </head>
@@ -87,17 +111,18 @@
   <!-- Main content -->
   <div class="main">
     <header>
-      <h1>Resignation Portal</h1>
+      <h1>Resignation Dashboard</h1>
+      <p>Select a service below to proceed</p>
     </header>
-
-    <p>Choose a service below to proceed:</p>
 
     <a class="button" href="Resignation_Form.html" target="_blank">
       Prepare Resignation Letter
     </a>
+
     <a class="button" href="Advance_Resignation_Form.html" target="_blank">
       Prepare Advance Resignation Letter
     </a>
+
     <a class="button" href="Resignation_PDF.html" target="_blank">
       Find Submitted Resignation PDF Files
     </a>
