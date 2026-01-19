@@ -136,3 +136,37 @@ body {
     background: #eef4f9; /* soft Wapka-style background */
     color: #222;
 }
+
+/* ===== Global Footer (used everywhere) ===== */
+.site-footer {
+  background: #cce0f5;        /* same as header */
+  color: #023e8a;
+  text-align: center;
+  padding: 18px 10px;
+  font-size: 13px;
+  border-top: 1px solid #a8c8e6;
+}
+
+.site-footer p {
+  margin: 6px 0;
+}
+
+.footer-links a {
+  color: #023e8a;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-tagline {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.footer-contact {
+  font-size: 12px;
+  margin-top: 6px;
+}
