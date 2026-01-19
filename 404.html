@@ -4,194 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webpage Not Found | G4S Cumilla</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: #eef4f9;
-    color: #222;
-    text-align: center;
-}
-
-/* Header */
-header {
-    background: #cce0f5;
-    padding: 12px 10px;
-    border-bottom: 1px solid #a8c8e6;
-}
-
-header img {
-    width: 120px;
-    height: auto;
-    margin-bottom: 6px;
-}
-
-header h1 {
-    font-size: 1.4em;
-    color: #023e8a;
-    margin: 4px 0 2px 0;
-}
-
-header p {
-    font-size: 0.9em;
-    color: #023e8a;
-    margin: 0 0 8px 0;
-}
-
-/* Header buttons */
-.header-buttons {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 8px;
-    max-width: 320px;
-    margin: 5px auto 0 auto;
-}
-
-.header-buttons a {
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    color: #023e8a;
-    font-weight: bold;
-    border: 1px solid #94b9dc;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    transition: 0.2s;
-}
-
-.header-buttons a:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* 404 content */
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-}
-
-/* Go Back Home button - first and 130% bigger */
-.main-content a.back-home {
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 32px 64px;
-    border-radius: 35px;
-    color: #023e8a;
-    font-weight: bold;
-    font-size: 1.43em;
-    border: 1px solid #94b9dc;
-    transition: 0.2s;
-    margin-bottom: 25px;
-}
-
-.main-content a.back-home:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.main-content h2 {
-    font-size: 2em;
-    color: #023e8a;
-    margin-bottom: 15px;
-}
-
-.main-content p {
-    font-size: 1em;
-    color: #444;
-    margin-bottom: 15px;
-}
-
-.main-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 15px 0;
-}
-
-.main-content ul li {
-    margin: 8px 0;
-}
-
-.main-content ul li a {
-    text-decoration: none;
-    color: #023e8a;
-    font-weight: bold;
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid #94b9dc;
-    background: linear-gradient(to bottom, #ffffff, #dceefa);
-    transition: 0.2s;
-}
-
-.main-content ul li a:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Footer styling same as other pages */
-footer {
-    background: #cce0f5;
-    color: #023e8a;
-    text-align: center;
-    padding: 12px 10px;
-    font-size: 0.9em;
-    border-top: 1px solid #a8c8e6;
-}
-
-footer .footer-links a {
-    text-decoration: none;
-    color: #023e8a;
-    margin: 0 5px;
-    font-weight: bold;
-}
-
-footer .footer-links a:hover {
-    text-decoration: underline;
-}
-
-footer .footer-contact span {
-    display: inline-block;
-    margin: 2px 8px;
-}
-
-/* Responsive */
-@media(max-width:500px){
-    header h1 { font-size: 1.2em; }
-    header p { font-size: 0.8em; }
-    .main-content h2 { font-size: 1.6em; }
-    .main-content p { font-size: 0.9em; }
-    .main-content ul li a { font-size: 0.85em; padding: 5px 10px; }
-    .main-content a.back-home { font-size: 1.3em; padding: 26px 52px; }
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
-    <h1>Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & resources</p>
-
-    <div class="header-buttons">
-        <a href="index.html">Home</a>
-        <a href="contactus.html">Contact Us</a>
-        <a href="faq">FAQ</a>
-    </div>
-</header>
+<!-- Header placeholder -->
+<div id="header"></div>
 
 <div class="main-content">
     <a href="index.html" class="back-home">Go Back Home</a>
@@ -200,28 +19,29 @@ footer .footer-contact span {
     <p>The page you are looking for does not exist, may have been moved, or the URL was typed incorrectly.</p>
     <p>You can try the following:</p>
     <ul>
-        <li><a href="parentresignation.html">Check Resignation Automations</a></li>
+        <li><a href="resignation_automations">Check Resignation Automations</a></li>
         <li><a href="adresignapp.html">Prepare Advance Resignation Letter</a></li>
         <li><a href="trainingsheet.html">Prepare Training Sheet</a></li>
     </ul>
     <p>Or contact the admin if you think this is an error.</p>
 </div>
 
-<footer>
-    <p>&copy; 2026 | G4S Cumilla</p>
+<!-- Footer placeholder -->
+<div id="footer"></div>
 
-    <div class="footer-links">
-        <a href="aboutus">About Us</a> | 
-        <a href="contactus">Contact Us</a> | 
-        <a href="faq">FAQ</a>
-    </div>
+<!-- Load header & footer dynamically -->
+<script>
+function loadHTML(id, file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => document.getElementById(id).innerHTML = data)
+        .catch(err => console.log(err));
+}
 
-    <p class="footer-tagline">Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only</p>
-
-    <div class="footer-contact">
-        <span>📞 +8801313-209156</span> | <span>✉ nothingistruehereinourselves@gmail.com</span>
-    </div>
-</footer>
+// Load header and footer
+loadHTML("header", "header.html");
+loadHTML("footer", "footer.html");
+</script>
 
 </body>
 </html>
