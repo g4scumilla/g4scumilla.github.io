@@ -1,6 +1,4 @@
-/* ===== Existing CSS (unchanged) ===== */
-
-/* Header */
+/* ===== Header ===== */
 header {
     background: #cce0f5;
     padding: 12px 10px;
@@ -60,12 +58,13 @@ section {
     padding: 20px 12px;
     max-width: 650px;
     margin: 20px auto;
+    flex: 1 0 auto; /* grow to take remaining space */
     text-align: center;
 }
 
 /* Section title */
 .section-title {
-    font-size: 1.26em;
+    font-size: 1.26em; /* ~140% bigger than link-card text */
     font-weight: bold;
     color: #023e8a;
     background: #dceefa;
@@ -105,37 +104,35 @@ section {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Responsive */
+/* Footer styled like header (matches colors) */
+footer, #footer {
+    background: #cce0f5;
+    color: #023e8a;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 12px;
+    flex-shrink: 0;           /* never shrink */
+    border-top: 1px solid #a8c8e6;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
 @media(max-width:500px){
     header h1 { font-size: 1.2em; }
     header p { font-size: 0.8em; }
     .link-card { font-size: 0.85em; }
-    .section-title { font-size: 1.1em; }
+    .section-title { font-size: 1.1em; padding: 8px 15px; }
+    .header-buttons { max-width: 100%; gap: 6px; }
 }
 
-/* ===== FIX: Sticky Footer ===== */
-
-/* Body full height */
+/* Body full height for sticky footer */
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
     padding: 0;
-}
-
-/* Section grows to take remaining space */
-section {
-    flex: 1 0 auto; /* grow & shrink as needed */
-}
-
-/* Footer styling for <footer> or #footer */
-footer, #footer {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 12px;
-    flex-shrink: 0; /* never shrink */
-    border-top: 1px solid #444;
+    background: #eef4f9; /* soft Wapka-style background */
+    color: #222;
 }
