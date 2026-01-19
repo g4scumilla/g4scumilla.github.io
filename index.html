@@ -9,17 +9,8 @@
 
 <body>
 
-<header>
-    <a href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo"></a>
-    <h1>Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & resources</p>
-
-    <div class="header-buttons">
-        <a href="aboutus">About Us</a>
-        <a href="contactus">Contact Us</a>
-        <a href="faq">FAQ</a>
-    </div>
-</header>
+<!-- Header placeholder -->
+<div id="header"></div>
 
 <section>
     <div class="section-title">Internal Tools & Automations</div>
@@ -40,22 +31,22 @@
     </div>
 </section>
 
-<!-- Hardcoded Footer -->
-<footer>
-    <p>&copy; 2026 | G4S Cumilla</p>
+<!-- Footer placeholder -->
+<div id="footer"></div>
 
-    <div class="footer-links">
-        <a href="aboutus">About Us</a> | 
-        <a href="contactus">Contact Us</a> | 
-        <a href="faq">FAQ</a>
-    </div>
+<!-- Load header & footer dynamically -->
+<script>
+function loadHTML(id, file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => document.getElementById(id).innerHTML = data)
+        .catch(err => console.log(err));
+}
 
-    <p class="footer-tagline">Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only</p>
-
-    <div class="footer-contact">
-        <span>📞 +8801313-209156</span> | <span>✉ nothingistruehereinourselves@gmail.com</span>
-    </div>
-</footer>
+// Load header and footer
+loadHTML("header", "header.html");
+loadHTML("footer", "footer.html");
+</script>
 
 </body>
 </html>
