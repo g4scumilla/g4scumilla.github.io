@@ -30,19 +30,25 @@
       line-height: 1.6;
     }
 
+    /* Resignation Application button styled like Back to Home button */
     .button {
-      font-size: 1.3em;
-      padding: 15px 40px;
-      background: #d81b60;
-      color: #fff;
-      border-radius: 10px;
       text-decoration: none;
-      display: inline-block;
+      background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+      padding: 32px 64px;
+      border-radius: 35px;
+      color: #023e8a;
+      font-weight: bold;
+      font-size: 1.43em;
+      border: 1px solid #94b9dc;
       transition: 0.3s;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .button:hover {
-      background: #b9154f;
+      background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
     }
 
     @media(max-width: 600px) {
@@ -54,7 +60,7 @@
       }
       .button {
         font-size: 1.2em;
-        padding: 12px 30px;
+        padding: 26px 52px;
       }
     }
   </style>
