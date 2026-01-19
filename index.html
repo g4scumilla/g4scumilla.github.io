@@ -6,137 +6,143 @@
 <title>G4S Cumilla Internal Dashboard</title>
 
 <style>
+/* Body & font for wapka-like mobile style */
 body {
     font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #f9f9f9;
-    color: #333;
+    background: #f2f2f2;
+    color: #222;
 }
 
 /* Header */
 header {
     background: #dbe9f4;
-    padding: 20px;
-    text-align: center;
+    padding: 15px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
+/* Logo */
 header img {
-    width: 140px;
-    max-width: 80%;
+    width: 120px;
     height: auto;
-    display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
+/* Title & subtitle */
 header h1 {
-    margin: 8px 0 0 0;
-    font-size: 1.7em;
+    font-size: 1.4em;
     color: #023e8a;
+    margin: 4px 0 2px 0;
 }
-
 header p {
-    margin: 4px 0 12px 0;
-    font-size: 1em;
+    font-size: 0.9em;
     color: #023e8a;
+    margin: 0 0 8px 0;
     opacity: 0.85;
 }
 
-/* Header buttons - desktop layout */
+/* Header Buttons - wapka style */
 .header-buttons {
     display: flex;
-    justify-content: space-between; /* b, center, d */
+    justify-content: space-between;
     width: 100%;
-    max-width: 600px;
-    margin-top: 10px;
-    padding: 0 20px;
-    box-sizing: border-box;
+    max-width: 300px;
+    margin: 5px 0 0 0;
 }
 
 .header-buttons a {
     text-decoration: none;
-    background: #ffffffcc;
-    padding: 8px 16px;
-    border-radius: 6px;
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
     color: #023e8a;
     font-weight: bold;
-    font-size: 0.95em;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: 0.3s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.2s;
 }
 
 .header-buttons a:hover {
     background: #90e0ef;
-    color: #023e8a;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-/* Section grows to push footer down */
+/* Section content */
 section {
-    padding: 20px;
-    max-width: 1000px;
+    padding: 10px;
+    max-width: 600px;
     margin: auto;
     flex: 1;
 }
 
 h2 {
+    font-size: 1.1em;
     color: #023e8a;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 6px;
-    margin-top: 35px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    margin-top: 20px;
 }
 
 .links {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 15px;
-    margin-top: 20px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 12px;
 }
 
 .link-card {
     background: #ffffff;
-    padding: 16px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 6px;
     text-align: center;
-    transition: 0.3s;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: 0.2s;
 }
 
 .link-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 .link-card a {
-    text-decoration: none;
     color: #023e8a;
     font-weight: bold;
-    font-size: 16px;
+    text-decoration: none;
 }
 
-/* Footer pinned at bottom */
+/* Footer sticky at bottom */
 footer {
     background: #023e8a;
     color: #fff;
     text-align: center;
-    padding: 12px;
-    font-size: 14px;
+    padding: 10px 0;
+    font-size: 12px;
     flex-shrink: 0;
 }
 
 /* Responsive adjustments */
-@media(max-width:800px){
+@media(max-width:500px){
+    header h1 {
+        font-size: 1.2em;
+    }
+    header p {
+        font-size: 0.8em;
+    }
     .header-buttons {
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-        padding: 0;
+        max-width: 250px;
+    }
+    .link-card {
+        font-size: 0.85em;
     }
 }
 </style>
@@ -145,12 +151,10 @@ footer {
 <body>
 
 <header>
-    <!-- Official G4S logo -->
     <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
     <h1>Cumilla Internal Dashboard</h1>
     <p>Quick access to forms, sheets, web apps & operational resources</p>
 
-    <!-- Header Buttons -->
     <div class="header-buttons">
         <a href="aboutus.html">About Us</a>
         <a href="contactus.html">Contact Us</a>
