@@ -6,7 +6,6 @@
 <title>G4S Cumilla Internal Dashboard</title>
 
 <style>
-/* Flex layout for sticky footer */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -23,14 +22,17 @@ header {
     background: #dbe9f4;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header img {
-    width: 140px; /* G4S style logo */
+    width: 140px;
     max-width: 80%;
     height: auto;
     display: block;
-    margin: 0 auto 8px auto;
+    margin-bottom: 8px;
 }
 
 header h1 {
@@ -46,13 +48,15 @@ header p {
     opacity: 0.85;
 }
 
-/* Header buttons */
+/* Header buttons - desktop layout */
 .header-buttons {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    justify-content: space-between; /* b, center, d */
+    width: 100%;
+    max-width: 600px;
     margin-top: 10px;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .header-buttons a {
@@ -127,10 +131,12 @@ footer {
 }
 
 /* Responsive adjustments */
-@media(max-width:600px){
+@media(max-width:800px){
     .header-buttons {
         flex-direction: column;
         gap: 10px;
+        align-items: center;
+        padding: 0;
     }
 }
 </style>
