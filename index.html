@@ -12,13 +12,23 @@
       padding: 0;
       background: #f9f9f9;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
-      background: #023e8a;
-      color: #fff;
-      padding: 25px 20px;
+      background: #dbe9f4; /* mild background */
+      color: #023e8a;
+      padding: 30px 20px;
       text-align: center;
+    }
+
+    header img {
+      width: 140px;       /* perfect proportional size */
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-bottom: 15px;
     }
 
     header h1 {
@@ -36,6 +46,7 @@
       padding: 20px;
       max-width: 1000px;
       margin: auto;
+      flex: 1; /* expand to push footer down */
     }
 
     h2 {
@@ -74,11 +85,10 @@
     }
 
     footer {
-      background: #333;
+      background: #023e8a;
       color: #fff;
       text-align: center;
-      padding: 15px;
-      margin-top: 40px;
+      padding: 12px;
       font-size: 14px;
     }
   </style>
@@ -87,6 +97,7 @@
 <body>
 
 <header>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
   <h1>G4S Cumilla Internal Dashboard</h1>
   <p>Quick access to forms, sheets, web apps, and operational resources</p>
 </header>
@@ -111,7 +122,7 @@
 </section>
 
 <footer>
-  © 2026 | g4scumilla
+  © 2026 | G4S Cumilla
 </footer>
 
 </body>
