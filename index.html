@@ -1,114 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>G4S Cumilla Internal Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G4S Cumilla Internal Dashboard</title>
 
-<style>
-* { box-sizing: border-box; margin:0; padding:0; }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #e0f7fa, #90e0ef);
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+    header {
+      background: #023e8a;
+      color: #fff;
+      padding: 25px 20px;
+      text-align: center;
+    }
 
-/* Header placeholder (temporary) */
-header {
-    text-align:center;
-    padding:30px 20px 20px;
-}
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
 
-header img {
-    width:180px;
-    border-radius:15px;
-    margin-bottom:15px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+    header p {
+      margin-top: 8px;
+      font-size: 1em;
+      opacity: 0.9;
+    }
 
-header h1 {
-    font-size:28px;
-    color:#023e8a;
-    text-shadow:1px 1px 2px #90e0ef;
-}
+    section {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
 
-header p {
-    margin-top:10px;
-    font-size:16px;
-    color:#0077b6;
-}
+    h2 {
+      color: #023e8a;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 6px;
+      margin-top: 35px;
+    }
 
-/* Links container */
-.links-container {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
-    padding:20px;
-}
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
 
-.link-card {
-    flex:1 1 220px;
-    max-width:250px;
-    background:linear-gradient(135deg,#00b4d8,#90e0ef);
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-    transition:transform 0.3s, box-shadow 0.3s;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
+    .link-card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: 0.3s;
+    }
 
-.link-card:hover {
-    transform:translateY(-7px);
-    box-shadow:0 8px 20px rgba(0,0,0,0.3);
-}
+    .link-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
 
-.link-card a {
-    text-decoration:none;
-    color:#fff;
-    font-size:18px;
-    font-weight:bold;
-}
+    .link-card a {
+      text-decoration: none;
+      color: #023e8a;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-/* Minimal footer */
-footer {
-    background:#023e8a;
-    color:#fff;
-    padding:15px;
-    margin-top:auto;
-    text-align:center;
-    font-size:14px;
-    border-radius:15px 15px 0 0;
-}
-
-/* Responsive */
-@media(max-width:600px){
-    .link-card { max-width:90%; }
-}
-</style>
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
-    <h1>G4S Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+  <h1>G4S Cumilla Internal Dashboard</h1>
+  <p>Quick access to forms, sheets, web apps, and operational resources</p>
 </header>
 
-<div class="links-container">
-    <div class="link-card"><a href="parentresignation.html">Resignation Automations</a></div>
-    <div class="link-card"><a href="adresignapp.html">Prepare Advance Resignation Letter</a></div>
-    <div class="link-card"><a href="trainingsheet.html">Prepare Training Sheet</a></div>
-    <div class="link-card"><a href="#">Other Links</a></div>
-</div>
+<section>
+  <h2>Internal Tools & Automations</h2>
+
+  <div class="links">
+    <div class="link-card">
+      <a href="parentresignation.html">Resignation Automations</a>
+    </div>
+    <div class="link-card">
+      <a href="adresignapp.html">Prepare Advance Resignation Letter</a>
+    </div>
+    <div class="link-card">
+      <a href="trainingsheet.html">Prepare Training Sheet</a>
+    </div>
+    <div class="link-card">
+      <a href="#">Other Internal Links</a>
+    </div>
+  </div>
+</section>
 
 <footer>
-    © 2026 | g4scumilla
+  © 2026 | g4scumilla
 </footer>
 
 </body>
