@@ -9,11 +9,11 @@
 
 <body>
 
-<!-- Header placeholder -->
+<!-- Header will be loaded dynamically -->
 <div id="header"></div>
 
 <div class="main-content">
-    <!-- Big Go Back Home button -->
+    <!-- Go Back Home button -->
     <a href="index.html" class="back-home">Go Back Home</a>
 
     <h2>Webpage Not Found</h2>
@@ -27,7 +27,7 @@
     <p>Or contact the admin if you think this is an error.</p>
 </div>
 
-<!-- Footer placeholder -->
+<!-- Footer will be loaded dynamically -->
 <div id="footer"></div>
 
 <!-- Load header & footer dynamically -->
@@ -39,7 +39,6 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Load header and footer
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
 </script>
