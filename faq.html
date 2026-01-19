@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ | G4S Cumilla</title>
+<link rel="stylesheet" href="style.css"> <!-- link your CSS -->
+</head>
+<body>
+
+<!-- Header -->
+<div id="header"></div>
+
+<!-- Main FAQ Content -->
+<div class="main-content">
+    <h2>Frequently Asked Questions</h2>
+    <p>Welcome to the FAQ section. Find answers to common questions below.</p>
+
+    <ul>
+        <li><strong>Q1:</strong> How do I submit a resignation form? <br>
+            <strong>A:</strong> Use the "Resignation Automations" link on the dashboard.</li>
+
+        <li><strong>Q2:</strong> How can I prepare an advance resignation letter? <br>
+            <strong>A:</strong> Click on "Prepare Advance Resignation Letter" in the dashboard links.</li>
+
+        <li><strong>Q3:</strong> Where can I find the training sheets? <br>
+            <strong>A:</strong> Use the "Prepare Training Sheet" link on the dashboard.</li>
+
+        <li><strong>Q4:</strong> Who do I contact for technical issues? <br>
+            <strong>A:</strong> Contact the site administrator via the "Contact Us" button.</li>
+    </ul>
+
+    <p>For other questions or support, please reach out using the "Contact Us" button in the header.</p>
+</div>
+
+<!-- Footer -->
+<div id="footer"></div>
+
+<!-- Load Header & Footer -->
+<script>
+function loadHTML(id, file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => document.getElementById(id).innerHTML = data)
+        .catch(err => console.log(err));
+}
+
+loadHTML("header", "header.html");
+loadHTML("footer", "footer.html");
+</script>
+
+</body>
+</html>
