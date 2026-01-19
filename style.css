@@ -1,3 +1,5 @@
+/* ===== Existing CSS (unchanged) ===== */
+
 /* Header */
 header {
     background: #cce0f5;
@@ -51,4 +53,89 @@ header p {
 .header-buttons a:hover {
     background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Section content */
+section {
+    padding: 20px 12px;
+    max-width: 650px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Section title */
+.section-title {
+    font-size: 1.26em;
+    font-weight: bold;
+    color: #023e8a;
+    background: #dceefa;
+    border: 1px solid #94b9dc;
+    border-radius: 20px;
+    padding: 10px 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+/* Links */
+.links {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.link-card {
+    background: linear-gradient(to bottom, #ffffff, #dceefa);
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    transition: 0.2s;
+}
+
+.link-card a {
+    color: #023e8a;
+    text-decoration: none;
+}
+
+.link-card:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media(max-width:500px){
+    header h1 { font-size: 1.2em; }
+    header p { font-size: 0.8em; }
+    .link-card { font-size: 0.85em; }
+    .section-title { font-size: 1.1em; }
+}
+
+/* ===== FIX: Sticky Footer ===== */
+
+/* Make body a full-height flex container */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* full viewport height */
+    margin: 0;
+    padding: 0;
+}
+
+/* Make main section grow to take remaining space */
+section {
+    flex: 1 0 auto; /* grow & shrink as needed */
+}
+
+/* Footer styles remain, just ensure it doesn’t shrink */
+footer, #footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 12px;
+    flex-shrink: 0; /* never shrink */
+    border-top: 1px solid #444;
 }
