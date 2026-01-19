@@ -6,6 +6,7 @@
 <title>G4S Cumilla Internal Dashboard</title>
 
 <style>
+/* Full height body with flex column */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -17,17 +18,19 @@ body {
     min-height: 100vh;
 }
 
+/* Header */
 header {
-    background: #dbe9f4;
+    background: #dbe9f4; /* mild background */
     padding: 20px;
     text-align: center;
 }
 
 header img {
-    width: 140px;
+    width: 140px; /* G4S style logo */
     max-width: 80%;
     height: auto;
-    margin-bottom: 8px;
+    display: block;
+    margin: 0 auto 8px auto;
 }
 
 header h1 {
@@ -43,11 +46,12 @@ header p {
     opacity: 0.85;
 }
 
+/* Section expands between header & footer */
 section {
     padding: 20px;
     max-width: 1000px;
     margin: auto;
-    flex: 1;
+    flex: 1; /* fills space so footer sticks */
 }
 
 h2 {
@@ -85,12 +89,14 @@ h2 {
     font-size: 16px;
 }
 
+/* Footer sticky to bottom */
 footer {
     background: #023e8a;
     color: #fff;
     text-align: center;
     padding: 12px;
     font-size: 14px;
+    flex-shrink: 0;
 }
 </style>
 </head>
@@ -98,7 +104,7 @@ footer {
 <body>
 
 <header>
-    <!-- Use official G4S style logo -->
+    <!-- Official G4S logo -->
     <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
     <h1>Cumilla Internal Dashboard</h1>
     <p>Quick access to forms, sheets, web apps & operational resources</p>
