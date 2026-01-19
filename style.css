@@ -1,0 +1,64 @@
+/* Header */
+header {
+    background: #cce0f5;
+    padding: 12px 10px;
+    border-bottom: 1px solid #a8c8e6;
+    text-align: center;
+}
+
+header img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 6px;
+}
+
+header h1 {
+    font-size: 1.4em;
+    color: #023e8a;
+    margin: 4px 0 2px 0;
+}
+
+header p {
+    font-size: 0.9em;
+    color: #023e8a;
+    margin: 0 0 8px 0;
+}
+
+/* Header buttons */
+.header-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 320px;
+    margin: 5px auto 0 auto;
+}
+
+.header-buttons a {
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #023e8a;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.header-buttons a:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 12px;
+    border-top: 1px solid #444;
+}
