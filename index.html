@@ -6,21 +6,21 @@
 <title>G4S Cumilla Internal Dashboard</title>
 
 <style>
-/* Full height body with flex column */
+/* Flex layout for sticky footer */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f9f9f9;
-    color: #333;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background: #f9f9f9;
+    color: #333;
 }
 
 /* Header */
 header {
-    background: #dbe9f4; /* mild background */
+    background: #dbe9f4;
     padding: 20px;
     text-align: center;
 }
@@ -40,18 +40,45 @@ header h1 {
 }
 
 header p {
-    margin: 4px 0 0 0;
+    margin: 4px 0 12px 0;
     font-size: 1em;
     color: #023e8a;
     opacity: 0.85;
 }
 
-/* Section expands between header & footer */
+/* Header buttons */
+.header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.header-buttons a {
+    text-decoration: none;
+    background: #ffffffcc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: #023e8a;
+    font-weight: bold;
+    font-size: 0.95em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.header-buttons a:hover {
+    background: #90e0ef;
+    color: #023e8a;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Section grows to push footer down */
 section {
     padding: 20px;
     max-width: 1000px;
     margin: auto;
-    flex: 1; /* fills space so footer sticks */
+    flex: 1;
 }
 
 h2 {
@@ -89,7 +116,7 @@ h2 {
     font-size: 16px;
 }
 
-/* Footer sticky to bottom */
+/* Footer pinned at bottom */
 footer {
     background: #023e8a;
     color: #fff;
@@ -97,6 +124,14 @@ footer {
     padding: 12px;
     font-size: 14px;
     flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media(max-width:600px){
+    .header-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 </style>
 </head>
@@ -108,6 +143,13 @@ footer {
     <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
     <h1>Cumilla Internal Dashboard</h1>
     <p>Quick access to forms, sheets, web apps & operational resources</p>
+
+    <!-- Header Buttons -->
+    <div class="header-buttons">
+        <a href="aboutus.html">About Us</a>
+        <a href="contactus.html">Contact Us</a>
+        <a href="#">FAQ</a>
+    </div>
 </header>
 
 <section>
