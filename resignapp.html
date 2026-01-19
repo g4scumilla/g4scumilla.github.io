@@ -3,61 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resignation App</title>
-
+  <title>Resignation App | G4S Cumilla</title>
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla&display=swap" rel="stylesheet">
-
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Noto Sans Bangla', 'Segoe UI', sans-serif;
-      background: #f4f7fb;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: #ffffff;
-      text-align: center;
-      padding: 30px 20px 20px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    header img {
-      width: 150px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    header h1 {
-      font-size: 28px;
-      color: #023e8a;
-    }
-
-    header p {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #555;
-    }
-
-    nav {
-      margin-top: 15px;
-    }
-
-    nav a {
-      margin: 0 10px;
-      color: #023e8a;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
+    /* Only styling main content */
     .form-container {
       max-width: 700px;
       margin: 40px auto;
@@ -95,35 +45,6 @@
       background: #b9154f;
     }
 
-    footer {
-      background: #023e8a;
-      color: #fff;
-      padding: 25px 20px;
-      margin-top: auto;
-      text-align: center;
-    }
-
-    .footer-links a {
-      color: #90e0ef;
-      text-decoration: none;
-      margin: 0 5px;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-tagline {
-      margin: 10px 0;
-      font-size: 14px;
-      color: #cce7ff;
-    }
-
-    .footer-contact {
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
     @media(max-width: 600px) {
       .form-container {
         padding: 30px 20px;
@@ -141,18 +62,10 @@
 
 <body>
 
-<header>
-  <img src="g4s-logo.png" alt="G4S Logo">
-  <h1>G4S Cumilla Internal Dashboard</h1>
-  <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+<!-- Load Header -->
+<div id="header"></div>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="aboutus.html">About Us</a>
-    <a href="contactus.html">Contact Us</a>
-  </nav>
-</header>
-
+<!-- Main Content -->
 <div class="form-container">
   <h2>Resignation Form</h2>
   <p>
@@ -165,24 +78,21 @@
   </a>
 </div>
 
-<footer>
-  <p>&copy; 2026 | G4S Cumilla</p>
+<!-- Load Footer -->
+<div id="footer"></div>
 
-  <div class="footer-links">
-    <a href="aboutus.html">About Us</a> | 
-    <a href="contactus.html">Contact Us</a> | 
-    <a href="faq.html">FAQ</a>
-  </div>
+<script>
+  // Load header and footer from separate files
+  function loadHTML(id, file) {
+      fetch(file)
+          .then(response => response.text())
+          .then(data => document.getElementById(id).innerHTML = data)
+          .catch(err => console.log(err));
+  }
 
-  <p class="footer-tagline">
-    Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only
-  </p>
-
-  <div class="footer-contact">
-    <span>📞 +8801313-209156</span> | 
-    <span>✉ nothingistruehereinourselves@gmail.com</span>
-  </div>
-</footer>
+  loadHTML("header", "header.html");
+  loadHTML("footer", "footer.html");
+</script>
 
 </body>
 </html>
