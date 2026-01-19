@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>G4S Cumilla Internal Dashboard</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 * { box-sizing: border-box; margin:0; padding:0; }
@@ -14,75 +14,28 @@ body {
     color: #333;
     min-height: 100vh;
     display: flex;
-}
-
-/* Sidebar */
-.side-panel {
-    width: 60px;
-    background: #023e8a;
-    color: #fff;
-    display: flex;
     flex-direction: column;
-    padding-top: 20px;
-    position: fixed;
-    top: 0; bottom: 0;
-    transition: width 0.3s;
-    overflow: hidden;
-    cursor: pointer;
-    z-index: 10;
 }
-.side-panel.expanded { width: 220px; }
 
-.side-panel h2 {
-    text-align:center;
-    margin-bottom:25px;
-    font-size:20px;
-    color:#90e0ef;
-    opacity:0;
-    transition: opacity 0.3s;
-}
-.side-panel.expanded h2 { opacity:1; }
-
-.side-panel a {
-    color:#fff;
-    text-decoration:none;
-    padding:12px 15px;
-    display:flex;
-    align-items:center;
-    font-size:16px;
-    white-space:nowrap;
-    transition:0.3s;
-}
-.side-panel a i { width:30px; text-align:center; }
-.side-panel span { opacity:0; transition: opacity 0.3s; margin-left:10px; }
-.side-panel.expanded span { opacity:1; }
-
-/* Main content */
-.main-content {
-    margin-left:60px;
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    transition: margin-left 0.3s;
-}
-.main-content.shifted { margin-left:220px; }
-
-/* Header */
+/* Header placeholder (temporary) */
 header {
     text-align:center;
-    padding:30px 20px 20px 20px;
+    padding:30px 20px 20px;
 }
+
 header img {
     width:180px;
     border-radius:15px;
     margin-bottom:15px;
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
+
 header h1 {
     font-size:28px;
     color:#023e8a;
     text-shadow:1px 1px 2px #90e0ef;
 }
+
 header p {
     margin-top:10px;
     font-size:16px;
@@ -97,6 +50,7 @@ header p {
     gap:20px;
     padding:20px;
 }
+
 .link-card {
     flex:1 1 220px;
     max-width:250px;
@@ -107,10 +61,12 @@ header p {
     transition:transform 0.3s, box-shadow 0.3s;
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
+
 .link-card:hover {
     transform:translateY(-7px);
     box-shadow:0 8px 20px rgba(0,0,0,0.3);
 }
+
 .link-card a {
     text-decoration:none;
     color:#fff;
@@ -118,7 +74,7 @@ header p {
     font-weight:bold;
 }
 
-/* Minimal Footer (temporary) */
+/* Minimal footer */
 footer {
     background:#023e8a;
     color:#fff;
@@ -130,15 +86,6 @@ footer {
 }
 
 /* Responsive */
-@media(max-width:800px){
-    .side-panel {
-        width:100%;
-        flex-direction:row;
-        justify-content:space-around;
-    }
-    .side-panel h2 { display:none; }
-    .main-content { margin-left:0; }
-}
 @media(max-width:600px){
     .link-card { max-width:90%; }
 }
@@ -147,46 +94,22 @@ footer {
 
 <body>
 
-<!-- Sidebar -->
-<div class="side-panel" id="sidebar">
-    <h2>Menu</h2>
-    <a href="index.html"><i class="fas fa-home"></i><span>Homepage</span></a>
-    <a href="aboutus.html"><i class="fas fa-info-circle"></i><span>About Us</span></a>
-    <a href="contactus.html"><i class="fas fa-phone"></i><span>Contact Us</span></a>
-    <a href="#"><i class="fas fa-user-cog"></i><span>Contact Site Developer</span></a>
-    <a href="#"><i class="fas fa-user-shield"></i><span>Admin Login</span></a>
-    <a href="#"><i class="fas fa-question-circle"></i><span>FAQ</span></a>
+<header>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
+    <h1>G4S Cumilla Internal Dashboard</h1>
+    <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+</header>
+
+<div class="links-container">
+    <div class="link-card"><a href="parentresignation.html">Resignation Automations</a></div>
+    <div class="link-card"><a href="adresignapp.html">Prepare Advance Resignation Letter</a></div>
+    <div class="link-card"><a href="trainingsheet.html">Prepare Training Sheet</a></div>
+    <div class="link-card"><a href="#">Other Links</a></div>
 </div>
 
-<!-- Main Content -->
-<div class="main-content" id="main-content">
-    <header>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
-        <h1>G4S Cumilla Internal Dashboard</h1>
-        <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
-    </header>
-
-    <div class="links-container">
-        <div class="link-card"><a href="parentresignation.html" target="_blank">Resignation Automations</a></div>
-        <div class="link-card"><a href="adresignapp.html">Prepare Advance Resignation Letter</a></div>
-        <div class="link-card"><a href="trainingsheet.html">Prepare Training Sheet</a></div>
-        <div class="link-card"><a href="#">Other Links</a></div>
-    </div>
-
-    <footer>
-        © 2026 | g4scumilla
-    </footer>
-</div>
-
-<script>
-const sidebar = document.getElementById('sidebar');
-const mainContent = document.getElementById('main-content');
-
-sidebar.addEventListener('click', () => {
-    sidebar.classList.toggle('expanded');
-    mainContent.classList.toggle('shifted');
-});
-</script>
+<footer>
+    © 2026 | g4scumilla
+</footer>
 
 </body>
 </html>
