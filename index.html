@@ -4,141 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: #eef4f9;
-    color: #222;
-}
-
-/* Header */
-header {
-    background: #cce0f5;
-    padding: 12px 10px;
-    text-align: center;
-    border-bottom: 1px solid #a8c8e6;
-}
-
-header img {
-    width: 120px;
-    height: auto;
-    margin-bottom: 6px;
-}
-
-header h1 {
-    font-size: 1.4em;
-    color: #023e8a;
-    margin: 4px 0 2px 0;
-}
-
-header p {
-    font-size: 0.9em;
-    color: #023e8a;
-    margin: 0 0 8px 0;
-}
-
-/* Header buttons */
-.header-buttons {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 8px;
-    max-width: 320px;
-    margin: 5px auto 0 auto;
-}
-
-.header-buttons a {
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    color: #023e8a;
-    font-weight: bold;
-    border: 1px solid #94b9dc;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    transition: 0.2s;
-}
-
-.header-buttons a:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Section content */
-section {
-    padding: 20px 12px;
-    max-width: 650px;
-    margin: 20px auto;
-    flex: 1;
-    text-align: center;
-}
-
-/* Section title */
-.section-title {
-    font-size: 1.26em;
-    font-weight: bold;
-    color: #023e8a;
-    background: #dceefa;
-    border: 1px solid #94b9dc;
-    border-radius: 20px;
-    padding: 10px 20px;
-    display: inline-block;
-    margin-bottom: 15px;
-}
-
-/* Links */
-.links {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-top: 12px;
-}
-
-.link-card {
-    background: linear-gradient(to bottom, #ffffff, #dceefa);
-    padding: 10px;
-    border-radius: 20px;
-    text-align: center;
-    font-size: 0.9em;
-    font-weight: bold;
-    border: 1px solid #94b9dc;
-    transition: 0.2s;
-}
-
-.link-card a {
-    color: #023e8a;
-    text-decoration: none;
-}
-
-.link-card:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Responsive */
-@media(max-width:500px){
-    header h1 { font-size: 1.2em; }
-    header p { font-size: 0.8em; }
-    .link-card { font-size: 0.85em; }
-    .section-title { font-size: 1.1em; }
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
+    <a href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo"></a>
     <h1>Cumilla Internal Dashboard</h1>
     <p>Quick access to forms, sheets, web apps & resources</p>
 
@@ -153,21 +25,37 @@ section {
     <div class="section-title">Internal Tools & Automations</div>
 
     <div class="links">
-        <div class="link-card"><a href="parentresignation.html">Resignation Automations</a></div>
-        <div class="link-card"><a href="adresignapp.html">Prepare Advance Resignation Letter</a></div>
-        <div class="link-card"><a href="trainingsheet.html">Prepare Training Sheet</a></div>
-        <div class="link-card"><a href="#">Other Internal Links</a></div>
+        <div class="link-card">
+            <a href="parentresignation.html">Resignation Automations</a>
+        </div>
+        <div class="link-card">
+            <a href="adresignapp.html">Prepare Advance Resignation Letter</a>
+        </div>
+        <div class="link-card">
+            <a href="trainingsheet.html">Prepare Training Sheet</a>
+        </div>
+        <div class="link-card">
+            <a href="#">Other Internal Links</a>
+        </div>
     </div>
 </section>
 
-<!-- Footer loaded dynamically -->
-<div id="footer"></div>
+<!-- Hardcoded Footer -->
+<footer>
+    <p>&copy; 2026 | G4S Cumilla</p>
 
-<script>
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
-</script>
+    <div class="footer-links">
+        <a href="aboutus">About Us</a> | 
+        <a href="contactus">Contact Us</a> | 
+        <a href="faq">FAQ</a>
+    </div>
+
+    <p class="footer-tagline">Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only</p>
+
+    <div class="footer-contact">
+        <span>📞 +8801313-209156</span> | <span>✉ nothingistruehereinourselves@gmail.com</span>
+    </div>
+</footer>
 
 </body>
 </html>
