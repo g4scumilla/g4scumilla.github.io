@@ -11,8 +11,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #90e0ef);
+      font-family: 'Noto Sans Bangla', 'Segoe UI', sans-serif;
+      background: #f4f7fb;
       color: #333;
       min-height: 100vh;
       display: flex;
@@ -20,30 +20,29 @@
     }
 
     header {
+      background: #ffffff;
       text-align: center;
       padding: 30px 20px 20px;
+      border-bottom: 1px solid #ddd;
     }
 
     header img {
       width: 150px;
-      border-radius: 15px;
+      border-radius: 12px;
       margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     header h1 {
       font-size: 28px;
       color: #023e8a;
-      text-shadow: 1px 1px 2px #90e0ef;
     }
 
     header p {
       margin-top: 10px;
       font-size: 16px;
-      color: #0077b6;
+      color: #555;
     }
 
-    /* Navigation */
     nav {
       margin-top: 15px;
     }
@@ -63,9 +62,9 @@
       max-width: 700px;
       margin: 40px auto;
       padding: 40px;
-      background: #ffffffdd;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
     }
 
@@ -82,45 +81,47 @@
     }
 
     .button {
-      font-size: 1.4em;
+      font-size: 1.3em;
       padding: 15px 40px;
-      background: linear-gradient(45deg, #ff4081, #f50057);
+      background: #d81b60;
       color: #fff;
-      border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       text-decoration: none;
       display: inline-block;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
+      transition: 0.3s;
     }
 
     .button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+      background: #b9154f;
     }
 
     footer {
       background: #023e8a;
       color: #fff;
-      padding: 30px 20px;
+      padding: 25px 20px;
       margin-top: auto;
       text-align: center;
-      border-radius: 15px 15px 0 0;
     }
 
-    footer h3 {
-      margin-bottom: 10px;
+    .footer-links a {
       color: #90e0ef;
-    }
-
-    footer p, footer a {
-      margin: 5px 0;
-      color: #fff;
       text-decoration: none;
+      margin: 0 5px;
     }
 
-    footer a:hover {
+    .footer-links a:hover {
       text-decoration: underline;
+    }
+
+    .footer-tagline {
+      margin: 10px 0;
+      font-size: 14px;
+      color: #cce7ff;
+    }
+
+    .footer-contact {
+      font-size: 14px;
+      margin-top: 8px;
     }
 
     @media(max-width: 600px) {
@@ -140,56 +141,48 @@
 
 <body>
 
-  <!-- Header -->
-  <header>
-    <img src="g4s-logo.png" alt="G4S Logo">
-    <h1>G4S Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+<header>
+  <img src="g4s-logo.png" alt="G4S Logo">
+  <h1>G4S Cumilla Internal Dashboard</h1>
+  <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="aboutus.html">About Us</a>
-      <a href="contactus.html">Contact Us</a>
-    </nav>
-  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="aboutus.html">About Us</a>
+    <a href="contactus.html">Contact Us</a>
+  </nav>
+</header>
 
-  <!-- Main Section -->
-  <div class="form-container">
-    <h2>Resignation Form</h2>
-    <p>
-      Click the button below to fill out your resignation form.
-      A prepared resignation letter will be emailed to you as a PDF.
-    </p>
+<div class="form-container">
+  <h2>Resignation Form</h2>
+  <p>
+    Click the button below to fill out your resignation form.
+    A prepared resignation letter will be emailed to you as a PDF.
+  </p>
 
-    <a class="button" href="https://forms.gle/SPGa2UywFvEPzxAt8" target="_blank" rel="noopener">
-      Resignation Application
-    </a>
+  <a class="button" href="https://forms.gle/SPGa2UywFvEPzxAt8" target="_blank" rel="noopener">
+    Resignation Application
+  </a>
+</div>
+
+<footer>
+  <p>&copy; 2026 | G4S Cumilla</p>
+
+  <div class="footer-links">
+    <a href="aboutus.html">About Us</a> | 
+    <a href="contactus.html">Contact Us</a> | 
+    <a href="faq.html">FAQ</a>
   </div>
 
-  <!-- Footer -->
-  <footer>
+  <p class="footer-tagline">
+    Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only
+  </p>
 
-    <div>
-      <h3>Quick Links</h3>
-      <p><a href="index.html">Homepage</a></p>
-      <p><a href="aboutus.html">About Us</a></p>
-      <p><a href="contactus.html">Contact Us</a></p>
-    </div>
-
-    <br>
-
-    <div>
-      <h3>Contact Information</h3>
-      <p>Address: G4S Cumilla House, 44/A, Judge Court Road, Cumilla-3500</p>
-      <p>Phone: +8801313-209156</p>
-      <p>Email: <a href="mailto:nothingistruehereinourselves@gmail.com">nothingistruehereinourselves@gmail.com</a></p>
-    </div>
-
-    <br>
-
-    <p>© 2026 G4S Cumilla Internal Dashboard. All rights reserved.</p>
-
-  </footer>
+  <div class="footer-contact">
+    <span>📞 +8801313-209156</span> | 
+    <span>✉ nothingistruehereinourselves@gmail.com</span>
+  </div>
+</footer>
 
 </body>
 </html>
