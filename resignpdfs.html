@@ -3,69 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resignation App</title>
-
+  <title>Resignation App | G4S Cumilla</title>
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla&display=swap" rel="stylesheet">
-
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #90e0ef);
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      text-align: center;
-      padding: 30px 20px 20px;
-    }
-
-    header img {
-      width: 150px;
-      border-radius: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    header h1 {
-      font-size: 28px;
-      color: #023e8a;
-      text-shadow: 1px 1px 2px #90e0ef;
-    }
-
-    header p {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #0077b6;
-    }
-
-    /* Navigation */
-    nav {
-      margin-top: 15px;
-    }
-
-    nav a {
-      margin: 0 10px;
-      color: #023e8a;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
+    /* Only styling main content */
     .form-container {
       max-width: 700px;
       margin: 40px auto;
       padding: 40px;
-      background: #ffffffdd;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
     }
 
@@ -81,46 +30,25 @@
       line-height: 1.6;
     }
 
+    /* Resignation Application button styled like Back to Home button */
     .button {
-      font-size: 1.4em;
-      padding: 15px 40px;
-      background: linear-gradient(45deg, #ff4081, #f50057);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
       text-decoration: none;
+      background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+      padding: 32px 64px;
+      border-radius: 35px;
+      color: #023e8a;
+      font-weight: bold;
+      font-size: 1.43em;
+      border: 1px solid #94b9dc;
+      transition: 0.3s;
       display: inline-block;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .button:hover {
+      background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
-    }
-
-    footer {
-      background: #023e8a;
-      color: #fff;
-      padding: 30px 20px;
-      margin-top: auto;
-      text-align: center;
-      border-radius: 15px 15px 0 0;
-    }
-
-    footer h3 {
-      margin-bottom: 10px;
-      color: #90e0ef;
-    }
-
-    footer p, footer a {
-      margin: 5px 0;
-      color: #fff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
     }
 
     @media(max-width: 600px) {
@@ -132,7 +60,7 @@
       }
       .button {
         font-size: 1.2em;
-        padding: 12px 30px;
+        padding: 26px 52px;
       }
     }
   </style>
@@ -140,56 +68,36 @@
 
 <body>
 
-  <!-- Header -->
-  <header>
-    <img src="g4s-logo.png" alt="G4S Logo">
-    <h1>G4S Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps, and other resources for daily operations.</p>
+<!-- Load Header -->
+<div id="header"></div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="aboutus.html">About Us</a>
-      <a href="contactus.html">Contact Us</a>
-    </nav>
-  </header>
+<!-- Main Content -->
+<div class="form-container">
+  <h2>Resignation Form</h2>
+  <p>
+    Click the button below to find out the generated PDF files for which a resignation application form is already filled up.
+  </p>
 
-  <!-- Main Section -->
-  <div class="form-container">
-    <h2>Resignation Form</h2>
-    <p>
-      Click the button below to fill out your resignation form.
-      A prepared resignation letter will be emailed to you as a PDF.
-    </p>
+  <a class="button" href="https://drive.google.com/drive/folders/1-LszcCdAiYENjA8qbwKPurQrAd9eLPWu" target="_blank" rel="noopener">
+    Resignation PDF Files
+  </a>
+</div>
 
-    <a class="button" href="https://drive.google.com/drive/folders/1-LszcCdAiYENjA8qbwKPurQrAd9eLPWu" target="_blank" rel="noopener">
-      Submitted PDF Files
-    </a>
-  </div>
+<!-- Load Footer -->
+<div id="footer"></div>
 
-  <!-- Footer -->
-  <footer>
+<script>
+  // Load header and footer from separate files
+  function loadHTML(id, file) {
+      fetch(file)
+          .then(response => response.text())
+          .then(data => document.getElementById(id).innerHTML = data)
+          .catch(err => console.log(err));
+  }
 
-    <div>
-      <h3>Quick Links</h3>
-      <p><a href="index.html">Homepage</a></p>
-      <p><a href="aboutus.html">About Us</a></p>
-      <p><a href="contactus.html">Contact Us</a></p>
-    </div>
-
-    <br>
-
-    <div>
-      <h3>Contact Information</h3>
-      <p>Address: G4S Cumilla House, 44/A, Judge Court Road, Cumilla-3500</p>
-      <p>Phone: +8801313-209156</p>
-      <p>Email: <a href="mailto:nothingistruehereinourselves@gmail.com">nothingistruehereinourselves@gmail.com</a></p>
-    </div>
-
-    <br>
-
-    <p>© 2026 G4S Cumilla Internal Dashboard. All rights reserved.</p>
-
-  </footer>
+  loadHTML("header", "header.html");
+  loadHTML("footer", "footer.html");
+</script>
 
 </body>
 </html>
