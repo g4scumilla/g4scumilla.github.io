@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #eef4f9; /* soft Wapka-style background */
+    background: #eef4f9;
     color: #222;
 }
 
@@ -38,13 +38,14 @@ header h1 {
     color: #023e8a;
     margin: 4px 0 2px 0;
 }
+
 header p {
     font-size: 0.9em;
     color: #023e8a;
     margin: 0 0 8px 0;
 }
 
-/* Header buttons - Wapka style pill buttons */
+/* Header buttons */
 .header-buttons {
     display: flex;
     justify-content: space-around;
@@ -58,7 +59,7 @@ header p {
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
     padding: 8px 14px;
-    border-radius: 20px; /* pill-shaped */
+    border-radius: 20px;
     font-size: 0.85em;
     color: #023e8a;
     font-weight: bold;
@@ -79,25 +80,23 @@ section {
     max-width: 650px;
     margin: 20px auto;
     flex: 1;
-    text-align: center; /* center section content */
+    text-align: center;
 }
 
-/* Section title styling */
+/* Section title */
 .section-title {
-    font-family: inherit; /* same as link cards */
-    font-size: 1.26em; /* ~140% bigger than link card text */
+    font-size: 1.26em;
     font-weight: bold;
     color: #023e8a;
-    background: #dceefa; /* light highlight */
-    border: 1px solid #94b9dc; /* like link cards */
-    border-radius: 20px; /* like link cards */
+    background: #dceefa;
+    border: 1px solid #94b9dc;
+    border-radius: 20px;
     padding: 10px 20px;
     display: inline-block;
-    text-align: center;
     margin-bottom: 15px;
 }
 
-/* Links grid */
+/* Links */
 .links {
     display: grid;
     grid-template-columns: 1fr;
@@ -108,7 +107,7 @@ section {
 .link-card {
     background: linear-gradient(to bottom, #ffffff, #dceefa);
     padding: 10px;
-    border-radius: 20px; /* pill-shaped */
+    border-radius: 20px;
     text-align: center;
     font-size: 0.9em;
     font-weight: bold;
@@ -126,36 +125,12 @@ section {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Footer like m.wapka.org */
-footer {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 12px;
-    flex-shrink: 0;
-    border-top: 1px solid #444;
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @media(max-width:500px){
-    header h1 {
-        font-size: 1.2em;
-    }
-    header p {
-        font-size: 0.8em;
-    }
-    .link-card {
-        font-size: 0.85em;
-    }
-    .header-buttons {
-        max-width: 100%;
-        gap: 6px;
-    }
-    .section-title {
-        font-size: 1.1em;
-        padding: 8px 15px;
-    }
+    header h1 { font-size: 1.2em; }
+    header p { font-size: 0.8em; }
+    .link-card { font-size: 0.85em; }
+    .section-title { font-size: 1.1em; }
 }
 </style>
 </head>
@@ -178,24 +153,21 @@ footer {
     <div class="section-title">Internal Tools & Automations</div>
 
     <div class="links">
-        <div class="link-card">
-            <a href="parentresignation.html">Resignation Automations</a>
-        </div>
-        <div class="link-card">
-            <a href="adresignapp.html">Prepare Advance Resignation Letter</a>
-        </div>
-        <div class="link-card">
-            <a href="trainingsheet.html">Prepare Training Sheet</a>
-        </div>
-        <div class="link-card">
-            <a href="#">Other Internal Links</a>
-        </div>
+        <div class="link-card"><a href="parentresignation.html">Resignation Automations</a></div>
+        <div class="link-card"><a href="adresignapp.html">Prepare Advance Resignation Letter</a></div>
+        <div class="link-card"><a href="trainingsheet.html">Prepare Training Sheet</a></div>
+        <div class="link-card"><a href="#">Other Internal Links</a></div>
     </div>
 </section>
 
-<footer>
-    &copy; 2026 | G4S Cumilla
-</footer>
+<!-- Footer loaded dynamically -->
+<div id="footer"></div>
+
+<script>
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
+</script>
 
 </body>
 </html>
