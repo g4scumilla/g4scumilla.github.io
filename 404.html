@@ -5,15 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webpage Not Found | G4S Cumilla</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* Make Go Back Home button big and styled like header buttons */
+.back-home {
+    display: inline-block;
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    color: #023e8a;
+    font-weight: bold;
+    font-size: 1.5em; /* bigger font */
+    padding: 20px 50px; /* big padding */
+    border-radius: 25px; /* pill shape */
+    border: 1px solid #94b9dc;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    margin-bottom: 30px;
+}
+
+.back-home:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
+/* Center the main content vertically */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-<!-- Header will be loaded dynamically -->
+<!-- Header -->
 <div id="header"></div>
 
 <div class="main-content">
-    <!-- Go Back Home button -->
+    <!-- Big Go Back Home button -->
     <a href="index.html" class="back-home">Go Back Home</a>
 
     <h2>Webpage Not Found</h2>
@@ -27,10 +61,10 @@
     <p>Or contact the admin if you think this is an error.</p>
 </div>
 
-<!-- Footer will be loaded dynamically -->
+<!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load header & footer dynamically -->
+<!-- Load header & footer -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
