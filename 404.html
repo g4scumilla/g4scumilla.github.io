@@ -84,7 +84,7 @@ header p {
     padding: 40px 20px;
 }
 
-/* Go Back Home button */
+/* Go Back Home button - first and 130% bigger */
 .main-content a.back-home {
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
@@ -141,15 +141,30 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Footer styled like header (same as other pages) */
+/* Footer styling same as other pages */
 footer {
     background: #cce0f5;
     color: #023e8a;
     text-align: center;
-    padding: 12px 0;
+    padding: 12px 10px;
     font-size: 0.9em;
     border-top: 1px solid #a8c8e6;
-    flex-shrink: 0;
+}
+
+footer .footer-links a {
+    text-decoration: none;
+    color: #023e8a;
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+footer .footer-links a:hover {
+    text-decoration: underline;
+}
+
+footer .footer-contact span {
+    display: inline-block;
+    margin: 2px 8px;
 }
 
 /* Responsive */
@@ -193,7 +208,19 @@ footer {
 </div>
 
 <footer>
-    &copy; 2026 | G4S Cumilla
+    <p>&copy; 2026 | G4S Cumilla</p>
+
+    <div class="footer-links">
+        <a href="aboutus">About Us</a> | 
+        <a href="contactus">Contact Us</a> | 
+        <a href="faq">FAQ</a>
+    </div>
+
+    <p class="footer-tagline">Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only</p>
+
+    <div class="footer-contact">
+        <span>📞 +8801313-209156</span> | <span>✉ nothingistruehereinourselves@gmail.com</span>
+    </div>
 </footer>
 
 </body>
