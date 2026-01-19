@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 Not Found | G4S Cumilla</title>
+<title>Webpage Not Found | G4S Cumilla</title>
 
 <style>
 body {
@@ -84,6 +84,25 @@ header p {
     padding: 40px 20px;
 }
 
+/* Go Back Home button - now first and 130% bigger */
+.main-content a.back-home {
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 32px 64px; /* 130% bigger than previous 14px/28px */
+    border-radius: 35px;
+    color: #023e8a;
+    font-weight: bold;
+    font-size: 1.43em; /* bigger font */
+    border: 1px solid #94b9dc;
+    transition: 0.2s;
+    margin-bottom: 25px;
+}
+
+.main-content a.back-home:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 .main-content h2 {
     font-size: 2em;
     color: #023e8a;
@@ -122,25 +141,6 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Go Back Home button - bigger */
-.main-content a.back-home {
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 14px 28px; /* bigger */
-    border-radius: 25px;
-    color: #023e8a;
-    font-weight: bold;
-    font-size: 1.1em; /* bigger font */
-    border: 1px solid #94b9dc;
-    transition: 0.2s;
-    margin-top: 20px;
-}
-
-.main-content a.back-home:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-
 /* Footer */
 footer {
     background: #333;
@@ -159,7 +159,7 @@ footer {
     .main-content h2 { font-size: 1.6em; }
     .main-content p { font-size: 0.9em; }
     .main-content ul li a { font-size: 0.85em; padding: 5px 10px; }
-    .main-content a.back-home { font-size: 1em; padding: 12px 24px; }
+    .main-content a.back-home { font-size: 1.3em; padding: 26px 52px; }
 }
 </style>
 </head>
@@ -179,17 +179,18 @@ footer {
 </header>
 
 <div class="main-content">
-    <h2>404 Not Found</h2>
+    <!-- Go Back Home first -->
+    <a href="index.html" class="back-home">Go Back Home</a>
+
+    <h2>Webpage Not Found</h2>
     <p>The page you are looking for does not exist, may have been moved, or the URL was typed incorrectly.</p>
     <p>You can try the following:</p>
     <ul>
-        <li><a href="index.html">Go back to the Homepage</a></li>
         <li><a href="parentresignation.html">Check Resignation Automations</a></li>
         <li><a href="adresignapp.html">Prepare Advance Resignation Letter</a></li>
         <li><a href="trainingsheet.html">Prepare Training Sheet</a></li>
     </ul>
     <p>Or contact the admin if you think this is an error.</p>
-    <a href="index.html" class="back-home">Go Back Home</a>
 </div>
 
 <footer>
