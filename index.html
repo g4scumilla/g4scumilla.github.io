@@ -6,7 +6,7 @@
 <title>G4S Cumilla Internal Dashboard</title>
 
 <style>
-/* Body & font for wapka-like mobile style */
+/* Body & font for Wapka-like mobile style */
 body {
     font-family: Arial, sans-serif;
     font-size: 14px;
@@ -16,18 +16,16 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: #f2f2f2;
+    background: #ffffff; /* clean white background like many Wapka themes */
     color: #222;
 }
 
 /* Header */
 header {
-    background: #dbe9f4;
-    padding: 15px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #f2f2f2; /* subtle neutral header background */
+    padding: 12px 8px;
     text-align: center;
+    border-bottom: 1px solid #ccc;
 }
 
 /* Logo */
@@ -47,39 +45,37 @@ header p {
     font-size: 0.9em;
     color: #023e8a;
     margin: 0 0 8px 0;
-    opacity: 0.85;
 }
 
-/* Header Buttons - wapka style */
+/* Header Buttons - Wapka style */
 .header-buttons {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 300px;
-    margin: 5px 0 0 0;
+    max-width: 320px;
+    margin: 4px auto;
 }
 
 .header-buttons a {
     text-decoration: none;
-    background: #ffffff;
+    background: #e8e8e8;
     padding: 6px 10px;
     border-radius: 4px;
     font-size: 0.85em;
     color: #023e8a;
     font-weight: bold;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     text-align: center;
-    transition: 0.2s;
+    border: 1px solid #bbb;
 }
 
 .header-buttons a:hover {
-    background: #90e0ef;
+    background: #ddd;
 }
 
 /* Section content */
 section {
-    padding: 10px;
-    max-width: 600px;
+    padding: 12px;
+    max-width: 650px;
     margin: auto;
     flex: 1;
 }
@@ -100,18 +96,19 @@ h2 {
 }
 
 .link-card {
-    background: #ffffff;
+    background: #fafafa;
     padding: 10px;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     text-align: center;
     font-size: 0.9em;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: none; /* simpler card, Wapka style */
     transition: 0.2s;
 }
 
 .link-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    background: #f0f0f0;
+    border-color: #ccc;
 }
 
 .link-card a {
@@ -129,22 +126,6 @@ footer {
     font-size: 12px;
     flex-shrink: 0;
 }
-
-/* Responsive adjustments */
-@media(max-width:500px){
-    header h1 {
-        font-size: 1.2em;
-    }
-    header p {
-        font-size: 0.8em;
-    }
-    .header-buttons {
-        max-width: 250px;
-    }
-    .link-card {
-        font-size: 0.85em;
-    }
-}
 </style>
 </head>
 
@@ -153,7 +134,7 @@ footer {
 <header>
     <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo">
     <h1>Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & operational resources</p>
+    <p>Quick access to forms, sheets, web apps & resources</p>
 
     <div class="header-buttons">
         <a href="aboutus.html">About Us</a>
