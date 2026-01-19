@@ -1,128 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G4S Cumilla Internal Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G4S Cumilla Internal Dashboard</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-    header {
-      background: #dbe9f4; /* mild background */
-      color: #023e8a;
-      padding: 30px 20px;
-      text-align: center;
-    }
+/* Header with logo on left */
+header {
+    background: #dbe9f4; /* mild background */
+    color: #023e8a;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centers header content horizontally */
+    gap: 15px; /* space between logo and text */
+}
 
-    header img {
-      width: 140px;       /* perfect proportional size */
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      margin-bottom: 15px;
-    }
+header img {
+    width: 60px; /* smaller logo */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2em;
-    }
+header .header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
-    header p {
-      margin-top: 8px;
-      font-size: 1em;
-      opacity: 0.9;
-    }
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
 
-    section {
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
-      flex: 1; /* expand to push footer down */
-    }
+header p {
+    margin: 2px 0 0 0;
+    font-size: 0.95em;
+    opacity: 0.9;
+}
 
-    h2 {
-      color: #023e8a;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 6px;
-      margin-top: 35px;
-    }
+/* Section */
+section {
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+    flex: 1; /* expand to push footer down */
+}
 
-    .links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
+h2 {
+    color: #023e8a;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 6px;
+    margin-top: 35px;
+}
 
-    .link-card {
-      background: #ffffff;
-      padding: 16px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: 0.3s;
-    }
+.links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    .link-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+.link-card {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
 
-    .link-card a {
-      text-decoration: none;
-      color: #023e8a;
-      font-weight: bold;
-      font-size: 16px;
-    }
+.link-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
 
-    footer {
-      background: #023e8a;
-      color: #fff;
-      text-align: center;
-      padding: 12px;
-      font-size: 14px;
-    }
-  </style>
+.link-card a {
+    text-decoration: none;
+    color: #023e8a;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Footer pinned at bottom */
+footer {
+    background: #023e8a;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
-  <h1>G4S Cumilla Internal Dashboard</h1>
-  <p>Quick access to forms, sheets, web apps, and operational resources</p>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
+    <div class="header-text">
+        <h1>G4S Cumilla Internal Dashboard</h1>
+        <p>Quick access to forms, sheets, web apps, and operational resources</p>
+    </div>
 </header>
 
 <section>
-  <h2>Internal Tools & Automations</h2>
+    <h2>Internal Tools & Automations</h2>
 
-  <div class="links">
-    <div class="link-card">
-      <a href="parentresignation.html">Resignation Automations</a>
+    <div class="links">
+        <div class="link-card">
+            <a href="parentresignation.html">Resignation Automations</a>
+        </div>
+        <div class="link-card">
+            <a href="adresignapp.html">Prepare Advance Resignation Letter</a>
+        </div>
+        <div class="link-card">
+            <a href="trainingsheet.html">Prepare Training Sheet</a>
+        </div>
+        <div class="link-card">
+            <a href="#">Other Internal Links</a>
+        </div>
     </div>
-    <div class="link-card">
-      <a href="adresignapp.html">Prepare Advance Resignation Letter</a>
-    </div>
-    <div class="link-card">
-      <a href="trainingsheet.html">Prepare Training Sheet</a>
-    </div>
-    <div class="link-card">
-      <a href="#">Other Internal Links</a>
-    </div>
-  </div>
 </section>
 
 <footer>
-  © 2026 | G4S Cumilla
+    © 2026 | G4S Cumilla
 </footer>
 
 </body>
