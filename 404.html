@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>404 – Page Not Found</title>
+  <title>404 | Page Not Found</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -10,79 +10,133 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
     }
 
     body {
-      height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #0f4c75, #000814 70%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
+      overflow: hidden;
+    }
+
+    /* Floating background blobs */
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      animation: float 8s infinite alternate ease-in-out;
+    }
+
+    body::after {
+      background: linear-gradient(135deg, #ff4ecd, #7f00ff);
+      bottom: -80px;
+      right: -80px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-60px); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 520px;
+      padding: 45px 40px;
       text-align: center;
-    }
-
-    .container {
-      max-width: 500px;
-      padding: 40px;
       background: rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
-    h1 {
-      font-size: 96px;
+    .code {
+      font-size: 110px;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #00c6ff, #7f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 10px;
     }
 
-    h2 {
-      font-size: 24px;
-      margin-bottom: 15px;
-      font-weight: normal;
+    h1 {
+      font-size: 26px;
+      margin-bottom: 12px;
+      font-weight: 500;
     }
 
     p {
       font-size: 15px;
       opacity: 0.9;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
 
-    a {
+    .btn {
       display: inline-block;
-      padding: 12px 28px;
-      text-decoration: none;
-      background-color: #00c6ff;
+      padding: 14px 34px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
       color: #000;
-      border-radius: 30px;
-      font-weight: bold;
-      transition: 0.3s;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.35s;
+      box-shadow: 0 8px 25px rgba(0, 198, 255, 0.45);
     }
 
-    a:hover {
-      background-color: #ffffff;
-      color: #000;
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 198, 255, 0.65);
+      background: linear-gradient(135deg, #ffffff, #e6f7ff);
     }
 
     footer {
-      margin-top: 25px;
-      font-size: 12px;
-      opacity: 0.7;
+      margin-top: 30px;
+      font-size: 13px;
+      opacity: 0.75;
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 480px) {
+      .code {
+        font-size: 80px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      .card {
+        padding: 35px 25px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>404</h1>
-    <h2>Page Not Found</h2>
+  <div class="card">
+    <div class="code">404</div>
+    <h1>Oops! Page Not Found</h1>
     <p>
-      The page you’re looking for doesn’t exist or may have been moved.
+      The page you are trying to reach doesn’t exist,  
+      or it may have been moved.
     </p>
-    <a href="/">Go Back Home</a>
+
+    <a href="/" class="btn">Back to Home</a>
 
     <footer>
-      © 2026 | GitHub Pages
+      © 2026 | g4scumilla
     </footer>
   </div>
 </body>
