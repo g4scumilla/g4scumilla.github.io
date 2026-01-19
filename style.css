@@ -115,21 +115,21 @@ section {
 
 /* ===== FIX: Sticky Footer ===== */
 
-/* Make body a full-height flex container */
+/* Body full height */
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* full viewport height */
+    min-height: 100vh;
     margin: 0;
     padding: 0;
 }
 
-/* Make main section grow to take remaining space */
+/* Section grows to take remaining space */
 section {
     flex: 1 0 auto; /* grow & shrink as needed */
 }
 
-/* Footer styles remain, just ensure it doesn’t shrink */
+/* Footer styling for <footer> or #footer */
 footer, #footer {
     background: #333;
     color: #fff;
