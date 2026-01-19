@@ -17,28 +17,23 @@ body {
     min-height: 100vh;
 }
 
-/* Header with logo on left */
+/* Header */
 header {
     background: #dbe9f4; /* mild background */
     color: #023e8a;
-    padding: 20px 25px;
+    padding: 20px;
     display: flex;
+    flex-direction: column; /* stack logo + text on small screens */
     align-items: center;
-    justify-content: center; /* centers header content horizontally */
-    gap: 15px; /* space between logo and text */
+    gap: 12px;
+    text-align: center;
 }
 
 header img {
-    width: 60px; /* smaller logo */
+    width: 80px; /* logo acts as G4S */
     height: auto;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-header .header-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
 header h1 {
@@ -47,7 +42,7 @@ header h1 {
 }
 
 header p {
-    margin: 2px 0 0 0;
+    margin: 4px 0 0 0;
     font-size: 0.95em;
     opacity: 0.9;
 }
@@ -57,7 +52,7 @@ section {
     padding: 20px;
     max-width: 1000px;
     margin: auto;
-    flex: 1; /* expand to push footer down */
+    flex: 1;
 }
 
 h2 {
@@ -103,6 +98,13 @@ footer {
     padding: 12px;
     font-size: 14px;
 }
+
+/* Responsive adjustments */
+@media(max-width:600px){
+    header {
+        flex-direction: column; /* stack logo above title for small screens */
+    }
+}
 </style>
 </head>
 
@@ -110,10 +112,8 @@ footer {
 
 <header>
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuYmIXxfhgr1NuzhXE_nUSWoghI-gvg-vQvO3RhVW-8w&s=10" alt="G4S Logo">
-    <div class="header-text">
-        <h1>G4S Cumilla Internal Dashboard</h1>
-        <p>Quick access to forms, sheets, web apps, and operational resources</p>
-    </div>
+    <h1>Cumilla Internal Dashboard</h1>
+    <p>Quick access to forms, sheets, web apps, and operational resources</p>
 </header>
 
 <section>
