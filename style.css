@@ -170,3 +170,29 @@ body {
   font-size: 12px;
   margin-top: 6px;
 }
+
+/* ===== Android text edge fix (Contact page safe spacing) ===== */
+.main-content {
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.contact-container {
+    padding-left: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+.contact-card {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Prevent long text/email overflow on small screens */
+.contact-card p,
+.contact-card a {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
