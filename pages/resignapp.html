@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resignation App | G4S Cumilla</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla&display=swap" rel="stylesheet">
+  <style>
+    /* Only styling main content */
+    .form-container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .form-container h2 {
+      font-size: 2em;
+      color: #d81b60;
+      margin-bottom: 25px;
+    }
+
+    .form-container p {
+      font-size: 1.1em;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* Resignation Application button styled like Back to Home button */
+    .button {
+      text-decoration: none;
+      background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+      padding: 32px 64px;
+      border-radius: 35px;
+      color: #023e8a;
+      font-weight: bold;
+      font-size: 1.43em;
+      border: 1px solid #94b9dc;
+      transition: 0.3s;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .button:hover {
+      background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+    }
+
+    @media(max-width: 600px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+      .form-container h2 {
+        font-size: 1.6em;
+      }
+      .button {
+        font-size: 1.2em;
+        padding: 26px 52px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Load Header -->
+<div id="header"></div>
+
+<!-- Main Content -->
+<div class="form-container">
+  <h2>Resignation Form</h2>
+  <p>
+    Click the button below to fill out your resignation form.
+    A prepared resignation letter will be emailed to you as a PDF.
+  </p>
+
+  <a class="button" href="https://forms.gle/SPGa2UywFvEPzxAt8" target="_blank" rel="noopener">
+    Resignation Application
+  </a>
+</div>
+
+<!-- Load Footer -->
+<div id="footer"></div>
+
+<script>
+  // Load header and footer from separate files
+  function loadHTML(id, file) {
+      fetch(file)
+          .then(response => response.text())
+          .then(data => document.getElementById(id).innerHTML = data)
+          .catch(err => console.log(err));
+  }
+
+  loadHTML("header", "header.html");
+  loadHTML("footer", "footer.html");
+</script>
+
+</body>
+</html>
