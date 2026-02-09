@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resignation App | G4S Cumilla</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS: go up one folder -->
+  <link rel="stylesheet" href="../style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla&display=swap" rel="stylesheet">
   <style>
     /* Only styling main content */
@@ -66,7 +67,6 @@
   </style>
 </head>
 
-
 <body>
 
 <!-- Load Header -->
@@ -89,9 +89,9 @@
 <div id="footer"></div>
 
 <script>
-  // Load header and footer from separate files
+  // Load header and footer from root folder
   function loadHTML(id, file) {
-      fetch(file)
+      fetch("../" + file)   // go up one folder to find header.html/footer.html
           .then(response => response.text())
           .then(data => document.getElementById(id).innerHTML = data)
           .catch(err => console.log(err));
