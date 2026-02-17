@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 College - Student Panel</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+}
+
+/* Top Header */
+.header {
+    background: #1e8aa5;
+    color: white;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-btn {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.profile {
+    background: #157a91;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Card Section */
+.card {
+    background: white;
+    margin: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-row {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.card-row:nth-child(odd) {
+    background: #f2f6f9;
+}
+
+.label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.value {
+    color: #333;
+}
+
+/* Table Section */
+.section-title {
+    font-size: 20px;
+    margin: 15px;
+    color: #444;
+}
+
+.table-container {
+    margin: 15px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #e9ecef;
+}
+
+.download-link {
+    color: #1e8aa5;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="header">
+    <div class="header-left">
+        <div class="menu-btn">☰</div>
+        <div><strong>7 College</strong></div>
+    </div>
+    <div class="profile">ABDULLAHIL KUAFI ▼</div>
+</div>
+
+<!-- Student Info Card -->
+<div class="card">
+    <div class="card-row">
+        <div class="label">REG No.</div>
+        <div class="value">71711028327</div>
+    </div>
+    <div class="card-row">
+        <div class="label">Father's Name</div>
+        <div class="value">Md. Ezabul Haque</div>
+    </div>
+    <div class="card-row">
+        <div class="label">Mother's Name</div>
+        <div class="value">Firoza Begum</div>
+    </div>
+    <div class="card-row">
+        <div class="label">College</div>
+        <div class="value">Government Titumir College</div>
+    </div>
+    <div class="card-row">
+        <div class="label">Subject</div>
+        <div class="value">1101 - ENGLISH</div>
+    </div>
+    <div class="card-row">
+        <div class="label">Session</div>
+        <div class="value">2020-2021</div>
+    </div>
+</div>
+
+<!-- Form Fill-up Section -->
+<div class="section-title">Form fill-up info</div>
+
+<div class="table-container">
+    <table>
+        <tr>
+            <th>College Status</th>
+            <th>Centre</th>
+            <th>Admit Card</th>
+        </tr>
+        <tr>
+            <td>Verified</td>
+            <td>Dhaka College</td>
+            <td><a href="#" class="download-link">Download Admit</a></td>
+        </tr>
+        <tr>
+            <td>Verified</td>
+            <td>-</td>
+            <td>NA</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
