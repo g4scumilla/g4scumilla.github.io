@@ -6,26 +6,35 @@
 <title>7 College - Student Panel</title>
 
 <style>
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
 }
 
-/* Top Header */
+body {
+    background: #f4f6f9;
+}
+
+/* ===== Header ===== */
 .header {
-    background: #1e8aa5;
+    background: #1f8ea8;
     color: white;
     padding: 12px 15px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 .menu-btn {
@@ -34,19 +43,75 @@ body {
 }
 
 .profile {
-    background: #157a91;
-    padding: 8px 12px;
-    border-radius: 5px;
+    position: relative;
     cursor: pointer;
 }
 
-/* Card Section */
+.profile-box {
+    background: #157a91;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    color: black;
+    width: 150px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    display: none;
+}
+
+.dropdown div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown div:hover {
+    background: #f2f2f2;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 220px;
+    background: #2c3e50;
+    color: white;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -220px;
+    padding-top: 60px;
+    transition: 0.3s;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background: #34495e;
+}
+
+/* ===== Main Content ===== */
+.main {
+    margin-top: 70px;
+    padding: 15px;
+    transition: 0.3s;
+}
+
+/* Card */
 .card {
     background: white;
-    margin: 15px;
     border-radius: 5px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .card-row {
@@ -55,39 +120,32 @@ body {
 }
 
 .card-row:nth-child(odd) {
-    background: #f2f6f9;
+    background: #f7fbfd;
 }
 
 .label {
     font-weight: bold;
     color: #555;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
-.value {
-    color: #333;
-}
-
-/* Table Section */
+/* Table */
 .section-title {
     font-size: 20px;
-    margin: 15px;
+    margin: 20px 0 10px;
     color: #444;
-}
-
-.table-container {
-    margin: 15px;
-    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 th, td {
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #ddd;
     text-align: center;
 }
@@ -96,10 +154,16 @@ th {
     background: #e9ecef;
 }
 
-.download-link {
-    color: #1e8aa5;
-    text-decoration: none;
+.download {
+    color: #1f8ea8;
     font-weight: bold;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        width: 200px;
+    }
 }
 </style>
 </head>
@@ -109,44 +173,59 @@ th {
 <!-- Header -->
 <div class="header">
     <div class="header-left">
-        <div class="menu-btn">☰</div>
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
         <div><strong>7 College</strong></div>
     </div>
-    <div class="profile">ABDULLAHIL KUAFI ▼</div>
-</div>
 
-<!-- Student Info Card -->
-<div class="card">
-    <div class="card-row">
-        <div class="label">REG No.</div>
-        <div class="value">71711028327</div>
-    </div>
-    <div class="card-row">
-        <div class="label">Father's Name</div>
-        <div class="value">Md. Ezabul Haque</div>
-    </div>
-    <div class="card-row">
-        <div class="label">Mother's Name</div>
-        <div class="value">Firoza Begum</div>
-    </div>
-    <div class="card-row">
-        <div class="label">College</div>
-        <div class="value">Government Titumir College</div>
-    </div>
-    <div class="card-row">
-        <div class="label">Subject</div>
-        <div class="value">1101 - ENGLISH</div>
-    </div>
-    <div class="card-row">
-        <div class="label">Session</div>
-        <div class="value">2020-2021</div>
+    <div class="profile" onclick="toggleDropdown()">
+        <div class="profile-box">ABDULLAHIL KUAFI ▼</div>
+        <div class="dropdown" id="dropdownMenu">
+            <div>Profile</div>
+            <div>Logout</div>
+        </div>
     </div>
 </div>
 
-<!-- Form Fill-up Section -->
-<div class="section-title">Form fill-up info</div>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <a href="#">Home</a>
+    <a href="#">Profile</a>
+    <a href="#">Form Fill-up</a>
+    <a href="#">Certificates</a>
+</div>
 
-<div class="table-container">
+<!-- Main -->
+<div class="main" id="mainContent">
+
+    <div class="card">
+        <div class="card-row">
+            <div class="label">REG No.</div>
+            71711028327
+        </div>
+        <div class="card-row">
+            <div class="label">Father's Name</div>
+            Md. Ezabul Haque
+        </div>
+        <div class="card-row">
+            <div class="label">Mother's Name</div>
+            Firoza Begum
+        </div>
+        <div class="card-row">
+            <div class="label">College</div>
+            Government Titumir College
+        </div>
+        <div class="card-row">
+            <div class="label">Subject</div>
+            1101 - ENGLISH
+        </div>
+        <div class="card-row">
+            <div class="label">Session</div>
+            2020-2021
+        </div>
+    </div>
+
+    <div class="section-title">Form fill-up info</div>
+
     <table>
         <tr>
             <th>College Status</th>
@@ -156,7 +235,7 @@ th {
         <tr>
             <td>Verified</td>
             <td>Dhaka College</td>
-            <td><a href="#" class="download-link">Download Admit</a></td>
+            <td><a href="#" class="download">Download Admit</a></td>
         </tr>
         <tr>
             <td>Verified</td>
@@ -164,7 +243,31 @@ th {
             <td>NA</td>
         </tr>
     </table>
+
 </div>
+
+<script>
+function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+    if (sidebar.style.left === "0px") {
+        sidebar.style.left = "-220px";
+    } else {
+        sidebar.style.left = "0px";
+    }
+}
+
+function toggleDropdown() {
+    var menu = document.getElementById("dropdownMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// Close dropdown when clicking outside
+window.onclick = function(e) {
+    if (!e.target.closest('.profile')) {
+        document.getElementById("dropdownMenu").style.display = "none";
+    }
+}
+</script>
 
 </body>
 </html>
