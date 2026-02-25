@@ -5,20 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kuafi Personal Dashboard</title>
 <style>
-* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial, sans-serif;}
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif;}
 
-/* Page border wrapper */
+/* Page wrapper */
 .page-wrapper{
-    border:2px solid #0070c0;
-    border-radius:15px;
     max-width:1200px;
-    margin:10px auto;
-    padding:0;
-    background:white;
-    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    margin:0 auto;
+    padding-top:70px; /* leave space for fixed header */
 }
 
-/* Overlay */
+/* Overlay for sidebar */
 .overlay{
     display:none;
     position:fixed;
@@ -28,32 +24,26 @@
     z-index:900;
 }
 
-/* Top navigation */
-.navbar{
+/* Header (Jugantor style) */
+.header{
+    position:fixed;
+    top:0; left:0;
+    width:100%;
+    background:#0070c0;
+    color:white;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    background:#0070c0;
-    color:white;
     padding:15px 20px;
-    border-top-left-radius:15px;
-    border-top-right-radius:15px;
-    position:relative;
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    z-index:1000;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    transition:0.3s;
 }
-.nav-left{display:flex; align-items:center;}
-.nav-left button{
-    background:#0059b3;
-    border:none;
-    color:white;
-    font-size:20px;
-    padding:8px 12px;
-    margin-right:15px;
-    border-radius:5px;
-    cursor:pointer;
+.header.scrolled{
+    box-shadow:0 4px 15px rgba(0,0,0,0.25);
 }
-.nav-title{font-size:22px; font-weight:bold;}
-.nav-right button{
+.header .logo{font-size:22px; font-weight:bold;}
+.header button{
     background:#0059b3;
     border:none;
     color:white;
@@ -72,8 +62,7 @@
     color:white;
     padding:20px;
     transition:0.4s;
-    z-index:1000;
-    border-right:2px solid #0059b3;
+    z-index:999;
 }
 .sidebar.active{left:0;}
 .sidebar h2{font-size:24px; margin-bottom:25px; letter-spacing:1px;}
@@ -90,8 +79,11 @@
 
 /* Main content */
 .main{
+    margin-left:0;
     padding:20px;
+    transition:margin-left 0.4s;
 }
+.main.shifted{margin-left:250px;}
 
 /* Cards */
 .cards{
@@ -114,7 +106,6 @@
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    transform:translateY(0);
 }
 .card:hover{
     transform:translateY(-8px) scale(1.05);
@@ -145,7 +136,6 @@ footer{
     background:#222;
     color:white;
     font-size:13px;
-    border-radius:0 0 15px 15px;
     margin-top:20px;
 }
 
@@ -153,7 +143,6 @@ footer{
 @media(max-width:768px){
     .cards{flex-direction:column;align-items:center;}
     .card{width:90%; height:160px;}
-    .nav-title{font-size:18px;}
 }
 </style>
 </head>
@@ -172,22 +161,20 @@ footer{
     <a href="#">Profile / Settings</a>
 </div>
 
+<!-- Header -->
+<div class="header" id="header">
+    <div class="logo">
+        <button id="menuBtn">☰</button>
+        Kuafi Dashboard
+    </div>
+    <button>Sign Up</button>
+</div>
+
 <!-- Page Wrapper -->
 <div class="page-wrapper">
 
-    <!-- Top Navigation -->
-    <div class="navbar">
-        <div class="nav-left">
-            <button id="menuBtn">☰</button>
-            <div class="nav-title">Kuafi Dashboard</div>
-        </div>
-        <div class="nav-right">
-            <button>Sign Up</button>
-        </div>
-    </div>
-
     <!-- Main Content -->
-    <div class="main">
+    <div class="main" id="main">
         <div class="cards">
             <div class="card">
                 <h3><a href="#">Forms</a></h3>
@@ -222,13 +209,26 @@ footer{
 const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
+const main = document.getElementById('main');
 menuBtn.addEventListener('click', ()=>{
     sidebar.classList.toggle('active');
     overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+    main.classList.toggle('shifted');
 });
 overlay.addEventListener('click', ()=>{
     sidebar.classList.remove('active');
     overlay.style.display='none';
+    main.classList.remove('shifted');
+});
+
+// Header shadow on scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 5){
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
 });
 </script>
 
