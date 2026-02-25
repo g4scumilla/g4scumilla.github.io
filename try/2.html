@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuafi Dashboard</title>
+<style>
+/* Reset */
+* {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+
+/* Sidebar */
+.sidebar{
+    position: fixed;
+    top:0; left:0;
+    width:220px;
+    height:100%;
+    background:#004080;
+    color:white;
+    padding:20px;
+}
+.sidebar h2{
+    font-size:22px;
+    margin-bottom:20px;
+}
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:10px 0;
+    transition:0.3s;
+}
+.sidebar a:hover{
+    background:#0059b3;
+    padding-left:10px;
+}
+
+/* Main content */
+.main{
+    margin-left:220px;
+    padding:20px;
+}
+header{
+    background:#0070c0;
+    color:white;
+    padding:20px;
+    border-radius:8px;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+/* Clock */
+#clock{
+    font-size:18px;
+    margin-top:5px;
+}
+
+/* Cards */
+.cards{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+}
+.card{
+    background:white;
+    width:200px;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    text-decoration:none;
+    color:#333;
+    text-align:center;
+    transition:0.3s;
+}
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:15px;
+    background:#222;
+    color:white;
+    font-size:12px;
+    margin-top:40px;
+    border-radius:8px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .sidebar{position:relative;width:100%;height:auto;}
+    .main{margin-left:0;}
+    .cards{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Kuafi Portal</h2>
+    <a href="#">Home</a>
+    <a href="#">Forms</a>
+    <a href="#">Reports</a>
+    <a href="#">PDF Tools</a>
+    <a href="#">Resources</a>
+    <a href="#">Settings</a>
+</div>
+
+<div class="main">
+    <header>
+        <h1>Welcome, Kuafi!</h1>
+        <p>Your personal dashboard</p>
+        <div id="clock"></div>
+    </header>
+
+    <div class="cards">
+        <a href="#" class="card">
+            <h3>Forms</h3>
+            <p>Submit & Manage</p>
+        </a>
+
+        <a href="#" class="card">
+            <h3>Reports</h3>
+            <p>View Generated Reports</p>
+        </a>
+
+        <a href="#" class="card">
+            <h3>PDF Tools</h3>
+            <p>Create & Download PDFs</p>
+        </a>
+
+        <a href="#" class="card">
+            <h3>Resources</h3>
+            <p>Important Links & Files</p>
+        </a>
+    </div>
+</div>
+
+<footer>
+    © 2026 Kuafi Web Portal | All Rights Reserved
+</footer>
+
+<script>
+// Live Clock
+function updateClock(){
+    const now = new Date();
+    const h= now.getHours().toString().padStart(2,'0');
+    const m= now.getMinutes().toString().padStart(2,'0');
+    const s= now.getSeconds().toString().padStart(2,'0');
+    document.getElementById('clock').innerText = `🕒 ${h}:${m}:${s}`;
+}
+setInterval(updateClock,1000);
+updateClock();
+</script>
+
+</body>
+</html>
