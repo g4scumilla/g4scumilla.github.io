@@ -10,24 +10,28 @@
 
 <style>
 
-/* ====== Global ====== */
+/* ===== GLOBAL ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
 }
 
-/* ====== Header ====== */
+/* ===== HEADER ===== */
 header {
-    background: #004080;
+    background: linear-gradient(135deg, #004080, #0070c0);
     color: white;
-    padding: 15px 25px;
+    padding: 18px 30px;
     font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
-/* ====== Section ====== */
+/* ===== SECTION ===== */
 section {
     padding: 30px;
 }
@@ -42,14 +46,14 @@ section {
     padding-left: 12px;
 }
 
-/* ====== Links Grid ====== */
+/* ===== LINKS GRID ===== */
 .links {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 20px;
 }
 
-/* ====== Link Cards ====== */
+/* ===== LINK CARDS ===== */
 .link-card {
     background: white;
     border-radius: 14px;
@@ -81,7 +85,7 @@ section {
     border-color: #0070c0;
 }
 
-/* ====== Footer ====== */
+/* ===== FOOTER ===== */
 footer {
     background: #f1f1f1;
     color: gray;
@@ -92,7 +96,7 @@ footer {
     border-top: 1px solid #ddd;
 }
 
-/* ====== Responsive ====== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
     .section-title {
         font-size: 18px;
@@ -158,7 +162,7 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Load header and footer
+// Load header and footer dynamically
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
 </script>
