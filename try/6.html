@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuafi Personal Dashboard</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial, sans-serif;}
+
+/* Page border wrapper */
+.page-wrapper{
+    border:2px solid #0070c0;
+    border-radius:15px;
+    max-width:1200px;
+    margin:10px auto;
+    padding:0;
+    background:white;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Overlay */
+.overlay{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    z-index:900;
+}
+
+/* Top navigation */
+.navbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#0070c0;
+    color:white;
+    padding:15px 20px;
+    border-top-left-radius:15px;
+    border-top-right-radius:15px;
+    position:relative;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+.nav-left{display:flex; align-items:center;}
+.nav-left button{
+    background:#0059b3;
+    border:none;
+    color:white;
+    font-size:20px;
+    padding:8px 12px;
+    margin-right:15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+.nav-title{font-size:22px; font-weight:bold;}
+.nav-right{position:relative;}
+.profile-btn{
+    background:#0059b3;
+    border:none;
+    color:white;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+.profile-dropdown{
+    display:none;
+    position:absolute;
+    right:0;
+    top:40px;
+    background:white;
+    color:#004080;
+    border-radius:8px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    overflow:hidden;
+}
+.profile-dropdown a{
+    display:block;
+    text-decoration:none;
+    color:#004080;
+    padding:10px 15px;
+    transition:0.3s;
+}
+.profile-dropdown a:hover{background:#e0f0ff;}
+
+/* Sidebar */
+.sidebar{
+    position: fixed;
+    top:0; left:-250px;
+    width:250px;
+    height:100%;
+    background:#004080;
+    color:white;
+    padding:20px;
+    transition:0.4s;
+    z-index:1000;
+    border-right:2px solid #0059b3;
+}
+.sidebar.active{left:0;}
+.sidebar h2{font-size:24px; margin-bottom:25px; letter-spacing:1px;}
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px 0;
+    font-weight:500;
+    border-radius:5px;
+    transition:0.3s;
+}
+.sidebar a:hover{background:#0059b3; padding-left:15px;}
+
+/* Main content */
+.main{
+    padding:20px;
+}
+
+/* Cards */
+.cards{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+}
+.card{
+    background:linear-gradient(135deg,#ffffff,#e0f0ff);
+    width:250px;
+    height:180px; /* fixed height for uniformity */
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    text-decoration:none;
+    color:#004080;
+    text-align:center;
+    transition:0.4s;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transform:translateY(0);
+}
+.card:hover{
+    transform:translateY(-8px) scale(1.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+.card h3{margin-bottom:10px; font-size:18px;}
+.card p{font-size:14px; opacity:0.8;}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:15px;
+    background:#222;
+    color:white;
+    font-size:13px;
+    border-radius:0 0 15px 15px;
+    margin-top:20px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .cards{flex-direction:column;align-items:center;}
+    .card{width:90%; height:160px;}
+    .nav-title{font-size:18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h2>Kuafi Portal</h2>
+    <a href="#">Home</a>
+    <a href="#">Forms</a>
+    <a href="#">Reports</a>
+    <a href="#">PDF Tools</a>
+    <a href="#">Resources</a>
+    <a href="#">Profile / Settings</a>
+</div>
+
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+
+    <!-- Top Navigation -->
+    <div class="navbar">
+        <div class="nav-left">
+            <button id="menuBtn">☰</button>
+            <div class="nav-title">Kuafi Dashboard</div>
+        </div>
+        <div class="nav-right">
+            <button class="profile-btn" id="profileBtn">Kuafi ▼</button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#">Profile</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="cards">
+            <a href="#" class="card">
+                <h3>Forms</h3>
+                <p>Submit & Manage</p>
+            </a>
+            <a href="#" class="card">
+                <h3>Reports</h3>
+                <p>View Reports</p>
+            </a>
+            <a href="#" class="card">
+                <h3>PDF Tools</h3>
+                <p>Create & Download PDFs</p>
+            </a>
+            <a href="#" class="card">
+                <h3>Resources</h3>
+                <p>Important Links & Files</p>
+            </a>
+            <a href="#" class="card">
+                <h3>Profile</h3>
+                <p>Personal Info / Settings</p>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Kuafi Personal Dashboard | All Rights Reserved
+    </footer>
+</div>
+
+<script>
+// Sidebar toggle
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+menuBtn.addEventListener('click', ()=>{
+    sidebar.classList.toggle('active');
+    overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+});
+overlay.addEventListener('click', ()=>{
+    sidebar.classList.remove('active');
+    overlay.style.display='none';
+});
+
+// Profile dropdown toggle
+const profileBtn = document.getElementById('profileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+profileBtn.addEventListener('click', ()=>{
+    profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+});
+// Click outside closes profile dropdown
+window.addEventListener('click', function(e){
+    if(!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)){
+        profileDropdown.style.display='none';
+    }
+});
+</script>
+
+</body>
+</html>
