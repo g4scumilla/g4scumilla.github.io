@@ -5,30 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
 
-<!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+
+/* ===== COLOR SYSTEM ===== */
+:root {
+    --primary-blue: #004080;
+    --secondary-blue: #0059b3;
+    --light-blue: #e6f0fa;
+    --text-dark: #1f2d3d;
+}
 
 /* ===== GLOBAL ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
+    color: var(--text-dark);
 }
 
 /* ===== HEADER ===== */
 header {
-    background: linear-gradient(135deg, #004080, #0070c0);
+    background: var(--primary-blue);
     color: white;
     padding: 18px 30px;
     font-size: 20px;
     font-weight: 600;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* ===== SECTION ===== */
@@ -39,10 +44,10 @@ section {
 /* Section Title */
 .section-title {
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 20px;
-    color: #004080;
-    border-left: 5px solid #0070c0;
+    color: var(--primary-blue);
+    border-left: 4px solid var(--primary-blue);
     padding-left: 12px;
 }
 
@@ -56,39 +61,38 @@ section {
 /* ===== LINK CARDS ===== */
 .link-card {
     background: white;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: 0.3s ease;
-    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    border: 1px solid #e0e6ed;
+    transition: 0.25s ease;
 }
 
 .link-card a {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 22px;
+    gap: 14px;
+    padding: 20px;
     text-decoration: none;
-    color: #004080;
+    color: var(--primary-blue);
     font-weight: 600;
     font-size: 16px;
 }
 
+/* Icon color matched */
 .link-card i {
-    font-size: 22px;
-    color: #0070c0;
+    font-size: 20px;
+    color: var(--primary-blue);
 }
 
-/* Hover Effect */
+/* Hover – subtle, not dramatic */
 .link-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.15);
-    border-color: #0070c0;
+    border-color: var(--primary-blue);
+    background: var(--light-blue);
 }
 
 /* ===== FOOTER ===== */
 footer {
     background: #f1f1f1;
-    color: gray;
+    color: #666;
     text-align: center;
     padding: 12px;
     font-size: 13px;
@@ -112,7 +116,6 @@ footer {
 
 <body>
 
-<!-- Header placeholder -->
 <div id="header"></div>
 
 <section>
@@ -151,7 +154,6 @@ footer {
     </div>
 </section>
 
-<!-- Footer placeholder -->
 <div id="footer"></div>
 
 <script>
@@ -162,7 +164,6 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Load header and footer dynamically
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
 </script>
