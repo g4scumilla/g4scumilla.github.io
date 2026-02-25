@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G4S Cumilla Internal Dashboard</title>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+/* ====== Global ====== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* ====== Header ====== */
+header {
+    background: #004080;
+    color: white;
+    padding: 15px 25px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ====== Section ====== */
+section {
+    padding: 30px;
+}
+
+/* Section Title */
+.section-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #004080;
+    border-left: 5px solid #0070c0;
+    padding-left: 12px;
+}
+
+/* ====== Links Grid ====== */
+.links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+/* ====== Link Cards ====== */
+.link-card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+    border: 1px solid #e5e5e5;
+}
+
+.link-card a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px;
+    text-decoration: none;
+    color: #004080;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.link-card i {
+    font-size: 22px;
+    color: #0070c0;
+}
+
+/* Hover Effect */
+.link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+    border-color: #0070c0;
+}
+
+/* ====== Footer ====== */
+footer {
+    background: #f1f1f1;
+    color: gray;
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 600px) {
+    .section-title {
+        font-size: 18px;
+    }
+
+    .link-card a {
+        font-size: 14px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Header placeholder -->
+<div id="header"></div>
+
+<section>
+    <div class="section-title">Tools & Automations</div>
+
+    <div class="links">
+
+        <div class="link-card">
+            <a href="/pages/resignation_automations">
+                <i class="fas fa-file-signature"></i>
+                <span>Resignation Automations</span>
+            </a>
+        </div>
+
+        <div class="link-card">
+            <a href="/pages/trainingapp">
+                <i class="fas fa-user-graduate"></i>
+                <span>Prepare Training App</span>
+            </a>
+        </div>
+
+        <div class="link-card">
+            <a href="/pages/trainingsheet">
+                <i class="fas fa-table"></i>
+                <span>Prepare Training Sheet</span>
+            </a>
+        </div>
+
+        <div class="link-card">
+            <a href="#">
+                <i class="fas fa-link"></i>
+                <span>Other Internal Links</span>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer placeholder -->
+<div id="footer"></div>
+
+<script>
+function loadHTML(id, file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => document.getElementById(id).innerHTML = data)
+        .catch(err => console.log(err));
+}
+
+// Load header and footer
+loadHTML("header", "header.html");
+loadHTML("footer", "footer.html");
+</script>
+
+</body>
+</html>
