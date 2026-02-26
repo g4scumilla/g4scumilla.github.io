@@ -1,0 +1,198 @@
+/* ===== Header ===== */
+header {
+    background: #cce0f5;
+    padding: 12px 10px;
+    border-bottom: 1px solid #a8c8e6;
+    text-align: center;
+}
+
+header img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 6px;
+}
+
+header h1 {
+    font-size: 1.4em;
+    color: #023e8a;
+    margin: 4px 0 2px 0;
+}
+
+header p {
+    font-size: 0.9em;
+    color: #023e8a;
+    margin: 0 0 8px 0;
+}
+
+/* Header buttons */
+.header-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 320px;
+    margin: 5px auto 0 auto;
+}
+
+.header-buttons a {
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #023e8a;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.header-buttons a:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Section content */
+section {
+    padding: 20px 12px;
+    max-width: 650px;
+    margin: 20px auto;
+    flex: 1 0 auto; /* grow to take remaining space */
+    text-align: center;
+}
+
+/* Section title */
+.section-title {
+    font-size: 1.26em; /* ~140% bigger than link-card text */
+    font-weight: bold;
+    color: #023e8a;
+    background: #dceefa;
+    border: 1px solid #94b9dc;
+    border-radius: 20px;
+    padding: 10px 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+/* Links */
+.links {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.link-card {
+    background: linear-gradient(to bottom, #ffffff, #dceefa);
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    transition: 0.2s;
+}
+
+.link-card a {
+    color: #023e8a;
+    text-decoration: none;
+}
+
+.link-card:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Footer styled like header (matches colors) */
+footer, #footer {
+    background: #cce0f5;
+    color: #023e8a;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 12px;
+    flex-shrink: 0;           /* never shrink */
+    border-top: 1px solid #a8c8e6;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media(max-width:500px){
+    header h1 { font-size: 1.2em; }
+    header p { font-size: 0.8em; }
+    .link-card { font-size: 0.85em; }
+    .section-title { font-size: 1.1em; padding: 8px 15px; }
+    .header-buttons { max-width: 100%; gap: 6px; }
+}
+
+/* Body full height for sticky footer */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #eef4f9; /* soft Wapka-style background */
+    color: #222;
+}
+
+/* ===== Global Footer (used everywhere) ===== */
+.site-footer {
+  background: #cce0f5;        /* same as header */
+  color: #023e8a;
+  text-align: center;
+  padding: 18px 10px;
+  font-size: 13px;
+  border-top: 1px solid #a8c8e6;
+}
+
+.site-footer p {
+  margin: 6px 0;
+}
+
+.footer-links a {
+  color: #023e8a;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-tagline {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.footer-contact {
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* ===== Android text edge fix (Contact page safe spacing) ===== */
+.main-content {
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.contact-container {
+    padding-left: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+.contact-card {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Prevent long text/email overflow on small screens */
+.contact-card p,
+.contact-card a {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
