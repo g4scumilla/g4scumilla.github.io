@@ -4,11 +4,16 @@ header {
     padding: 12px 10px;
     border-bottom: 1px solid #a8c8e6;
     text-align: center;
+
+    position: fixed;   /* always on top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;      /* overlay content */
 }
 
-/* Updated logo size */
 header img {
-    width: 80px;   /* smaller than before */
+    width: 80px;       /* smaller logo */
     height: auto;
     margin-bottom: 6px;
 }
@@ -54,13 +59,15 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Section content */
-section {
+/* ===== Section content ===== */
+body > section {
     padding: 20px 12px;
     max-width: 650px;
     margin: 20px auto;
     flex: 1 0 auto;
     text-align: center;
+
+    padding-top: 140px; /* extra top space for fixed header */
 }
 
 /* Section title */
@@ -126,7 +133,7 @@ footer, #footer {
     .section-title { font-size: 1.1em; padding: 8px 15px; }
     .header-buttons { max-width: 100%; gap: 6px; }
 
-    /* Make logo smaller on small screens */
+    /* Smaller logo on mobile */
     header img { width: 60px; }
 }
 
