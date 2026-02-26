@@ -53,6 +53,9 @@ header p {
     text-align: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     transition: 0.2s;
+    display: inline-flex;      /* aligns icon and text nicely */
+    align-items: center;
+    gap: 6px;                  /* space between icon and text */
 }
 
 .header-buttons a:hover {
@@ -107,6 +110,9 @@ body > section {
 .link-card a {
     color: #023e8a;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .link-card:hover {
@@ -114,8 +120,8 @@ body > section {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Footer styled like header */
-footer, #footer {
+/* ===== Footer ===== */
+footer, #footer, .site-footer {
     background: #cce0f5;
     color: #023e8a;
     text-align: center;
@@ -126,6 +132,33 @@ footer, #footer {
     font-weight: bold;
     letter-spacing: 0.5px;
 }
+
+/* Footer button styled like header buttons */
+.footer-button {
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #023e8a;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-button:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Footer taglines and contact */
+.footer-tagline { font-size: 12px; opacity: 0.9; }
+.footer-contact { font-size: 12px; margin-top: 6px; }
 
 /* Responsive adjustments */
 @media(max-width:500px){
@@ -152,30 +185,6 @@ body {
     background: #eef4f9;
     color: #222;
 }
-
-/* ===== Global Footer ===== */
-.site-footer {
-    background: #cce0f5;
-    color: #023e8a;
-    text-align: center;
-    padding: 18px 10px;
-    font-size: 13px;
-    border-top: 1px solid #a8c8e6;
-}
-
-.site-footer p { margin: 6px 0; }
-
-.footer-links a {
-    color: #023e8a;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.footer-links a:hover { text-decoration: underline; }
-
-.footer-tagline { font-size: 12px; opacity: 0.9; }
-
-.footer-contact { font-size: 12px; margin-top: 6px; }
 
 /* ===== Android text edge fix ===== */
 .main-content, .contact-container, .contact-card {
