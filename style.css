@@ -10,6 +10,7 @@ header {
     left: 0;
     width: 100%;
     z-index: 999;      /* overlay content */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow for floating effect */
 }
 
 header img {
@@ -60,14 +61,15 @@ header p {
 }
 
 /* ===== Section content ===== */
+/* Add top padding so content sits below fixed header */
 body > section {
-    padding: 20px 12px;
+    padding-top: 160px; /* adjust based on header height */
+    padding-left: 12px;
+    padding-right: 12px;
     max-width: 650px;
     margin: 20px auto;
     flex: 1 0 auto;
     text-align: center;
-
-    padding-top: 140px; /* extra top space for fixed header */
 }
 
 /* Section title */
@@ -135,6 +137,9 @@ footer, #footer {
 
     /* Smaller logo on mobile */
     header img { width: 60px; }
+
+    /* More top padding for mobile as header stacks */
+    body > section { padding-top: 180px; }
 }
 
 /* Body full height for sticky footer */
