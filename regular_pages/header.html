@@ -24,34 +24,28 @@
         <div class="header-right more-menu">
             <a href="javascript:void(0);" class="more-btn"><i class="fas fa-ellipsis-h"></i> More</a>
             <div class="more-dropdown">
-                <a href="/regular_pages/contactus">Contact Us</a>
-                <a href="/regular_pages/faq">FAQ</a>
+                <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact Us</a>
+                <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>
+                <!-- Add more links here if needed -->
             </div>
         </div>
     </div>
 </header>
-
-<!-- Font Awesome (head already recommended) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- More dropdown JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.more-menu').forEach(menu => {
         const btn = menu.querySelector('.more-btn');
-        const dropdown = menu.querySelector('.more-dropdown');
-
         btn.addEventListener('click', function(e){
             e.stopPropagation();
-            dropdown.classList.toggle('active');
+            menu.classList.toggle('active'); // toggle on parent
         });
     });
 
     document.addEventListener('click', function(){
-        document.querySelectorAll('.more-dropdown').forEach(drop => {
-            drop.classList.remove('active');
+        document.querySelectorAll('.more-menu').forEach(menu => {
+            menu.classList.remove('active');
         });
     });
 });
