@@ -1,5 +1,5 @@
 <header>
-    <!-- Logo (optional if you want it above) -->
+    <!-- Logo (optional) -->
     <a href="http://g4scumilla.github.io/" class="logo-link">
         <img src="/Files/Img/logo.png" alt="G4S Logo">
     </a>
@@ -9,26 +9,27 @@
     <p>Quick access to forms, sheets, web apps & resources</p>
 
     <!-- Header buttons container -->
-    <div class="header-buttons-container">
+    <div class="header-buttons-container" style="display: flex; justify-content: space-between; align-items: center; max-width: 360px; margin: 4px auto 0 auto; padding: 0 8px;">
+
         <!-- Back -->
         <div class="header-left">
-            <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
+            <a href="javascript:history.back()" style="padding:6px 12px;"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <!-- Home -->
         <div class="header-center">
-            <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>
+            <a href="https://g4scumilla.github.io" style="padding:6px 12px;"><i class="fas fa-home"></i> Home</a>
         </div>
 
         <!-- More -->
-        <div class="header-right more-menu">
-            <a href="javascript:void(0);" class="more-btn"><i class="fas fa-ellipsis-h"></i> More</a>
-            <div class="more-dropdown">
-                <a href="/regular_pages/contactus">Contact Us</a>
-                <a href="/regular_pages/faq">FAQ</a>
-                <!-- Add more links here -->
+        <div class="header-right more-menu" style="position: relative;">
+            <a href="javascript:void(0);" class="more-btn" style="padding:6px 12px;"><i class="fas fa-ellipsis-h"></i> More</a>
+            <div class="more-dropdown" style="display:none; position:absolute; top:100%; right:0; background:#fff; border:1px solid #94b9dc; border-radius:10px; min-width:140px; box-shadow:0 2px 6px rgba(0,0,0,0.15); flex-direction: column; z-index:1000;">
+                <a href="/regular_pages/contactus" style="padding:8px 12px;">Contact Us</a>
+                <a href="/regular_pages/faq" style="padding:8px 12px;">FAQ</a>
             </div>
         </div>
+
     </div>
 </header>
 
@@ -42,13 +43,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.more-menu').forEach(menu => {
         const btn = menu.querySelector('.more-btn');
+        const dropdown = menu.querySelector('.more-dropdown');
+
         btn.addEventListener('click', function(e){
-            menu.classList.toggle('active');
+            e.stopPropagation();
+            dropdown.style.display = (dropdown.style.display === 'flex') ? 'none' : 'flex';
         });
     });
-    document.addEventListener('click', function(e){
-        document.querySelectorAll('.more-menu').forEach(menu => {
-            if(!menu.contains(e.target)) menu.classList.remove('active');
+
+    document.addEventListener('click', function(){
+        document.querySelectorAll('.more-dropdown').forEach(drop => {
+            drop.style.display = 'none';
         });
     });
 });
