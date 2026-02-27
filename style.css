@@ -63,9 +63,16 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* ===== Section content ===== */
+/* ===== Section & content padding ===== */
+/* Push content below fixed header for all pages */
+body > section,
+body > .form-container,
+body > main {
+    padding-top: 130px; /* matches your compact header height */
+}
+
+/* Section content */
 body > section {
-    padding-top: 130px; /* reduced to match compact header */
     padding-left: 12px;
     padding-right: 12px;
     max-width: 650px;
@@ -159,7 +166,7 @@ footer, #footer, .site-footer {
 .footer-tagline { font-size: 12px; opacity: 0.9; }
 .footer-contact { font-size: 12px; margin-top: 6px; }
 
-/* Responsive adjustments */
+/* ===== Responsive adjustments ===== */
 @media(max-width:500px){
     header h1 { font-size: 1.1em; }
     header p { font-size: 0.75em; }
@@ -171,7 +178,9 @@ footer, #footer, .site-footer {
     header img { width: 50px; }
 
     /* Adjust top padding for mobile content */
-    body > section { padding-top: 150px; }
+    body > section,
+    body > .form-container,
+    body > main { padding-top: 150px; }
 }
 
 /* Body full height for sticky footer */
