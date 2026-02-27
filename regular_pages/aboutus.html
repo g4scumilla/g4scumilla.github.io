@@ -4,16 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Us | G4S Cumilla</title>
+
+<!-- Main CSS -->
 <link rel="stylesheet" href="../regular_pages/style.css">
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Font Awesome (for icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
+
 <body>
 
 <!-- Header -->
 <div id="header"></div>
 
-<!-- Main About Content -->
+<!-- Main Content -->
 <div class="main-content">
 
     <!-- Page Header -->
@@ -50,14 +56,15 @@
 <!-- Load Header & Footer -->
 <script>
 function loadHTML(id, file) {
-    fetch("../regular_pages/" + file)  // header & footer in same folder
+    fetch(file)
         .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
-        .catch(err => console.log(err));
+        .catch(err => console.log("Error loading " + file, err));
 }
 
-loadHTML("header", "header.html");
-loadHTML("footer", "footer.html");
+// Correct paths for this page
+loadHTML("header", "../regular_pages/header.html");
+loadHTML("footer", "../regular_pages/footer.html");
 </script>
 
 </body>
