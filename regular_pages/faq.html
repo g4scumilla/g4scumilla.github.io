@@ -4,157 +4,111 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
-<link rel="stylesheet" href="style.css">
-<style>
-/* ===== FAQ specific ===== */
-.faq-header {
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: #023e8a;
-    margin-bottom: 20px;
-}
-
-.faq-search {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.faq-search input {
-    padding: 8px 12px;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 20px;
-    border: 1px solid #94b9dc;
-    font-size: 1em;
-}
-
-.faq-container {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.faq-card {
-    border: 2px solid #94b9dc;
-    border-radius: 15px;
-    background: #ffffff;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.faq-card:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-.faq-question {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: bold;
-    font-size: 1em;
-    color: #023e8a;
-}
-
-.faq-question i {
-    font-size: 1.2em;
-    color: #f57c00;
-}
-
-.faq-answer {
-    display: none;
-    margin-top: 8px;
-    padding-left: 28px;
-    color: #222;
-}
-
-.faq-answer a {
-    color: #023e8a;
-    text-decoration: none;
-}
-
-.faq-answer a:hover {
-    text-decoration: underline;
-}
-
-/* Expand/collapse indicator */
-.faq-card.active .faq-answer {
-    display: block;
-}
-
-/* Numbered questions */
-.faq-number {
-    font-weight: bold;
-    min-width: 25px;
-}
-
-/* Responsive */
-@media(max-width:500px){
-    .faq-question { font-size: 0.95em; }
-    .faq-number { min-width: 20px; }
-    .faq-search input { width: 90%; }
-}
-</style>
+<link rel="stylesheet" href="style.css"> <!-- same folder -->
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-pnNfrFyOTxIVl04ku+4Vg0cTqO1F+tpNyoUj0k4xq1r+UvyfFHQjXmsIab8T0eSAX6ZZkxv5X/k/0IF4B7/jxw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
 <!-- Header -->
 <div id="header"></div>
 
+<!-- Main FAQ Content -->
 <div class="main-content">
-    <h2 class="faq-header">Frequently Asked Questions</h2>
+    <h2 class="page-header">Frequently Asked Questions</h2>
 
-    <!-- Search -->
-    <div class="faq-search">
-        <input type="text" id="faqSearch" placeholder="Search FAQs...">
-    </div>
-
-    <div class="faq-container" id="faqContainer">
-        <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">1.</span> <i class="fa-solid fa-file-signature"></i> How do I submit a resignation form?</div>
-            <div class="faq-answer">Use the <a href="index.html">Resignation Automations</a> link on the dashboard to submit your resignation easily.</div>
-        </div>
+    <div class="faq-container">
 
         <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">2.</span> <i class="fa-solid fa-envelope"></i> How can I prepare an advance resignation letter?</div>
-            <div class="faq-answer">Click on <a href="index.html">Prepare Advance Resignation Letter</a> in the dashboard links.</div>
-        </div>
-
-        <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">3.</span> <i class="fa-solid fa-chalkboard-user"></i> Where can I find the training sheets?</div>
-            <div class="faq-answer">Use the <a href="index.html">Prepare Training Sheet</a> link on the dashboard to access training sheets.</div>
-        </div>
-
-        <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">4.</span> <i class="fa-solid fa-tools"></i> Who do I contact for technical issues?</div>
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q1: How do I submit a resignation form?
+                <span class="collapse-icon">▼</span>
+            </button>
             <div class="faq-answer">
-                Contact the site administrator via the <a href="contact.html">Contact Us</a> page. You can also <a href="mailto:nothingistruehereinourselves@gmail.com">compose email</a> or <a href="tel:+8801313209156">call directly</a>.
+                <p>A: Use the <a href="/index.html#resignation">"Resignation Automations"</a> link on the dashboard.</p>
             </div>
         </div>
 
         <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">5.</span> <i class="fa-solid fa-file-circle-check"></i> Do you store submitted forms and PDFs?</div>
-            <div class="faq-answer">We do not store any personal data permanently. Submitted forms & PDFs are preserved for a maximum of 2 months for later use and are then permanently deleted.</div>
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q2: How can I prepare an advance resignation letter?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: Click on <a href="/index.html#advance-resignation">"Prepare Advance Resignation Letter"</a> in the dashboard links.</p>
+            </div>
         </div>
 
         <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">6.</span> <i class="fa-solid fa-shield-halved"></i> Are you liable for user data?</div>
-            <div class="faq-answer">We will not take any liability for user data. The platform is only for making tasks easier and nothing else.</div>
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q3: Where can I find the training sheets?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: Use the <a href="/index.html#training-sheets">"Prepare Training Sheet"</a> link on the dashboard to access training sheets.</p>
+            </div>
         </div>
 
         <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">7.</span> <i class="fa-solid fa-clipboard-list"></i> What is the purpose of this platform?</div>
-            <div class="faq-answer">This platform is designed to simplify internal tools and automations for G4S Cumilla. It is not intended for any other purpose.</div>
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q4: Who do I contact for technical issues?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: For technical issues, you can <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> or <a href="tel:+8801313209156">call directly</a>. You can also use the "Contact Developer" Messenger link in the header.</p>
+            </div>
         </div>
 
         <div class="faq-card">
-            <div class="faq-question"><span class="faq-number">8.</span> <i class="fa-solid fa-building"></i> Is it G4S official webpage?</div>
-            <div class="faq-answer">No, it’s unofficial and meant to be used only by Branch Officers, Patrol Officers, Security Personnel, and authorized staff. Nobody else should access it.</div>
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q5: Do you store submitted forms and PDFs?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: We do not store personal data permanently. Submitted forms & PDFs are preserved for up to 2 months for later use, then permanently deleted.</p>
+            </div>
         </div>
+
+        <div class="faq-card">
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q6: Are you liable for user data?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: The platform is only for simplifying tasks and internal use; we do not take liability for user data.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q7: What is the purpose of this platform?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: The platform is designed to simplify internal tools and automations for G4S Cumilla staff only.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <button class="faq-question">
+                <i class="fas fa-search"></i> Q8: Is this G4S official webpage?
+                <span class="collapse-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <p>A: No, it is unofficial and meant for Branch Officers, Patrol Officers, Security Personnel, and authorized staff only.</p>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Ask a Question Card -->
+    <div class="faq-ask">
+        <p><strong>⚠️ Please read the full FAQ before asking a question.</strong></p>
+        <a href="/regular_pages/contactus.html" class="footer-button">
+            <i class="fas fa-question-circle"></i> Ask a Question
+        </a>
+    </div>
+
 </div>
 
 <!-- Footer -->
@@ -164,37 +118,29 @@
 <script>
 function loadHTML(id, file) {
     fetch(file)
-        .then(resp => resp.text())
+        .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
 
+// header & footer same folder as FAQ
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
-</script>
 
-<!-- FAQ accordion + search -->
-<script>
-// Accordion toggle
-document.querySelectorAll('.faq-card').forEach(card => {
-    card.querySelector('.faq-question').addEventListener('click', () => {
-        card.classList.toggle('active');
-    });
-});
-
-// FAQ search filter
-document.getElementById('faqSearch').addEventListener('input', function() {
-    let filter = this.value.toLowerCase();
-    document.querySelectorAll('.faq-card').forEach(card => {
-        let question = card.querySelector('.faq-question').textContent.toLowerCase();
-        let answer = card.querySelector('.faq-answer').textContent.toLowerCase();
-        card.style.display = (question.includes(filter) || answer.includes(filter)) ? '' : 'none';
+// FAQ toggle
+const faqButtons = document.querySelectorAll(".faq-question");
+faqButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        btn.classList.toggle("active");
+        const answer = btn.nextElementSibling;
+        if(answer.style.maxHeight){
+            answer.style.maxHeight = null;
+        } else {
+            answer.style.maxHeight = answer.scrollHeight + "px";
+        }
     });
 });
 </script>
-
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </body>
 </html>
