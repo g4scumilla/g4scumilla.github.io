@@ -48,7 +48,8 @@ header p {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0 16px; /* More spacing from edges */
+    max-width: 100%;
+    padding: 0 16px;
     margin: 8px 0 0 0;
     box-sizing: border-box;
 }
@@ -89,25 +90,25 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.header-right a {
-    margin-right: 4px; /* Keeps More button away from screen edge */
-}
-
 /* ===== More Dropdown Menu ===== */
 .more-menu {
     position: relative;
+}
+
+.more-btn {
+    cursor: pointer;
 }
 
 .more-dropdown {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0; /* aligned with More button */
+    right: 0; /* align dropdown with button */
     background: #ffffff;
     border: 1px solid #94b9dc;
     border-radius: 10px;
     min-width: 140px;
-    max-width: calc(100vw - 24px);
+    max-width: 90vw;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     z-index: 1000;
     flex-direction: column;
@@ -241,9 +242,6 @@ footer, #footer, .site-footer {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.footer-tagline { font-size: 12px; opacity: 0.9; padding: 0 16px; }
-.footer-contact { font-size: 12px; margin-top: 6px; padding: 0 16px; }
-
 /* ===== About, Contact, FAQ ===== */
 .page-header, .contact-header {
     text-align: center;
@@ -275,23 +273,23 @@ footer, #footer, .site-footer {
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
-/* ===== Contact Card Icons ===== */
-.contact-card i { font-size: 1.3em; min-width: 30px; }
-.contact-card .fa-phone { color: #1a73e8; }
-.contact-card .fa-envelope { color: #0b3d91; }
-.contact-card .fa-whatsapp { color: #25D366; }
-.contact-card .fa-facebook-messenger { color: #0084FF; }
-.contact-card .fa-tools { color: #f57c00; }
-.contact-card a { color: #023e8a; text-decoration: none; }
-.contact-card a:hover { text-decoration: underline; }
+/* ===== Contact & FAQ Icons ===== */
+.contact-card i, .faq-card i, .about-card i {
+    font-size: 1.3em;
+    min-width: 25px;
+    color: #023e8a;
+}
 
-/* ===== FAQ Card Icons ===== */
-.faq-card h3 { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #023e8a; margin-bottom: 10px; }
-.faq-card i { font-size: 1.2em; min-width: 25px; }
-.faq-card a { color: #023e8a; text-decoration: none; }
-.faq-card a:hover { text-decoration: underline; }
+.contact-card a, .faq-card a, .about-card a {
+    color: #023e8a;
+    text-decoration: none;
+}
 
-/* ===== Android Edge Fixes ===== */
+.contact-card a:hover, .faq-card a:hover, .about-card a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Android & Mobile Fixes ===== */
 .main-content, .contact-container, .contact-card, .faq-container, .faq-card {
     box-sizing: border-box;
     padding-left: 16px;
