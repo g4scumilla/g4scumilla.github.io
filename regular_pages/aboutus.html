@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Us | G4S Cumilla</title>
-<!-- CSS path goes up one folder -->
-<link rel="stylesheet" href="../style.css">
+<!-- CSS -->
+<link rel="stylesheet" href="../regular_pages/style.css">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -13,10 +15,9 @@
 <div id="header"></div>
 
 <!-- Main About Content -->
-<div class="main-content">
-
+<main class="main-content">
     <!-- Page Header -->
-    <div class="page-header">About Us</div>
+    <div class="section-title">About Us</div>
 
     <!-- About Cards -->
     <div class="about-container">
@@ -40,21 +41,21 @@
             <p>Our staff consists of trained Branch Officers, Patrol Officers, and Security Personnel dedicated to ensuring safe and secure environments for our clients.</p>
         </div>
     </div>
-
-</div>
+</main>
 
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer from root -->
+<!-- Load Header & Footer dynamically -->
 <script>
 function loadHTML(id, file) {
-    fetch("../" + file)  // go up one folder to root
+    fetch("../regular_pages/" + file)
         .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
 
+// Load header and footer
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
 </script>
