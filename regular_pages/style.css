@@ -284,3 +284,121 @@ body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; padd
 .main-content, .contact-container, .contact-card, .faq-container, .faq-card { box-sizing: border-box; padding-left: 16px; padding-right: 16px; max-width: 100%; }
 
 .contact-card p, .contact-card a, .faq-card p, .faq-card a { word-break: break-word; overflow-wrap: break-word; }
+
+
+/* ===== Header ===== */
+header {
+    background: #cce0f5;
+    padding: 8px 16px;
+    border-bottom: 1px solid #a8c8e6;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header img {
+    width: 60px;
+    height: auto;
+    margin-bottom: 4px;
+}
+
+header h1 {
+    font-size: 1.2em;
+    color: #023e8a;
+    margin: 3px 0 2px 0;
+}
+
+header p {
+    font-size: 0.8em;
+    color: #023e8a;
+    margin: 0 0 6px 0;
+}
+
+/* Header buttons: back left, home center, more right */
+.header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 360px; /* container width for 3 buttons */
+    margin: 4px auto 0 auto;
+}
+
+/* Individual button styling */
+.header-buttons a {
+    text-decoration: none;
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    color: #023e8a;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-buttons a i {
+    font-size: 1em;
+}
+
+.header-buttons a:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ===== More dropdown menu ===== */
+.more-menu {
+    position: relative;
+}
+
+.more-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 12px; /* safe distance from right screen edge */
+    left: auto;
+    background: #ffffff;
+    border: 1px solid #94b9dc;
+    border-radius: 10px;
+    min-width: 140px;
+    max-width: calc(100vw - 24px); /* ensures it never overflows screen */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 1000;
+    flex-direction: column;
+    word-break: break-word; /* wraps long links */
+}
+
+.more-dropdown a {
+    padding: 8px 12px;
+    font-size: 0.8em;
+    color: #023e8a;
+    text-decoration: none;
+    display: block;
+    transition: 0.2s;
+}
+
+.more-dropdown a:hover {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
+}
+
+.more-menu.active .more-dropdown {
+    display: flex;
+}
+
+/* ===== Responsive adjustments ===== */
+@media(max-width:500px){
+    header h1 { font-size: 1.1em; }
+    header p { font-size: 0.75em; }
+    .header-buttons { max-width: 100%; gap: 5px; }
+    header img { width: 50px; }
+}
