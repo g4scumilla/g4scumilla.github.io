@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resignation App | G4S Cumilla</title>
-  <!-- CSS: go up one folder -->
-  <link rel="stylesheet" href="../style.css">
+  <!-- Absolute CSS path for universal use -->
+  <link rel="stylesheet" href="/regular_pages/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla&display=swap" rel="stylesheet">
   <style>
     /* Only styling main content */
@@ -89,16 +89,16 @@
 <div id="footer"></div>
 
 <script>
-  // Load header and footer from root folder
+  // Load header and footer using absolute paths
   function loadHTML(id, file) {
-      fetch("../" + file)   // go up one folder to find header.html/footer.html
+      fetch(file)
           .then(response => response.text())
           .then(data => document.getElementById(id).innerHTML = data)
           .catch(err => console.log(err));
   }
 
-  loadHTML("header", "header.html");
-  loadHTML("footer", "footer.html");
+  loadHTML("header", "/regular_pages/header.html");
+  loadHTML("footer", "/regular_pages/footer.html");
 </script>
 
 </body>
