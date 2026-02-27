@@ -1,7 +1,18 @@
+/* ===== Body ===== */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #eef4f9;
+    color: #222;
+}
+
 /* ===== Header ===== */
 header {
     background: #cce0f5;
-    padding: 8px 16px; /* increased side padding */
+    padding: 8px 16px;
     border-bottom: 1px solid #a8c8e6;
     text-align: center;
     position: fixed;
@@ -30,31 +41,31 @@ header p {
     margin: 0 0 6px 0;
 }
 
-/* Header buttons */
+/* ===== Header Buttons ===== */
 .header-buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center; /* center buttons */
     flex-wrap: wrap;
     gap: 6px;
-    max-width: 320px;
-    margin: 4px auto 0 auto;
+    margin: 6px auto 0 auto;
+    max-width: 340px; /* enough width for buttons */
 }
 
 .header-buttons a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
-    font-size: 0.8em;
+    font-size: 0.85em;
     color: #023e8a;
     font-weight: bold;
     border: 1px solid #94b9dc;
     text-align: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
 }
 
 .header-buttons a i {
@@ -71,9 +82,9 @@ body > .main-content,
 body > section,
 body > .form-container,
 body > main {
-    padding-top: 150px; /* matches header height */
-    padding-left: 16px; /* added side padding */
-    padding-right: 16px; /* added side padding */
+    padding-top: 150px; /* space for fixed header */
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 /* Section content */
@@ -138,7 +149,7 @@ footer, #footer, .site-footer {
     background: #cce0f5;
     color: #023e8a;
     text-align: center;
-    padding: 10px 0; /* reduced height */
+    padding: 10px 0;
     font-size: 12px;
     flex-shrink: 0;
     border-top: 1px solid #a8c8e6;
@@ -146,7 +157,6 @@ footer, #footer, .site-footer {
     letter-spacing: 0.5px;
 }
 
-/* Footer button styled like header buttons */
 .footer-button {
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
@@ -158,10 +168,10 @@ footer, #footer, .site-footer {
     border: 1px solid #94b9dc;
     text-align: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    transition: 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    transition: 0.2s;
 }
 
 .footer-button i {
@@ -173,7 +183,6 @@ footer, #footer, .site-footer {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Footer taglines and contact */
 .footer-tagline { font-size: 12px; opacity: 0.9; padding: 0 16px; }
 .footer-contact { font-size: 12px; margin-top: 6px; padding: 0 16px; }
 
@@ -247,7 +256,6 @@ footer, #footer, .site-footer {
     min-width: 30px;
 }
 
-/* Icon colors */
 .contact-card .fa-phone { color: #1a73e8; }
 .contact-card .fa-envelope { color: #0b3d91; }
 .contact-card .fa-whatsapp { color: #25D366; }
@@ -322,17 +330,6 @@ footer, #footer, .site-footer {
     .page-header, .contact-header { font-size: 1.6em; margin-bottom: 20px; }
     .contact-card { flex-direction: column; align-items: flex-start; gap: 6px; }
     .faq-card h3 { flex-direction: column; align-items: flex-start; }
-}
-
-/* Body full height for sticky footer */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background: #eef4f9;
-    color: #222;
 }
 
 /* ===== Android text edge fix ===== */
