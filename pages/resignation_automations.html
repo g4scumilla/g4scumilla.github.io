@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
 
-<!-- CSS (page is inside /pages folder) -->
-<link rel="stylesheet" href="../style.css">
+<!-- Absolute CSS path -->
+<link rel="stylesheet" href="/regular_pages/style.css">
 </head>
 
 <body>
@@ -14,16 +14,15 @@
 <!-- Header will load here -->
 <div id="header-container"></div>
 
-
 <section>
     <div class="section-title">Resignation Automation Tools</div>
 
     <div class="links">
         <div class="link-card">
-            <a href="/pages/resignapp">Prepare Resignation Letter</a>
+            <a href="/regular_pages/resignapp.html">Prepare Resignation Letter</a>
         </div>
         <div class="link-card">
-            <a href="/pages/advanceresignation">#</a>
+            <a href="/regular_pages/advanceresignation.html">Prepare Advance Resignation</a>
         </div>
         <div class="link-card">
             <a href="#">#</a>
@@ -34,23 +33,20 @@
     </div>
 </section>
 
-
 <!-- Footer will load here -->
 <div id="footer-container"></div>
 
-
 <script>
-fetch("/header.html")
-  .then(response => response.text())
-  .then(data => {
-      document.getElementById("header-container").innerHTML = data;
-  });
+  // Load header and footer using absolute paths
+  function loadHTML(id, file) {
+      fetch(file)
+          .then(response => response.text())
+          .then(data => document.getElementById(id).innerHTML = data)
+          .catch(err => console.log(err));
+  }
 
-fetch("/footer.html")
-  .then(response => response.text())
-  .then(data => {
-      document.getElementById("footer-container").innerHTML = data;
-  });
+  loadHTML("header-container", "/regular_pages/header.html");
+  loadHTML("footer-container", "/regular_pages/footer.html");
 </script>
 
 </body>
