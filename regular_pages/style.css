@@ -1,7 +1,7 @@
 /* ===== Header ===== */
 header {
     background: #cce0f5;
-    padding: 8px 16px; /* increased side padding */
+    padding: 8px 10px;
     border-bottom: 1px solid #a8c8e6;
     text-align: center;
     position: fixed;
@@ -72,8 +72,8 @@ body > section,
 body > .form-container,
 body > main {
     padding-top: 150px; /* matches header height */
-    padding-left: 16px; /* added side padding */
-    padding-right: 16px; /* added side padding */
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 /* Section content */
@@ -138,7 +138,7 @@ footer, #footer, .site-footer {
     background: #cce0f5;
     color: #023e8a;
     text-align: center;
-    padding: 10px 0; /* reduced height */
+    padding: 12px 0;
     font-size: 12px;
     flex-shrink: 0;
     border-top: 1px solid #a8c8e6;
@@ -174,8 +174,8 @@ footer, #footer, .site-footer {
 }
 
 /* Footer taglines and contact */
-.footer-tagline { font-size: 12px; opacity: 0.9; padding: 0 16px; }
-.footer-contact { font-size: 12px; margin-top: 6px; padding: 0 16px; }
+.footer-tagline { font-size: 12px; opacity: 0.9; }
+.footer-contact { font-size: 12px; margin-top: 6px; }
 
 /* ===== About Us Page ===== */
 .page-header {
