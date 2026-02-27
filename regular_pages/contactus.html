@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us | G4S Cumilla</title>
-<link rel="stylesheet" href="../regular_pages/style.css">
+<link rel="stylesheet" href="../style.css">
 <!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 
@@ -15,47 +15,47 @@
 
 <!-- Main Contact Content -->
 <div class="main-content">
+    <div class="contact-header">Contact Us</div>
 
-    <!-- Page Header -->
-    <div class="page-header">Contact Us</div>
-
-    <!-- Contact Cards -->
     <div class="contact-container">
-
         <div class="contact-card">
-            <h3>Office Address</h3>
-            <p><i class="fas fa-map-marker-alt"></i> G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+                <h3>Office Address</h3>
+                <p>G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
+            </div>
         </div>
 
         <div class="contact-card">
-            <h3>Call Us</h3>
-            <p><a href="tel:+8801313209156"><i class="fas fa-phone"></i> +8801313-209156</a></p>
+            <i class="fas fa-phone"></i>
+            <div>
+                <h3>Call Us</h3>
+                <p><a href="tel:+8801313209156">+8801313-209156</a></p>
+            </div>
         </div>
 
         <div class="contact-card">
-            <h3>Compose Email</h3>
-            <p><a href="mailto:nothingistruehereinourselves@gmail.com?subject=Contact%20from%20G4S%20Dashboard">
-                <i class="fas fa-envelope"></i> Send Email
-            </a></p>
+            <i class="fas fa-envelope"></i>
+            <div>
+                <h3>Email</h3>
+                <p><a href="mailto:nothingistruehereinourselves@gmail.com">Compose Mail</a></p>
+            </div>
         </div>
 
         <div class="contact-card">
-            <h3>WhatsApp</h3>
-            <p><a href="https://wa.me/8801313209156" target="_blank">
-                <i class="fab fa-whatsapp"></i> Send WhatsApp Message
-            </a></p>
+            <i class="fab fa-whatsapp"></i>
+            <div>
+                <h3>WhatsApp</h3>
+                <p><a href="https://wa.me/8801313209156" target="_blank">Send WhatsApp Message</a></p>
+            </div>
         </div>
 
         <div class="contact-card">
-            <h3>Contact Developer</h3>
-            <p><a href="https://m.me/YourMessengerUsername" target="_blank">
-                <i class="fab fa-facebook-messenger"></i> Send Messenger Message
-            </a></p>
-        </div>
-
-        <div class="contact-card">
-            <h3>Technical Support</h3>
-            <p><i class="fas fa-tools"></i> Use the "Contact Developer" link above for any technical issues related to this platform.</p>
+            <i class="fab fa-facebook-messenger"></i>
+            <div>
+                <h3>Contact Developer</h3>
+                <p><a href="https://m.me/themadkafi" target="_blank">Messenger</a></p>
+            </div>
         </div>
     </div>
 
@@ -67,10 +67,10 @@
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer -->
+<!-- Load Header & Footer from root -->
 <script>
 function loadHTML(id, file) {
-    fetch("../regular_pages/" + file)
+    fetch("../" + file)
         .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
