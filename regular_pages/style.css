@@ -66,17 +66,19 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* ===== Section & content padding ===== */
+/* ===== Section & main content padding ===== */
+/* Push content below fixed header */
+body > .main-content,
 body > section,
 body > .form-container,
 body > main {
-    padding-top: 130px;
+    padding-top: 150px; /* matches header height */
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 /* Section content */
 body > section {
-    padding-left: 12px;
-    padding-right: 12px;
     max-width: 650px;
     margin: 20px auto;
     flex: 1 0 auto;
@@ -218,7 +220,8 @@ footer, #footer, .site-footer {
 
     body > section,
     body > .form-container,
-    body > main { padding-top: 150px; }
+    body > main,
+    body > .main-content { padding-top: 150px; }
 
     .page-header { font-size: 1.6em; margin-bottom: 20px; }
 }
