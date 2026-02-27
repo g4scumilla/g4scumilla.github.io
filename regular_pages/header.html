@@ -1,52 +1,23 @@
-<header>
-    <!-- Logo -->
-    <a href="https://g4scumilla.github.io/" class="logo-link">
-        <img src="/Files/Img/logo.png" alt="G4S Logo">
-    </a>
 
-    <!-- Title & Subtitle -->
-    <h1>Internal Automation Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & resources</p>
 
-    <!-- Header Buttons Container -->
-    <div class="header-buttons-container">
-        <!-- Back -->
-        <div class="header-left">
-            <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
-        </div>
+<header>  
+    <!-- Font Awesome CSS for icons -->  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"   
+          integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="   
+          crossorigin="anonymous" referrerpolicy="no-referrer" />  <!-- Logo -->  
+<a href="/index" class="logo-link">  
+    <img src="/Files/Img/logo.png" alt="G4S Logo">  
+</a>  
 
-        <!-- Home -->
-        <div class="header-center">
-            <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>
-        </div>
+<!-- Title & subtitle -->  
+<h1>Internal Automation Dashboard</h1>  
+<p>Quick access to forms, sheets, web apps & resources</p>  
 
-        <!-- More -->
-        <div class="header-right more-menu">
-            <a href="javascript:void(0);" class="more-btn"><i class="fas fa-ellipsis-h"></i> More</a>
-            <div class="more-dropdown">
-                <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact Us</a>
-                <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>
-                <!-- Add more links here if needed -->
-            </div>
-        </div>
-    </div>
+<!-- Header buttons -->  
+<div class="header-buttons">  
+    <a href="/index"><i class="fas fa-home"></i> Home</a>  
+    <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact Us</a>  
+    <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>  
+</div>
+
 </header>
-
-<!-- More dropdown JS -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.more-menu').forEach(menu => {
-        const btn = menu.querySelector('.more-btn');
-        btn.addEventListener('click', function(e){
-            e.stopPropagation();
-            menu.classList.toggle('active'); // toggle on parent
-        });
-    });
-
-    document.addEventListener('click', function(){
-        document.querySelectorAll('.more-menu').forEach(menu => {
-            menu.classList.remove('active');
-        });
-    });
-});
-</script>
