@@ -209,6 +209,61 @@ footer, #footer, .site-footer {
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
+/* ===== Contact Us Page ===== */
+.contact-header {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #023e8a;
+    margin-bottom: 30px;
+}
+
+.contact-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contact-card {
+    border: 2px solid #94b9dc;
+    border-radius: 15px;
+    background: #ffffff;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-card:hover {
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.contact-card i {
+    font-size: 1.3em;
+    min-width: 30px;
+}
+
+/* Specific icon colors */
+.contact-card .fa-phone { color: #1a73e8; }
+.contact-card .fa-envelope { color: #0b3d91; }
+.contact-card .fa-whatsapp { color: #25D366; }
+.contact-card .fa-facebook-messenger { color: #0084FF; }
+.contact-card .fa-tools { color: #f57c00; }
+
+.contact-card a {
+    color: #023e8a;
+    text-decoration: none;
+}
+
+.contact-card a:hover {
+    text-decoration: underline;
+}
+
 /* ===== Responsive adjustments ===== */
 @media(max-width:500px){
     header h1 { font-size: 1.1em; }
@@ -223,7 +278,8 @@ footer, #footer, .site-footer {
     body > main,
     body > .main-content { padding-top: 150px; }
 
-    .page-header { font-size: 1.6em; margin-bottom: 20px; }
+    .page-header, .contact-header { font-size: 1.6em; margin-bottom: 20px; }
+    .contact-card { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 
 /* Body full height for sticky footer */
