@@ -47,8 +47,8 @@ header p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* full width */
-    padding: 0 12px; /* spacing from edges */
+    width: 100%;
+    padding: 0 16px; /* More spacing from edges */
     margin: 8px 0 0 0;
     box-sizing: border-box;
 }
@@ -89,6 +89,10 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+.header-right a {
+    margin-right: 4px; /* Keeps More button away from screen edge */
+}
+
 /* ===== More Dropdown Menu ===== */
 .more-menu {
     position: relative;
@@ -98,7 +102,7 @@ header p {
     display: none;
     position: absolute;
     top: 100%;
-    right: 12px; /* spacing from screen edge */
+    right: 0; /* aligned with More button */
     background: #ffffff;
     border: 1px solid #94b9dc;
     border-radius: 10px;
