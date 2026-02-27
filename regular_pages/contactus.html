@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us | G4S Cumilla</title>
 <link rel="stylesheet" href="/regular_pages/style.css">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -16,37 +18,48 @@
     <div class="page-header">Contact Us</div>
 
     <div class="contact-container">
+
         <div class="contact-card">
-            <h3>Office Address</h3>
+            <h3><i class="fas fa-map-marker-alt"></i> Office Address</h3>
             <p>G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
         </div>
 
         <div class="contact-card">
-            <h3>Call Us</h3>
+            <h3><i class="fas fa-phone"></i> Call Us</h3>
             <p><a href="tel:+8801313209156">+8801313-209156</a></p>
         </div>
 
         <div class="contact-card">
-            <h3>Compose Email</h3>
-            <p><a href="mailto:nothingistruehereinourselves@gmail.com">nothingistruehereinourselves@gmail.com</a></p>
+            <h3><i class="fas fa-envelope"></i> Compose Email</h3>
+            <p><a href="mailto:nothingistruehereinourselves@gmail.com" style="text-decoration:none; color:#023e8a;">Click to Email</a></p>
         </div>
 
         <div class="contact-card">
-            <h3>WhatsApp</h3>
+            <h3><i class="fab fa-whatsapp"></i> WhatsApp</h3>
             <p><a href="https://wa.me/8801313209156" target="_blank">Send WhatsApp Message</a></p>
         </div>
 
         <div class="contact-card">
-            <h3>Technical Support (Messenger)</h3>
-            <p><a href="https://m.me/themadkafi" target="_blank">Contact Developer via Messenger</a></p>
+            <h3><i class="fas fa-headset"></i> Technical Support</h3>
+            <p>
+                <a href="mailto:nothingistruehereinourselves@gmail.com" style="text-decoration:none; color:#023e8a;">Compose Email</a>  
+                or  
+                <a href="tel:+8801313209156" style="text-decoration:none; color:#023e8a;">Call Us</a>
+            </p>
         </div>
+
+        <div class="contact-card">
+            <h3><i class="fab fa-facebook-messenger"></i> Contact Developer</h3>
+            <p><a href="https://m.me/themadkafi" target="_blank">Messenger</a></p>
+        </div>
+
     </div>
 </div>
 
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer from fixed location -->
+<!-- Load Header & Footer -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
