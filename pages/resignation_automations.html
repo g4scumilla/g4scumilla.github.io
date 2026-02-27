@@ -4,24 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
-<!-- CSS: go up one folder -->
+
+<!-- CSS (page is inside /pages folder) -->
 <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
 
-<header>
-    <!-- Logo link goes to root -->
-    <a href="/index"><img src="https://upload.wikimedia.org/wikipedia/commons/5/50/G4S_logo.svg" alt="G4S Logo"></a>
-    <h1>Cumilla Internal Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & resources</p>
+<!-- Header will load here -->
+<div id="header-container"></div>
 
-    <div class="header-buttons">
-        <a href="/index">Home</a>
-        <a href="/regular_pages/contactus">Contact Us</a>
-        <a href="/regular_pages/faq">FAQ</a>
-    </div>
-</header>
 
 <section>
     <div class="section-title">Resignation Automation Tools</div>
@@ -42,22 +34,24 @@
     </div>
 </section>
 
-<!-- Hardcoded Footer -->
-<footer>
-    <p>&copy; 2026 | G4S Cumilla</p>
 
-    <div class="footer-links">
-        <a href="/regular_pages/aboutus">About Us</a> | 
-        <a href="/regular-pages/contactus">Contact Us</a> | 
-        <a href="/regular_pages/faq">FAQ</a>
-    </div>
+<!-- Footer will load here -->
+<div id="footer-container"></div>
 
-    <p class="footer-tagline">Internal Dashboard for G4S Cumilla — For Branch & Patrol Officers only</p>
 
-    <div class="footer-contact">
-        <span>📞 +8801313-209156</span> | <span>✉ nothingistruehereinourselves@gmail.com</span>
-    </div>
-</footer>
+<script>
+fetch("/header.html")
+  .then(response => response.text())
+  .then(data => {
+      document.getElementById("header-container").innerHTML = data;
+  });
+
+fetch("/footer.html")
+  .then(response => response.text())
+  .then(data => {
+      document.getElementById("footer-container").innerHTML = data;
+  });
+</script>
 
 </body>
 </html>
