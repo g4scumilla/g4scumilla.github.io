@@ -45,7 +45,7 @@ header p {
 .header-buttons-container {
     display: flex;
     justify-content: space-between;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     max-width: 700px;
     margin: 6px auto 0 auto;
@@ -59,8 +59,7 @@ header p {
 }
 
 .header-left a, 
-.header-center a,
-.header-right a {
+.header-center a {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -78,47 +77,68 @@ header p {
 }
 
 .header-left a:hover,
-.header-center a:hover,
-.header-right a:hover {
+.header-center a:hover {
     background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* ===== More Dropdown ===== */
-.more-menu {
+/* ===== Dropdown for More button ===== */
+.header-right .dropdown {
     position: relative;
+    display: inline-block;
 }
 
-.more-dropdown {
+.header-right .dropbtn {
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    color: #023e8a;
+    padding: 6px 14px;
+    font-size: 0.85em;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.header-right .dropdown-content {
     display: none;
     position: absolute;
-    top: 100%;
     right: 0;
+    top: 100%;
     background: #ffffff;
+    min-width: 160px;
     border: 1px solid #94b9dc;
     border-radius: 10px;
-    min-width: 160px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
     flex-direction: column;
     z-index: 1000;
 }
 
-.more-dropdown a {
+.header-right .dropdown-content a {
     padding: 8px 12px;
     display: flex;
     align-items: center;
     gap: 6px;
-    font-weight: bold;
     color: #023e8a;
+    font-weight: bold;
+    text-decoration: none;
 }
 
-.more-dropdown a:hover {
+.header-right .dropdown-content a:hover {
     background: #dceefa;
 }
 
-.more-dropdown.active {
+/* Show dropdown on hover */
+.header-right .dropdown:hover .dropdown-content {
     display: flex;
     flex-direction: column;
+}
+
+.header-right .dropdown:hover .dropbtn {
+    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
 }
 
 /* ===== Section & main content padding ===== */
@@ -225,136 +245,6 @@ footer, #footer, .site-footer {
 .footer-button:hover {
     background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.footer-tagline { font-size: 12px; opacity: 0.9; padding: 0 16px; }
-.footer-contact { font-size: 12px; margin-top: 6px; padding: 0 16px; }
-
-/* ===== About Us Page ===== */
-.page-header {
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: #023e8a;
-    margin-bottom: 30px;
-}
-
-.about-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.about-card {
-    border: 2px solid #94b9dc;
-    border-radius: 15px;
-    background: #ffffff;
-    padding: 20px;
-    text-align: left;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: 0.3s;
-}
-
-.about-card:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-/* ===== Contact Us Page ===== */
-.contact-header {
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: #023e8a;
-    margin-bottom: 30px;
-}
-
-.contact-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.contact-card {
-    border: 2px solid #94b9dc;
-    border-radius: 15px;
-    background: #ffffff;
-    padding: 20px;
-    text-align: left;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.contact-card:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-.contact-card i {
-    font-size: 1.3em;
-    min-width: 30px;
-}
-
-.contact-card .fa-phone { color: #1a73e8; }
-.contact-card .fa-envelope { color: #0b3d91; }
-.contact-card .fa-whatsapp { color: #25D366; }
-.contact-card .fa-facebook-messenger { color: #0084FF; }
-.contact-card .fa-tools { color: #f57c00; }
-
-.contact-card a {
-    color: #023e8a;
-    text-decoration: none;
-}
-
-.contact-card a:hover {
-    text-decoration: underline;
-}
-
-/* ===== FAQ Page ===== */
-.faq-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.faq-card {
-    border: 2px solid #94b9dc;
-    border-radius: 15px;
-    background: #ffffff;
-    padding: 20px;
-    text-align: left;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: 0.3s;
-}
-
-.faq-card h3 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: bold;
-    color: #023e8a;
-    margin-bottom: 10px;
-}
-
-.faq-card i {
-    font-size: 1.2em;
-    min-width: 25px;
-}
-
-.faq-card a {
-    color: #023e8a;
-    text-decoration: none;
-}
-
-.faq-card a:hover {
-    text-decoration: underline;
 }
 
 /* ===== Responsive adjustments ===== */
