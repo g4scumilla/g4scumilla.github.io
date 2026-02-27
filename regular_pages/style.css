@@ -67,7 +67,6 @@ header p {
 }
 
 /* ===== Section & main content padding ===== */
-/* Push content below fixed header */
 body > .main-content,
 body > section,
 body > .form-container,
@@ -248,7 +247,7 @@ footer, #footer, .site-footer {
     min-width: 30px;
 }
 
-/* Specific icon colors */
+/* Icon colors */
 .contact-card .fa-phone { color: #1a73e8; }
 .contact-card .fa-envelope { color: #0b3d91; }
 .contact-card .fa-whatsapp { color: #25D366; }
@@ -261,6 +260,48 @@ footer, #footer, .site-footer {
 }
 
 .contact-card a:hover {
+    text-decoration: underline;
+}
+
+/* ===== FAQ Page ===== */
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.faq-card {
+    border: 2px solid #94b9dc;
+    border-radius: 15px;
+    background: #ffffff;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.faq-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #023e8a;
+    margin-bottom: 10px;
+}
+
+.faq-card i {
+    font-size: 1.2em;
+    min-width: 25px;
+}
+
+.faq-card a {
+    color: #023e8a;
+    text-decoration: none;
+}
+
+.faq-card a:hover {
     text-decoration: underline;
 }
 
@@ -280,6 +321,7 @@ footer, #footer, .site-footer {
 
     .page-header, .contact-header { font-size: 1.6em; margin-bottom: 20px; }
     .contact-card { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .faq-card h3 { flex-direction: column; align-items: flex-start; }
 }
 
 /* Body full height for sticky footer */
@@ -294,7 +336,7 @@ body {
 }
 
 /* ===== Android text edge fix ===== */
-.main-content, .contact-container, .contact-card {
+.main-content, .contact-container, .contact-card, .faq-container, .faq-card {
     box-sizing: border-box;
     padding-left: 16px;
     padding-right: 16px;
@@ -302,7 +344,9 @@ body {
 }
 
 .contact-card p,
-.contact-card a {
+.contact-card a,
+.faq-card p,
+.faq-card a {
     word-break: break-word;
     overflow-wrap: break-word;
 }
