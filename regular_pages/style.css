@@ -58,7 +58,7 @@ header p {
 }
 
 .header-buttons a i {
-    font-size: 1em; /* ensures icons scale correctly */
+    font-size: 1em;
 }
 
 .header-buttons a:hover {
@@ -70,7 +70,7 @@ header p {
 body > section,
 body > .form-container,
 body > main {
-    padding-top: 130px; /* space for fixed header */
+    padding-top: 130px;
 }
 
 /* Section content */
@@ -124,7 +124,7 @@ body > section {
 }
 
 .link-card a i {
-    font-size: 1em; /* icons inside cards scale correctly */
+    font-size: 1em;
 }
 
 .link-card:hover {
@@ -164,7 +164,7 @@ footer, #footer, .site-footer {
 }
 
 .footer-button i {
-    font-size: 1em; /* ensures footer icon scales */
+    font-size: 1em;
 }
 
 .footer-button:hover {
@@ -175,6 +175,37 @@ footer, #footer, .site-footer {
 /* Footer taglines and contact */
 .footer-tagline { font-size: 12px; opacity: 0.9; }
 .footer-contact { font-size: 12px; margin-top: 6px; }
+
+/* ===== About Us Page ===== */
+.page-header {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #023e8a;
+    margin-bottom: 30px;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.about-card {
+    border: 2px solid #94b9dc;
+    border-radius: 15px;
+    background: #ffffff;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.about-card:hover {
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
 
 /* ===== Responsive adjustments ===== */
 @media(max-width:500px){
@@ -188,6 +219,8 @@ footer, #footer, .site-footer {
     body > section,
     body > .form-container,
     body > main { padding-top: 150px; }
+
+    .page-header { font-size: 1.6em; margin-bottom: 20px; }
 }
 
 /* Body full height for sticky footer */
