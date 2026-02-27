@@ -13,7 +13,7 @@
     <h1>Internal Automation Dashboard</h1>
     <p>Quick access to forms, sheets, web apps & resources</p>
 
-    <!-- Header buttons: Back, Home, More -->
+    <!-- Header buttons -->
     <div class="header-buttons">
         <!-- Back button -->
         <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
@@ -23,12 +23,13 @@
 
         <!-- More button with dropdown -->
         <div class="more-menu">
-            <a href="#"><i class="fas fa-ellipsis-h"></i> More</a>
+            <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">
+                <i class="fas fa-ellipsis-h"></i> More
+            </a>
             <div class="more-dropdown">
-                <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact Us</a>
-                <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>
-                <a href="/regular_pages/aboutus"><i class="fas fa-info-circle"></i> About Us</a>
-                <!-- Add more links as needed -->
+                <a href="/regular_pages/contactus">Contact Us</a>
+                <a href="/regular_pages/faq">FAQ</a>
+                <!-- add more links here -->
             </div>
         </div>
     </div>
