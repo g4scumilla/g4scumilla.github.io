@@ -70,6 +70,11 @@ header p {
 /* ===== More dropdown menu ===== */
 .more-menu {
     position: relative;
+    margin-left: auto; /* pushes more button slightly away from screen edge */
+}
+
+.more-menu a {
+    padding-right: 12px; /* extra space inside more button */
 }
 
 .more-dropdown {
