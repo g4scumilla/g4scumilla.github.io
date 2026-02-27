@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webpage Not Found | G4S Cumilla</title>
-<link rel="stylesheet" href="../style.css"> <!-- go up one folder -->
+<link rel="stylesheet" href="/regular_pages/style.css"> <!-- absolute path -->
 <style>
 .back-home {
     display: inline-block;
@@ -34,6 +34,17 @@
     padding: 40px 20px;
     text-align: center;
 }
+.main-content h2 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #023e8a;
+    margin-bottom: 15px;
+}
+.main-content p {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -43,7 +54,7 @@
 <div id="header"></div>
 
 <div class="main-content">
-    <a href="/index" class="back-home">Back to Homepage</a>
+    <a href="/index.html" class="back-home">Back to Homepage</a>
 
     <h2>Webpage Not Found</h2>
     <p>The page you are looking for does not exist, may have been moved, or the URL was typed incorrectly.</p>
@@ -61,9 +72,9 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// fixed paths for subfolder
-loadHTML("header", "../header.html");
-loadHTML("footer", "../footer.html");
+// Absolute paths from root
+loadHTML("header", "/regular_pages/header.html");
+loadHTML("footer", "/regular_pages/footer.html");
 </script>
 
 </body>
