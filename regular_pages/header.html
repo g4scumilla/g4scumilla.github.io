@@ -1,9 +1,4 @@
 <header>
-    <!-- Font Awesome CSS for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- Logo -->
     <a href="/index" class="logo-link">
         <img src="/Files/Img/logo.png" alt="G4S Logo">
@@ -15,31 +10,42 @@
 
     <!-- Header buttons -->
     <div class="header-buttons">
-        <!-- Back button (left) -->
-        <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
+        <!-- Back button -->
+        <a href="javascript:history.back()" style="margin-left:8px;"><i class="fas fa-arrow-left"></i> Back</a>
 
-        <!-- Home button (center) -->
+        <!-- Home button -->
         <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>
 
-        <!-- More button (right) -->
-        <div class="more-menu">
-            <a href="#"><i class="fas fa-ellipsis-h"></i> More</a>
+        <!-- More dropdown -->
+        <div class="more-menu" style="margin-right:8px;">
+            <a href="javascript:void(0);" class="more-btn"><i class="fas fa-ellipsis-h"></i> More</a>
             <div class="more-dropdown">
                 <a href="/regular_pages/contactus">Contact Us</a>
                 <a href="/regular_pages/faq">FAQ</a>
-                <!-- add more links here -->
+                <!-- Add more links here -->
             </div>
         </div>
     </div>
 </header>
 
-<!-- Optional: JS to toggle More menu -->
+<!-- Font Awesome (move to <head> of all pages) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- More dropdown JS -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const moreBtn = document.querySelector('.more-btn');
         const moreMenu = document.querySelector('.more-menu');
-        moreMenu.querySelector('a').addEventListener('click', function(e) {
-            e.preventDefault();
+        moreBtn.addEventListener('click', function() {
             moreMenu.classList.toggle('active');
+        });
+        // Close dropdown if clicked outside
+        document.addEventListener('click', function(e) {
+            if(!moreMenu.contains(e.target)) {
+                moreMenu.classList.remove('active');
+            }
         });
     });
 </script>
