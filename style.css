@@ -1,7 +1,7 @@
 /* ===== Header ===== */
 header {
     background: #cce0f5;
-    padding: 12px 10px;
+    padding: 8px 10px;                 /* reduced padding for compact header */
     border-bottom: 1px solid #a8c8e6;
     text-align: center;
 
@@ -10,25 +10,25 @@ header {
     left: 0;
     width: 100%;
     z-index: 999;      /* overlay content */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow for floating effect */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 header img {
-    width: 80px;       /* smaller logo */
+    width: 60px;        /* smaller logo */
     height: auto;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 header h1 {
-    font-size: 1.4em;
+    font-size: 1.2em;   /* smaller title */
     color: #023e8a;
-    margin: 4px 0 2px 0;
+    margin: 3px 0 2px 0;
 }
 
 header p {
-    font-size: 0.9em;
+    font-size: 0.8em;   /* smaller subtitle */
     color: #023e8a;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
 }
 
 /* Header buttons */
@@ -36,26 +36,26 @@ header p {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     max-width: 320px;
-    margin: 5px auto 0 auto;
+    margin: 4px auto 0 auto;
 }
 
 .header-buttons a {
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 8px 14px;
+    padding: 6px 12px;   /* smaller buttons */
     border-radius: 20px;
-    font-size: 0.85em;
+    font-size: 0.8em;
     color: #023e8a;
     font-weight: bold;
     border: 1px solid #94b9dc;
     text-align: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     transition: 0.2s;
-    display: inline-flex;      /* aligns icon and text nicely */
+    display: inline-flex;
     align-items: center;
-    gap: 6px;                  /* space between icon and text */
+    gap: 5px;
 }
 
 .header-buttons a:hover {
@@ -64,9 +64,8 @@ header p {
 }
 
 /* ===== Section content ===== */
-/* Add top padding so content sits below fixed header */
 body > section {
-    padding-top: 160px; /* adjust based on header height */
+    padding-top: 130px; /* reduced to match compact header */
     padding-left: 12px;
     padding-right: 12px;
     max-width: 650px;
@@ -162,17 +161,17 @@ footer, #footer, .site-footer {
 
 /* Responsive adjustments */
 @media(max-width:500px){
-    header h1 { font-size: 1.2em; }
-    header p { font-size: 0.8em; }
+    header h1 { font-size: 1.1em; }
+    header p { font-size: 0.75em; }
     .link-card { font-size: 0.85em; }
     .section-title { font-size: 1.1em; padding: 8px 15px; }
-    .header-buttons { max-width: 100%; gap: 6px; }
+    .header-buttons { max-width: 100%; gap: 5px; }
 
     /* Smaller logo on mobile */
-    header img { width: 60px; }
+    header img { width: 50px; }
 
-    /* More top padding for mobile as header stacks */
-    body > section { padding-top: 180px; }
+    /* Adjust top padding for mobile content */
+    body > section { padding-top: 150px; }
 }
 
 /* Body full height for sticky footer */
