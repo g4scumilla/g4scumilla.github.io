@@ -41,20 +41,29 @@ header p {
     margin: 0 0 6px 0;
 }
 
-/* ===== Header Buttons ===== */
-.header-buttons {
+/* ===== Header Buttons Container ===== */
+.header-buttons-container {
     display: flex;
-    justify-content: center; /* center buttons */
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 6px;
+    align-items: center;
+    max-width: 700px;
     margin: 6px auto 0 auto;
-    max-width: 340px; /* enough width for buttons */
+    gap: 6px;
 }
 
-.header-buttons a {
-    display: inline-flex;
+.header-left, .header-center, .header-right {
+    display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.header-left a, 
+.header-center a,
+.header-right a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     text-decoration: none;
     background: linear-gradient(to bottom, #ffffff, #d4e6fa);
     padding: 6px 14px;
@@ -68,13 +77,48 @@ header p {
     transition: 0.2s;
 }
 
-.header-buttons a i {
-    font-size: 1em;
-}
-
-.header-buttons a:hover {
+.header-left a:hover,
+.header-center a:hover,
+.header-right a:hover {
     background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ===== More Dropdown ===== */
+.more-menu {
+    position: relative;
+}
+
+.more-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #94b9dc;
+    border-radius: 10px;
+    min-width: 160px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.more-dropdown a {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+    color: #023e8a;
+}
+
+.more-dropdown a:hover {
+    background: #dceefa;
+}
+
+.more-dropdown.active {
+    display: flex;
+    flex-direction: column;
 }
 
 /* ===== Section & main content padding ===== */
@@ -319,7 +363,9 @@ footer, #footer, .site-footer {
     header p { font-size: 0.75em; }
     .link-card { font-size: 0.85em; }
     .section-title { font-size: 1.1em; padding: 8px 15px; }
-    .header-buttons { max-width: 100%; gap: 5px; }
+
+    .header-buttons-container { flex-direction: column; gap: 5px; }
+    .header-left, .header-center, .header-right { justify-content: center; }
     header img { width: 50px; }
 
     body > section,
