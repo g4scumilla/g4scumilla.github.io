@@ -4,52 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Us | G4S Cumilla</title>
-<link rel="stylesheet" href="../style.css">
-<style>
-/* Centered page header */
-.page-header {
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: #023e8a;
-    margin: 20px 0;
-}
-
-/* About cards */
-.about-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    max-width: 700px;
-    margin: 0 auto 40px auto;
-}
-
-.about-card {
-    background: #ffffff;
-    border: 2px solid #94b9dc;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    transition: 0.2s;
-}
-
-.about-card h3 {
-    font-size: 1.2em;
-    color: #023e8a;
-    margin-bottom: 10px;
-}
-
-.about-card p {
-    font-size: 1em;
-    line-height: 1.5;
-    color: #222;
-}
-
-.about-card:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -57,40 +12,40 @@
 <div id="header"></div>
 
 <!-- Main About Content -->
-<div class="main-content">
+<main class="main-content">
 
     <!-- Page Header -->
-    <div class="page-header">About Us</div>
+    <h1 class="section-title" style="text-align:center;">About Us</h1>
 
     <!-- About Cards -->
     <div class="about-container">
-        <div class="about-card">
+        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; margin:10px; border-radius:12px;">
             <h3>Who We Are</h3>
             <p>G4S Cumilla provides professional security services to ensure safety and protection for clients in the region. We are committed to high standards of service and integrity.</p>
         </div>
 
-        <div class="about-card">
+        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; margin:10px; border-radius:12px;">
             <h3>Our Mission</h3>
             <p>To deliver reliable, efficient, and professional security solutions while ensuring the safety of people, assets, and property at all times.</p>
         </div>
 
-        <div class="about-card">
+        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; margin:10px; border-radius:12px;">
             <h3>Our Vision</h3>
             <p>To be recognized as the leading security service provider in Cumilla, offering innovative solutions and trusted support to all clients.</p>
         </div>
 
-        <div class="about-card">
+        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; margin:10px; border-radius:12px;">
             <h3>Our Team</h3>
             <p>Our staff consists of trained Branch Officers, Patrol Officers, and Security Personnel dedicated to ensuring safe and secure environments for our clients.</p>
         </div>
     </div>
 
-</div>
+</main>
 
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer -->
+<!-- Load Header & Footer from same folder -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
@@ -99,7 +54,7 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Both header & footer are in same folder as this page
+// Load header and footer from /regular_pages/
 loadHTML("header", "header.html");
 loadHTML("footer", "footer.html");
 </script>
