@@ -4,55 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Us | G4S Cumilla</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../regular_pages/style.css">
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<!-- Header placeholder -->
+<!-- Header -->
 <div id="header"></div>
 
 <!-- Main About Content -->
 <div class="main-content">
 
     <!-- Page Header -->
-    <div class="section-title" style="font-size:1.8em; text-align:center; margin-bottom:25px;">
-        About Us
-    </div>
+    <div class="page-header">About Us</div>
 
     <!-- About Cards -->
     <div class="about-container">
-        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; border-radius:15px; margin-bottom:12px;">
+        <div class="about-card">
             <h3><i class="fas fa-users"></i> Who We Are</h3>
             <p>G4S Cumilla provides professional security services to ensure safety and protection for clients in the region. We are committed to high standards of service and integrity.</p>
         </div>
 
-        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; border-radius:15px; margin-bottom:12px;">
+        <div class="about-card">
             <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
             <p>To deliver reliable, efficient, and professional security solutions while ensuring the safety of people, assets, and property at all times.</p>
         </div>
 
-        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; border-radius:15px; margin-bottom:12px;">
+        <div class="about-card">
             <h3><i class="fas fa-eye"></i> Our Vision</h3>
             <p>To be recognized as the leading security service provider in Cumilla, offering innovative solutions and trusted support to all clients.</p>
         </div>
 
-        <div class="about-card" style="border:1px solid #94b9dc; padding:15px; border-radius:15px; margin-bottom:12px;">
-            <h3><i class="fas fa-user-shield"></i> Our Team</h3>
+        <div class="about-card">
+            <h3><i class="fas fa-shield-alt"></i> Our Team</h3>
             <p>Our staff consists of trained Branch Officers, Patrol Officers, and Security Personnel dedicated to ensuring safe and secure environments for our clients.</p>
         </div>
     </div>
 
 </div>
 
-<!-- Footer placeholder -->
+<!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer from same folder -->
+<!-- Load Header & Footer -->
 <script>
 function loadHTML(id, file) {
-    fetch(file)
+    fetch("../regular_pages/" + file)  // header & footer in same folder
         .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
