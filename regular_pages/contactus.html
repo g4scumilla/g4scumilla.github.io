@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us | G4S Cumilla</title>
-<!-- CSS path goes up one folder -->
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../regular_pages/style.css">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -14,27 +15,47 @@
 
 <!-- Main Contact Content -->
 <div class="main-content">
-    <h2 style="text-align:center; margin-bottom:20px;">Contact Us</h2>
 
+    <!-- Page Header -->
+    <div class="page-header">Contact Us</div>
+
+    <!-- Contact Cards -->
     <div class="contact-container">
+
         <div class="contact-card">
             <h3>Office Address</h3>
-            <p>G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
+            <p><i class="fas fa-map-marker-alt"></i> G4S Cumilla House, 44/A, Judge Court Road, Cumilla‑3500</p>
         </div>
 
         <div class="contact-card">
-            <h3>Phone</h3>
-            <p>+8801313-209156</p>
+            <h3>Call Us</h3>
+            <p><a href="tel:+8801313209156"><i class="fas fa-phone"></i> +8801313-209156</a></p>
         </div>
 
         <div class="contact-card">
-            <h3>Email</h3>
-            <p><a href="mailto:nothingistruehereinourselves@gmail.com">nothingistruehereinourselves@gmail.com</a></p>
+            <h3>Compose Email</h3>
+            <p><a href="mailto:nothingistruehereinourselves@gmail.com?subject=Contact%20from%20G4S%20Dashboard">
+                <i class="fas fa-envelope"></i> Send Email
+            </a></p>
+        </div>
+
+        <div class="contact-card">
+            <h3>WhatsApp</h3>
+            <p><a href="https://wa.me/8801313209156" target="_blank">
+                <i class="fab fa-whatsapp"></i> Send WhatsApp Message
+            </a></p>
+        </div>
+
+        <div class="contact-card">
+            <h3>Contact Developer</h3>
+            <p><a href="https://m.me/YourMessengerUsername" target="_blank">
+                <i class="fab fa-facebook-messenger"></i> Send Messenger Message
+            </a></p>
         </div>
 
         <div class="contact-card">
             <h3>Technical Support</h3>
-            <p>Use the "Contact Site Developer" link in the header for any technical issues related to this platform.</p>
+            <p><i class="fas fa-tools"></i> Use the "Contact Developer" link above for any technical issues related to this platform.</p>
         </div>
     </div>
 
@@ -46,10 +67,10 @@
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load Header & Footer from root -->
+<!-- Load Header & Footer -->
 <script>
 function loadHTML(id, file) {
-    fetch("../" + file)  // go up one folder to root
+    fetch("../regular_pages/" + file)
         .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
