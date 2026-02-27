@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webpage Not Found | G4S Cumilla</title>
 <link rel="stylesheet" href="/regular_pages/style.css"> <!-- absolute path -->
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 .back-home {
     display: inline-block;
@@ -38,12 +40,30 @@
     font-size: 2em;
     font-weight: bold;
     color: #023e8a;
-    margin-bottom: 15px;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
 }
-.main-content p {
-    font-size: 1em;
-    color: #333;
-    margin-bottom: 10px;
+.contact-card {
+    border: 2px solid #94b9dc;
+    border-radius: 15px;
+    background: #ffffff;
+    padding: 20px;
+    max-width: 450px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    margin-top: 30px;
+}
+.contact-card a {
+    color: #023e8a;
+    text-decoration: none;
+    font-weight: bold;
+}
+.contact-card a:hover {
+    text-decoration: underline;
 }
 </style>
 </head>
@@ -54,11 +74,20 @@
 <div id="header"></div>
 
 <div class="main-content">
+    <i class="fas fa-exclamation-triangle" style="font-size: 3em; color:#e63946;"></i>
+    <h2>Webpage Not Found</h2>
+
+    <p>The page you are looking for does not exist, may have been moved, or the URL was typed incorrectly.</p>
+    <p>You may contact support if you think this is an error.</p>
+
     <a href="/index.html" class="back-home">Back to Homepage</a>
 
-    <h2>Webpage Not Found</h2>
-    <p>The page you are looking for does not exist, may have been moved, or the URL was typed incorrectly.</p>
-    <p>You may contact the admin if you think this is an error.</p>
+    <!-- Contact Support Card -->
+    <div class="contact-card">
+        <h3>Contact Support</h3>
+        <p>Email: <a href="mailto:nothingistruehereinourselves@gmail.com">Compose Email</a></p>
+        <p>Phone: <a href="tel:+8801313209156">+8801313-209156</a></p>
+    </div>
 </div>
 
 <!-- Footer -->
