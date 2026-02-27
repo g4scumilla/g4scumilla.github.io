@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
+
+<!-- Absolute CSS -->
 <link rel="stylesheet" href="/regular_pages/style.css">
+
+<!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -22,79 +26,77 @@
     <div class="faq-container">
 
         <div class="faq-card">
-            <h3><i class="fas fa-file-signature"></i> Q1: How do I submit a resignation form?</h3>
+            <h3><i class="fas fa-file-signature"></i> How do I submit a resignation form?</h3>
             <p>
-                A: Use the 
-                <i class="fas fa-file-signature"></i> 
-                <a href="/pages/resignation_automations.html">Resignation Automations</a> 
-                link on the dashboard to submit your resignation easily.
+                Use 
+                <i class="fas fa-file-signature"></i>
+                <a href="/pages/resignation_automations.html">Resignation Automations</a>.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-file-alt"></i> Q2: How can I prepare an advance resignation letter?</h3>
+            <h3><i class="fas fa-file-alt"></i> How can I prepare an advance resignation letter?</h3>
             <p>
-                A: Click on 
-                <i class="fas fa-file-signature"></i> 
-                <a href="/pages/resignation_automations.html">Prepare Advance Resignation Letter</a> 
-                in the dashboard links.
+                Visit 
+                <i class="fas fa-file-signature"></i>
+                <a href="/pages/resignation_automations.html">Prepare Advance Resignation Letter</a>.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-chalkboard-teacher"></i> Q3: Where can I find the training sheets?</h3>
+            <h3><i class="fas fa-chalkboard-teacher"></i> Where can I find training sheets?</h3>
             <p>
-                A: Use the 
-                <i class="fas fa-chalkboard-teacher"></i> 
-                <a href="/pages/trainingapp.html">Prepare Training Sheet</a> 
-                link on the dashboard.
+                Go to 
+                <i class="fas fa-chalkboard-teacher"></i>
+                <a href="/pages/trainingapp.html">Prepare Training Sheet</a>.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-tools"></i> Q4: Who do I contact for technical issues?</h3>
+            <h3><i class="fas fa-tools"></i> Who do I contact for technical issues?</h3>
             <p>
-                A: Visit the 
-                <i class="fas fa-envelope"></i> 
-                <a href="/regular_pages/contactus.html">Contact Us</a> 
-                page or directly 
-                <i class="fas fa-envelope"></i> 
-                <a href="mailto:nothingistruehereinourselves@gmail.com">Compose Email</a> 
-                or 
-                <i class="fas fa-phone"></i> 
-                <a href="tel:+8801313209156">Call Us</a>.
+                Visit 
+                <i class="fas fa-envelope"></i>
+                <a href="/regular_pages/contactus.html">Contact Us</a>
+                or directly
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:nothingistruehereinourselves@gmail.com">Compose Email</a>
+                or
+                <i class="fas fa-phone"></i>
+                <a href="tel:+8801313209156">Call Support</a>.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-database"></i> Q5: Do you store submitted forms and PDFs?</h3>
+            <h3><i class="fas fa-database"></i> Do you store submitted forms?</h3>
             <p>
-                A: Submitted forms & PDFs are preserved for a maximum of 2 months and then permanently deleted.
+                Forms and generated PDFs are stored for up to 2 months and then permanently removed.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-shield-alt"></i> Q6: Are you liable for user data?</h3>
+            <h3><i class="fas fa-shield-alt"></i> Are you liable for user data?</h3>
             <p>
-                A: We do not take liability for user data. The platform exists only to simplify internal tasks.
+                No. This platform simplifies internal processes only.
+                Read more in 
+                <i class="fas fa-info-circle"></i>
+                <a href="/regular_pages/about.html">About Us</a>.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-bullseye"></i> Q7: What is the purpose of this platform?</h3>
+            <h3><i class="fas fa-bullseye"></i> What is the purpose of this platform?</h3>
             <p>
-                A: This platform simplifies internal tools for 
-                <i class="fas fa-info-circle"></i> 
-                <a href="/regular_pages/about.html">G4S Cumilla</a>.
+                It streamlines internal tools for staff operations.
             </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-circle-info"></i> Q8: Is it G4S official webpage?</h3>
+            <h3><i class="fas fa-circle-info"></i> Is this an official G4S website?</h3>
             <p>
-                A: No, it is unofficial and intended only for authorized staff. 
-                For more details, visit 
-                <i class="fas fa-info-circle"></i> 
+                No. It is unofficial and intended for authorized personnel only.
+                See 
+                <i class="fas fa-info-circle"></i>
                 <a href="/regular_pages/about.html">About Us</a>.
             </p>
         </div>
@@ -109,11 +111,15 @@
 <script>
 function loadHTML(id, file) {
     fetch(file)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) throw new Error("File not found");
+            return response.text();
+        })
         .then(data => document.getElementById(id).innerHTML = data)
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
 }
 
+// Absolute paths (works everywhere)
 loadHTML("header", "/regular_pages/header.html");
 loadHTML("footer", "/regular_pages/footer.html");
 </script>
