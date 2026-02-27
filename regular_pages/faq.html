@@ -4,85 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
-<link rel="stylesheet" href="/style.css"> <!-- absolute path -->
-
-<!-- Inline styles for FAQ -->
+<link rel="stylesheet" href="../style.css"> <!-- adjust if needed -->
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <style>
-/* FAQ Search & Accordion */
-.faq-search {
-    max-width: 700px;
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
-}
-
-.faq-search input {
-    width: 100%;
-    max-width: 500px;
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid #94b9dc;
-    font-size: 1em;
-}
-
+/* ===== Accordion FAQ ===== */
 .faq-container {
     max-width: 700px;
-    margin: 20px auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .faq-card {
     border: 2px solid #94b9dc;
     border-radius: 15px;
     background: #ffffff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     padding: 15px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .faq-card h3 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.05em;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .faq-card h3 i {
-    min-width: 20px;
     color: #023e8a;
 }
 
 .faq-card p {
-    margin: 8px 0 0 28px;
     display: none;
-    font-size: 0.95em;
+    margin-top: 10px;
+    padding-left: 28px;
 }
 
 .faq-card.active p {
     display: block;
 }
 
-/* Sticky categories placeholder */
-.faq-categories {
-    position: sticky;
-    top: 150px;
-    background: #eef4f9;
-    padding: 5px 10px;
-    border-radius: 10px;
+/* FAQ search box */
+#faq-search {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    padding: 8px 12px;
+    font-size: 1em;
     border: 1px solid #94b9dc;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
+    border-radius: 15px;
+    background: #eef4f9;
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media(max-width:500px){
-    .faq-card p { margin-left: 0; }
-    .faq-search input { width: 90%; }
-    .faq-card h3 i { min-width: 18px; }
+    .faq-card h3 { font-size: 1em; }
+    .faq-card p { font-size: 0.9em; padding-left: 20px; }
+    #faq-search { font-size: 0.9em; }
 }
 </style>
 </head>
@@ -91,97 +73,82 @@
 <!-- Header -->
 <div id="header"></div>
 
-<!-- Main Content -->
 <div class="main-content">
     <h2 class="page-header">Frequently Asked Questions</h2>
 
-    <!-- Search -->
-    <div class="faq-search">
-        <input type="text" id="faqSearch" placeholder="🔎 Search FAQs...">
-    </div>
+    <input type="text" id="faq-search" placeholder="Search FAQs...">
 
-    <!-- Sticky Categories (example) -->
-    <div class="faq-categories">
-        General | Resignation | Technical
-    </div>
-
-    <!-- FAQ Items -->
     <div class="faq-container">
-
         <div class="faq-card">
-            <h3><i class="fa-solid fa-1"></i> Q1: How do I submit a resignation form?</h3>
-            <p>A: Use the <a href="/resignation.html">Resignation Automations</a> link on the dashboard to submit your resignation easily.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q1: How do I submit a resignation form?</h3>
+            <p>A: Use the <a href="/index.html#resignation-automation">"Resignation Automations"</a> link on the dashboard to submit your resignation easily.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-2"></i> Q2: How can I prepare an advance resignation letter?</h3>
-            <p>A: Click on <a href="/resignation.html#advance-letter">Prepare Advance Resignation Letter</a> in the dashboard links.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q2: How can I prepare an advance resignation letter?</h3>
+            <p>A: Click on <a href="/index.html#advance-resignation">"Prepare Advance Resignation Letter"</a> in the dashboard links.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-3"></i> Q3: Where can I find the training sheets?</h3>
-            <p>A: Use the <a href="/training.html">Prepare Training Sheet</a> link on the dashboard to access training sheets.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q3: Where can I find the training sheets?</h3>
+            <p>A: Use the <a href="/index.html#training-sheets">"Prepare Training Sheet"</a> link on the dashboard to access training sheets.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-4"></i> Q4: Who do I contact for technical issues?</h3>
-            <p>A: Contact the site administrator via the <a href="/contactus.html">Contact Us</a> page, or directly call 📞 +8801313-209156 or email ✉️ <a href="mailto:nothingistruehereinourselves@gmail.com">Compose Mail</a>.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q4: Who do I contact for technical issues?</h3>
+            <p>A: Contact the site administrator via the <a href="/contactus.html">Contact Us</a> button in the header or directly <a href="mailto:nothingistruehereinourselves@gmail.com">compose mail</a> or call <a href="tel:+8801313209156">+8801313-209156</a>.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-5"></i> Q5: Do you store submitted forms and PDFs?</h3>
-            <p>A: We do not store any personal data permanently. Submitted forms & PDFs are preserved for a maximum of 2 months for later use and are then permanently deleted.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q5: Do you store submitted forms and PDFs?</h3>
+            <p>A: We do not store any personal data permanently. Submitted forms & PDFs are preserved for a maximum of 2 months for later use and then permanently deleted.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-6"></i> Q6: Are you liable for user data?</h3>
+            <h3><i class="fa-solid fa-circle-question"></i> Q6: Are you liable for user data?</h3>
             <p>A: We will not take any liability for user data. The platform is only for making tasks easier and nothing else.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-7"></i> Q7: What is the purpose of this platform?</h3>
-            <p>A: This platform simplifies internal tools and automations for G4S Cumilla only.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q7: What is the purpose of this platform?</h3>
+            <p>A: This platform simplifies internal tools and automations for G4S Cumilla. It is not intended for any other purpose.</p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fa-solid fa-8"></i> Q8: Is this G4S official webpage?</h3>
-            <p>A: No, it’s unofficial and meant to be used only by Branch Officers, Patrol Officers, Security Personnel, and authorized staff.</p>
+            <h3><i class="fa-solid fa-circle-question"></i> Q8: Is it a G4S official webpage?</h3>
+            <p>A: No, it’s unofficial and meant only for Branch Officers, Patrol Officers, Security Personnel, and authorized staff. Others should not access it.</p>
         </div>
-
     </div>
 </div>
 
 <!-- Footer -->
 <div id="footer"></div>
 
-<!-- JS: Header/Footer + Accordion + Search -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- Icons -->
 <script>
-// Load Header & Footer
+// ===== Load Header/Footer =====
 function loadHTML(id, file) {
     fetch(file)
         .then(r => r.text())
         .then(data => document.getElementById(id).innerHTML = data)
-        .catch(err => console.log(err));
+        .catch(err => console.log("Failed to load", file, err));
 }
-loadHTML("header", "/header.html");
-loadHTML("footer", "/footer.html");
 
-// Accordion toggle
-document.querySelectorAll('.faq-card h3').forEach(h3 => {
-    h3.addEventListener('click', () => {
-        h3.parentElement.classList.toggle('active');
+loadHTML("header", "../header.html"); // adjust path if faq.html is in subfolder
+loadHTML("footer", "../footer.html");
+
+// ===== Accordion behavior =====
+document.querySelectorAll(".faq-card h3").forEach((q, i) => {
+    q.addEventListener("click", () => {
+        q.parentElement.classList.toggle("active");
     });
 });
 
-// Search filter
-const searchInput = document.getElementById('faqSearch');
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase();
-    document.querySelectorAll('.faq-card').forEach(card => {
-        const q = card.querySelector('h3').innerText.toLowerCase();
-        const a = card.querySelector('p').innerText.toLowerCase();
-        card.style.display = (q.includes(query) || a.includes(query)) ? 'block' : 'none';
+// ===== Search filter =====
+document.getElementById("faq-search").addEventListener("input", function(){
+    const val = this.value.toLowerCase();
+    document.querySelectorAll(".faq-card").forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(val) ? "flex" : "none";
     });
 });
 </script>
