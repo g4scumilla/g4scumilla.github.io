@@ -14,6 +14,7 @@ header {
     background: #cce0f5;
     padding: 8px 16px;
     border-bottom: 1px solid #a8c8e6;
+    text-align: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -22,42 +23,30 @@ header {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.logo-link img {
+header img {
     width: 60px;
     height: auto;
+    margin-bottom: 4px;
 }
 
-.header-title {
-    text-align: center;
-    flex: 1;
-}
-
-.header-title h1 {
+header h1 {
     font-size: 1.2em;
     color: #023e8a;
     margin: 3px 0 2px 0;
 }
 
-.header-title p {
+header p {
     font-size: 0.8em;
     color: #023e8a;
-    margin: 0 0 0 0;
+    margin: 0 0 6px 0;
 }
 
-/* ===== Header Buttons Container (horizontal) ===== */
+/* ===== Header Buttons Horizontal ===== */
 .header-buttons-container {
     display: flex;
+    justify-content: flex-start; /* বাম থেকে শুরু, ডান থেকে চাইলে flex-end */
     gap: 10px;
+    margin-top: 10px;
 }
 
 .header-buttons-container a {
@@ -319,25 +308,20 @@ footer, #footer, .site-footer {
 }
 
 /* ===== Responsive adjustments ===== */
-@media(max-width:800px){
-    .header-row {
-        flex-direction: column;
-        align-items: center;
-    }
-    .header-title { text-align: center; }
-    .header-buttons-container { justify-content: center; gap: 6px; margin-top: 5px; }
-    .logo-link img { width: 50px; }
-    .header-title h1 { font-size: 1.1em; }
-    .header-title p { font-size: 0.75em; }
-}
-
 @media(max-width:500px){
+    header h1 { font-size: 1.1em; }
+    header p { font-size: 0.75em; }
     .link-card { font-size: 0.85em; }
     .section-title { font-size: 1.1em; padding: 8px 15px; }
+
+    .header-buttons-container { flex-direction: column; align-items: flex-start; gap: 6px; }
+    header img { width: 50px; }
+
     body > section,
     body > .form-container,
     body > main,
     body > .main-content { padding-top: 150px; }
+
     .page-header, .contact-header { font-size: 1.6em; margin-bottom: 20px; }
     .contact-card { flex-direction: column; align-items: flex-start; gap: 6px; }
     .faq-card h3 { flex-direction: column; align-items: flex-start; }
