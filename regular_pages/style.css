@@ -44,9 +44,10 @@ header p {
 /* ===== Header Buttons Horizontal ===== */
 .header-buttons-container {
     display: flex;
-    justify-content: flex-start; /* বাম থেকে শুরু, ডান থেকে চাইলে flex-end */
+    justify-content: center; /* buttons center horizontally */
     gap: 10px;
     margin-top: 10px;
+    flex-wrap: nowrap; /* no wrapping */
 }
 
 .header-buttons-container a {
@@ -314,7 +315,7 @@ footer, #footer, .site-footer {
     .link-card { font-size: 0.85em; }
     .section-title { font-size: 1.1em; padding: 8px 15px; }
 
-    .header-buttons-container { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .header-buttons-container { justify-content: center; gap: 6px; flex-wrap: nowrap; }
     header img { width: 50px; }
 
     body > section,
