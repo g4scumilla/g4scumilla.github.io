@@ -4,11 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
+
+<!-- Absolute URL to your style.css -->
 <link rel="stylesheet" href="https://g4scumilla.github.io/regular_pages/style.css">
+
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
       integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
       crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
 
@@ -22,46 +26,15 @@
     <div class="faq-container">
         <div class="faq-item">
             <div class="faq-question"><span>1. 🔹 How do I submit a resignation form?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard to submit your resignation easily.</div>
+            <div class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard.</div>
         </div>
-
         <div class="faq-item">
             <div class="faq-question"><span>2. 💡 How can I prepare an advance resignation letter?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Click on "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.</div>
+            <div class="faq-answer">Click "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.</div>
         </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>3. 📄 Where can I find the training sheets?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Use the "<a href="index.html">Prepare Training Sheet</a>" link on the dashboard to access training sheets.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>4. 🛠️ Who do I contact for technical issues?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">For technical issues, <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> or directly <a href="tel:+8801313209156">call +8801313-209156</a>.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>5. 🗂️ Do you store submitted forms and PDFs?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">We do not store any personal data permanently. Submitted forms & PDFs are preserved for a maximum of 2 months and then permanently deleted.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>6. ⚖️ Are you liable for user data?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">We will not take any liability for user data. The platform is only for making tasks easier and nothing else.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>7. 🎯 What is the purpose of this platform?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">This platform simplifies internal tools and automations for G4S Cumilla. It is not intended for any other purpose.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question"><span>8. ❌ Is it G4S official webpage?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">No, it’s unofficial and meant only for Branch Officers, Patrol Officers, Security Personnel, and authorized staff.</div>
-        </div>
+        <!-- Add more FAQ items here -->
     </div>
 
-    <!-- Ask Question -->
     <div class="ask-question">
         <p>Have a new question? Please read the full FAQ above first.</p>
         <a href="contact_us.html"><i class="fas fa-envelope"></i> Ask a Question</a>
@@ -72,13 +45,15 @@
 <div id="footer"></div>
 
 <script>
-// Load header & footer from your repo
+// Load header & footer with absolute URLs
 function loadHTML(id, file) {
     fetch(file)
         .then(r => r.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
+
+// Use absolute URLs to ensure it works on GitHub Pages
 loadHTML("header", "https://g4scumilla.github.io/regular_pages/header.html");
 loadHTML("footer", "https://g4scumilla.github.io/regular_pages/footer.html");
 
