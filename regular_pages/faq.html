@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
 
-<!-- Absolute URL to your style.css -->
+<!-- Style & Font Awesome -->
 <link rel="stylesheet" href="https://g4scumilla.github.io/regular_pages/style.css">
-
-<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
       integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
       crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,24 +17,55 @@
 <!-- Header -->
 <div id="header"></div>
 
-<!-- Main FAQ Content -->
+<!-- Main Content -->
 <div class="main-content">
     <h2 class="page-header"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
 
     <div class="faq-container">
         <div class="faq-item">
-            <div class="faq-question"><span>1. 🔹 How do I submit a resignation form?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard.</div>
+            <div class="faq-question"><span><i class="fas fa-file-alt"></i> 1. How do I submit a resignation form?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard to submit your resignation easily.</div>
         </div>
+
         <div class="faq-item">
-            <div class="faq-question"><span>2. 💡 How can I prepare an advance resignation letter?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-question"><span><i class="fas fa-lightbulb"></i> 2. How can I prepare an advance resignation letter?</span> <span class="collapse-icon">▼</span></div>
             <div class="faq-answer">Click "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.</div>
         </div>
-        <!-- Add more FAQ items here -->
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-chalkboard-teacher"></i> 3. Where can I find the training sheets?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">Use the "<a href="index.html">Prepare Training Sheet</a>" link on the dashboard to access training sheets.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-tools"></i> 4. Who do I contact for technical issues?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">For technical issues, <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> or directly <a href="tel:+8801313209156">call +8801313-209156</a>.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-folder-open"></i> 5. Do you store submitted forms and PDFs?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">Submitted forms & PDFs are preserved for a maximum of 2 months and then permanently deleted.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-balance-scale"></i> 6. Are you liable for user data?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">We do not take any liability. The platform is only for internal automation purposes.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-bullseye"></i> 7. What is the purpose of this platform?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">It simplifies internal tools and automations for G4S Cumilla staff.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question"><span><i class="fas fa-ban"></i> 8. Is it G4S official webpage?</span> <span class="collapse-icon">▼</span></div>
+            <div class="faq-answer">No, it’s unofficial and meant only for authorized staff.</div>
+        </div>
     </div>
 
+    <!-- Ask Question Button -->
     <div class="ask-question">
-        <p>Have a new question? Please read the full FAQ above first.</p>
+        <p>Have a new question? Please read the FAQ above first.</p>
         <a href="contact_us.html"><i class="fas fa-envelope"></i> Ask a Question</a>
     </div>
 </div>
@@ -45,15 +74,14 @@
 <div id="footer"></div>
 
 <script>
-// Load header & footer with absolute URLs
-function loadHTML(id, file) {
-    fetch(file)
+// Load header & footer (absolute URLs)
+function loadHTML(id, url){
+    fetch(url)
         .then(r => r.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
 
-// Use absolute URLs to ensure it works on GitHub Pages
 loadHTML("header", "https://g4scumilla.github.io/regular_pages/header.html");
 loadHTML("footer", "https://g4scumilla.github.io/regular_pages/footer.html");
 
