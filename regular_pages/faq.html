@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg==" 
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style>
 /* FAQ specific styles */
 .faq-container {
@@ -12,7 +18,7 @@
     flex-direction: column;
     gap: 15px;
     max-width: 750px;
-    margin: 0 auto 40px auto;
+    margin: 20px auto 40px auto;
 }
 
 .faq-question {
@@ -80,7 +86,19 @@
 <body>
 
 <!-- Header -->
-<div id="header"></div>
+<header>
+    <a href="/index" class="logo-link">
+        <img src="/Files/Img/logo.png" alt="G4S Logo">
+    </a>
+    <h1>Internal Automation Dashboard</h1>
+    <p>Quick access to forms, sheets, web apps & resources</p>
+
+    <div class="header-buttons-container">
+        <a href="/index"><i class="fas fa-home"></i> Home</a>
+        <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>
+    </div>
+</header>
 
 <!-- Main FAQ Content -->
 <div class="main-content">
@@ -136,19 +154,14 @@
 </div>
 
 <!-- Footer -->
-<div id="footer"></div>
+<footer class="site-footer">
+    <a href="/index" class="footer-button"><i class="fas fa-home"></i> Home</a>
+    <a href="/regular_pages/contactus" class="footer-button"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="/regular_pages/faq" class="footer-button"><i class="fas fa-question-circle"></i> FAQ</a>
+    <div class="footer-tagline">© 2026 G4S Cumilla Demo</div>
+</footer>
 
 <script>
-// Load header & footer
-function loadHTML(id, file) {
-    fetch(file)
-        .then(r => r.text())
-        .then(data => document.getElementById(id).innerHTML = data)
-        .catch(err => console.log(err));
-}
-loadHTML("header", "header.html");
-loadHTML("footer", "footer.html");
-
 // FAQ collapse functionality
 window.addEventListener("DOMContentLoaded", () => {
     const faqButtons = document.querySelectorAll(".faq-question");
