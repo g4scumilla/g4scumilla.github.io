@@ -5,87 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
 
-<!-- Link your main style.css -->
 <link rel="stylesheet" href="/regular_pages/style.css">
-
-<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* Collapse fix */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0;
+}
+
+.faq-card h3 {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collapse-icon {
+    transition: transform 0.3s ease;
+}
+
+.collapse-icon.active {
+    transform: rotate(180deg);
+}
+</style>
 
 </head>
 <body>
 
-<!-- Header -->
 <div id="header"></div>
 
-<!-- Main FAQ Content -->
 <div class="main-content">
     <h2 class="page-header">Frequently Asked Questions</h2>
 
     <div class="faq-container">
+
         <div class="faq-card">
-            <h3><i class="fas fa-file-signature"></i> 1. How do I submit a resignation form? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard to submit your resignation easily.</p>
+            <h3>
+                <span><i class="fas fa-file-signature"></i> How do I submit a resignation form?</span>
+                <span class="collapse-icon">▼</span>
+            </h3>
+            <p class="faq-answer">
+                Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard to submit your resignation easily.
+            </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-chalkboard-teacher"></i> 2. How can I prepare an advance resignation letter? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">Click on "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.</p>
+            <h3>
+                <span><i class="fas fa-chalkboard-teacher"></i> How can I prepare an advance resignation letter?</span>
+                <span class="collapse-icon">▼</span>
+            </h3>
+            <p class="faq-answer">
+                Click on "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.
+            </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-table"></i> 3. Where can I find the training sheets? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">Use the "<a href="index.html">Prepare Training Sheet</a>" link on the dashboard to access training sheets.</p>
+            <h3>
+                <span><i class="fas fa-table"></i> Where can I find the training sheets?</span>
+                <span class="collapse-icon">▼</span>
+            </h3>
+            <p class="faq-answer">
+                Use the "<a href="index.html">Prepare Training Sheet</a>" link on the dashboard.
+            </p>
         </div>
 
         <div class="faq-card">
-            <h3><i class="fas fa-tools"></i> 4. Who do I contact for technical issues? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">For technical issues, <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> or directly <a href="tel:+8801313209156">call +8801313-209156</a>.</p>
+            <h3>
+                <span><i class="fas fa-tools"></i> Who do I contact for technical issues?</span>
+                <span class="collapse-icon">▼</span>
+            </h3>
+            <p class="faq-answer">
+                For technical issues, 
+                <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> 
+                or call 
+                <a href="tel:+8801313209156">+8801313-209156</a>.
+            </p>
         </div>
 
-        <div class="faq-card">
-            <h3><i class="fas fa-folder-open"></i> 5. Do you store submitted forms and PDFs? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">We do not store any personal data permanently. Submitted forms & PDFs are preserved for a maximum of 2 months and then permanently deleted.</p>
-        </div>
-
-        <div class="faq-card">
-            <h3><i class="fas fa-balance-scale"></i> 6. Are you liable for user data? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">We will not take any liability for user data. The platform is only for making tasks easier and nothing else.</p>
-        </div>
-
-        <div class="faq-card">
-            <h3><i class="fas fa-bullseye"></i> 7. What is the purpose of this platform? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">This platform simplifies internal tools and automations for G4S Cumilla. It is not intended for any other purpose.</p>
-        </div>
-
-        <div class="faq-card">
-            <h3><i class="fas fa-times-circle"></i> 8. Is it G4S official webpage? <span class="collapse-icon">▼</span></h3>
-            <p class="faq-answer">No, it’s unofficial and meant only for Branch Officers, Patrol Officers, Security Personnel, and authorized staff.</p>
-        </div>
     </div>
 </div>
 
-<!-- Footer -->
 <div id="footer"></div>
 
 <script>
-// Load header & footer
 function loadHTML(id, file) {
     fetch(file)
         .then(r => r.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
+
 loadHTML("header", "/regular_pages/header.html");
 loadHTML("footer", "/regular_pages/footer.html");
 
-// FAQ collapse functionality
 document.addEventListener("DOMContentLoaded", () => {
-    const faqCards = document.querySelectorAll(".faq-card h3");
-    faqCards.forEach(card => {
-        card.addEventListener("click", () => {
-            const answer = card.nextElementSibling;
-            answer.style.maxHeight = answer.style.maxHeight ? null : answer.scrollHeight + "px";
-            card.querySelector(".collapse-icon").classList.toggle("active");
+    const faqHeaders = document.querySelectorAll(".faq-card h3");
+
+    faqHeaders.forEach(header => {
+        const answer = header.nextElementSibling;
+        const icon = header.querySelector(".collapse-icon");
+
+        header.addEventListener("click", () => {
+            if (answer.style.maxHeight && answer.style.maxHeight !== "0px") {
+                answer.style.maxHeight = "0px";
+                answer.style.padding = "0";
+                icon.classList.remove("active");
+            } else {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+                answer.style.padding = "10px 0";
+                icon.classList.add("active");
+            }
         });
     });
 });
