@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ | G4S Cumilla</title>
 
-<!-- Link main style.css from /regular_pages -->
+<!-- Main style -->
 <link rel="stylesheet" href="/regular_pages/style.css">
 
-<!-- Font Awesome for all icons -->
+<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body>
 
-<!-- Header placeholder -->
+<!-- Header -->
 <div id="header"></div>
 
 <!-- Main FAQ Content -->
@@ -24,22 +24,22 @@
     <div class="faq-container">
         <div class="faq-item">
             <div class="faq-question"><span>1. 🔹 How do I submit a resignation form?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Use the "<a href="/index.html"><i class="fas fa-file-signature"></i> Resignation Automations</a>" link on the dashboard to submit your resignation easily.</div>
+            <div class="faq-answer">Use the "<a href="index.html">Resignation Automations</a>" link on the dashboard to submit your resignation easily.</div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question"><span>2. 💡 How can I prepare an advance resignation letter?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Click on "<a href="/index.html"><i class="fas fa-file-signature"></i> Prepare Advance Resignation Letter</a>" in the dashboard links.</div>
+            <div class="faq-answer">Click on "<a href="index.html">Prepare Advance Resignation Letter</a>" in the dashboard links.</div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question"><span>3. 📄 Where can I find the training sheets?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">Use the "<a href="/index.html"><i class="fas fa-table"></i> Prepare Training Sheet</a>" link on the dashboard to access training sheets.</div>
+            <div class="faq-answer">Use the "<a href="index.html">Prepare Training Sheet</a>" link on the dashboard to access training sheets.</div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question"><span>4. 🛠️ Who do I contact for technical issues?</span> <span class="collapse-icon">▼</span></div>
-            <div class="faq-answer">For technical issues, <a href="mailto:nothingistruehereinourselves@gmail.com"><i class="fas fa-envelope"></i> compose an email</a> or directly <a href="tel:+8801313209156"><i class="fas fa-phone"></i> call +8801313-209156</a>.</div>
+            <div class="faq-answer">For technical issues, <a href="mailto:nothingistruehereinourselves@gmail.com">compose an email</a> or directly <a href="tel:+8801313209156">call +8801313-209156</a>.</div>
         </div>
 
         <div class="faq-item">
@@ -66,28 +66,27 @@
     <!-- Ask Question -->
     <div class="ask-question">
         <p>Have a new question? Please read the full FAQ above first.</p>
-        <a href="/regular_pages/contact_us.html"><i class="fas fa-envelope"></i> Ask a Question</a>
+        <a href="contact_us.html"><i class="fas fa-envelope"></i> Ask a Question</a>
     </div>
 </div>
 
-<!-- Footer placeholder -->
+<!-- Footer -->
 <div id="footer"></div>
 
-<!-- Load header & footer dynamically from /regular_pages -->
+<!-- Load header & footer dynamically -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
-        .then(r => r.text())
+        .then(response => response.text())
         .then(data => document.getElementById(id).innerHTML = data)
         .catch(err => console.log(err));
 }
 
-// Updated paths to start with /
 loadHTML("header", "/regular_pages/header.html");
 loadHTML("footer", "/regular_pages/footer.html");
 
 // FAQ collapse functionality
-window.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const faqButtons = document.querySelectorAll(".faq-question");
     faqButtons.forEach(btn => {
         btn.addEventListener("click", () => {
