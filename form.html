@@ -9,11 +9,11 @@
       font-family: 'Arial', sans-serif;
       background: #f0f4f8;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
 
     /* ===== Form Container ===== */
@@ -24,6 +24,7 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       max-width: 500px;
       width: 100%;
+      margin: 20px;
     }
 
     .form-container h2 {
@@ -33,7 +34,6 @@
       font-size: 26px;
     }
 
-    /* ===== Inputs & Textarea ===== */
     input[type="text"],
     input[type="date"],
     input[type="email"],
@@ -60,7 +60,6 @@
       min-height: 80px;
     }
 
-    /* ===== Labels ===== */
     label {
       font-weight: bold;
       display: block;
@@ -68,7 +67,6 @@
       color: #333;
     }
 
-    /* ===== Submit Button ===== */
     button {
       width: 100%;
       background-color: #0070c0;
@@ -85,7 +83,6 @@
       background-color: #004080;
     }
 
-    /* ===== Response Text ===== */
     #response {
       text-align: center;
       margin-top: 15px;
@@ -93,7 +90,6 @@
       color: green;
     }
 
-    /* ===== Responsive ===== */
     @media(max-width: 550px){
       .form-container {
         padding: 20px;
@@ -103,60 +99,83 @@
 </head>
 <body>
 
-<div class="form-container">
-  <h2>Resignation Application Form</h2>
+  <!-- Header will be loaded here -->
+  <div id="header-placeholder"></div>
 
-  <form id="demoForm">
-    <label>Application Date:</label>
-    <input type="date" name="appDate" required>
+  <!-- Form -->
+  <div class="form-container">
+    <h2>Resignation Application Form</h2>
 
-    <label>নাম (বাংলা):</label>
-    <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
+    <form id="demoForm">
+      <label>Application Date:</label>
+      <input type="date" name="appDate" required>
 
-    <label>Clock Number:</label>
-    <input type="text" name="clockNo" placeholder="Clock Number" required>
+      <label>নাম (বাংলা):</label>
+      <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
 
-    <label>Service Duration:</label>
-    <input type="text" name="serviceDuration" placeholder="Service Duration" required>
+      <label>Clock Number:</label>
+      <input type="text" name="clockNo" placeholder="Clock Number" required>
 
-    <label>Rank:</label>
-    <input type="text" name="rank" placeholder="Rank" required>
+      <label>Service Duration:</label>
+      <input type="text" name="serviceDuration" placeholder="Service Duration" required>
 
-    <label>Reason for Leaving:</label>
-    <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
+      <label>Rank:</label>
+      <input type="text" name="rank" placeholder="Rank" required>
 
-    <label>Mobile Number:</label>
-    <input type="text" name="mobile" placeholder="Mobile Number" required>
+      <label>Reason for Leaving:</label>
+      <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
 
-    <label>Email Address (For PDF copy):</label>
-    <input type="email" name="email" placeholder="Email Address" required>
+      <label>Mobile Number:</label>
+      <input type="text" name="mobile" placeholder="Mobile Number" required>
 
-    <button type="submit">Submit Application</button>
-  </form>
+      <label>Email Address (For PDF copy):</label>
+      <input type="email" name="email" placeholder="Email Address" required>
 
-  <p id="response"></p>
-</div>
+      <button type="submit">Submit Application</button>
+    </form>
 
-<script>
-document.getElementById("demoForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+    <p id="response"></p>
+  </div>
 
-  fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
-    method: "POST",
-    body: new FormData(this)
-  })
-  .then(response => response.json())
-  .then(result => {
-    document.getElementById("response").innerHTML =
-      "Submitted Successfully!<br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
-    document.getElementById("demoForm").reset();
-  })
-  .catch(error => {
-    document.getElementById("response").innerHTML = "Error: could not submit";
-    console.error(error);
-  });
-});
-</script>
+  <!-- Footer will be loaded here -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Script to load external header/footer -->
+  <script>
+    // Load header
+    fetch('/regular_pages/header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+      });
+
+    // Load footer
+    fetch('/regular_pages/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+
+    // Form submission
+    document.getElementById("demoForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
+        method: "POST",
+        body: new FormData(this)
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById("response").innerHTML =
+          "Submitted Successfully!<br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
+        document.getElementById("demoForm").reset();
+      })
+      .catch(error => {
+        document.getElementById("response").innerHTML = "Error: could not submit";
+        console.error(error);
+      });
+    });
+  </script>
 
 </body>
 </html>
