@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Resignation Application Form</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Global CSS -->
@@ -41,9 +40,9 @@
     /* Form container */
     .form-container.vertical-form {
       max-width: 500px;
-      margin: 0 auto 50px auto; /* top margin set dynamically via script */
+      margin: 0 auto 50px auto;
       padding: 30px 35px;
-      border: 2px solid #0070c0;          /* total border around form */
+      border: 2px solid #0070c0;
       border-radius: 20px;
       background: linear-gradient(145deg, #ffffff, #e6f0ff);
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -57,55 +56,53 @@
       font-weight: 700;
     }
 
-    /* Form layout */
-    .form-container.vertical-form form {
+    /* Form field block */
+    .form-field {
+      border: 1px solid #0070c0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 15px;
+      background-color: #f0f8ff;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
     }
 
-    /* Labels with border */
-    .form-container.vertical-form label {
-      display: block;
+    .form-field label {
+      margin: 0 0 5px 0;
       font-weight: 600;
-      margin: 10px 0 5px 0;
+      font-size: 14px;
       color: #004080;
-      font-size: 14px;
-      padding: 5px 10px;
-      border: 1px solid #0070c0;   /* label border */
-      border-radius: 8px;
-      background-color: #f0f8ff;    /* light background behind label */
+      padding: 0;
+      border: none;
+      background: none;
     }
 
-    /* Inputs, textarea, select moderate width & centered */
-    .form-container.vertical-form input,
-    .form-container.vertical-form textarea,
-    .form-container.vertical-form select {
-      max-width: 380px;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      max-width: 100%;
       width: 100%;
+      margin: 0;
+      display: block;
       box-sizing: border-box;
-      padding: 12px 15px;
       border: 1px solid #bbb;
-      border-radius: 10px;
-      background-color: #f9faff;
+      border-radius: 8px;
+      padding: 10px 12px;
       font-size: 14px;
+      background-color: #f9faff;
       transition: all 0.3s ease;
-      margin-bottom: 10px;
     }
 
-    .form-container.vertical-form input:focus,
-    .form-container.vertical-form textarea:focus,
-    .form-container.vertical-form select:focus {
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus {
       border-color: #0070c0;
       box-shadow: 0 0 10px rgba(0,112,192,0.3);
       outline: none;
       background-color: #fff;
     }
 
-    .form-container.vertical-form textarea {
+    .form-field textarea {
       resize: vertical;
       min-height: 100px;
     }
@@ -160,37 +157,52 @@
   <div class="form-container vertical-form">
     <h2>Submit Your Details</h2>
     <form id="demoForm">
-      <label>Application Date:</label>
-      <input type="date" name="appDate" required>
+      <div class="form-field">
+        <label>Application Date:</label>
+        <input type="date" name="appDate" required>
+      </div>
 
-      <label>নাম (বাংলা):</label>
-      <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
+      <div class="form-field">
+        <label>নাম (বাংলা):</label>
+        <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
+      </div>
 
-      <label>Clock Number:</label>
-      <input type="text" name="clockNo" placeholder="Clock Number" required>
+      <div class="form-field">
+        <label>Clock Number:</label>
+        <input type="text" name="clockNo" placeholder="Clock Number" required>
+      </div>
 
-      <label>Service Duration:</label>
-      <input type="text" name="serviceDuration" placeholder="Service Duration" required>
+      <div class="form-field">
+        <label>Service Duration:</label>
+        <input type="text" name="serviceDuration" placeholder="Service Duration" required>
+      </div>
 
-      <!-- Rank Dropdown with "Other" -->
-      <label>Rank:</label>
-      <select name="rank" id="rankSelect" required>
-        <option value="" disabled selected>Select Rank</option>
-        <option value="Security Guard">Security Guard</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Inspector">Inspector</option>
-        <option value="Other">Other</option>
-      </select>
-      <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;" required>
+      <div class="form-field">
+        <label>Rank:</label>
+        <select name="rank" id="rankSelect" required>
+          <option value="" disabled selected>Select Rank</option>
+          <option value="Security Guard">Security Guard</option>
+          <option value="Supervisor">Supervisor</option>
+          <option value="Inspector">Inspector</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;" required>
+      </div>
 
-      <label>Reason for Leaving:</label>
-      <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
+      <div class="form-field">
+        <label>Reason for Leaving:</label>
+        <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
+      </div>
 
-      <label>Mobile Number:</label>
-      <input type="text" name="mobile" placeholder="Mobile Number" required>
+      <div class="form-field">
+        <label>Mobile Number:</label>
+        <input type="text" name="mobile" placeholder="Mobile Number" required>
+      </div>
 
-      <label>Email Address (For PDF copy):</label>
-      <input type="email" name="email" placeholder="Email Address" required>
+      <div class="form-field">
+        <label>Email Address (For PDF copy):</label>
+        <input type="email" name="email" placeholder="Email Address" required>
+      </div>
 
       <button type="submit">Submit Application</button>
     </form>
@@ -210,13 +222,13 @@
       .then(res => res.text())
       .then(data => document.getElementById('footer-placeholder').innerHTML = data);
 
-    // Adjust form position to avoid header overlap
+    // Adjust form container top to avoid header overlap
     window.addEventListener('load', () => {
       const header = document.getElementById('header-placeholder');
       const form = document.querySelector('.form-container.vertical-form');
       if(header && form){
         const headerHeight = header.offsetHeight;
-        form.style.marginTop = (headerHeight + 20) + 'px'; // 20px extra space
+        form.style.marginTop = (headerHeight + 20) + 'px';
       }
     });
 
