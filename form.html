@@ -22,7 +22,7 @@
       padding: 0;
     }
 
-    /* Header/Footer placeholders spacing */
+    /* Header/Footer placeholders */
     #header-placeholder, #footer-placeholder {
       width: 100%;
       z-index: 2;
@@ -41,10 +41,11 @@
     /* Form container */
     .form-container.vertical-form {
       max-width: 500px;
-      margin: 20px auto 50px auto;
+      margin: 0 auto 50px auto; /* top margin set dynamically via script */
       padding: 30px 35px;
-      background: linear-gradient(145deg, #ffffff, #e6f0ff);
+      border: 2px solid #0070c0;          /* total border around form */
       border-radius: 20px;
+      background: linear-gradient(145deg, #ffffff, #e6f0ff);
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
@@ -63,25 +64,34 @@
       align-items: stretch;
     }
 
-    /* Labels */
+    /* Labels with border */
     .form-container.vertical-form label {
+      display: block;
       font-weight: 600;
       margin: 10px 0 5px 0;
       color: #004080;
       font-size: 14px;
+      padding: 5px 10px;
+      border: 1px solid #0070c0;   /* label border */
+      border-radius: 8px;
+      background-color: #f0f8ff;    /* light background behind label */
     }
 
-    /* Inputs, textarea, select */
+    /* Inputs, textarea, select moderate width & centered */
     .form-container.vertical-form input,
     .form-container.vertical-form textarea,
     .form-container.vertical-form select {
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
       width: 100%;
+      box-sizing: border-box;
       padding: 12px 15px;
       border: 1px solid #bbb;
       border-radius: 10px;
-      font-size: 14px;
       background-color: #f9faff;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      font-size: 14px;
       transition: all 0.3s ease;
       margin-bottom: 10px;
     }
@@ -133,7 +143,7 @@
     @media(max-width: 550px){
       .form-container.vertical-form {
         padding: 20px;
-        margin: 15px;
+        margin: 20px 15px 30px 15px;
       }
     }
   </style>
@@ -199,6 +209,16 @@
     fetch('/regular_pages/footer.html')
       .then(res => res.text())
       .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+
+    // Adjust form position to avoid header overlap
+    window.addEventListener('load', () => {
+      const header = document.getElementById('header-placeholder');
+      const form = document.querySelector('.form-container.vertical-form');
+      if(header && form){
+        const headerHeight = header.offsetHeight;
+        form.style.marginTop = (headerHeight + 20) + 'px'; // 20px extra space
+      }
+    });
 
     // Show "Other" input dynamically
     const rankSelect = document.getElementById('rankSelect');
