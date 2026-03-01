@@ -1,23 +1,50 @@
-Note: it colse to center,,,
-
 <header>  
     <!-- Font Awesome CSS -->  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"   
           integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="   
-          crossorigin="anonymous" referrerpolicy="no-referrer" />  <!-- Logo -->  
-<a href="/index" class="logo-link">  
-    <img src="/Files/Img/logo.png" alt="G4S Logo">  
-</a>  
+          crossorigin="anonymous" referrerpolicy="no-referrer" />  
 
-<!-- Title & subtitle -->  
-<h1>Internal Automation Dashboard</h1>  
-<p>Quick access to forms, sheets, web apps & resources</p>  
+    <!-- Logo -->  
+    <a href="/index" class="logo-link">  
+        <img src="/Files/Img/logo.png" alt="G4S Logo">  
+    </a>  
 
-<!-- Horizontal Buttons -->  
-<div class="header-buttons-container">  
-    <a href="/index"><i class="fas fa-home"></i> Home</a>  
-    <a href="/regular_pages/contactus"><i class="fas fa-envelope"></i> Contact Us</a>  
-    <a href="/regular_pages/faq"><i class="fas fa-question-circle"></i> FAQ</a>  
+    <!-- Title & subtitle -->  
+    <h1>Internal Automation Dashboard</h1>  
+    <p>Quick access to forms, sheets, web apps & resources</p>  
+</header>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <a href="javascript:history.back()" class="nav-button"><i class="fas fa-arrow-left"></i> Back</a>
+  <a href="https://g4scumilla.github.io" class="nav-button"><i class="fas fa-home"></i> Home</a>
+  <a href="/menu.html" class="nav-button"><i class="fas fa-bars"></i> Menu</a>
 </div>
 
-</header>
+<style>
+/* Bottom Navigation Styling */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #004080;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.bottom-nav .nav-button {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  text-align: center;
+  flex: 1;
+}
+
+.bottom-nav .nav-button:hover {
+  background-color: #0066cc;
+}
+</style>
