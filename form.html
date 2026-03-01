@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demo Form</title>
+</head>
+<body>
+
+<h2>Demo Input Form</h2>
+
+<form id="demoForm">
+  <input type="text" name="name" placeholder="Your Name" required><br><br>
+  <input type="text" name="message" placeholder="Your Message" required><br><br>
+  <button type="submit">Submit</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+document.getElementById("demoForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  
+  fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
+    method: "POST",
+    body: new FormData(this)
+  })
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById("response").innerHTML = "Submitted Successfully!";
+    document.getElementById("demoForm").reset();
+  });
+});
+</script>
+
+</body>
+</html>
