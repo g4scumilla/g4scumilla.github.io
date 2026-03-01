@@ -343,3 +343,57 @@ footer, #footer, .site-footer {
     word-break: break-word;
     overflow-wrap: break-word;
 }
+
+
+
+
+
+
+
+
+
+
+/* ===== Dropdown Button ===== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #023e8a;
+    font-weight: bold;
+    border: 1px solid #94b9dc;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 140px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #023e8a;
+    font-size: 0.85em;
+}
+
+.dropdown-content a:hover {
+    background-color: #dceefa;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
