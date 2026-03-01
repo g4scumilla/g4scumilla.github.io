@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Resignation Application Form</title>
 
+  <!-- Make page responsive on mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Global CSS -->
   <link rel="stylesheet" href="/regular_pages/style.css">
 
@@ -25,14 +28,18 @@
     .form-container.vertical-form textarea,
     .form-container.vertical-form button {
       width: 100%;
-      max-width: 400px;  /* limit width */
+      max-width: 400px;  /* limit width on large screens */
       margin: 5px 0 !important;
       box-sizing: border-box;
     }
 
-    /* Optional: center the h2 inside the container */
     .form-container.vertical-form h2 {
       text-align: center;
+    }
+
+    /* Optional: add some margin around form container */
+    .form-container.vertical-form {
+      margin: 20px;
     }
   </style>
 </head>
