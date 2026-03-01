@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Resignation Application Form</title>
 
-  <!-- Make page responsive on mobile -->
+  <!-- Make page responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Global CSS -->
@@ -15,31 +15,88 @@
         integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- Inline CSS for form styling -->
   <style>
-    /* ===== Vertical form & centered fields ===== */
+    /* Centered form container with max-width */
+    .form-container.vertical-form {
+      max-width: 450px;
+      margin: 30px auto;
+      padding: 25px 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Vertical form layout */
     .form-container.vertical-form form {
       display: flex !important;
       flex-direction: column !important;
-      align-items: center; /* center fields horizontally */
+      align-items: stretch;
     }
 
-    .form-container.vertical-form label,
+    /* Labels */
+    .form-container.vertical-form label {
+      font-weight: bold;
+      margin: 8px 0 5px 0;
+      color: #004080;
+      font-size: 14px;
+    }
+
+    /* Inputs and textarea */
     .form-container.vertical-form input,
-    .form-container.vertical-form textarea,
-    .form-container.vertical-form button {
+    .form-container.vertical-form textarea {
       width: 100%;
-      max-width: 400px;  /* limit width on large screens */
-      margin: 5px 0 !important;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
       box-sizing: border-box;
     }
 
-    .form-container.vertical-form h2 {
-      text-align: center;
+    .form-container.vertical-form input:focus,
+    .form-container.vertical-form textarea:focus {
+      border-color: #0070c0;
+      box-shadow: 0 0 5px rgba(0,112,192,0.3);
+      outline: none;
     }
 
-    /* Optional: add some margin around form container */
-    .form-container.vertical-form {
-      margin: 20px;
+    .form-container.vertical-form textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Submit button */
+    .form-container.vertical-form button {
+      width: 100%;
+      background-color: #0070c0;
+      color: #fff;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-container.vertical-form button:hover {
+      background-color: #004080;
+    }
+
+    /* Response text */
+    #response {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+    }
+
+    @media(max-width: 500px) {
+      .form-container.vertical-form {
+        padding: 20px;
+        margin: 15px;
+      }
     }
   </style>
 </head>
@@ -50,7 +107,7 @@
 
   <!-- Form -->
   <div class="form-container vertical-form">
-    <h2>Resignation Application Form</h2>
+    <h2 style="text-align:center;">Resignation Application Form</h2>
 
     <form id="demoForm">
       <label>Application Date:</label>
