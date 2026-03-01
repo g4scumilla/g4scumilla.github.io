@@ -7,10 +7,26 @@
   <!-- Global CSS -->
   <link rel="stylesheet" href="/regular_pages/style.css">
 
-  <!-- Font Awesome for icons (if not already included in style.css) -->
+  <!-- Font Awesome (if needed) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* ===== Force vertical layout for this form ===== */
+    .form-container.vertical-form form {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    .form-container.vertical-form label,
+    .form-container.vertical-form input,
+    .form-container.vertical-form textarea,
+    .form-container.vertical-form button {
+      width: 100% !important;
+      margin: 5px 0 !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,7 +34,7 @@
   <div id="header-placeholder"></div>
 
   <!-- Form -->
-  <div class="form-container">
+  <div class="form-container vertical-form">
     <h2>Resignation Application Form</h2>
 
     <form id="demoForm">
@@ -57,12 +73,12 @@
 
   <!-- Scripts -->
   <script>
-    // Load external header
+    // Load header
     fetch('/regular_pages/header.html')
       .then(response => response.text())
       .then(data => { document.getElementById('header-placeholder').innerHTML = data; });
 
-    // Load external footer
+    // Load footer
     fetch('/regular_pages/footer.html')
       .then(response => response.text())
       .then(data => { document.getElementById('footer-placeholder').innerHTML = data; });
