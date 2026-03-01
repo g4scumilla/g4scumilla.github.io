@@ -14,18 +14,42 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
+    /* Body & spacing */
     body {
       font-family: 'Arial', sans-serif;
       background: #eef4fb;
       margin: 0;
       padding: 0;
-      padding-top: 100px; /* will be adjusted dynamically */
+      padding-top: 100px; /* dynamically updated via JS */
     }
 
     /* Header/Footer placeholders */
     #header-placeholder, #footer-placeholder {
       width: 100%;
       z-index: 2;
+    }
+
+    /* Header compact style */
+    header {
+      padding: 8px 16px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    header h1 {
+      font-size: 20px;
+      margin: 4px 0;
+    }
+    header p {
+      font-size: 12px;
+      margin: 2px 0 6px 0;
+    }
+    .header-buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
     }
 
     /* Content heading */
@@ -48,7 +72,6 @@
       background: linear-gradient(145deg, #ffffff, #e6f0ff);
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
-
     .form-container.vertical-form h2 {
       text-align: center;
       color: #004080;
@@ -67,17 +90,12 @@
       display: flex;
       flex-direction: column;
     }
-
     .form-field label {
       margin: 0 0 5px 0;
-      font-weight: bold; /* bold labels */
+      font-weight: bold;
       font-size: 14px;
       color: #004080;
-      padding: 0;
-      border: none;
-      background: none;
     }
-
     .form-field input,
     .form-field textarea,
     .form-field select {
@@ -93,7 +111,6 @@
       background-color: #f9faff;
       transition: all 0.3s ease;
     }
-
     .form-field input:focus,
     .form-field textarea:focus,
     .form-field select:focus {
@@ -102,7 +119,6 @@
       outline: none;
       background-color: #fff;
     }
-
     .form-field textarea {
       resize: vertical;
       min-height: 100px;
@@ -123,7 +139,6 @@
       transition: all 0.3s ease;
       margin-top: 15px;
     }
-
     .form-container.vertical-form button:hover {
       background: linear-gradient(90deg, #004080, #0070c0);
       transform: translateY(-2px);
@@ -162,22 +177,18 @@
         <label>Application Date:</label>
         <input type="date" name="appDate" required>
       </div>
-
       <div class="form-field">
         <label>নাম (বাংলা):</label>
         <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
       </div>
-
       <div class="form-field">
         <label>Clock Number:</label>
         <input type="text" name="clockNo" placeholder="Clock Number" required>
       </div>
-
       <div class="form-field">
         <label>Service Duration:</label>
         <input type="text" name="serviceDuration" placeholder="Service Duration" required>
       </div>
-
       <div class="form-field">
         <label>Rank:</label>
         <select name="rank" id="rankSelect" required>
@@ -189,22 +200,18 @@
         </select>
         <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;" required>
       </div>
-
       <div class="form-field">
         <label>Reason for Leaving:</label>
         <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
       </div>
-
       <div class="form-field">
         <label>Mobile Number:</label>
         <input type="text" name="mobile" placeholder="Mobile Number" required>
       </div>
-
       <div class="form-field">
         <label>Email Address (For PDF copy):</label>
         <input type="email" name="email" placeholder="Email Address" required>
       </div>
-
       <button type="submit">Submit Application</button>
     </form>
     <p id="response"></p>
@@ -216,23 +223,28 @@
   <script>
     const headerPlaceholder = document.getElementById('header-placeholder');
     const footerPlaceholder = document.getElementById('footer-placeholder');
-    const formContainer = document.querySelector('.form-container.vertical-form');
 
-    // Load header and adjust body padding dynamically
+    // Load header and adjust body padding dynamically after image loads
     fetch('/regular_pages/header.html')
       .then(res => res.text())
       .then(data => {
         headerPlaceholder.innerHTML = data;
-        const headerHeight = headerPlaceholder.offsetHeight;
-        document.body.style.paddingTop = (headerHeight + 10) + 'px'; // 10px spacing
+        const headerImg = headerPlaceholder.querySelector('img');
+        if(headerImg){
+          headerImg.onload = () => {
+            const headerHeight = headerPlaceholder.offsetHeight;
+            document.body.style.paddingTop = (headerHeight + 10) + 'px';
+          };
+        } else {
+          const headerHeight = headerPlaceholder.offsetHeight;
+          document.body.style.paddingTop = (headerHeight + 10) + 'px';
+        }
       });
 
     // Load footer
     fetch('/regular_pages/footer.html')
       .then(res => res.text())
-      .then(data => {
-        footerPlaceholder.innerHTML = data;
-      });
+      .then(data => footerPlaceholder.innerHTML = data);
 
     // Rank "Other" logic
     const rankSelect = document.getElementById('rankSelect');
