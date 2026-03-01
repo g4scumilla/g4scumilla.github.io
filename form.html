@@ -52,9 +52,10 @@
       font-size: 14px;
     }
 
-    /* Inputs and textarea with shadows and hover effect */
+    /* Inputs, textarea, and select with shadows and hover effect */
     .form-container.vertical-form input,
-    .form-container.vertical-form textarea {
+    .form-container.vertical-form textarea,
+    .form-container.vertical-form select {
       width: 100%;
       padding: 12px 15px;
       border: 1px solid #bbb;
@@ -64,10 +65,12 @@
       transition: all 0.3s ease;
       background-color: #f9faff;
       box-sizing: border-box;
+      margin-bottom: 10px;
     }
 
     .form-container.vertical-form input:focus,
-    .form-container.vertical-form textarea:focus {
+    .form-container.vertical-form textarea:focus,
+    .form-container.vertical-form select:focus {
       border-color: #0070c0;
       box-shadow: 0 0 8px rgba(0,112,192,0.3);
       outline: none;
@@ -140,8 +143,18 @@
       <label>Service Duration:</label>
       <input type="text" name="serviceDuration" placeholder="Service Duration" required>
 
+      <!-- Rank Dropdown with "Other" option -->
       <label>Rank:</label>
-      <input type="text" name="rank" placeholder="Rank" required>
+      <select name="rank" id="rankSelect" required>
+        <option value="" disabled selected>Select Rank</option>
+        <option value="Security Guard">Security Guard</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Inspector">Inspector</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <!-- Hidden input for "Other" -->
+      <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;">
 
       <label>Reason for Leaving:</label>
       <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
@@ -173,9 +186,27 @@
       .then(response => response.text())
       .then(data => { document.getElementById('footer-placeholder').innerHTML = data; });
 
+    // Show "Other" input dynamically
+    const rankSelect = document.getElementById('rankSelect');
+    const rankOther = document.getElementById('rankOther');
+    rankSelect.addEventListener('change', function() {
+      if (this.value === 'Other') {
+        rankOther.style.display = 'block';
+        rankOther.required = true;
+      } else {
+        rankOther.style.display = 'none';
+        rankOther.required = false;
+      }
+    });
+
     // Form submission
     document.getElementById("demoForm").addEventListener("submit", function(e) {
       e.preventDefault();
+
+      // If "Other" is used, override rank value
+      if(rankSelect.value === "Other") {
+        this.rank.value = rankOther.value;
+      }
 
       fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
         method: "POST",
@@ -186,6 +217,7 @@
         document.getElementById("response").innerHTML =
           "Submitted Successfully!<br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
         document.getElementById("demoForm").reset();
+        rankOther.style.display = 'none';
       })
       .catch(error => {
         document.getElementById("response").innerHTML = "Error: could not submit";
