@@ -19,6 +19,7 @@
       background: #eef4fb;
       margin: 0;
       padding: 0;
+      padding-top: 100px; /* will be adjusted dynamically */
     }
 
     /* Header/Footer placeholders */
@@ -69,7 +70,7 @@
 
     .form-field label {
       margin: 0 0 5px 0;
-      font-weight: 600;
+      font-weight: bold; /* bold labels */
       font-size: 14px;
       color: #004080;
       padding: 0;
@@ -217,15 +218,13 @@
     const footerPlaceholder = document.getElementById('footer-placeholder');
     const formContainer = document.querySelector('.form-container.vertical-form');
 
-    // Load header
+    // Load header and adjust body padding dynamically
     fetch('/regular_pages/header.html')
       .then(res => res.text())
       .then(data => {
         headerPlaceholder.innerHTML = data;
-
-        // Adjust form after header loads
         const headerHeight = headerPlaceholder.offsetHeight;
-        formContainer.style.marginTop = (headerHeight + 20) + 'px';
+        document.body.style.paddingTop = (headerHeight + 10) + 'px'; // 10px spacing
       });
 
     // Load footer
