@@ -13,10 +13,39 @@
     <h1>Internal Automation Dashboard</h1>  
     <p>Quick access to forms, sheets, web apps & resources</p>  
 
-    <!-- Header Buttons (only button links changed) -->  
+    <!-- Header Buttons (compact, links updated) -->  
     <div class="header-buttons-container">  
         <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>  
         <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>  
         <a href="/menu.html"><i class="fas fa-bars"></i> Menu</a>  
     </div>
 </header>
+
+<style>
+/* Compact Header Styling */
+header {
+    padding: 8px 16px; /* less padding for compactness */
+}
+
+header h1 {
+    font-size: 20px; /* slightly smaller title */
+    margin: 4px 0;
+}
+
+header p {
+    font-size: 12px; /* smaller subtitle */
+    margin: 2px 0 6px 0;
+}
+
+.header-buttons-container {
+    display: flex;
+    justify-content: center; /* keep buttons centered */
+    gap: 10px; /* closer spacing between buttons */
+    margin-top: 6px; /* reduced top margin */
+}
+
+/* Button style remains the same as original */
+.header-buttons-container a {
+    /* no changes here, preserves your original button styling */
+}
+</style>
