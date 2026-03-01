@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Resignation Application Form</title>
 
-  <!-- Make page responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Global CSS -->
@@ -15,18 +14,38 @@
         integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- Inline CSS for form decorations -->
   <style>
-    /* Form container centered with spacing from header */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #eef4fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header/Footer placeholders spacing */
+    #header-placeholder, #footer-placeholder {
+      width: 100%;
+      z-index: 2;
+    }
+
+    /* Content heading */
+    .content-heading {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 28px;
+      color: #004080;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Form container */
     .form-container.vertical-form {
-      max-width: 450px;
-      margin: 40px auto 50px auto; /* space from header and footer */
-      padding: 25px 30px;
-      background: linear-gradient(145deg, #ffffff, #e6f0ff); /* subtle gradient */
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      position: relative;
-      z-index: 1;
+      max-width: 500px;
+      margin: 20px auto 50px auto;
+      padding: 30px 35px;
+      background: linear-gradient(145deg, #ffffff, #e6f0ff);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     .form-container.vertical-form h2 {
@@ -34,25 +53,25 @@
       color: #004080;
       margin-bottom: 25px;
       font-size: 24px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      font-weight: 700;
     }
 
-    /* Vertical form layout */
+    /* Form layout */
     .form-container.vertical-form form {
-      display: flex !important;
-      flex-direction: column !important;
+      display: flex;
+      flex-direction: column;
       align-items: stretch;
     }
 
     /* Labels */
     .form-container.vertical-form label {
-      font-weight: bold;
+      font-weight: 600;
       margin: 10px 0 5px 0;
       color: #004080;
       font-size: 14px;
     }
 
-    /* Inputs, textarea, and select with shadows and hover effect */
+    /* Inputs, textarea, select */
     .form-container.vertical-form input,
     .form-container.vertical-form textarea,
     .form-container.vertical-form select {
@@ -61,10 +80,9 @@
       border: 1px solid #bbb;
       border-radius: 10px;
       font-size: 14px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
       background-color: #f9faff;
-      box-sizing: border-box;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
       margin-bottom: 10px;
     }
 
@@ -72,39 +90,39 @@
     .form-container.vertical-form textarea:focus,
     .form-container.vertical-form select:focus {
       border-color: #0070c0;
-      box-shadow: 0 0 8px rgba(0,112,192,0.3);
+      box-shadow: 0 0 10px rgba(0,112,192,0.3);
       outline: none;
       background-color: #fff;
     }
 
-    /* Textarea resize */
     .form-container.vertical-form textarea {
       resize: vertical;
-      min-height: 90px;
+      min-height: 100px;
     }
 
-    /* Submit button with gradient and shadow */
+    /* Submit button */
     .form-container.vertical-form button {
       width: 100%;
-      background: linear-gradient(90deg, #0070c0, #004080);
-      color: #fff;
       padding: 12px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 10px;
       font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: linear-gradient(90deg, #0070c0, #004080);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
+      margin-top: 15px;
     }
 
     .form-container.vertical-form button:hover {
       background: linear-gradient(90deg, #004080, #0070c0);
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
     }
 
-    /* Response text */
+    /* Response */
     #response {
       text-align: center;
       margin-top: 15px;
@@ -112,11 +130,10 @@
       color: green;
     }
 
-    /* Responsive adjustments */
-    @media(max-width: 500px) {
+    @media(max-width: 550px){
       .form-container.vertical-form {
         padding: 20px;
-        margin: 20px 15px 30px 15px;
+        margin: 15px;
       }
     }
   </style>
@@ -126,10 +143,12 @@
   <!-- Header -->
   <div id="header-placeholder"></div>
 
+  <!-- Content heading -->
+  <div class="content-heading">Resignation Application</div>
+
   <!-- Form -->
   <div class="form-container vertical-form">
-    <h2>Resignation Application Form</h2>
-
+    <h2>Submit Your Details</h2>
     <form id="demoForm">
       <label>Application Date:</label>
       <input type="date" name="appDate" required>
@@ -143,7 +162,7 @@
       <label>Service Duration:</label>
       <input type="text" name="serviceDuration" placeholder="Service Duration" required>
 
-      <!-- Rank Dropdown with "Other" option -->
+      <!-- Rank Dropdown with "Other" -->
       <label>Rank:</label>
       <select name="rank" id="rankSelect" required>
         <option value="" disabled selected>Select Rank</option>
@@ -152,9 +171,7 @@
         <option value="Inspector">Inspector</option>
         <option value="Other">Other</option>
       </select>
-
-      <!-- Hidden input for "Other" -->
-      <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;">
+      <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;" required>
 
       <label>Reason for Leaving:</label>
       <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
@@ -167,30 +184,27 @@
 
       <button type="submit">Submit Application</button>
     </form>
-
     <p id="response"></p>
   </div>
 
   <!-- Footer -->
   <div id="footer-placeholder"></div>
 
-  <!-- Scripts -->
   <script>
-    // Load header
+    // Load header and footer
     fetch('/regular_pages/header.html')
-      .then(response => response.text())
-      .then(data => { document.getElementById('header-placeholder').innerHTML = data; });
+      .then(res => res.text())
+      .then(data => document.getElementById('header-placeholder').innerHTML = data);
 
-    // Load footer
     fetch('/regular_pages/footer.html')
-      .then(response => response.text())
-      .then(data => { document.getElementById('footer-placeholder').innerHTML = data; });
+      .then(res => res.text())
+      .then(data => document.getElementById('footer-placeholder').innerHTML = data);
 
     // Show "Other" input dynamically
     const rankSelect = document.getElementById('rankSelect');
     const rankOther = document.getElementById('rankOther');
     rankSelect.addEventListener('change', function() {
-      if (this.value === 'Other') {
+      if(this.value === 'Other'){
         rankOther.style.display = 'block';
         rankOther.required = true;
       } else {
@@ -200,28 +214,24 @@
     });
 
     // Form submission
-    document.getElementById("demoForm").addEventListener("submit", function(e) {
+    document.getElementById("demoForm").addEventListener("submit", function(e){
       e.preventDefault();
+      if(rankSelect.value === "Other") this.rank.value = rankOther.value;
 
-      // If "Other" is used, override rank value
-      if(rankSelect.value === "Other") {
-        this.rank.value = rankOther.value;
-      }
-
-      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
-        method: "POST",
-        body: new FormData(this)
+      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
+        method:"POST",
+        body:new FormData(this)
       })
-      .then(response => response.json())
-      .then(result => {
-        document.getElementById("response").innerHTML =
+      .then(res => res.json())
+      .then(result=>{
+        document.getElementById("response").innerHTML = 
           "Submitted Successfully!<br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
-        document.getElementById("demoForm").reset();
+        this.reset();
         rankOther.style.display = 'none';
       })
-      .catch(error => {
+      .catch(err=>{
         document.getElementById("response").innerHTML = "Error: could not submit";
-        console.error(error);
+        console.error(err);
       });
     });
   </script>
