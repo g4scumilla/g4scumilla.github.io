@@ -1,32 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Demo Form</title>
+  <meta charset="UTF-8">
+  <title>Resignation Application Form</title>
+  <style>
+    /* ===== Body ===== */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* ===== Form Container ===== */
+    .form-container {
+      background: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .form-container h2 {
+      text-align: center;
+      color: #004080;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
+
+    /* ===== Inputs & Textarea ===== */
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0 18px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #0070c0;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0,112,192,0.3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ===== Labels ===== */
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    /* ===== Submit Button ===== */
+    button {
+      width: 100%;
+      background-color: #0070c0;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #004080;
+    }
+
+    /* ===== Response Text ===== */
+    #response {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width: 550px){
+      .form-container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h2>Demo Input Form</h2>
+<div class="form-container">
+  <h2>Resignation Application Form</h2>
 
-<form id="demoForm">
-  <input type="text" name="name" placeholder="Your Name" required><br><br>
-  <input type="text" name="message" placeholder="Your Message" required><br><br>
-  <button type="submit">Submit</button>
-</form>
+  <form id="demoForm">
+    <label>Application Date:</label>
+    <input type="date" name="appDate" required>
 
-<p id="response"></p>
+    <label>নাম (বাংলা):</label>
+    <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required>
+
+    <label>Clock Number:</label>
+    <input type="text" name="clockNo" placeholder="Clock Number" required>
+
+    <label>Service Duration:</label>
+    <input type="text" name="serviceDuration" placeholder="Service Duration" required>
+
+    <label>Rank:</label>
+    <input type="text" name="rank" placeholder="Rank" required>
+
+    <label>Reason for Leaving:</label>
+    <textarea name="reason" placeholder="Reason for Leaving" required></textarea>
+
+    <label>Mobile Number:</label>
+    <input type="text" name="mobile" placeholder="Mobile Number" required>
+
+    <label>Email Address (For PDF copy):</label>
+    <input type="email" name="email" placeholder="Email Address" required>
+
+    <button type="submit">Submit Application</button>
+  </form>
+
+  <p id="response"></p>
+</div>
 
 <script>
 document.getElementById("demoForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  
+
   fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
     method: "POST",
     body: new FormData(this)
   })
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById("response").innerHTML = "Submitted Successfully!";
+  .then(response => response.json())
+  .then(result => {
+    document.getElementById("response").innerHTML =
+      "Submitted Successfully!<br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
     document.getElementById("demoForm").reset();
+  })
+  .catch(error => {
+    document.getElementById("response").innerHTML = "Error: could not submit";
+    console.error(error);
   });
 });
 </script>
