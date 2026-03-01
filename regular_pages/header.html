@@ -12,39 +12,34 @@
     <!-- Title & subtitle -->  
     <h1>Internal Automation Dashboard</h1>  
     <p>Quick access to forms, sheets, web apps & resources</p>  
+
+    <!-- Header Buttons (Updated) -->  
+    <div class="header-buttons-container">  
+        <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>  
+        <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>  
+        <a href="/menu.html"><i class="fas fa-bars"></i> Menu</a>  
+    </div>
 </header>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <a href="javascript:history.back()" class="nav-button"><i class="fas fa-arrow-left"></i> Back</a>
-  <a href="https://g4scumilla.github.io" class="nav-button"><i class="fas fa-home"></i> Home</a>
-  <a href="/menu.html" class="nav-button"><i class="fas fa-bars"></i> Menu</a>
-</div>
-
 <style>
-/* Bottom Navigation Styling */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #004080;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
-  z-index: 1000;
+/* Header Buttons Styling */
+.header-buttons-container {
+    display: flex;
+    justify-content: center; /* space buttons evenly */
+    gap: 20px; /* spacing between buttons */
+    margin-top: 10px;
 }
 
-.bottom-nav .nav-button {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-  text-align: center;
-  flex: 1;
+.header-buttons-container a {
+    background-color: #004080;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
 }
 
-.bottom-nav .nav-button:hover {
-  background-color: #0066cc;
+.header-buttons-container a:hover {
+    background-color: #0066cc;
 }
 </style>
