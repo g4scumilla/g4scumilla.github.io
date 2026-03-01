@@ -13,18 +13,26 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* ===== Force vertical layout for this form ===== */
+    /* ===== Vertical form & centered fields ===== */
     .form-container.vertical-form form {
       display: flex !important;
       flex-direction: column !important;
+      align-items: center; /* center fields horizontally */
     }
 
     .form-container.vertical-form label,
     .form-container.vertical-form input,
     .form-container.vertical-form textarea,
     .form-container.vertical-form button {
-      width: 100% !important;
+      width: 100%;
+      max-width: 400px;  /* limit width */
       margin: 5px 0 !important;
+      box-sizing: border-box;
+    }
+
+    /* Optional: center the h2 inside the container */
+    .form-container.vertical-form h2 {
+      text-align: center;
     }
   </style>
 </head>
