@@ -213,26 +213,29 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    // Load header and footer
+    const headerPlaceholder = document.getElementById('header-placeholder');
+    const footerPlaceholder = document.getElementById('footer-placeholder');
+    const formContainer = document.querySelector('.form-container.vertical-form');
+
+    // Load header
     fetch('/regular_pages/header.html')
       .then(res => res.text())
-      .then(data => document.getElementById('header-placeholder').innerHTML = data);
+      .then(data => {
+        headerPlaceholder.innerHTML = data;
 
+        // Adjust form after header loads
+        const headerHeight = headerPlaceholder.offsetHeight;
+        formContainer.style.marginTop = (headerHeight + 20) + 'px';
+      });
+
+    // Load footer
     fetch('/regular_pages/footer.html')
       .then(res => res.text())
-      .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+      .then(data => {
+        footerPlaceholder.innerHTML = data;
+      });
 
-    // Adjust form container top to avoid header overlap
-    window.addEventListener('load', () => {
-      const header = document.getElementById('header-placeholder');
-      const form = document.querySelector('.form-container.vertical-form');
-      if(header && form){
-        const headerHeight = header.offsetHeight;
-        form.style.marginTop = (headerHeight + 20) + 'px';
-      }
-    });
-
-    // Show "Other" input dynamically
+    // Rank "Other" logic
     const rankSelect = document.getElementById('rankSelect');
     const rankOther = document.getElementById('rankOther');
     rankSelect.addEventListener('change', function() {
