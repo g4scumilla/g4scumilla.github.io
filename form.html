@@ -19,7 +19,8 @@
       padding: 0;
       font-family: 'Arial', sans-serif;
       background: #eef4fb;
-      padding-top: 0; /* will adjust dynamically */
+      display: flex;
+      flex-direction: column;
     }
 
     #header-placeholder, #footer-placeholder {
@@ -27,13 +28,16 @@
       z-index: 2;
     }
 
+    /* Fixed Header */
     header {
-      margin: 0;
-      padding: 8px 16px;
-      background-color: #ffffff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      background: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 2;
+      padding: 8px 16px;
     }
     header h1 {
       font-size: 20px;
@@ -52,7 +56,7 @@
 
     .content-heading {
       text-align: center;
-      margin: 20px 0;
+      margin: 140px 0 20px 0; /* space below fixed header */
       font-size: 28px;
       color: #004080;
       font-weight: bold;
@@ -173,7 +177,7 @@
       </div>
       <div class="form-field">
         <label>Clock Number:</label>
-        <input type="text" name="clockNo" placeholder="Clock Number" required>
+        <input type="tel" name="clockNo" placeholder="Clock Number" pattern="[0-9]{1,15}" title="Enter a valid number" required>
       </div>
       <div class="form-field">
         <label>Service Duration:</label>
@@ -213,26 +217,10 @@
     const headerPlaceholder = document.getElementById('header-placeholder');
     const footerPlaceholder = document.getElementById('footer-placeholder');
 
-    // Load header and calculate exact padding-top
+    // Load header
     fetch('/regular_pages/header.html')
       .then(res => res.text())
-      .then(data => {
-        headerPlaceholder.innerHTML = data;
-        const imgs = headerPlaceholder.querySelectorAll('img');
-        let loadedCount = 0;
-        if(imgs.length === 0){
-          document.body.style.paddingTop = headerPlaceholder.offsetHeight + 'px';
-        } else {
-          imgs.forEach(img => {
-            img.onload = () => {
-              loadedCount++;
-              if(loadedCount === imgs.length){
-                document.body.style.paddingTop = headerPlaceholder.offsetHeight + 'px';
-              }
-            }
-          });
-        }
-      });
+      .then(data => { headerPlaceholder.innerHTML = data; });
 
     // Load footer
     fetch('/regular_pages/footer.html')
