@@ -14,23 +14,21 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* Body & spacing */
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #eef4fb;
+    html, body {
       margin: 0;
       padding: 0;
-      padding-top: 100px; /* dynamically updated via JS */
+      font-family: 'Arial', sans-serif;
+      background: #eef4fb;
+      padding-top: 0; /* will adjust dynamically */
     }
 
-    /* Header/Footer placeholders */
     #header-placeholder, #footer-placeholder {
       width: 100%;
       z-index: 2;
     }
 
-    /* Header compact style */
     header {
+      margin: 0;
       padding: 8px 16px;
       background-color: #ffffff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -52,7 +50,6 @@
       margin-top: 6px;
     }
 
-    /* Content heading */
     .content-heading {
       text-align: center;
       margin: 20px 0;
@@ -62,7 +59,6 @@
       text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
-    /* Form container */
     .form-container.vertical-form {
       max-width: 500px;
       margin: 0 auto 50px auto;
@@ -80,7 +76,6 @@
       font-weight: 700;
     }
 
-    /* Form field block */
     .form-field {
       border: 1px solid #0070c0;
       border-radius: 10px;
@@ -124,7 +119,6 @@
       min-height: 100px;
     }
 
-    /* Submit button */
     .form-container.vertical-form button {
       width: 100%;
       padding: 12px;
@@ -145,7 +139,6 @@
       box-shadow: 0 8px 16px rgba(0,0,0,0.25);
     }
 
-    /* Response */
     #response {
       text-align: center;
       margin-top: 15px;
@@ -163,13 +156,10 @@
 </head>
 <body>
 
-  <!-- Header -->
   <div id="header-placeholder"></div>
 
-  <!-- Content heading -->
   <div class="content-heading">Resignation Application</div>
 
-  <!-- Form -->
   <div class="form-container vertical-form">
     <h2>Submit Your Details</h2>
     <form id="demoForm">
@@ -206,7 +196,7 @@
       </div>
       <div class="form-field">
         <label>Mobile Number:</label>
-        <input type="text" name="mobile" placeholder="Mobile Number" required>
+        <input type="tel" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10,15}" title="Enter a valid mobile number" required>
       </div>
       <div class="form-field">
         <label>Email Address (For PDF copy):</label>
@@ -217,27 +207,30 @@
     <p id="response"></p>
   </div>
 
-  <!-- Footer -->
   <div id="footer-placeholder"></div>
 
   <script>
     const headerPlaceholder = document.getElementById('header-placeholder');
     const footerPlaceholder = document.getElementById('footer-placeholder');
 
-    // Load header and adjust body padding dynamically after image loads
+    // Load header and calculate exact padding-top
     fetch('/regular_pages/header.html')
       .then(res => res.text())
       .then(data => {
         headerPlaceholder.innerHTML = data;
-        const headerImg = headerPlaceholder.querySelector('img');
-        if(headerImg){
-          headerImg.onload = () => {
-            const headerHeight = headerPlaceholder.offsetHeight;
-            document.body.style.paddingTop = (headerHeight + 10) + 'px';
-          };
+        const imgs = headerPlaceholder.querySelectorAll('img');
+        let loadedCount = 0;
+        if(imgs.length === 0){
+          document.body.style.paddingTop = headerPlaceholder.offsetHeight + 'px';
         } else {
-          const headerHeight = headerPlaceholder.offsetHeight;
-          document.body.style.paddingTop = (headerHeight + 10) + 'px';
+          imgs.forEach(img => {
+            img.onload = () => {
+              loadedCount++;
+              if(loadedCount === imgs.length){
+                document.body.style.paddingTop = headerPlaceholder.offsetHeight + 'px';
+              }
+            }
+          });
         }
       });
 
@@ -281,6 +274,5 @@
       });
     });
   </script>
-
 </body>
 </html>
