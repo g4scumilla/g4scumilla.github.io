@@ -18,7 +18,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: #eef4fb;
+      background: #eef4f9;
       display: flex;
       flex-direction: column;
     }
@@ -42,10 +42,12 @@
     header h1 {
       font-size: 20px;
       margin: 4px 0;
+      color: #004080;
     }
     header p {
       font-size: 12px;
       margin: 2px 0 6px 0;
+      color: #004080;
     }
     .header-buttons-container {
       display: flex;
@@ -54,22 +56,24 @@
       margin-top: 6px;
     }
 
+    /* Content Heading */
     .content-heading {
       text-align: center;
-      margin: 140px 0 20px 0; /* space below fixed header */
+      margin: 140px 0 20px 0;
       font-size: 28px;
       color: #004080;
       font-weight: bold;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
+    /* Form Container */
     .form-container.vertical-form {
       max-width: 500px;
       margin: 0 auto 50px auto;
       padding: 30px 35px;
-      border: 2px solid #0070c0;
+      border: 2px solid #004080;
       border-radius: 20px;
-      background: linear-gradient(145deg, #ffffff, #e6f0ff);
+      background: #eef4f9;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
     .form-container.vertical-form h2 {
@@ -81,11 +85,11 @@
     }
 
     .form-field {
-      border: 1px solid #0070c0;
+      border: 1px solid #004080;
       border-radius: 10px;
       padding: 8px 12px;
       margin-bottom: 15px;
-      background-color: #f0f8ff;
+      background-color: #ffffff;
       display: flex;
       flex-direction: column;
     }
@@ -132,13 +136,13 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      background: linear-gradient(90deg, #0070c0, #004080);
+      background: linear-gradient(90deg, #004080, #0070c0);
       box-shadow: 0 6px 12px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
       margin-top: 15px;
     }
     .form-container.vertical-form button:hover {
-      background: linear-gradient(90deg, #004080, #0070c0);
+      background: linear-gradient(90deg, #0070c0, #004080);
       transform: translateY(-2px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.25);
     }
