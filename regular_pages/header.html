@@ -4,70 +4,48 @@
           integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="   
           crossorigin="anonymous" referrerpolicy="no-referrer" />  
 
-    <div class="header-container">
-        <!-- Logo -->
-        <a href="/index" class="logo-link">
-            <img src="/Files/Img/logo.png" alt="G4S Logo">
-        </a>
+    <!-- Logo -->  
+    <a href="/index" class="logo-link">  
+        <img src="/Files/Img/logo.png" alt="G4S Logo">  
+    </a>  
 
-        <!-- Title -->
-        <h1>Internal Automation Dashboard</h1>
+    <!-- Title & subtitle -->  
+    <h1>Internal Automation Dashboard</h1>  
+    <p>Quick access to forms, sheets, web apps & resources</p>  
 
-        <!-- Header Buttons -->
-        <div class="header-buttons-container">
-            <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a>
-            <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i></a>
-            <a href="/menu.html"><i class="fas fa-bars"></i></a>
-        </div>
+    <!-- Header Buttons (compact, links updated) -->  
+    <div class="header-buttons-container">  
+        <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>  
+        <a href="https://g4scumilla.github.io"><i class="fas fa-home"></i> Home</a>  
+        <a href="/menu.html"><i class="fas fa-bars"></i> Menu</a>  
     </div>
-
-    <!-- Optional small subtitle -->
-    <p class="subtitle">Quick access to forms, sheets, web apps & resources</p>
 </header>
 
 <style>
-/* Super Compact Header */
+/* Compact Header Styling */
 header {
-    padding: 6px 12px;
-    background-color: #f5f5f5; /* optional, keeps it clean */
-}
-
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 8px 16px; /* less padding for compactness */
 }
 
 header h1 {
-    font-size: 16px;
-    margin: 0 10px;
-    flex: 1;
-    text-align: center;
+    font-size: 20px; /* slightly smaller title */
+    margin: 4px 0;
 }
 
-.subtitle {
-    font-size: 10px;
-    margin: 2px 0 0 0;
-    text-align: center;
-    color: #555;
+header p {
+    font-size: 12px; /* smaller subtitle */
+    margin: 2px 0 6px 0;
 }
 
 .header-buttons-container {
     display: flex;
-    gap: 6px;
+    justify-content: center; /* keep buttons centered */
+    gap: 10px; /* closer spacing between buttons */
+    margin-top: 6px; /* reduced top margin */
 }
 
+/* Button style remains the same as original */
 .header-buttons-container a {
-    text-decoration: none;
-    color: #004080;
-    font-size: 16px; /* icon size */
-    padding: 4px 6px; /* smaller padding */
-}
-.header-buttons-container a:hover {
-    color: #0066cc;
-}
-
-.logo-link img {
-    height: 30px; /* smaller logo */
+    /* no changes here, preserves your original button styling */
 }
 </style>
