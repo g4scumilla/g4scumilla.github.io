@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate Attendance System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #00264d, #0059b3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card */
+.container {
+    background: white;
+    width: 95%;
+    max-width: 420px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 5px;
+    color: #003366;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: gray;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+#clock {
+    font-weight: bold;
+    margin: 12px 0;
+    color: #0059b3;
+}
+
+#location {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.in-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.out-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Fake Fingerprint */
+.fingerprint {
+    margin: 15px auto;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px dashed #0059b3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    color: #0059b3;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
+
+.footer {
+    margin-top: 15px;
+    font-size: 11px;
+    color: gray;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Corporate Attendance</h2>
+    <div class="subtitle">Demo Version (Not Connected)</div>
+
+    <input type="text" placeholder="Full Name" required>
+    <input type="text" placeholder="Employee ID" required>
+    <input type="tel" placeholder="Mobile Number" pattern="[0-9]*" inputmode="numeric">
+    <input type="email" placeholder="Email Address">
+
+    <div id="clock"></div>
+    <div id="location">Detecting location...</div>
+
+    <div class="fingerprint">🔒</div>
+
+    <button class="btn in-btn" onclick="markStatus('IN')">✔ Mark IN</button>
+    <button class="btn out-btn" onclick="markStatus('OUT')">✖ Mark OUT</button>
+
+    <div class="footer">
+        © 2026 Demo System | Secure Entry Portal
+    </div>
+</div>
+
+<script>
+// Live Clock
+function updateClock() {
+    const now = new Date();
+    document.getElementById("clock").innerText =
+        now.toLocaleDateString() + " | " + now.toLocaleTimeString();
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Fake Location Detect
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        document.getElementById("location").innerText =
+            "Location: Lat " + position.coords.latitude.toFixed(4) +
+            ", Long " + position.coords.longitude.toFixed(4);
+    }, function() {
+        document.getElementById("location").innerText = "Location permission denied";
+    });
+} else {
+    document.getElementById("location").innerText = "Location not supported";
+}
+
+// Demo Button Action
+function markStatus(status) {
+    alert("Demo Only: " + status + " recorded successfully!");
+}
+</script>
+
+</body>
+</html>
