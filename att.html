@@ -12,40 +12,92 @@ body {
     background: #f1f3f6;
 }
 
-/* ===== Top App Bar ===== */
+/* Top App Bar */
 .appbar {
     background: #0d47a1;
     color: white;
     padding: 15px;
     font-size: 18px;
-    font-weight: 500;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* ===== Main Container ===== */
+/* Main container */
 .container {
     padding: 20px;
-    text-align: center;
+    padding-bottom: 80px;
 }
 
-/* Card */
+/* User Card */
+.user-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0d47a1;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.user-info p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: gray;
+}
+
+.status {
+    margin-top: 5px;
+    padding: 3px 8px;
+    font-size: 12px;
+    border-radius: 20px;
+    display: inline-block;
+    background: #e0e0e0;
+}
+
+.status.in {
+    background: #c8e6c9;
+    color: #2e7d32;
+}
+
+.status.out {
+    background: #ffcdd2;
+    color: #c62828;
+}
+
+/* Attendance Card */
 .card {
     background: white;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
-/* Clock */
 #clock {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
     color: #0d47a1;
+    margin-bottom: 10px;
 }
 
-/* Check In Button */
 .checkin-btn {
     width: 100%;
     padding: 14px;
@@ -58,23 +110,18 @@ body {
     cursor: pointer;
 }
 
-/* Fingerprint Checkout */
-.fingerprint-container {
-    margin-top: 25px;
-}
-
+/* Fingerprint */
 .fingerprint-btn {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    margin: auto;
+    margin: 25px auto 0;
     background: radial-gradient(circle, #ff5252, #b71c1c);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 45px;
     color: white;
-    box-shadow: 0 0 20px rgba(255,82,82,0.6);
     animation: pulse 2s infinite;
     cursor: pointer;
     transition: 0.2s;
@@ -90,13 +137,7 @@ body {
     100% { box-shadow: 0 0 10px rgba(255,82,82,0.4); }
 }
 
-.scan-text {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #b71c1c;
-}
-
-/* ===== Bottom Navigation ===== */
+/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -112,7 +153,6 @@ body {
     text-align: center;
     font-size: 12px;
     color: #555;
-    cursor: pointer;
 }
 
 .nav-item span {
@@ -123,18 +163,57 @@ body {
 .nav-item.active {
     color: #0d47a1;
 }
+
+/* Snackbar */
+.snackbar {
+    visibility: hidden;
+    min-width: 200px;
+    background: #333;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 12px;
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.snackbar.show {
+    visibility: visible;
+    animation: fadein 0.3s, fadeout 0.3s 2.7s;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- Top App Bar -->
-<div class="appbar">
-    Attendance App
-</div>
+<div class="appbar">Attendance App</div>
 
-<!-- Main Content -->
 <div class="container">
+
+    <!-- Demo User -->
+    <div class="user-card">
+        <div class="avatar">AK</div>
+        <div class="user-info">
+            <h3>Abdullahil Kuafi</h3>
+            <p>ID: NM2000417</p>
+            <p>Department: Security Operations</p>
+            <div id="statusBadge" class="status out">Checked Out</div>
+        </div>
+    </div>
+
+    <!-- Attendance Section -->
     <div class="card">
         <div id="clock"></div>
 
@@ -142,35 +221,30 @@ body {
             ✔ Check In
         </button>
 
-        <div class="fingerprint-container">
-            <div class="fingerprint-btn" onclick="markStatus('OUT')">
-                🔒
-            </div>
-            <div class="scan-text">
-                Tap Fingerprint to Check Out
-            </div>
+        <div class="fingerprint-btn" onclick="markStatus('OUT')">
+            🔒
         </div>
+        <p style="color:#b71c1c;">Tap Fingerprint to Check Out</p>
     </div>
+
 </div>
 
-<!-- Bottom Navigation -->
+<!-- Bottom Nav -->
 <div class="bottom-nav">
     <div class="nav-item active">
-        <span>🏠</span>
-        Home
+        <span>🏠</span>Home
     </div>
     <div class="nav-item">
-        <span>📊</span>
-        History
+        <span>📊</span>History
     </div>
     <div class="nav-item">
-        <span>⚙️</span>
-        Settings
+        <span>⚙️</span>Settings
     </div>
 </div>
 
+<div id="snackbar" class="snackbar"></div>
+
 <script>
-// Live Clock
 function updateClock() {
     const now = new Date();
     document.getElementById("clock").innerText =
@@ -179,9 +253,24 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Demo action
 function markStatus(status) {
-    alert("Demo: " + status + " recorded successfully!");
+    const badge = document.getElementById("statusBadge");
+    const snackbar = document.getElementById("snackbar");
+
+    if (status === "IN") {
+        badge.innerText = "Checked In";
+        badge.className = "status in";
+    } else {
+        badge.innerText = "Checked Out";
+        badge.className = "status out";
+    }
+
+    snackbar.innerText = "Demo: " + status + " recorded successfully!";
+    snackbar.className = "snackbar show";
+
+    setTimeout(() => {
+        snackbar.className = "snackbar";
+    }, 3000);
 }
 </script>
 
