@@ -9,34 +9,45 @@
 body {
     margin: 0;
     font-family: 'Roboto', Arial, sans-serif;
-    background: #f1f3f6;
+    background: #eef2f7;
 }
 
-/* Top App Bar */
+/* ===== App Bar ===== */
 .appbar {
     background: #0d47a1;
     color: white;
-    padding: 15px;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 18px;
-    text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Main container */
-.container {
-    padding: 20px;
-    padding-bottom: 80px;
+.appbar-icons span {
+    margin-left: 15px;
+    font-size: 18px;
 }
 
-/* User Card */
-.user-card {
+/* ===== Container ===== */
+.container {
+    padding: 15px;
+    padding-bottom: 90px;
+}
+
+/* ===== Card ===== */
+.card {
     background: white;
     padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    margin-bottom: 15px;
+}
+
+/* ===== User Section ===== */
+.user-card {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .avatar {
@@ -45,11 +56,11 @@ body {
     border-radius: 50%;
     background: #0d47a1;
     color: white;
-    font-size: 24px;
+    font-size: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 15px;
+    margin-right: 12px;
 }
 
 .user-info h3 {
@@ -63,41 +74,29 @@ body {
     color: gray;
 }
 
-.status {
-    margin-top: 5px;
-    padding: 3px 8px;
+.live-status {
+    margin-top: 4px;
     font-size: 12px;
+    padding: 3px 8px;
     border-radius: 20px;
     display: inline-block;
-    background: #e0e0e0;
-}
-
-.status.in {
-    background: #c8e6c9;
-    color: #2e7d32;
-}
-
-.status.out {
     background: #ffcdd2;
     color: #c62828;
 }
 
-/* Attendance Card */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
+/* ===== Attendance Summary ===== */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-top: 8px;
 }
 
-#clock {
-    font-size: 18px;
-    font-weight: bold;
-    color: #0d47a1;
-    margin-bottom: 10px;
+.summary-label {
+    color: gray;
 }
 
+/* ===== Buttons ===== */
 .checkin-btn {
     width: 100%;
     padding: 14px;
@@ -105,22 +104,21 @@ body {
     border-radius: 10px;
     background: #2e7d32;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     margin-top: 10px;
     cursor: pointer;
 }
 
-/* Fingerprint */
 .fingerprint-btn {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
-    margin: 25px auto 0;
+    margin: 20px auto 0;
     background: radial-gradient(circle, #ff5252, #b71c1c);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 45px;
+    font-size: 40px;
     color: white;
     animation: pulse 2s infinite;
     cursor: pointer;
@@ -137,7 +135,7 @@ body {
     100% { box-shadow: 0 0 10px rgba(255,82,82,0.4); }
 }
 
-/* Bottom Navigation */
+/* ===== Bottom Nav ===== */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -164,11 +162,11 @@ body {
     color: #0d47a1;
 }
 
-/* Snackbar */
+/* ===== Snackbar ===== */
 .snackbar {
     visibility: hidden;
     min-width: 200px;
-    background: #333;
+    background: #323232;
     color: white;
     text-align: center;
     border-radius: 5px;
@@ -198,24 +196,48 @@ body {
 
 <body>
 
-<div class="appbar">Attendance App</div>
+<!-- App Bar -->
+<div class="appbar">
+    Attendance
+    <div class="appbar-icons">
+        <span>🔔</span>
+        <span>🔋85%</span>
+    </div>
+</div>
 
 <div class="container">
 
-    <!-- Demo User -->
-    <div class="user-card">
+    <!-- User Info -->
+    <div class="card user-card">
         <div class="avatar">AK</div>
         <div class="user-info">
             <h3>Abdullahil Kuafi</h3>
-            <p>ID: NM2000417</p>
-            <p>Department: Security Operations</p>
-            <div id="statusBadge" class="status out">Checked Out</div>
+            <p>ID: NM2000417 | Security Operations</p>
+            <p>Shift: 09:00 AM - 06:00 PM</p>
+            <div id="statusBadge" class="live-status">Checked Out</div>
         </div>
     </div>
 
-    <!-- Attendance Section -->
+    <!-- Attendance Summary -->
     <div class="card">
-        <div id="clock"></div>
+        <h4>Today's Summary</h4>
+        <div class="summary-row">
+            <span class="summary-label">Check In:</span>
+            <span id="inTime">--:--</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Check Out:</span>
+            <span id="outTime">--:--</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Working Hours:</span>
+            <span id="workHours">0 hrs</span>
+        </div>
+    </div>
+
+    <!-- Attendance Action -->
+    <div class="card" style="text-align:center;">
+        <div id="clock" style="font-weight:bold; color:#0d47a1;"></div>
 
         <button class="checkin-btn" onclick="markStatus('IN')">
             ✔ Check In
@@ -231,20 +253,16 @@ body {
 
 <!-- Bottom Nav -->
 <div class="bottom-nav">
-    <div class="nav-item active">
-        <span>🏠</span>Home
-    </div>
-    <div class="nav-item">
-        <span>📊</span>History
-    </div>
-    <div class="nav-item">
-        <span>⚙️</span>Settings
-    </div>
+    <div class="nav-item active"><span>🏠</span>Home</div>
+    <div class="nav-item"><span>📊</span>History</div>
+    <div class="nav-item"><span>👤</span>Profile</div>
 </div>
 
 <div id="snackbar" class="snackbar"></div>
 
 <script>
+let checkInTime = null;
+
 function updateClock() {
     const now = new Date();
     document.getElementById("clock").innerText =
@@ -254,23 +272,28 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function markStatus(status) {
+    const now = new Date();
     const badge = document.getElementById("statusBadge");
     const snackbar = document.getElementById("snackbar");
 
     if (status === "IN") {
+        checkInTime = now;
+        document.getElementById("inTime").innerText = now.toLocaleTimeString();
         badge.innerText = "Checked In";
-        badge.className = "status in";
-    } else {
+        badge.style.background = "#c8e6c9";
+        badge.style.color = "#2e7d32";
+    } else if (status === "OUT" && checkInTime) {
+        document.getElementById("outTime").innerText = now.toLocaleTimeString();
+        const diff = (now - checkInTime) / (1000 * 60 * 60);
+        document.getElementById("workHours").innerText = diff.toFixed(2) + " hrs";
         badge.innerText = "Checked Out";
-        badge.className = "status out";
+        badge.style.background = "#ffcdd2";
+        badge.style.color = "#c62828";
     }
 
     snackbar.innerText = "Demo: " + status + " recorded successfully!";
     snackbar.className = "snackbar show";
-
-    setTimeout(() => {
-        snackbar.className = "snackbar";
-    }, 3000);
+    setTimeout(() => snackbar.className = "snackbar", 3000);
 }
 </script>
 
