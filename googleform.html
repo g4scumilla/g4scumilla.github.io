@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resignation Application Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/regular_pages/style.css">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Roboto, Arial, sans-serif;
+      background: #f0ebf8;
+      min-height: 100vh;
+    }
+
+    #header-placeholder, #footer-placeholder {
+      width: 100%;
+    }
+
+    /* Main Wrapper */
+    .main-wrapper {
+      padding-top: 120px; /* space for fixed header */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Page Heading */
+    .content-heading {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #202124;
+      font-weight: 500;
+    }
+
+    /* Form Card */
+    .form-container.vertical-form {
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 60px;
+      padding: 30px;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      border-top: 6px solid #673ab7;
+    }
+
+    .form-container.vertical-form h2 {
+      margin-bottom: 25px;
+      font-size: 22px;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    .form-field {
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-field label {
+      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #202124;
+    }
+
+    .required-star {
+      color: red;
+      margin-left: 3px;
+    }
+
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      border: none;
+      border-bottom: 1.5px solid #dadce0;
+      border-radius: 0;
+      padding: 10px 4px;
+      font-size: 14px;
+      background-color: transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus {
+      outline: none;
+      border-bottom: 2px solid #1a73e8;
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      background-color: #1a73e8;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1669c1;
+    }
+
+    #response {
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #188038;
+    }
+
+    @media(max-width: 600px){
+      .form-container.vertical-form {
+        margin: 0 15px 40px 15px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <div class="main-wrapper">
+
+    <div class="content-heading">Resignation Application</div>
+
+    <div class="form-container vertical-form">
+      <h2>Submit Your Details</h2>
+
+      <form id="demoForm">
+
+        <div class="form-field">
+          <label>Application Date <span class="required-star">*</span></label>
+          <input type="date" name="appDate" required>
+        </div>
+
+        <div class="form-field">
+          <label>নাম (বাংলা) <span class="required-star">*</span></label>
+          <input type="text" name="nameBn" required>
+        </div>
+
+        <div class="form-field">
+          <label>Clock Number <span class="required-star">*</span></label>
+          <input type="tel" name="clockNo" pattern="[0-9]{1,15}" required>
+        </div>
+
+        <div class="form-field">
+          <label>Service Duration <span class="required-star">*</span></label>
+          <input type="text" name="serviceDuration" required>
+        </div>
+
+        <div class="form-field">
+          <label>Rank <span class="required-star">*</span></label>
+          <select name="rank" id="rankSelect" required>
+            <option value="" disabled selected>Select Rank</option>
+            <option value="Security Guard">Security Guard</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Inspector">Inspector</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;">
+        </div>
+
+        <div class="form-field">
+          <label>Reason for Leaving <span class="required-star">*</span></label>
+          <textarea name="reason" required></textarea>
+        </div>
+
+        <div class="form-field">
+          <label>Mobile Number <span class="required-star">*</span></label>
+          <input type="tel" name="mobile" pattern="[0-9]{10,15}" required>
+        </div>
+
+        <div class="form-field">
+          <label>Email Address (For PDF copy) <span class="required-star">*</span></label>
+          <input type="email" name="email" required>
+        </div>
+
+        <button type="submit">Submit</button>
+
+      </form>
+
+      <p id="response"></p>
+    </div>
+
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('/regular_pages/header.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('header-placeholder').innerHTML = data);
+
+    fetch('/regular_pages/footer.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+
+    const rankSelect = document.getElementById('rankSelect');
+    const rankOther = document.getElementById('rankOther');
+
+    rankSelect.addEventListener('change', function() {
+      if(this.value === 'Other'){
+        rankOther.style.display = 'block';
+        rankOther.required = true;
+      } else {
+        rankOther.style.display = 'none';
+        rankOther.required = false;
+      }
+    });
+
+    document.getElementById("demoForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      if(rankSelect.value === "Other") this.rank.value = rankOther.value;
+
+      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
+        method:"POST",
+        body:new FormData(this)
+      })
+      .then(res => res.json())
+      .then(result=>{
+        document.getElementById("response").innerHTML =
+          "Submitted Successfully! <br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
+        this.reset();
+        rankOther.style.display = 'none';
+      })
+      .catch(()=>{
+        document.getElementById("response").innerHTML = "Error: Could not submit";
+      });
+    });
+  </script>
+
+</body>
+</html>
