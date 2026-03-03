@@ -5,17 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
 
-<!-- Global site style -->
+<!-- Global Style -->
 <link rel="stylesheet" href="regular_pages/style.css">
 
-<!-- Header specific style -->
-<link rel="stylesheet" href="regular_pages/header.css">
-
 <!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
 <body>
 
 <!-- Header placeholder -->
@@ -55,7 +52,7 @@
 <!-- Footer placeholder -->
 <div id="footer"></div>
 
-<!-- Load header & footer dynamically from /regular_pages -->
+<!-- Load header & footer dynamically -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
@@ -64,9 +61,29 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Load header and footer
+// Load header & footer from regular_pages
 loadHTML("header", "regular_pages/header.html");
 loadHTML("footer", "regular_pages/footer.html");
+</script>
+
+<!-- Footer Menu Toggle JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.menu-btn');
+    const footerMenu = document.querySelector('.footer-menu');
+
+    if(menuBtn && footerMenu){
+        menuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // prevent bubbling
+            footerMenu.classList.toggle('menu-open');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function() {
+            footerMenu.classList.remove('menu-open');
+        });
+    }
+});
 </script>
 
 </body>
