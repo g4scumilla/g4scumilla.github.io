@@ -1,253 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Resignation Application Form</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Resignation Application Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <style>
-    /* ===== Body ===== */
-    body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; margin:0; color:#202124; }
+<style>
+/* ===== Body & Layout ===== */
+body { font-family: 'Roboto', Arial, sans-serif; background:#f8f9fa; margin:0; color:#202124; }
+#header-placeholder header{ background:#cce0f5; padding:12px 16px; text-align:center; position:fixed; top:0; width:100%; z-index:999; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+#header-placeholder header img{width:60px;margin-bottom:4px;}
+#header-placeholder header h1{font-size:1.2em;color:#023e8a;margin:3px 0 2px 0;}
+#header-placeholder header p{font-size:0.8em;color:#023e8a;margin:0 0 6px 0;}
+#header-placeholder .header-buttons-container{display:flex;justify-content:center;gap:10px;margin-top:10px;}
+#header-placeholder .header-buttons-container a{ text-decoration:none; background: linear-gradient(to bottom,#ffffff,#d4e6fa); padding:6px 14px; border-radius:20px; font-size:0.85em; color:#023e8a; font-weight:bold; border:1px solid #94b9dc; box-shadow:0 1px 2px rgba(0,0,0,0.1);}
+#header-placeholder .header-buttons-container a:hover{background: linear-gradient(to bottom,#d4e6fa,#a8cde6); box-shadow:0 2px 4px rgba(0,0,0,0.2);}
 
-    /* ===== Header Inline ===== */
-    #header-placeholder header {
-      background: #cce0f5;
-      padding: 12px 16px;
-      text-align: center;
-      position: fixed;
-      top: 0; left: 0; width: 100%;
-      z-index: 999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    #header-placeholder header img { width:60px; margin-bottom:4px; }
-    #header-placeholder header h1 { font-size:1.2em; color:#023e8a; margin:3px 0 2px 0; }
-    #header-placeholder header p { font-size:0.8em; color:#023e8a; margin:0 0 6px 0; }
-    #header-placeholder .header-buttons-container { display:flex; justify-content:center; gap:10px; margin-top:10px; }
-    #header-placeholder .header-buttons-container a {
-      text-decoration:none;
-      background: linear-gradient(to bottom,#ffffff,#d4e6fa);
-      padding:6px 14px;
-      border-radius:20px;
-      font-size:0.85em;
-      color:#023e8a;
-      font-weight:bold;
-      border:1px solid #94b9dc;
-      box-shadow:0 1px 2px rgba(0,0,0,0.1);
-    }
-    #header-placeholder .header-buttons-container a:hover {
-      background: linear-gradient(to bottom,#d4e6fa,#a8cde6);
-      box-shadow:0 2px 4px rgba(0,0,0,0.2);
-    }
+#footer-placeholder footer{ background:#cce0f5; color:#023e8a; text-align:center; padding:10px 0; font-size:12px; flex-shrink:0; border-top:1px solid #a8c8e6; font-weight:bold;}
+#footer-placeholder .footer-button{ text-decoration:none; background: linear-gradient(to bottom,#ffffff,#d4e6fa); padding:8px 14px; border-radius:20px; font-size:0.85em; color:#023e8a; font-weight:bold; border:1px solid #94b9dc; display:inline-flex; align-items:center; gap:6px; box-shadow:0 1px 2px rgba(0,0,0,0.1); transition:0.2s;}
+#footer-placeholder .footer-button:hover{ background: linear-gradient(to bottom,#d4e6fa,#a8cde6); box-shadow:0 2px 4px rgba(0,0,0,0.2); }
 
-    /* ===== Footer Inline ===== */
-    #footer-placeholder footer {
-      background: #cce0f5;
-      color: #023e8a;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 12px;
-      flex-shrink: 0;
-      border-top: 1px solid #a8c8e6;
-      font-weight: bold;
-    }
-    #footer-placeholder .footer-button {
-      text-decoration: none;
-      background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.85em;
-      color: #023e8a;
-      font-weight: bold;
-      border: 1px solid #94b9dc;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      transition: 0.2s;
-    }
-    #footer-placeholder .footer-button:hover {
-      background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
+/* ===== Google Form Card ===== */
+.form-card { max-width:600px; margin:180px auto 50px auto; background:#fff; border-radius:8px; padding:35px 30px; box-shadow:0 8px 25px rgba(0,0,0,0.08); transition: all 0.3s ease;}
+.form-card h2{ text-align:center; color:#1a73e8; margin-bottom:35px; font-size:26px; font-weight:500; }
 
-    /* ===== Form Card ===== */
-    .form-card {
-      max-width: 600px;
-      margin: 180px auto 50px auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 35px 30px;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-    .form-card h2 { text-align:center; color:#1a73e8; margin-bottom:35px; font-size:26px; font-weight:500; }
+/* ===== Form Fields ===== */
+.form-group{ position:relative; margin-bottom:28px; }
+.form-group input, .form-group select, .form-group textarea{
+  width:100%; padding:20px 12px 8px 12px; font-size:16px;
+  border:1px solid #dadce0; border-radius:4px; background:#fff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); outline:none; transition: all 0.25s ease;
+}
+.form-group textarea{ resize:vertical; min-height:100px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{ border-color:#1a73e8; box-shadow:0 1px 3px rgba(26,115,232,0.5); }
 
-    /* ===== Google Forms Style Fields ===== */
-    .form-group { position: relative; margin-bottom: 30px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width:100%;
-      padding:20px 12px 8px 12px;
-      font-size:16px;
-      border:1px solid #dadce0;
-      border-radius:4px;
-      background:#fff;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-      outline:none;
-      transition: all 0.25s ease;
-    }
-    .form-group textarea { resize: vertical; min-height:100px; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      border-color: #1a73e8;
-      box-shadow: 0 1px 3px rgba(26,115,232,0.5);
-    }
+/* ===== Floating Labels ===== */
+.form-group label{ position:absolute; left:12px; top:20px; font-size:16px; color:#5f6368; pointer-events:none; transition: all 0.25s ease; background:#fff; padding:0 4px; }
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label,
+.form-group select:focus + label,
+.form-group select:not([value=""]) + label{ top:-8px; font-size:12px; color:#1a73e8; }
 
-    /* Floating labels */
-    .form-group label {
-      position: absolute;
-      left: 12px; top:20px;
-      font-size:16px; color:#5f6368;
-      pointer-events:none;
-      transition: all 0.25s ease;
-      background: #fff;
-      padding:0 4px;
-    }
-    .form-group input:focus + label,
-    .form-group input:not(:placeholder-shown) + label,
-    .form-group textarea:focus + label,
-    .form-group textarea:not(:placeholder-shown) + label,
-    .form-group select:focus + label,
-    .form-group select:not([value=""]) + label {
-      top: -8px; font-size:12px; color:#1a73e8;
-    }
+/* ===== Submit Button ===== */
+.submit-btn{ width:100%; padding:16px; font-size:16px; font-weight:500; color:#fff; border:none; border-radius:4px; cursor:pointer; background:linear-gradient(90deg,#1a73e8,#4285f4); box-shadow:0 4px 12px rgba(0,0,0,0.2); transition: all 0.25s ease; }
+.submit-btn:hover{ background:linear-gradient(90deg,#4285f4,#1a73e8); transform:scale(1.02) translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.25); }
+.submit-btn:active{ transform:scale(0.98); box-shadow:0 3px 10px rgba(0,0,0,0.2); }
 
-    /* Submit Button */
-    .submit-btn {
-      width:100%; padding:16px; font-size:16px; font-weight:500;
-      color:#fff; border:none; border-radius:4px;
-      cursor:pointer; background: linear-gradient(90deg,#1a73e8,#4285f4);
-      box-shadow:0 4px 12px rgba(0,0,0,0.2); transition: all 0.25s ease;
-    }
-    .submit-btn:hover {
-      background: linear-gradient(90deg,#4285f4,#1a73e8);
-      transform: scale(1.02) translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
-    .submit-btn:active { transform: scale(0.98); box-shadow:0 3px 10px rgba(0,0,0,0.2); }
+#response{ text-align:center; margin-top:15px; font-weight:bold; color:green; }
 
-    #response { text-align:center; margin-top:15px; font-weight:bold; color:green; }
-
-    @media(max-width:600px){
-      .form-card { margin:200px 15px 50px 15px; padding:25px 20px; }
-    }
-  </style>
+@media(max-width:600px){
+  .form-card{ margin:200px 15px 50px 15px; padding:25px 20px; }
+}
+</style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div id="header-placeholder"></div>
+<!-- Header -->
+<div id="header-placeholder"></div>
 
-  <!-- Form Card -->
-  <div class="form-card">
-    <h2>Submit Your Details</h2>
-    <form id="demoForm">
+<!-- Form Card -->
+<div class="form-card">
+  <h2>Resignation Application</h2>
+  <form id="demoForm">
 
-      <div class="form-group">
-        <input type="date" name="appDate" required placeholder=" " />
-        <label>Application Date:</label>
-      </div>
+    <div class="form-group">
+      <input type="date" name="appDate" required placeholder=" " />
+      <label>Application Date:</label>
+    </div>
 
-      <div class="form-group">
-        <input type="text" name="nameBn" required placeholder=" " />
-        <label>নাম (বাংলা):</label>
-      </div>
+    <div class="form-group">
+      <input type="text" name="nameBn" required placeholder=" " />
+      <label>নাম (বাংলা):</label>
+    </div>
 
-      <div class="form-group">
-        <input type="tel" name="clockNo" required pattern="[0-9]{1,15}" placeholder=" " />
-        <label>Clock Number:</label>
-      </div>
+    <div class="form-group">
+      <input type="tel" name="clockNo" required pattern="[0-9]{1,15}" placeholder=" " />
+      <label>Clock Number:</label>
+    </div>
 
-      <div class="form-group">
-        <input type="text" name="serviceDuration" required placeholder=" " />
-        <label>Service Duration:</label>
-      </div>
+    <div class="form-group">
+      <input type="text" name="serviceDuration" required placeholder=" " />
+      <label>Service Duration:</label>
+    </div>
 
-      <div class="form-group">
-        <select name="rank" id="rankSelect" required>
-          <option value="" disabled selected></option>
-          <option value="Security Guard">Security Guard</option>
-          <option value="Supervisor">Supervisor</option>
-          <option value="Inspector">Inspector</option>
-          <option value="Other">Other</option>
-        </select>
-        <label>Rank:</label>
-      </div>
+    <div class="form-group">
+      <select name="rank" id="rankSelect" required>
+        <option value="" disabled selected></option>
+        <option value="Security Guard">Security Guard</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Inspector">Inspector</option>
+        <option value="Other">Other</option>
+      </select>
+      <label>Rank:</label>
+    </div>
 
-      <div class="form-group">
-        <input type="text" name="rankOther" id="rankOther" placeholder=" " style="display:none;" />
-        <label>Other Rank:</label>
-      </div>
+    <div class="form-group">
+      <input type="text" name="rankOther" id="rankOther" placeholder=" " style="display:none;" />
+      <label>Other Rank:</label>
+    </div>
 
-      <div class="form-group">
-        <textarea name="reason" required placeholder=" "></textarea>
-        <label>Reason for Leaving:</label>
-      </div>
+    <div class="form-group">
+      <textarea name="reason" required placeholder=" "></textarea>
+      <label>Reason for Leaving:</label>
+    </div>
 
-      <div class="form-group">
-        <input type="tel" name="mobile" required pattern="[0-9]{10,15}" placeholder=" " />
-        <label>Mobile Number:</label>
-      </div>
+    <div class="form-group">
+      <input type="tel" name="mobile" required pattern="[0-9]{10,15}" placeholder=" " />
+      <label>Mobile Number:</label>
+    </div>
 
-      <div class="form-group">
-        <input type="email" name="email" required placeholder=" " />
-        <label>Email Address (For PDF copy):</label>
-      </div>
+    <div class="form-group">
+      <input type="email" name="email" required placeholder=" " />
+      <label>Email Address (For PDF copy):</label>
+    </div>
 
-      <button type="submit" class="submit-btn">Submit Application</button>
-      <p id="response"></p>
-    </form>
-  </div>
+    <button type="submit" class="submit-btn">Submit Application</button>
+    <p id="response"></p>
+  </form>
+</div>
 
-  <!-- Footer -->
-  <div id="footer-placeholder"></div>
+<!-- Footer -->
+<div id="footer-placeholder"></div>
 
-  <script>
-    // Load header/footer dynamically
-    fetch('/regular_pages/header.html')
-      .then(res => res.text()).then(data => document.getElementById('header-placeholder').innerHTML = data);
-    fetch('/regular_pages/footer.html')
-      .then(res => res.text()).then(data => document.getElementById('footer-placeholder').innerHTML = data);
+<script>
+// Load header/footer dynamically
+fetch('/regular_pages/header.html').then(res=>res.text()).then(data=>document.getElementById('header-placeholder').innerHTML=data);
+fetch('/regular_pages/footer.html').then(res=>res.text()).then(data=>document.getElementById('footer-placeholder').innerHTML=data);
 
-    // Rank Other logic
-    const rankSelect = document.getElementById('rankSelect');
-    const rankOther = document.getElementById('rankOther');
-    rankSelect.addEventListener('change', function(){
-      if(this.value==='Other'){ rankOther.style.display='block'; rankOther.required=true; }
-      else{ rankOther.style.display='none'; rankOther.required=false; }
-    });
+// Rank Other logic
+const rankSelect=document.getElementById('rankSelect');
+const rankOther=document.getElementById('rankOther');
+rankSelect.addEventListener('change', function(){ if(this.value==='Other'){rankOther.style.display='block';rankOther.required=true;} else{rankOther.style.display='none';rankOther.required=false;} });
 
-    // Form submission
-    document.getElementById('demoForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      if(rankSelect.value==='Other') this.rank.value=rankOther.value;
-
-      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
-        method:"POST",
-        body:new FormData(this)
-      })
-      .then(res=>res.json())
-      .then(result=>{
-        document.getElementById('response').innerHTML=
-          "Submitted Successfully!<br><a href='"+result.downloadUrl+"' target='_blank'>Download PDF</a>";
-        this.reset();
-        rankOther.style.display='none';
-      })
-      .catch(err=>{ document.getElementById('response').innerHTML="Error: could not submit"; console.error(err); });
-    });
-  </script>
+// Form submission
+document.getElementById('demoForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  if(rankSelect.value==='Other') this.rank.value=rankOther.value;
+  fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
+    method:"POST", body:new FormData(this)
+  }).then(res=>res.json()).then(result=>{
+    document.getElementById('response').innerHTML="Submitted Successfully!<br><a href='"+result.downloadUrl+"' target='_blank'>Download PDF</a>";
+    this.reset(); rankOther.style.display='none';
+  }).catch(err=>{ document.getElementById('response').innerHTML="Error: could not submit"; console.error(err); });
+});
+</script>
 </body>
 </html>
