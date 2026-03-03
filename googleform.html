@@ -10,124 +10,184 @@
         integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-</head>
-<body style="margin:0; font-family:Arial,sans-serif; background:#eef4f9; color:#222;">
+  <style>
+    body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; margin:0; color:#202124; }
+    #header-placeholder, #footer-placeholder { width: 100%; }
 
-  <!-- Header Placeholder -->
+    /* Form card */
+    .form-card {
+      max-width: 600px;
+      margin: 180px auto 50px auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 35px 30px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .form-card h2 { text-align:center; color:#1a73e8; margin-bottom:35px; font-size:26px; font-weight:500; }
+
+    /* Google form style fields */
+    .form-group {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 20px 12px 8px 12px;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #1a73e8;
+      box-shadow: 0 1px 3px rgba(26,115,232,0.5);
+    }
+
+    /* Floating labels */
+    .form-group label {
+      position: absolute;
+      left: 12px;
+      top: 20px;
+      font-size: 16px;
+      color: #5f6368;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      background: #fff;
+      padding: 0 4px;
+    }
+
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label,
+    .form-group textarea:focus + label,
+    .form-group textarea:not(:placeholder-shown) + label,
+    .form-group select:focus + label,
+    .form-group select:not([value=""]) + label {
+      top: -8px;
+      font-size: 12px;
+      color: #1a73e8;
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      border:none;
+      border-radius: 4px;
+      cursor:pointer;
+      background: linear-gradient(90deg, #1a73e8, #4285f4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.25s ease;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(90deg, #4285f4, #1a73e8);
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    #response { text-align:center; margin-top:15px; font-weight:bold; color:green; }
+
+    @media(max-width:600px){
+      .form-card { margin: 200px 15px 50px 15px; padding:25px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
   <div id="header-placeholder"></div>
 
-  <!-- Content Heading -->
-  <div style="text-align:center; margin:160px 0 30px 0; font-size:28px; color:#004080; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.1);">
-    Resignation Application
-  </div>
-
-  <!-- Form Container -->
-  <div style="max-width:500px; margin:0 auto 50px auto; padding:30px 35px; border-radius:10px; background:#fff; box-shadow:0 3px 15px rgba(0,0,0,0.1);">
-    <h2 style="text-align:center; color:#004080; margin-bottom:25px; font-size:24px; font-weight:700;">Submit Your Details</h2>
+  <!-- Form Card -->
+  <div class="form-card">
+    <h2>Submit Your Details</h2>
     <form id="demoForm">
-      
-      <!-- Function to create each field -->
-      <script>
-        function createField(labelText, type, name, placeholder="", pattern="", min=0, required=true){
-          return `<div style="margin-bottom:20px;">
-            <label style="display:block; font-weight:bold; margin-bottom:6px;">${labelText}</label>
-            <input ${type!=='textarea' ? `type="${type}"` : ""} name="${name}" ${placeholder ? `placeholder="${placeholder}"` : ""} ${pattern ? `pattern="${pattern}"` : ""} ${required ? "required" : ""} style="
-              width:100%; padding:12px 14px; font-size:14px; border:1px solid #ccc; border-radius:6px; background:#fff; 
-              box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition:0.3s; outline:none;"
-              onfocus="this.style.boxShadow='0 0 5px rgba(0,112,192,0.5)'; this.style.borderColor='#0070c0';" 
-              onblur="this.style.boxShadow='inset 0 1px 3px rgba(0,0,0,0.05)'; this.style.borderColor='#ccc';">
-          </div>`;
-        }
-      </script>
 
-      <div id="form-fields"></div>
+      <div class="form-group">
+        <input type="date" name="appDate" required placeholder=" " />
+        <label>Application Date:</label>
+      </div>
 
-      <!-- Rank Select + Other -->
-      <div style="margin-bottom:20px;">
-        <label style="display:block; font-weight:bold; margin-bottom:6px;">Rank:</label>
-        <select name="rank" id="rankSelect" required style="
-              width:100%; padding:12px 14px; font-size:14px; border:1px solid #ccc; border-radius:6px; background:#fff;
-              box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition:0.3s; outline:none;"
-              onfocus="this.style.boxShadow='0 0 5px rgba(0,112,192,0.5)'; this.style.borderColor='#0070c0';"
-              onblur="this.style.boxShadow='inset 0 1px 3px rgba(0,0,0,0.05)'; this.style.borderColor='#ccc';">
-          <option value="" disabled selected>Select Rank</option>
+      <div class="form-group">
+        <input type="text" name="nameBn" required placeholder=" " />
+        <label>নাম (বাংলা):</label>
+      </div>
+
+      <div class="form-group">
+        <input type="tel" name="clockNo" required pattern="[0-9]{1,15}" placeholder=" " />
+        <label>Clock Number:</label>
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="serviceDuration" required placeholder=" " />
+        <label>Service Duration:</label>
+      </div>
+
+      <div class="form-group">
+        <select name="rank" id="rankSelect" required>
+          <option value="" disabled selected></option>
           <option value="Security Guard">Security Guard</option>
           <option value="Supervisor">Supervisor</option>
           <option value="Inspector">Inspector</option>
           <option value="Other">Other</option>
         </select>
-        <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="
-              width:100%; padding:12px 14px; font-size:14px; border:1px solid #ccc; border-radius:6px; background:#fff; 
-              box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition:0.3s; outline:none; margin-top:8px; display:none;"
-              onfocus="this.style.boxShadow='0 0 5px rgba(0,112,192,0.5)'; this.style.borderColor='#0070c0';" 
-              onblur="this.style.boxShadow='inset 0 1px 3px rgba(0,0,0,0.05)'; this.style.borderColor='#ccc';">
+        <label>Rank:</label>
       </div>
 
-      <!-- Submit Button -->
-      <button type="submit" style="width:100%; padding:14px; font-size:16px; font-weight:600; color:#fff; border:none; border-radius:8px;
-        cursor:pointer; background:linear-gradient(90deg,#004080,#0070c0); box-shadow:0 4px 12px rgba(0,0,0,0.2); transition:0.3s;">
-        Submit Application
-      </button>
-      <p id="response" style="text-align:center; margin-top:15px; font-weight:bold; color:green;"></p>
+      <div class="form-group">
+        <input type="text" name="rankOther" id="rankOther" placeholder=" " style="display:none;" />
+        <label>Other Rank:</label>
+      </div>
+
+      <div class="form-group">
+        <textarea name="reason" required placeholder=" "></textarea>
+        <label>Reason for Leaving:</label>
+      </div>
+
+      <div class="form-group">
+        <input type="tel" name="mobile" required pattern="[0-9]{10,15}" placeholder=" " />
+        <label>Mobile Number:</label>
+      </div>
+
+      <div class="form-group">
+        <input type="email" name="email" required placeholder=" " />
+        <label>Email Address (For PDF copy):</label>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Application</button>
+      <p id="response"></p>
     </form>
   </div>
 
-  <!-- Footer Placeholder -->
+  <!-- Footer -->
   <div id="footer-placeholder"></div>
 
   <script>
-    // Header/Footer
-    const headerPlaceholder = document.getElementById('header-placeholder');
-    const footerPlaceholder = document.getElementById('footer-placeholder');
-
-    function applyHeaderFooterStyles(el, type){
-      if(type==='header'){
-        el.style.background='#cce0f5'; el.style.padding='8px 16px'; el.style.borderBottom='1px solid #a8c8e6';
-        el.style.textAlign='center'; el.style.position='fixed'; el.style.top='0'; el.style.left='0';
-        el.style.width='100%'; el.style.zIndex='999'; el.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)';
-        const logo = el.querySelector('img'); if(logo){ logo.style.width='60px'; logo.style.marginBottom='4px'; }
-        const h1 = el.querySelector('h1'); if(h1){ h1.style.fontSize='1.2em'; h1.style.color='#023e8a'; }
-        const p = el.querySelector('p'); if(p){ p.style.fontSize='0.8em'; p.style.color='#023e8a'; }
-        const btnContainer = el.querySelector('.header-buttons-container');
-        if(btnContainer){ btnContainer.style.display='flex'; btnContainer.style.justifyContent='center'; btnContainer.style.gap='10px';
-          btnContainer.querySelectorAll('a').forEach(a=>{
-            a.style.display='inline-flex'; a.style.alignItems='center'; a.style.gap='5px';
-            a.style.textDecoration='none'; a.style.background='linear-gradient(to bottom,#ffffff,#d4e6fa)';
-            a.style.padding='6px 14px'; a.style.borderRadius='20px'; a.style.fontSize='0.85em';
-            a.style.color='#023e8a'; a.style.fontWeight='bold'; a.style.border='1px solid #94b9dc';
-            a.style.boxShadow='0 1px 2px rgba(0,0,0,0.1)'; a.style.transition='0.2s';
-          });
-        }
-      } else if(type==='footer'){
-        el.style.background='#cce0f5'; el.style.color='#023e8a'; el.style.textAlign='center';
-        el.style.padding='10px 0'; el.style.fontSize='12px'; el.style.fontWeight='bold';
-        el.style.borderTop='1px solid #a8c8e6';
-      }
-    }
-
+    // Load header/footer
     fetch('/regular_pages/header.html')
-      .then(res=>res.text())
-      .then(data=>{ headerPlaceholder.innerHTML=data; applyHeaderFooterStyles(headerPlaceholder,'header'); });
-
+      .then(res=>res.text()).then(data=>document.getElementById('header-placeholder').innerHTML=data);
     fetch('/regular_pages/footer.html')
-      .then(res=>res.text())
-      .then(data=>{ footerPlaceholder.innerHTML=data; applyHeaderFooterStyles(footerPlaceholder,'footer'); });
-
-    // Form Fields
-    const fields = [
-      {label:'Application Date:', type:'date', name:'appDate'},
-      {label:'নাম (বাংলা):', type:'text', name:'nameBn', placeholder:'নাম (বাংলা)'},
-      {label:'Clock Number:', type:'tel', name:'clockNo', placeholder:'Clock Number', pattern:'[0-9]{1,15}'},
-      {label:'Service Duration:', type:'text', name:'serviceDuration', placeholder:'Service Duration'},
-      {label:'Reason for Leaving:', type:'textarea', name:'reason', placeholder:'Reason for Leaving'},
-      {label:'Mobile Number:', type:'tel', name:'mobile', placeholder:'Mobile Number', pattern:'[0-9]{10,15}'},
-      {label:'Email Address (For PDF copy):', type:'email', name:'email', placeholder:'Email Address'}
-    ];
-
-    const container = document.getElementById('form-fields');
-    fields.forEach(f=>{
-      container.insertAdjacentHTML('beforeend', createField(f.label,f.type,f.name,f.placeholder,f.pattern));
-    });
+      .then(res=>res.text()).then(data=>document.getElementById('footer-placeholder').innerHTML=data);
 
     // Rank Other logic
     const rankSelect = document.getElementById('rankSelect');
@@ -141,6 +201,7 @@
     document.getElementById('demoForm').addEventListener('submit', function(e){
       e.preventDefault();
       if(rankSelect.value==='Other') this.rank.value=rankOther.value;
+
       fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
         method:"POST",
         body:new FormData(this)
@@ -155,6 +216,5 @@
       .catch(err=>{ document.getElementById('response').innerHTML="Error: could not submit"; console.error(err); });
     });
   </script>
-
 </body>
 </html>
