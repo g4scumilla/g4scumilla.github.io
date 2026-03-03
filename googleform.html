@@ -11,120 +11,190 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
-<body>
+<body style="margin:0; font-family:Arial,sans-serif; background:#eef4f9; color:#222;">
 
+  <!-- Header Placeholder -->
   <div id="header-placeholder"></div>
 
-  <div class="main-wrapper" style="display:flex; flex-direction:column; align-items:center; margin-top:180px; padding:0 20px;">
-    <div class="content-heading" style="text-align:center; font-size:26px; color:#023e8a; font-weight:500; margin-bottom:25px;">
-      Resignation Application
-    </div>
-
-    <div class="form-container vertical-form" style="width:100%; max-width:650px; padding:35px; border-radius:10px; background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-top:6px solid #673ab7;">
-      <h2 style="margin-bottom:25px; font-size:22px; font-weight:500; color:#202124; text-align:center;">Submit Your Details</h2>
-
-      <form id="demoForm">
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Application Date <span style="color:red;">*</span></label>
-          <input type="date" name="appDate" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; transition:border-color 0.3s;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>নাম (বাংলা) <span style="color:red;">*</span></label>
-          <input type="text" name="nameBn" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Clock Number <span style="color:red;">*</span></label>
-          <input type="tel" name="clockNo" pattern="[0-9]{1,15}" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Service Duration <span style="color:red;">*</span></label>
-          <input type="text" name="serviceDuration" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Rank <span style="color:red;">*</span></label>
-          <select name="rank" id="rankSelect" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-            <option value="" disabled selected>Select Rank</option>
-            <option value="Security Guard">Security Guard</option>
-            <option value="Supervisor">Supervisor</option>
-            <option value="Inspector">Inspector</option>
-            <option value="Other">Other</option>
-          </select>
-          <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; display:none; margin-top:10px;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Reason for Leaving <span style="color:red;">*</span></label>
-          <textarea name="reason" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; min-height:90px; resize:vertical;"></textarea>
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Mobile Number <span style="color:red;">*</span></label>
-          <input type="tel" name="mobile" pattern="[0-9]{10,15}" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-        </div>
-
-        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
-          <label>Email Address (For PDF copy) <span style="color:red;">*</span></label>
-          <input type="email" name="email" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
-        </div>
-
-        <button type="submit" style="margin-top:20px; padding:10px 24px; font-size:14px; font-weight:500; color:#fff; border:none; border-radius:4px; background-color:#1a73e8; cursor:pointer; transition:0.3s;">Submit</button>
-
-      </form>
-
-      <p id="response" style="margin-top:20px; font-size:14px; font-weight:500; color:#188038;"></p>
-    </div>
+  <!-- Content Heading -->
+  <div style="text-align:center; margin:160px 0 20px 0; font-size:28px; color:#004080; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.1);">
+    Resignation Application
   </div>
 
+  <!-- Form Container -->
+  <div style="max-width:500px; margin:0 auto 50px auto; padding:30px 35px; border:2px solid #004080; border-radius:20px; background:#eef4f9; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+    <h2 style="text-align:center; color:#004080; margin-bottom:25px; font-size:24px; font-weight:700;">Submit Your Details</h2>
+    <form id="demoForm">
+      <!-- Application Date -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Application Date:</label>
+        <input type="date" name="appDate" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+      <!-- Name -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">নাম (বাংলা):</label>
+        <input type="text" name="nameBn" placeholder="নাম (বাংলা)" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+      <!-- Clock Number -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Clock Number:</label>
+        <input type="tel" name="clockNo" placeholder="Clock Number" pattern="[0-9]{1,15}" title="Enter a valid number" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+      <!-- Service Duration -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Service Duration:</label>
+        <input type="text" name="serviceDuration" placeholder="Service Duration" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+      <!-- Rank -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Rank:</label>
+        <select name="rank" id="rankSelect" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+          <option value="" disabled selected>Select Rank</option>
+          <option value="Security Guard">Security Guard</option>
+          <option value="Supervisor">Supervisor</option>
+          <option value="Inspector">Inspector</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff; display:none; margin-top:8px;">
+      </div>
+      <!-- Reason -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Reason for Leaving:</label>
+        <textarea name="reason" placeholder="Reason for Leaving" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff; min-height:100px;"></textarea>
+      </div>
+      <!-- Mobile -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Mobile Number:</label>
+        <input type="tel" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10,15}" title="Enter a valid mobile number" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+      <!-- Email -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Email Address (For PDF copy):</label>
+        <input type="email" name="email" placeholder="Email Address" required style="width:100%; padding:10px 12px; border:1px solid #bbb; border-radius:8px; font-size:14px; background:#f9faff;">
+      </div>
+
+      <button type="submit" style="width:100%; padding:12px; font-size:16px; font-weight:600; color:#fff; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(90deg,#004080,#0070c0); box-shadow:0 6px 12px rgba(0,0,0,0.2); margin-top:15px;">
+        Submit Application
+      </button>
+      <p id="response" style="text-align:center; margin-top:15px; font-weight:bold; color:green;"></p>
+    </form>
+  </div>
+
+  <!-- Footer Placeholder -->
   <div id="footer-placeholder"></div>
 
   <script>
-    // Load header and footer
+    const headerPlaceholder = document.getElementById('header-placeholder');
+    const footerPlaceholder = document.getElementById('footer-placeholder');
+
+    // Apply inline styles from style.css for header/footer
+    function applyHeaderFooterStyles(el, type){
+      if(type==='header'){
+        el.style.background='#cce0f5';
+        el.style.padding='8px 16px';
+        el.style.borderBottom='1px solid #a8c8e6';
+        el.style.textAlign='center';
+        el.style.position='fixed';
+        el.style.top='0';
+        el.style.left='0';
+        el.style.width='100%';
+        el.style.zIndex='999';
+        el.style.boxShadow='0 2px 6px rgba(0,0,0,0.1)';
+
+        const logo = el.querySelector('img');
+        if(logo){ logo.style.width='60px'; logo.style.height='auto'; logo.style.marginBottom='4px'; }
+
+        const h1 = el.querySelector('h1');
+        if(h1){ h1.style.fontSize='1.2em'; h1.style.color='#023e8a'; h1.style.margin='3px 0 2px 0'; }
+
+        const p = el.querySelector('p');
+        if(p){ p.style.fontSize='0.8em'; p.style.color='#023e8a'; p.style.margin='0 0 6px 0'; }
+
+        const btnContainer = el.querySelector('.header-buttons-container');
+        if(btnContainer){
+          btnContainer.style.display='flex';
+          btnContainer.style.justifyContent='center';
+          btnContainer.style.gap='10px';
+          btnContainer.style.marginTop='10px';
+          btnContainer.style.flexWrap='nowrap';
+          btnContainer.querySelectorAll('a').forEach(a=>{
+            a.style.display='inline-flex';
+            a.style.alignItems='center';
+            a.style.gap='5px';
+            a.style.textDecoration='none';
+            a.style.background='linear-gradient(to bottom,#ffffff,#d4e6fa)';
+            a.style.padding='6px 14px';
+            a.style.borderRadius='20px';
+            a.style.fontSize='0.85em';
+            a.style.color='#023e8a';
+            a.style.fontWeight='bold';
+            a.style.border='1px solid #94b9dc';
+            a.style.boxShadow='0 1px 2px rgba(0,0,0,0.1)';
+            a.style.transition='0.2s';
+          });
+        }
+      } else if(type==='footer'){
+        el.style.background='#cce0f5';
+        el.style.color='#023e8a';
+        el.style.textAlign='center';
+        el.style.padding='10px 0';
+        el.style.fontSize='12px';
+        el.style.fontWeight='bold';
+        el.style.borderTop='1px solid #a8c8e6';
+        el.style.flexShrink='0';
+        el.style.letterSpacing='0.5px';
+      }
+    }
+
+    // Load header/footer content and apply inline styles
     fetch('/regular_pages/header.html')
-      .then(res => res.text())
-      .then(data => document.getElementById('header-placeholder').innerHTML = data);
+      .then(res=>res.text())
+      .then(data=>{
+        headerPlaceholder.innerHTML = data;
+        applyHeaderFooterStyles(headerPlaceholder,'header');
+      });
 
     fetch('/regular_pages/footer.html')
-      .then(res => res.text())
-      .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+      .then(res=>res.text())
+      .then(data=>{
+        footerPlaceholder.innerHTML = data;
+        applyHeaderFooterStyles(footerPlaceholder,'footer');
+      });
 
-    // Rank "Other" logic
+    // Form logic
     const rankSelect = document.getElementById('rankSelect');
     const rankOther = document.getElementById('rankOther');
-    rankSelect.addEventListener('change', function() {
-      if(this.value === 'Other'){
-        rankOther.style.display = 'block';
+    rankSelect.addEventListener('change', function(){
+      if(this.value==='Other'){
+        rankOther.style.display='block';
         rankOther.required = true;
       } else {
-        rankOther.style.display = 'none';
+        rankOther.style.display='none';
         rankOther.required = false;
       }
     });
 
-    // Form submission
-    document.getElementById("demoForm").addEventListener("submit", function(e){
+    document.getElementById('demoForm').addEventListener('submit', function(e){
       e.preventDefault();
-      if(rankSelect.value === "Other") this.rank.value = rankOther.value;
+      if(rankSelect.value==='Other') this.rank.value=rankOther.value;
 
-      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec",{
+      fetch("https://script.google.com/macros/s/AKfycbwn8NGUnp2slWhRO7hPs_sxtfp2KLAi6fx577drjcNYB9_dpFhB3OTOZT5GiEkr-4_6/exec", {
         method:"POST",
         body:new FormData(this)
       })
-      .then(res => res.json())
+      .then(res=>res.json())
       .then(result=>{
-        document.getElementById("response").innerHTML =
-          "Submitted Successfully! <br><a href='" + result.downloadUrl + "' target='_blank'>Download PDF</a>";
+        document.getElementById('response').innerHTML=
+          "Submitted Successfully!<br><a href='"+result.downloadUrl+"' target='_blank'>Download PDF</a>";
         this.reset();
-        rankOther.style.display = 'none';
+        rankOther.style.display='none';
       })
-      .catch(()=>{
-        document.getElementById("response").innerHTML = "Error: Could not submit";
+      .catch(err=>{
+        document.getElementById('response').innerHTML="Error: could not submit";
+        console.error(err);
       });
     });
   </script>
+
 </body>
 </html>
