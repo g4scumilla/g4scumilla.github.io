@@ -1,52 +1,55 @@
-/* ===== Independent Header Styling (Fully Centered) ===== */
+/* ===== Header ===== */
 header {
     background: #cce0f5;
-    padding: 16px 16px;
-    text-align: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid #a8c8e6;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 999;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
 
-    /* Flexbox centering */
+    /* Perfect centering */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* horizontal centering */
+    text-align: center;
 }
 
 /* Logo */
 header img {
     width: 60px;
     height: auto;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
-/* Title & subtitle */
+/* Title */
 header h1 {
     font-size: 1.2em;
     color: #023e8a;
-    margin: 4px 0 2px 0;
+    margin: 3px 0 2px 0;
 }
 
+/* Subtitle */
 header p {
-    font-size: 0.85em;
+    font-size: 0.8em;
     color: #023e8a;
-    margin: 2px 0 8px 0;
+    margin: 0 0 6px 0;
 }
 
-/* Header buttons container */
+/* ===== Header Buttons ===== */
 .header-buttons-container {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* center buttons horizontally */
     gap: 10px;
+    margin-top: 10px;
     flex-wrap: nowrap;
+    width: 100%;       /* full width prevents offset */
+    max-width: 500px;  /* prevents buttons stretching too far */
 }
 
-/* Buttons */
+/* Individual buttons */
 .header-buttons-container a {
     display: inline-flex;
     align-items: center;
@@ -69,15 +72,10 @@ header p {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Font Awesome icons in buttons */
-.header-buttons-container a i {
-    font-size: 1em;
-}
-
-/* Responsive adjustments */
+/* ===== Responsive adjustments ===== */
 @media(max-width:500px){
+    header img { width: 50px; }
     header h1 { font-size: 1.1em; }
     header p { font-size: 0.75em; }
-    .header-buttons-container { gap: 6px; flex-wrap: nowrap; }
-    header img { width: 50px; }
+    .header-buttons-container { gap: 6px; max-width: 100%; }
 }
