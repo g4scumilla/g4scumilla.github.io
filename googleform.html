@@ -22,7 +22,8 @@
 
     /* Main Wrapper */
     .main-wrapper {
-      padding-top: 120px; /* space for fixed header */
+      margin-top: 140px; /* space below fixed header */
+      padding: 0 20px;   /* space from left & right edges */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -31,7 +32,7 @@
     /* Page Heading */
     .content-heading {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-size: 26px;
       color: #202124;
       font-weight: 500;
@@ -40,15 +41,15 @@
     /* Form Card */
     .form-container.vertical-form {
       width: 100%;
-      max-width: 640px;
-      margin-bottom: 60px;
-      padding: 30px;
-      border-radius: 8px;
+      max-width: 650px;
+      padding: 35px;
+      border-radius: 10px;
       background: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       border-top: 6px solid #673ab7;
     }
 
+    /* Title inside form */
     .form-container.vertical-form h2 {
       margin-bottom: 25px;
       font-size: 22px;
@@ -56,14 +57,16 @@
       color: #202124;
     }
 
+    /* Form Field */
     .form-field {
-      margin-bottom: 22px;
+      margin-bottom: 25px;
       display: flex;
       flex-direction: column;
     }
 
+    /* Label */
     .form-field label {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 500;
       font-size: 14px;
       color: #202124;
@@ -71,18 +74,17 @@
 
     .required-star {
       color: red;
-      margin-left: 3px;
     }
 
+    /* Inputs */
     .form-field input,
     .form-field textarea,
     .form-field select {
       border: none;
       border-bottom: 1.5px solid #dadce0;
-      border-radius: 0;
-      padding: 10px 4px;
-      font-size: 14px;
-      background-color: transparent;
+      padding: 12px 4px;
+      font-size: 15px;
+      background: transparent;
       transition: border-color 0.3s ease;
     }
 
@@ -98,6 +100,7 @@
       min-height: 90px;
     }
 
+    /* Button */
     button {
       margin-top: 20px;
       padding: 10px 24px;
@@ -115,6 +118,7 @@
       background-color: #1669c1;
     }
 
+    /* Response */
     #response {
       margin-top: 20px;
       font-size: 14px;
@@ -122,10 +126,10 @@
       color: #188038;
     }
 
+    /* Mobile */
     @media(max-width: 600px){
       .form-container.vertical-form {
-        margin: 0 15px 40px 15px;
-        padding: 20px;
+        padding: 25px;
       }
     }
   </style>
