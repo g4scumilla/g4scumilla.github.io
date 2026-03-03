@@ -25,6 +25,7 @@ body > section {
     margin: 20px auto;
     flex: 1 0 auto;
     text-align: center;
+    padding-bottom: 80px; /* space for footer navbar */
 }
 
 /* Section title */
@@ -76,47 +77,53 @@ body > section {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* ===== Footer ===== */
+/* ===== Footer navbar (Android style) ===== */
 footer, #footer, .site-footer {
-    background: #cce0f5;
+    background: #ffffff;
     color: #023e8a;
     text-align: center;
-    padding: 10px 0;
-    font-size: 12px;
-    flex-shrink: 0;
-    border-top: 1px solid #a8c8e6;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-
-.footer-button {
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 8px 14px;
-    border-radius: 20px;
+    padding: 8px 0;
     font-size: 0.85em;
-    color: #023e8a;
+    border-top: 1px solid #ccc;
     font-weight: bold;
-    border: 1px solid #94b9dc;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    display: inline-flex;
+    display: flex;
+    justify-content: space-around;
     align-items: center;
-    gap: 6px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
+    z-index: 999;
+}
+
+footer a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #023e8a;
+    background: #f0f4f8;
+    padding: 6px 12px;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: 0.2s;
+    font-weight: bold;
 }
 
-.footer-button i {
-    font-size: 1em;
-}
+footer a i { font-size: 1.2em; }
 
-.footer-button:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+footer a:hover {
+    background: #d4e6fa;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 /* ===== Responsive adjustments ===== */
 @media(max-width:500px){
     .link-card { font-size: 0.85em; }
     .section-title { font-size: 1.1em; padding: 8px 15px; }
+    footer a { font-size: 0.75em; padding: 5px 10px; }
+    footer a i { font-size: 1em; }
 }
