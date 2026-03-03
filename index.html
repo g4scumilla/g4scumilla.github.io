@@ -5,28 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
 
-<!-- Global Styles -->
-<link rel="stylesheet" href="/regular_pages/style.css">
-
-<!-- Header Styles -->
-<link rel="stylesheet" href="/regular_pages/header.css">
+<!-- Link updated style.css from /regular_pages -->
+<link rel="stylesheet" href="regular_pages/style.css">
 
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
+
 <body>
 
 <!-- Header placeholder -->
 <div id="header"></div>
 
-<!-- Main Content -->
 <section>
     <div class="section-title">AUTOMATION TOOLS</div>
 
     <div class="links">
         <div class="link-card">
-            <a href="/pages/resignation_automations.html">
+            <a href="pages/resignation_automations.html">
                 <i class="fas fa-file-signature"></i> Resignation Automations
             </a>
             <p>Generate resignation documents automatically.</p>
@@ -55,7 +52,7 @@
 <!-- Footer placeholder -->
 <div id="footer"></div>
 
-<!-- Load header & footer dynamically -->
+<!-- Load header & footer dynamically from /regular_pages -->
 <script>
 function loadHTML(id, file) {
     fetch(file)
@@ -64,6 +61,7 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
+// Updated paths to regular_pages folder
 loadHTML("header", "regular_pages/header.html");
 loadHTML("footer", "regular_pages/footer.html");
 </script>
