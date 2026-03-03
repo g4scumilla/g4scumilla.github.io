@@ -10,72 +10,32 @@ header {
     z-index: 999;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 
-    /* Perfect centering */
     display: flex;
     flex-direction: column;
-    align-items: center; /* horizontal centering */
+    align-items: center;
     text-align: center;
 }
 
-/* Logo */
 header img {
     width: 60px;
     height: auto;
     margin-bottom: 4px;
 }
 
-/* Title */
 header h1 {
     font-size: 1.2em;
     color: #023e8a;
     margin: 3px 0 2px 0;
 }
 
-/* Subtitle */
 header p {
     font-size: 0.8em;
     color: #023e8a;
     margin: 0 0 6px 0;
 }
 
-/* ===== Header Buttons ===== */
-.header-buttons-container {
-    display: flex;
-    justify-content: center; /* center buttons horizontally */
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: nowrap;
-    width: 100%;       /* full width prevents offset */
-    max-width: 500px;  /* prevents buttons stretching too far */
-}
-
-/* Individual buttons */
-.header-buttons-container a {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
-    background: linear-gradient(to bottom, #ffffff, #d4e6fa);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    color: #023e8a;
-    font-weight: bold;
-    border: 1px solid #94b9dc;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    transition: 0.2s;
-}
-
-.header-buttons-container a:hover {
-    background: linear-gradient(to bottom, #d4e6fa, #a8cde6);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* ===== Responsive adjustments ===== */
 @media(max-width:500px){
     header img { width: 50px; }
     header h1 { font-size: 1.1em; }
     header p { font-size: 0.75em; }
-    .header-buttons-container { gap: 6px; max-width: 100%; }
 }
