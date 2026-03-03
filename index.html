@@ -5,16 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S Cumilla Internal Dashboard</title>
 
-<!-- Global styles -->
+<!-- Global Styles -->
 <link rel="stylesheet" href="regular_pages/style.css">
 
-<!-- Header CSS -->
+<!-- Header Styles -->
 <link rel="stylesheet" href="regular_pages/header.css">
 
-<!-- Footer CSS -->
-<link rel="stylesheet" href="regular_pages/footer.css">
-
-<!-- Font Awesome -->
+<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -23,7 +20,7 @@
 <!-- Header placeholder -->
 <div id="header"></div>
 
-<!-- Main section -->
+<!-- Main Content -->
 <section>
     <div class="section-title">AUTOMATION TOOLS</div>
 
@@ -67,7 +64,6 @@ function loadHTML(id, file) {
         .catch(err => console.log(err));
 }
 
-// Load header & footer from /regular_pages
 loadHTML("header", "regular_pages/header.html");
 loadHTML("footer", "regular_pages/footer.html");
 </script>
