@@ -5,207 +5,85 @@
   <title>Resignation Application Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="/regular_pages/style.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Roboto, Arial, sans-serif;
-      background: #f0ebf8;
-      min-height: 100vh;
-    }
-
-    #header-placeholder, #footer-placeholder {
-      width: 100%;
-    }
-
-    /* Main Wrapper */
-    .main-wrapper {
-      margin-top: 140px; /* space below fixed header */
-      padding: 0 20px;   /* space from left & right edges */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* Page Heading */
-    .content-heading {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 26px;
-      color: #202124;
-      font-weight: 500;
-    }
-
-    /* Form Card */
-    .form-container.vertical-form {
-      width: 100%;
-      max-width: 650px;
-      padding: 35px;
-      border-radius: 10px;
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      border-top: 6px solid #673ab7;
-    }
-
-    /* Title inside form */
-    .form-container.vertical-form h2 {
-      margin-bottom: 25px;
-      font-size: 22px;
-      font-weight: 500;
-      color: #202124;
-    }
-
-    /* Form Field */
-    .form-field {
-      margin-bottom: 25px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Label */
-    .form-field label {
-      margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 14px;
-      color: #202124;
-    }
-
-    .required-star {
-      color: red;
-    }
-
-    /* Inputs */
-    .form-field input,
-    .form-field textarea,
-    .form-field select {
-      border: none;
-      border-bottom: 1.5px solid #dadce0;
-      padding: 12px 4px;
-      font-size: 15px;
-      background: transparent;
-      transition: border-color 0.3s ease;
-    }
-
-    .form-field input:focus,
-    .form-field textarea:focus,
-    .form-field select:focus {
-      outline: none;
-      border-bottom: 2px solid #1a73e8;
-    }
-
-    .form-field textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    /* Button */
-    button {
-      margin-top: 20px;
-      padding: 10px 24px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      background-color: #1a73e8;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #1669c1;
-    }
-
-    /* Response */
-    #response {
-      margin-top: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #188038;
-    }
-
-    /* Mobile */
-    @media(max-width: 600px){
-      .form-container.vertical-form {
-        padding: 25px;
-      }
-    }
-  </style>
 </head>
 <body>
 
   <div id="header-placeholder"></div>
 
-  <div class="main-wrapper">
+  <div class="main-wrapper" style="display:flex; flex-direction:column; align-items:center; margin-top:180px; padding:0 20px;">
+    <div class="content-heading" style="text-align:center; font-size:26px; color:#023e8a; font-weight:500; margin-bottom:25px;">
+      Resignation Application
+    </div>
 
-    <div class="content-heading">Resignation Application</div>
-
-    <div class="form-container vertical-form">
-      <h2>Submit Your Details</h2>
+    <div class="form-container vertical-form" style="width:100%; max-width:650px; padding:35px; border-radius:10px; background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.15); border-top:6px solid #673ab7;">
+      <h2 style="margin-bottom:25px; font-size:22px; font-weight:500; color:#202124; text-align:center;">Submit Your Details</h2>
 
       <form id="demoForm">
 
-        <div class="form-field">
-          <label>Application Date <span class="required-star">*</span></label>
-          <input type="date" name="appDate" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Application Date <span style="color:red;">*</span></label>
+          <input type="date" name="appDate" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; transition:border-color 0.3s;">
         </div>
 
-        <div class="form-field">
-          <label>নাম (বাংলা) <span class="required-star">*</span></label>
-          <input type="text" name="nameBn" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>নাম (বাংলা) <span style="color:red;">*</span></label>
+          <input type="text" name="nameBn" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
         </div>
 
-        <div class="form-field">
-          <label>Clock Number <span class="required-star">*</span></label>
-          <input type="tel" name="clockNo" pattern="[0-9]{1,15}" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Clock Number <span style="color:red;">*</span></label>
+          <input type="tel" name="clockNo" pattern="[0-9]{1,15}" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
         </div>
 
-        <div class="form-field">
-          <label>Service Duration <span class="required-star">*</span></label>
-          <input type="text" name="serviceDuration" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Service Duration <span style="color:red;">*</span></label>
+          <input type="text" name="serviceDuration" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
         </div>
 
-        <div class="form-field">
-          <label>Rank <span class="required-star">*</span></label>
-          <select name="rank" id="rankSelect" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Rank <span style="color:red;">*</span></label>
+          <select name="rank" id="rankSelect" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
             <option value="" disabled selected>Select Rank</option>
             <option value="Security Guard">Security Guard</option>
             <option value="Supervisor">Supervisor</option>
             <option value="Inspector">Inspector</option>
             <option value="Other">Other</option>
           </select>
-          <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="display:none;">
+          <input type="text" name="rankOther" id="rankOther" placeholder="Enter your rank" style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; display:none; margin-top:10px;">
         </div>
 
-        <div class="form-field">
-          <label>Reason for Leaving <span class="required-star">*</span></label>
-          <textarea name="reason" required></textarea>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Reason for Leaving <span style="color:red;">*</span></label>
+          <textarea name="reason" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent; min-height:90px; resize:vertical;"></textarea>
         </div>
 
-        <div class="form-field">
-          <label>Mobile Number <span class="required-star">*</span></label>
-          <input type="tel" name="mobile" pattern="[0-9]{10,15}" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Mobile Number <span style="color:red;">*</span></label>
+          <input type="tel" name="mobile" pattern="[0-9]{10,15}" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
         </div>
 
-        <div class="form-field">
-          <label>Email Address (For PDF copy) <span class="required-star">*</span></label>
-          <input type="email" name="email" required>
+        <div class="form-field" style="margin-bottom:25px; display:flex; flex-direction:column;">
+          <label>Email Address (For PDF copy) <span style="color:red;">*</span></label>
+          <input type="email" name="email" required style="border:none; border-bottom:1.5px solid #dadce0; padding:12px 4px; font-size:15px; background:transparent;">
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" style="margin-top:20px; padding:10px 24px; font-size:14px; font-weight:500; color:#fff; border:none; border-radius:4px; background-color:#1a73e8; cursor:pointer; transition:0.3s;">Submit</button>
 
       </form>
 
-      <p id="response"></p>
+      <p id="response" style="margin-top:20px; font-size:14px; font-weight:500; color:#188038;"></p>
     </div>
-
   </div>
 
   <div id="footer-placeholder"></div>
 
   <script>
+    // Load header and footer
     fetch('/regular_pages/header.html')
       .then(res => res.text())
       .then(data => document.getElementById('header-placeholder').innerHTML = data);
@@ -214,9 +92,9 @@
       .then(res => res.text())
       .then(data => document.getElementById('footer-placeholder').innerHTML = data);
 
+    // Rank "Other" logic
     const rankSelect = document.getElementById('rankSelect');
     const rankOther = document.getElementById('rankOther');
-
     rankSelect.addEventListener('change', function() {
       if(this.value === 'Other'){
         rankOther.style.display = 'block';
@@ -227,6 +105,7 @@
       }
     });
 
+    // Form submission
     document.getElementById("demoForm").addEventListener("submit", function(e){
       e.preventDefault();
       if(rankSelect.value === "Other") this.rank.value = rankOther.value;
@@ -247,6 +126,5 @@
       });
     });
   </script>
-
 </body>
 </html>
