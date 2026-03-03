@@ -23,3 +23,20 @@
     </div>
   </div>
 </footer>
+
+
+
+<script>
+const menuBtn = document.querySelector('.menu-btn');
+const footerMenu = document.querySelector('.footer-menu');
+
+menuBtn.addEventListener('click', function(e) {
+  e.stopPropagation(); // prevent click bubbling
+  footerMenu.classList.toggle('menu-open');
+});
+
+// Close menu if clicked outside
+document.addEventListener('click', function() {
+  footerMenu.classList.remove('menu-open');
+});
+</script>
