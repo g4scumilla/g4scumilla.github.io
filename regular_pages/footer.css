@@ -1,14 +1,14 @@
+/* ===== Footer Navbar (Android style) ===== */
 footer {
-    background: #ffffff;
-    padding: 8px 0;
-    border-top: 1px solid #ccc;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    background: #ffffff;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    padding: 10px 0;
     box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
     z-index: 999;
 }
@@ -18,29 +18,21 @@ footer a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     text-decoration: none;
     color: #023e8a;
-    font-size: 0.8em;
-    font-weight: bold;
-    background: #f0f4f8;
+    font-size: 0.9em; /* slightly larger text like Android nav */
+    font-weight: normal; /* no bold */
     padding: 6px 12px;
-    border-radius: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 12px;
     transition: 0.2s;
 }
 
-footer a i { font-size: 1.2em; }
+footer a i {
+    font-size: 1.3em; /* slightly bigger icons */
+}
 
 footer a:hover {
-    background: #d4e6fa;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background: #e0f0ff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-
-@media(max-width:500px){
-    footer a { padding: 5px 10px; font-size: 0.75em; }
-    footer a i { font-size: 1em; }
-}
-
-/* Prevent content overlap */
-body > section { padding-bottom: 80px; }
