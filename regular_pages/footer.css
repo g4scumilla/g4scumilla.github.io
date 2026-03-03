@@ -1,19 +1,20 @@
-/* ===== Footer Navbar (Android style) ===== */
+/* ===== Footer Navbar (Android-style, bold, integrated with header) ===== */
 footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #ffffff;
+    background: #cce0f5; /* match header bg */
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 10px 0;
     box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
     z-index: 999;
+    font-weight: 600; /* bolder text */
 }
 
-footer a {
+footer a, footer .dropbtn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,18 +22,58 @@ footer a {
     gap: 4px;
     text-decoration: none;
     color: #023e8a;
-    font-size: 0.9em; /* slightly larger text like Android nav */
-    font-weight: normal; /* no bold */
+    font-size: 0.95em; /* slightly bigger text */
     padding: 6px 12px;
     border-radius: 12px;
     transition: 0.2s;
 }
 
-footer a i {
-    font-size: 1.3em; /* slightly bigger icons */
+footer a i, footer .dropbtn i {
+    font-size: 1.4em;
 }
 
-footer a:hover {
+footer a:hover, footer .dropbtn:hover {
     background: #e0f0ff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ===== Dropdown styling ===== */
+.footer-dropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    bottom: 50px; /* appears above footer */
+    background: #ffffff;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+.dropdown-content a {
+    padding: 10px 14px;
+    text-align: left;
+    color: #023e8a;
+    font-weight: 500;
+    border-bottom: 1px solid #d4e6fa;
+    display: block;
+}
+
+.dropdown-content a:last-child { border-bottom: none; }
+
+.dropdown-content a:hover {
+    background: #e0f0ff;
+}
+
+/* Show dropdown on click */
+.footer-dropdown.show .dropdown-content {
+    display: flex;
+    flex-direction: column;
 }
