@@ -1,12 +1,46 @@
-<header>
-  <!-- Logo -->
-  <a href="/index" class="logo-link">
-    <img src="/Files/Img/logo.png" alt="G4S Logo">
-  </a>
+/* regular_pages/header.css */
 
-  <!-- Title & subtitle -->
-  <div class="header-text">
-    <h1>Internal Automation Dashboard</h1>
-    <p>Quick access to forms, sheets, web apps & resources</p>
-  </div>
-</header>
+/* General header container */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem 2rem;
+  background-color: #f5f5f5; /* light neutral background */
+  border-bottom: 2px solid #ccc;
+}
+
+/* Logo link and image */
+.logo-link {
+  display: inline-block;
+  margin-right: 1.5rem;
+}
+
+.logo-link img {
+  height: 60px; /* adjust as needed */
+  width: auto;
+  transition: transform 0.2s ease-in-out;
+}
+
+.logo-link img:hover {
+  transform: scale(1.05);
+}
+
+/* Header text block */
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-text h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.header-text p {
+  font-size: 1rem;
+  margin: 0.3rem 0 0;
+  color: #666;
+}
