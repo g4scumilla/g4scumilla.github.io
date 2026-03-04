@@ -1,29 +1,87 @@
-<footer style="position: fixed; bottom: 0; width: 100%; background: #cce0f5; border-top: 1px solid #a8c8e6; display: flex; justify-content: space-around; align-items: center; padding: 12px 0; z-index: 999; box-shadow: 0 -2px 6px rgba(0,0,0,0.05);">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Universal Footer Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Back Button -->
-  <a href="javascript:history.back()" style="text-align: center; text-decoration: none; color: #023e8a; font-size: 16px; font-weight: bold;">
-    <i class="fas fa-arrow-left" style="display: block; font-size: 22px;"></i>
-    Back
-  </a>
+  <!-- Font Awesome (for icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Home Button -->
-  <a href="index.html" style="text-align: center; text-decoration: none; color: #023e8a; font-size: 16px; font-weight: bold;">
-    <i class="fas fa-home" style="display: block; font-size: 22px;"></i>
-    Home
-  </a>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Dropup Menu -->
-  <div class="dropup text-center">
-    <button data-bs-toggle="dropdown" style="background: none; border: none; color: #023e8a; font-size: 16px; font-weight: bold;">
-      <i class="fas fa-ellipsis-vertical" style="display: block; font-size: 22px;"></i>
-      Menu
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end">
-      <li><a class="dropdown-item" href="#">Resignation Automations</a></li>
-      <li><a class="dropdown-item" href="#">Prepare Sheet</a></li>
-      <li><a class="dropdown-item" href="#">Prepare Training Sheet</a></li>
-      <li><a class="dropdown-item" href="#">Other Internal Links</a></li>
-    </ul>
-  </div>
+  <style>
+    body {
+      margin: 0;
+      padding-bottom: 70px;
+      font-family: Arial, sans-serif;
+    }
 
-</footer>
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #f8f9fa;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    footer a, footer button {
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      background: none;
+      border: none;
+      font-size: 14px;
+    }
+
+    footer i {
+      display: block;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h3 style="padding:20px;">Test Page Content</h3>
+
+  <!-- Universal Footer -->
+  <footer>
+
+    <a href="javascript:history.back()">
+      <i class="fas fa-arrow-left"></i>
+      Back
+    </a>
+
+    <a href="index.html">
+      <i class="fas fa-home"></i>
+      Home
+    </a>
+
+    <!-- Dropup Menu -->
+    <div class="dropup">
+      <button data-bs-toggle="dropdown">
+        <i class="fas fa-ellipsis-vertical"></i>
+        Menu
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Resignation Automations</a></li>
+        <li><a class="dropdown-item" href="#">Prepare Sheet</a></li>
+        <li><a class="dropdown-item" href="#">Prepare Training Sheet</a></li>
+        <li><a class="dropdown-item" href="#">Other Internal Links</a></li>
+      </ul>
+    </div>
+
+  </footer>
+
+  <!-- Bootstrap JS (Very Important) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
