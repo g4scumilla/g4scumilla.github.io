@@ -1,0 +1,57 @@
+<style>
+  /* Keep existing body padding */
+  body {
+    margin: 0;
+    padding-bottom: 70px; /* keep space for footer */
+    font-family: Arial, sans-serif;
+  }
+
+  /* Android-style Bottom Nav */
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #0070c0; /* Android blue look */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    border-top: none;
+    padding: 0;
+  }
+
+  footer a, footer button {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    color: white; /* white icons & text */
+    font-weight: 600; /* bold look */
+    font-size: 13px;
+    padding: 8px 0;
+    background: none;
+    border: none;
+    transition: background 0.2s;
+  }
+
+  footer a:hover, footer button:hover {
+    background-color: #005a9e; /* darker on hover */
+    border-radius: 8px 8px 0 0; /* subtle rounded top */
+  }
+
+  footer i {
+    display: block;
+    font-size: 20px; /* bigger icon for touch */
+    margin-bottom: 2px;
+  }
+
+  /* Dropup menu button styling */
+  .dropup button {
+    color: white;
+    font-weight: 600;
+  }
+
+  .dropdown-menu {
+    min-width: 160px;
+  }
+</style>
