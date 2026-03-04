@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Send Message</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial; padding:20px;">
+
+  <h2>Contact Form</h2>
+
+  <form action="https://formsubmit.co/nothingistruehereinourselves@gmail.com" method="POST">
+    
+    <!-- Disable Captcha (optional) -->
+    <input type="hidden" name="_captcha" value="false">
+
+    <!-- Subject -->
+    <input type="hidden" name="_subject" value="New Message from GitHub Page">
+
+    <!-- User Email -->
+    <label>Your Email:</label><br>
+    <input type="email" name="email" required style="width:100%; padding:8px;"><br><br>
+
+    <!-- Message -->
+    <label>Your Message:</label><br>
+    <textarea name="message" rows="5" required style="width:100%; padding:8px;"></textarea><br><br>
+
+    <button type="submit" style="padding:10px 20px; cursor:pointer;">
+      Send Message
+    </button>
+
+  </form>
+
+</body>
+</html>
