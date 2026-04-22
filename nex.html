@@ -3,209 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusPay Enterprise</title>
+    <title>NexusPay Lite</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --nexus-red: #f44336;
-            --nexus-gradient: linear-gradient(180deg, #ff5f52 0%, #ffffff 45%);
-            --bg-light: #f8f9fa;
+            --nexus-gradient: linear-gradient(180deg, #ff5f52 0%, #ffffff 180px);
+            --card-bg: #1a1a1a;
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--nexus-gradient);
             background-attachment: fixed;
             color: #333;
-            padding-bottom: 90px;
+            padding-bottom: 80px;
         }
 
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 20px;
+            color: white;
+        }
+
+        /* LIGHTWEIGHT SMART CARD */
+        .card-container { padding: 0 15px; margin-bottom: 20px; }
+        
+        .virtual-card {
+            background: var(--card-bg);
+            background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+            border-radius: 18px;
             padding: 20px;
             color: white;
-        }
-
-        /* SMART CARD WITH FLORAL BACKGROUND */
-        .card-container {
-            padding: 0 20px;
-            margin-bottom: 25px;
-        }
-
-        .virtual-card {
-            background-color: #111;
-            /* Subtle floral/geometric pattern */
-            background-image: radial-gradient(circle at 100% 150%, #222 24%, white 25%, white 28%, #222 29%, #222 36%, white 36%, white 40%, transparent 40%),
-                              radial-gradient(circle at 0 150%, #222 24%, white 25%, white 28%, #222 29%, #222 36%, white 36%, white 40%, transparent 40%),
-                              radial-gradient(circle at 50% 100%, white 10%, #111 11%, #111 23%, white 24%, white 30%, #111 31%, #111 43%, white 44%, white 50%, #111 51%);
-            background-size: 100px 50px;
-            border-radius: 20px;
-            padding: 25px;
-            color: white;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            text-align: center;
             position: relative;
-            min-height: 180px;
+            min-height: 150px;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            text-align: center;
-            overflow: hidden;
         }
 
-        .card-header-info {
+        .card-info {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 20px;
             text-align: left;
+            font-size: 11px;
+            letter-spacing: 1px;
+            opacity: 0.7;
         }
 
-        .card-holder { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 2px; }
-        .card-number { font-size: 14px; margin-top: 4px; font-family: monospace; opacity: 0.7; }
-
-        .balance-label {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-            font-weight: 300;
-        }
-
+        .balance-label { font-size: 13px; margin-bottom: 10px; font-weight: 300; }
+        
         .balance-box {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
-            padding: 10px 30px;
-            cursor: pointer;
-            backdrop-filter: blur(8px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: 600;
-            min-width: 140px;
-            z-index: 2;
-        }
-
-        .balance-box:active { transform: scale(0.95); }
-
-        /* BANKING SERVICES GRID */
-        .section-title {
-            padding: 0 20px;
+            padding: 10px 25px;
             font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            color: #444;
-            font-size: 15px;
+            display: inline-block;
+            margin: 0 auto;
+            cursor: pointer;
+            min-width: 130px;
         }
 
+        /* GRID */
+        .section-title { padding: 0 20px; font-weight: bold; font-size: 14px; margin-top: 20px; }
+        
         .service-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            padding: 20px;
-            text-align: center;
+            gap: 10px;
+            padding: 15px;
         }
 
-        .service-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
+        .service-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+        
         .icon-circle {
-            width: 58px;
-            height: 58px;
+            width: 50px;
+            height: 50px;
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
-            font-size: 22px;
-            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 20px;
         }
 
-        .service-item:active .icon-circle { transform: translateY(2px); }
-        .service-label { font-size: 10px; font-weight: 700; color: #666; }
+        .service-label { font-size: 10px; font-weight: 600; color: #555; text-align: center; }
 
-        /* RECENT TRANSACTIONS */
-        .content-area { padding: 0 20px; }
-
+        /* LISTS */
+        .content-area { padding: 0 15px; }
         .tx-card {
             background: white;
-            padding: 15px;
-            border-radius: 18px;
-            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        .tx-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 18px;
-        }
-
+        .tx-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         .icon-in { background: #e8f5e9; color: #4caf50; }
         .icon-out { background: #ffebee; color: #f44336; }
 
         .tx-info { flex: 1; }
-        .tx-info b { font-size: 14px; color: #333; }
-        .tx-info div { font-size: 11px; color: #888; }
+        .tx-info b { font-size: 13px; }
+        .tx-info div { font-size: 10px; color: #888; }
+        .tx-amt { font-weight: bold; font-size: 13px; }
 
-        .tx-amt { font-weight: 800; font-size: 14px; }
-
-        /* BOTTOM NAV */
+        /* NAV */
         .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #eee;
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; display: flex; justify-content: space-around;
+            padding: 10px 0; border-top: 1px solid #eee;
         }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            color: #bbb;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #ccc; }
         .nav-item.active { color: var(--nexus-red); }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item i { font-size: 18px; }
+
+        /* LOADING SPINNER */
+        #loader { text-align: center; padding: 20px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
 
 <div class="top-bar">
-    <div style="font-size: 22px; font-weight: bold;">Nexus<span style="font-weight:300">Pay</span></div>
+    <div style="font-weight:bold; font-size:20px;">NexusPay</div>
     <i class="fa-regular fa-bell"></i>
 </div>
 
 <div id="view">
-    </div>
+    <div id="loader"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading secure data...</div>
+</div>
 
 <div class="bottom-nav">
-    <div class="nav-item active" onclick="loadDash()"><i class="fa-solid fa-house"></i><span>Home</span></div>
-    <div class="nav-item" onclick="loadHistory()"><i class="fa-solid fa-clock-rotate-left"></i><span>History</span></div>
-    <div style="width: 60px; position: relative;">
-        <div style="width:55px; height:55px; background:var(--nexus-red); border-radius:50%; position:absolute; top:-25px; left:2px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; box-shadow:0 4px 12px rgba(244,67,54,0.4);">
-            <i class="fa-solid fa-qrcode"></i>
-        </div>
-    </div>
-    <div class="nav-item"><i class="fa-solid fa-grid-2"></i><span>Services</span></div>
+    <div class="nav-item active" onclick="renderDash()"><i class="fa-solid fa-house"></i><span>Home</span></div>
+    <div class="nav-item" onclick="loadHistory()"><i class="fa-solid fa-list"></i><span>History</span></div>
+    <div style="width: 50px;"></div>
+    <div class="nav-item" onclick="loadUsers()"><i class="fa-solid fa-users"></i><span>Users</span></div>
     <div class="nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></div>
 </div>
 
@@ -213,138 +155,108 @@
     const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
     let DATA = {transactions:[], users:{}};
 
+    // Faster initial load
+    window.onload = () => { sync(); };
+
     async function sync() {
         try {
-            const r = await fetch(API);
-            DATA = await r.json();
-            if(window.currentView === 'dash') renderDash();
-        } catch(e) { console.log("Sync error"); }
+            const response = await fetch(API);
+            const json = await response.json();
+            DATA = json;
+            renderDash();
+        } catch(e) {
+            document.getElementById('view').innerHTML = "<div style='text-align:center; padding:20px;'>Connection error. Check script permissions.</div>";
+        }
     }
 
-    // 30 SECOND BALANCE TOGGLE
-    function showBalance(el, amt) {
-        el.innerText = "৳ " + amt;
-        el.style.background = "rgba(255,255,255,0.4)";
-        setTimeout(() => {
-            el.innerText = "Tap for Balance";
-            el.style.background = "rgba(255,255,255,0.15)";
-        }, 30000); // 30 Seconds
+    function toggleBal(el, val) {
+        el.innerText = "৳ " + val;
+        setTimeout(() => { el.innerText = "Tap for Balance"; }, 30000);
     }
 
     function renderDash() {
-        window.currentView = 'dash';
-        let bal = DATA.transactions.length > 0 ? DATA.transactions[DATA.transactions.length - 1].balance : 0;
-        
-        let html = `
-        <div class="card-container">
-            <div class="virtual-card">
-                <div class="card-header-info">
-                    <div class="card-holder">ABDULLAHIL KUAFI</div>
-                    <div class="card-number">**** **** **** 7537</div>
+        const bal = DATA.transactions.length > 0 ? DATA.transactions[DATA.transactions.length - 1].balance : 0;
+        const recent = DATA.transactions.slice(-2).reverse(); // Show only 2 recent items
+
+        document.getElementById('view').innerHTML = `
+            <div class="card-container">
+                <div class="virtual-card">
+                    <div class="card-info">ABDULLAHIL KUAFI<br>**** 7537</div>
+                    <div class="balance-label">Available Balance</div>
+                    <div class="balance-box" onclick="toggleBal(this, '${bal}')">Tap for Balance</div>
                 </div>
-                
-                <div class="balance-label">Available Balance</div>
-                <div class="balance-box" onclick="showBalance(this, '${bal}')">Tap for Balance</div>
-                
-                <div style="position:absolute; bottom:20px; right:20px; font-weight:bold; font-style:italic; font-size:18px; opacity:0.4">VISA</div>
             </div>
-        </div>
 
-        <div class="section-title">Banking Services</div>
-        <div class="service-grid">
-            <div class="service-item" onclick="loadAddTx()">
-                <div class="icon-circle"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#ff9800"></i></div>
-                <span class="service-label">Transaction</span>
-            </div>
-            <div class="service-item" onclick="loadUsers()">
-                <div class="icon-circle"><i class="fa-solid fa-users-viewfinder" style="color:#2196f3"></i></div>
-                <span class="service-label">User Summary</span>
-            </div>
-            <div class="service-item">
-                <div class="icon-circle"><i class="fa-solid fa-user-plus" style="color:#4caf50"></i></div>
-                <span class="service-label">Add User</span>
-            </div>
-            <div class="service-item" onclick="loadHistory()">
-                <div class="icon-circle"><i class="fa-solid fa-receipt" style="color:#9c27b0"></i></div>
-                <span class="service-label">Histories</span>
-            </div>
-        </div>
-
-        <div class="section-title">
-            <span>Recent Transactions</span>
-            <span style="color:var(--nexus-red); font-size:11px">View More</span>
-        </div>
-        <div class="content-area">
-            ${DATA.transactions.slice(-3).reverse().map(t => `
-                <div class="tx-card">
-                    <div class="tx-icon ${t.type === 'Expense' ? 'icon-out' : 'icon-in'}">
-                        <i class="fa-solid ${t.type === 'Expense' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
-                    </div>
-                    <div class="tx-info">
-                        <b>${t.person}</b>
-                        <div>${t.category} • ${t.note || 'No notes'}</div>
-                    </div>
-                    <div class="tx-amt" style="color: ${t.type === 'Expense' ? '#f44336' : '#4caf50'}">
-                        ${t.type === 'Expense' ? '-' : '+'}৳${t.amount}
-                    </div>
+            <div class="section-title">Banking Services</div>
+            <div class="service-grid">
+                <div class="service-item" onclick="loadAddForm()">
+                    <div class="icon-circle"><i class="fa-solid fa-exchange" style="color:#ff9800"></i></div>
+                    <span class="service-label">Transaction</span>
                 </div>
-            `).join('')}
-        </div>`;
-        document.getElementById('view').innerHTML = html;
-    }
+                <div class="service-item" onclick="loadUsers()">
+                    <div class="icon-circle"><i class="fa-solid fa-address-book" style="color:#2196f3"></i></div>
+                    <span class="service-label">User Summary</span>
+                </div>
+                <div class="service-item">
+                    <div class="icon-circle"><i class="fa-solid fa-user-plus" style="color:#4caf50"></i></div>
+                    <span class="service-label">Add User</span>
+                </div>
+                <div class="service-item" onclick="loadHistory()">
+                    <div class="icon-circle"><i class="fa-solid fa-clock-rotate-left" style="color:#9c27b0"></i></div>
+                    <span class="service-label">Histories</span>
+                </div>
+            </div>
 
-    function loadHistory() {
-        window.currentView = 'history';
-        let html = `<div class="section-title">Full History</div><div class="content-area">`;
-        DATA.transactions.slice().reverse().forEach(t => {
-            html += `<div class="tx-card">
-                <div class="tx-icon ${t.type === 'Expense' ? 'icon-out' : 'icon-in'}"><i class="fa-solid ${t.type === 'Expense' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i></div>
-                <div class="tx-info"><b>${t.person}</b><div>${t.category}</div></div>
-                <div class="tx-amt" style="color: ${t.type === 'Expense' ? '#f44336' : '#4caf50'}">৳${t.amount}</div>
-            </div>`;
-        });
-        html += `<button onclick="renderDash()" style="width:100%; border:none; padding:15px; border-radius:12px; background:#eee;">Back</button></div>`;
-        document.getElementById('view').innerHTML = html;
+            <div class="section-title">Recent Activity</div>
+            <div class="content-area">
+                ${recent.map(t => `
+                    <div class="tx-card">
+                        <div class="tx-icon ${t.type==='Expense'?'icon-out':'icon-in'}">
+                            <i class="fa-solid ${t.type==='Expense'?'fa-minus':'fa-plus'}"></i>
+                        </div>
+                        <div class="tx-info"><b>${t.person}</b><div>${t.category}</div></div>
+                        <div class="tx-amt" style="color:${t.type==='Expense'?'#f44336':'#4caf50'}">
+                            ${t.type==='Expense'?'-':'+'}৳${t.amount}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
 
     function loadUsers() {
-        let html = `<div class="section-title">User Summary</div><div class="content-area">`;
+        let h = `<div class="section-title">Users</div><div class="content-area">`;
         for(let u in DATA.users) {
-            html += `<div class="tx-card">
-                <div class="tx-icon icon-in"><i class="fa-solid fa-user"></i></div>
-                <div class="tx-info"><b>${u}</b><div>Balance Held</div></div>
-                <div class="tx-amt" style="color:#2196f3">৳${DATA.users[u].balance}</div>
-            </div>`;
+            h += `<div class="tx-card"><div class="tx-info"><b>${u}</b></div><div class="tx-amt" style="color:#2196f3">৳${DATA.users[u].balance}</div></div>`;
         }
-        html += `<button onclick="renderDash()" style="width:100%; border:none; padding:15px; border-radius:12px; background:#eee;">Back</button></div>`;
-        document.getElementById('view').innerHTML = html;
+        document.getElementById('view').innerHTML = h + `<button onclick="renderDash()" style="width:100%; padding:10px; border:none; border-radius:10px; margin-top:10px;">Back</button></div>`;
     }
 
-    function loadAddTx() {
+    function loadHistory() {
+        let h = `<div class="section-title">History</div><div class="content-area">`;
+        DATA.transactions.slice().reverse().forEach(t => {
+            h += `<div class="tx-card"><div class="tx-info"><b>${t.person}</b><div>${t.type}</div></div><div class="tx-amt">৳${t.amount}</div></div>`;
+        });
+        document.getElementById('view').innerHTML = h + `<button onclick="renderDash()" style="width:100%; padding:10px; border:none; border-radius:10px; margin-top:10px;">Back</button></div>`;
+    }
+
+    function loadAddForm() {
         document.getElementById('view').innerHTML = `
-        <div class="content-area" style="padding-top:20px">
-            <div style="background:white; padding:20px; border-radius:20px;">
-                <h3>New Transaction</h3>
-                <input id="p" placeholder="Name" style="width:100%; padding:12px; margin:8px 0; border:1px solid #eee; border-radius:10px;">
-                <select id="t" style="width:100%; padding:12px; margin:8px 0; border:1px solid #eee; border-radius:10px;">
-                    <option>Income</option><option>Expense</option>
-                </select>
-                <input id="a" type="number" placeholder="Amount" style="width:100%; padding:12px; margin:8px 0; border:1px solid #eee; border-radius:10px;">
-                <button onclick="submit()" style="width:100%; padding:15px; background:var(--nexus-red); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">Confirm</button>
-                <button onclick="renderDash()" style="width:100%; padding:15px; background:#eee; border:none; border-radius:12px; margin-top:8px;">Cancel</button>
+            <div class="content-area" style="padding-top:20px">
+                <div style="background:white; padding:20px; border-radius:15px;">
+                    <input id="p" placeholder="Name" style="width:90%; padding:10px; margin-bottom:10px;">
+                    <select id="t" style="width:100%; padding:10px; margin-bottom:10px;"><option>Income</option><option>Expense</option></select>
+                    <input id="a" type="number" placeholder="Amount" style="width:90%; padding:10px; margin-bottom:10px;">
+                    <button onclick="postData()" style="width:100%; padding:12px; background:var(--nexus-red); color:white; border:none; border-radius:10px;">Submit</button>
+                </div>
             </div>
-        </div>`;
+        `;
     }
 
-    function submit() {
-        const payload = { person: p.value, type: t.value, amount: a.value };
-        fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-        alert("Success!"); renderDash();
+    function postData() {
+        fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify({person:p.value, type:t.value, amount:a.value}) });
+        alert("Sent!"); sync();
     }
-
-    // Start App
-    sync();
-    setInterval(sync, 10000);
 </script>
 </body>
 </html>
