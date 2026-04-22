@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Wallet Simple</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#0b1220;
+  color:white;
+}
+
+.header{
+  padding:15px;
+  text-align:center;
+  background:#111827;
+  font-weight:bold;
+}
+
+.card{
+  margin:10px;
+  padding:12px;
+  background:#111827;
+  border-radius:10px;
+}
+
+input,select,button{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border:none;
+  border-radius:8px;
+}
+
+button{
+  background:#22c55e;
+  color:white;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">💰 Wallet System</div>
+
+<!-- BALANCE -->
+<div class="card">
+  <h3>Balance</h3>
+  <h2 id="balance">0</h2>
+</div>
+
+<!-- RECENT -->
+<div class="card">
+  <h3>Recent Transactions</h3>
+  <div id="recent"></div>
+</div>
+
+<!-- ADD -->
+<div class="card">
+  <h3>Add Transaction</h3>
+
+  <select id="person"></select>
+
+  <select id="type">
+    <option>Income</option>
+    <option>Expense</option>
+  </select>
+
+  <input id="amount" type="number" placeholder="Amount">
+  <input id="category" placeholder="Category">
+  <input id="note" placeholder="Note">
+
+  <button onclick="send()">Save</button>
+</div>
+
+<script>
+
+const API = "YOUR_APPS_SCRIPT_URL";
+
+let DATA = [];
+
+fetch(API)
+.then(r=>r.json())
+.then(d=>{
+
+  DATA = d.transactions;
+
+  let bal = 0;
+  let html = "";
+
+  let last = DATA.slice(-2);
+
+  last.forEach(t=>{
+    html += `<div>${t.person} | ${t.amount} | ${t.type}</div>`;
+    bal = t.balance;
+  });
+
+  document.getElementById("balance").innerText = bal;
+  document.getElementById("recent").innerHTML = html;
+
+  let users = [...new Set(DATA.map(x=>x.person))];
+
+  document.getElementById("person").innerHTML =
+    users.map(u=>`<option>${u}</option>`).join("");
+
+});
+
+// SEND DATA
+function send(){
+
+  fetch(API,{
+    method:"POST",
+    mode:"no-cors",
+    body:JSON.stringify({
+      person:person.value,
+      type:type.value,
+      amount:amount.value,
+      category:category.value,
+      note:note.value
+    })
+  });
+
+  alert("Transaction saved ✔");
+}
+
+</script>
+
+</body>
+</html>
