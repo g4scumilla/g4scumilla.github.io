@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wallet Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 500px;
+      margin: auto;
+      padding: 15px;
+      background: #f4f6f8;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+
+    .income { color: green; }
+    .expense { color: red; }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>💰 Wallet Dashboard</h2>
+
+<div class="summary">
+  <div id="total">Balance: 0</div>
+  <div id="count">Transactions: 0</div>
+</div>
+
+<div id="list"></div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
+
+fetch(API)
+  .then(res => res.json())
+  .then(data => {
+
+    let total = 0;
+    let html = "";
+
+    data.forEach(item => {
+
+      total = Number(item.balance);
+
+      html += `
+        <div class="card">
+          <b>${item.person}</b> - 
+          <span class="${item.type === "Income" ? "income" : "expense"}">
+            ${item.type}
+          </span><br>
+          Category: ${item.category}<br>
+          Amount: ${item.amount}<br>
+          Balance: ${item.balance}<br>
+          Note: ${item.note}
+        </div>
+      `;
+    });
+
+    document.getElementById("list").innerHTML = html;
+    document.getElementById("total").innerText = "Balance: " + total;
+    document.getElementById("count").innerText = "Transactions: " + data.length;
+
+  });
+</script>
+
+</body>
+</html>
