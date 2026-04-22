@@ -29,16 +29,11 @@
     button {
       width: 100%;
       padding: 12px;
-      background: #28a745;
+      background: green;
       color: white;
       border: none;
       border-radius: 6px;
       font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #218838;
     }
 
     .box {
@@ -52,57 +47,49 @@
 
 <body>
 
-  <h2>💰 My Wallet</h2>
+<h2>💰 My Wallet</h2>
 
-  <div class="box">
+<div class="box">
 
-    <input id="person" placeholder="Person">
+  <input id="person" placeholder="Person">
 
-    <select id="type">
-      <option>Income</option>
-      <option>Expense</option>
-    </select>
+  <select id="type">
+    <option>Income</option>
+    <option>Expense</option>
+  </select>
 
-    <input id="category" placeholder="Category">
-    <input id="amount" type="number" placeholder="Amount">
-    <input id="note" placeholder="Note">
+  <input id="category" placeholder="Category">
+  <input id="amount" type="number" placeholder="Amount">
+  <input id="note" placeholder="Note">
 
-    <button onclick="sendData()">Add Transaction</button>
+  <button onclick="sendData()">Add Transaction</button>
 
-  </div>
+</div>
 
-  <script>
-    function sendData() {
+<script>
+function sendData() {
 
-      fetch("https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          person: document.getElementById("person").value,
-          type: document.getElementById("type").value,
-          category: document.getElementById("category").value,
-          amount: document.getElementById("amount").value,
-          note: document.getElementById("note").value
-        })
-      })
-      .then(res => res.text())
-      .then(data => {
-        alert("Saved: " + data);
+  fetch("https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec", {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      person: document.getElementById("person").value,
+      type: document.getElementById("type").value,
+      category: document.getElementById("category").value,
+      amount: document.getElementById("amount").value,
+      note: document.getElementById("note").value
+    })
+  });
 
-        // clear inputs
-        document.getElementById("person").value = "";
-        document.getElementById("category").value = "";
-        document.getElementById("amount").value = "";
-        document.getElementById("note").value = "";
-      })
-      .catch(err => {
-        alert("Error: " + err);
-      });
+  alert("Transaction sent ✔ Check Google Sheet");
 
-    }
-  </script>
+  // clear fields
+  document.getElementById("person").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("amount").value = "";
+  document.getElementById("note").value = "";
+}
+</script>
 
 </body>
 </html>
