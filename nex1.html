@@ -3,42 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G4SPay Business</title>
+    <title>G4SPay</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --g4s-red: #d32f2f; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; padding-top: 310px; padding-bottom: 80px; background: #fff; }
+        body { margin: 0; font-family: sans-serif; padding-top: 320px; padding-bottom: 80px; background: #fdfdfd; }
         
-        #sync-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 12px; display: none; z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #sync-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 12px; display: none; z-index: 9999; }
 
         .fixed-header { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(180deg, #f44336 0%, #fff 100%); z-index: 1000; }
         .top-bar { display: flex; justify-content: space-between; padding: 10px 20px; color: white; font-weight: bold; font-size: 20px; }
         
         .card-container { padding: 0 15px; }
-        .visa-card { background: #1a1a1a; border-radius: 15px; height: 160px; color: white; display: flex; flex-direction: column; box-shadow: 0 10px 20px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
-        .visa-card::after { content: '\f06c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.05; pointer-events: none; }
+        .visa-card { background: #1a1a1a; border-radius: 12px; height: 180px; width: 100%; color: white; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .visa-card::after { content: '\f06c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -10px; bottom: -10px; font-size: 110px; opacity: 0.04; pointer-events: none; }
         .card-split { display: flex; flex: 1; border-top: 1px solid rgba(255,255,255,0.1); }
         .split-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         .split-box:first-child { border-right: 1px solid rgba(255,255,255,0.1); }
-        .split-label { font-size: 9px; text-transform: uppercase; opacity: 0.6; }
-        .split-value { font-size: 14px; font-weight: bold; margin-top: 4px; }
 
-        .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); padding: 15px; background: white; }
+        .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); padding: 15px; background: white; border-bottom: 1px solid #eee; }
         .service-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; cursor: pointer; }
-        .icon-circle { width: 45px; height: 45px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 5px; font-size: 18px; }
+        .icon-circle { width: 45px; height: 45px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 5px; font-size: 18px; }
 
-        .tx-card { background: white; padding: 15px; border-radius: 18px; margin: 0 15px 10px; display: flex; align-items: center; border: 1px solid #f0f0f0; }
-        .user-initial { width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; color: #555; border: 1px solid #ddd; }
-        .user-details { flex: 1; }
-        .user-details b { display: block; font-size: 14px; }
-        .user-details small { color: #888; font-size: 11px; }
+        /* STATEMENT STYLE LIST */
+        .tx-card { background: white; padding: 12px 15px; border-radius: 12px; margin: 0 15px 8px; display: flex; align-items: center; border: 1px solid #f0f0f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .user-initial { width: 38px; height: 38px; border-radius: 50%; background: #f4f4f4; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; color: #555; }
+        .center-meta { flex: 1; overflow: hidden; }
+        .center-meta b { display: block; font-size: 13px; color: #333; }
+        .center-meta span { font-size: 11px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .amount-side { text-align: right; min-width: 70px; font-weight: bold; font-size: 14px; }
 
-        .form-box { padding: 20px; background: #fff; border-radius: 20px; margin: 0 15px; border: 1px solid #eee; }
-        label { font-size: 10px; font-weight: 800; color: #aaa; text-transform: uppercase; display: block; margin: 10px 5px 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; background: #fafafa; margin-bottom: 10px; }
-        .quick-row { display: flex; gap: 8px; margin-bottom: 15px; }
-        .q-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; font-weight: bold; cursor: pointer; color: var(--g4s-red); }
-        .submit-btn { width: 100%; padding: 15px; background: #1a1a1a; color: white; border: none; border-radius: 12px; font-weight: bold; }
+        .del-btn { color: #d32f2f; font-size: 16px; margin-left: 10px; cursor: pointer; }
+
+        .form-box { padding: 20px; background: #fff; border-radius: 15px; margin: 0 15px; border: 1px solid #eee; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; background: #fafafa; margin-bottom: 10px; }
+        .q-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; font-weight: bold; color: var(--g4s-red); margin-right: 5px; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; cursor: pointer; }
@@ -47,22 +46,16 @@
 </head>
 <body>
 
-<div id="sync-toast"><i class="fa-solid fa-rotate fa-spin"></i> Syncing...</div>
+<div id="sync-toast"><i class="fa-solid fa-rotate fa-spin"></i> Synchronizing...</div>
 
 <div class="fixed-header">
     <div class="top-bar"><span>G4SPay</span><i class="fa-solid fa-shield-halved"></i></div>
     <div class="card-container">
         <div class="visa-card">
-            <div style="padding:15px 20px;"><div style="width:35px; height:25px; background:#c0c0c0; border-radius:4px; opacity:0.5;"></div></div>
+            <div style="padding:15px 20px;"><div style="width:35px; height:25px; background:#c0c0c0; border-radius:4px; opacity:0.6;"></div></div>
             <div class="card-split">
-                <div class="split-box" onclick="showBalance()">
-                    <span class="split-label">Balance</span>
-                    <span class="split-value" id="bal-text">Tap for Balance</span>
-                </div>
-                <div class="split-box" onclick="sync()">
-                    <span class="split-label">Synchronisation</span>
-                    <span class="split-value"><i id="refresh-icon" class="fa-solid fa-rotate"></i> Refresh</span>
-                </div>
+                <div class="split-box" onclick="showBalance()"><span style="font-size:9px;opacity:0.6">BALANCE</span><span id="bal-text" style="font-weight:bold">Tap for Balance</span></div>
+                <div class="split-box" onclick="sync()"><span style="font-size:9px;opacity:0.6">REFRESH</span><span id="refresh-icon"><i class="fa-solid fa-rotate"></i> Sync</span></div>
             </div>
             <div style="padding:10px 20px; font-size:10px; letter-spacing:2px; opacity:0.5;">ABDULLAHIL KUAFI</div>
         </div>
@@ -90,105 +83,98 @@
     window.onload = () => sync();
 
     async function sync() {
-        const toast = document.getElementById('sync-toast');
-        const icon = document.getElementById('refresh-icon');
-        toast.style.display = 'block';
-        icon.classList.add('fa-spin');
+        document.getElementById('sync-toast').style.display = 'block';
         try {
             const r = await fetch(API);
             DATA = await r.json();
             renderDash();
-        } catch(e) { alert("Network Error"); }
-        setTimeout(() => { toast.style.display = 'none'; icon.classList.remove('fa-spin'); }, 800);
+        } catch(e) { alert("Error Syncing"); }
+        setTimeout(() => { document.getElementById('sync-toast').style.display = 'none'; }, 800);
     }
 
     function showBalance() {
-        const textEl = document.getElementById('bal-text');
-        textEl.innerText = '৳ ' + (DATA.centralBalance || 0);
-        setTimeout(() => { textEl.innerText = 'Tap for Balance'; }, 20000);
+        document.getElementById('bal-text').innerText = '৳ ' + (DATA.centralBalance || 0);
+        setTimeout(() => { document.getElementById('bal-text').innerText = 'Tap for Balance'; }, 20000);
     }
 
     function renderDash() {
         document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; font-weight:800; font-size:15px;">Recent Transactions</div>
+            <div style="padding:10px 20px; font-weight:800; font-size:14px; color:#555;">RECENT STATEMENTS</div>
             ${DATA.transactions.slice(-10).reverse().map(t => `
                 <div class="tx-card">
                     <div class="user-initial">${t.person.charAt(0)}</div>
-                    <div class="user-details"><b>${t.person}</b><small>${t.category}</small></div>
-                    <b style="color:${t.type=='Withdraw'?'red':'green'}">${t.type=='Withdraw'?'+':'-'}৳${t.amount}</b>
+                    <div class="center-meta"><b>${t.person}</b><span>${t.note || 'No Reference'}</span></div>
+                    <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">${t.type=='Withdraw'?'+':'-'}৳${t.amount}</div>
                 </div>
             `).join('')}
         `;
     }
 
     function loadUsers() {
-        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:800;">User List</span><span onclick="renderDash()" style="color:red; font-size:12px;">Back</span></div>`;
+        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:800;">USER DIRECTORY</span><span onclick="renderDash()" style="color:red; font-size:12px;">Back</span></div>`;
         for(let u in DATA.users) {
             h += `<div class="tx-card">
                 <div class="user-initial">${u.charAt(0)}</div>
-                <div class="user-details"><b>${u}</b><small>${DATA.users[u].designation} • ${DATA.users[u].phone || 'No Mobile'}</small></div>
-                <b style="color:var(--g4s-red)">৳${DATA.users[u].balance}</b>
+                <div class="center-meta"><b>${u}</b><span>${DATA.users[u].designation} • ${DATA.users[u].phone}</span></div>
+                <div class="amount-side" style="color:var(--g4s-red)">৳${DATA.users[u].balance}</div>
+                <i class="fa-solid fa-trash-can del-btn" onclick="removeUser('${u}')"></i>
             </div>`;
         }
         document.getElementById('main-content').innerHTML = h;
     }
 
-    function loadAddForm() {
-        let options = Object.keys(DATA.users).map(u => `<option value="${u}">${u} (${DATA.users[u].designation})</option>`).join('');
-        document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">Transact</span><span onclick="renderDash()" style="color:red;">Back</span></div>
-            <div class="form-box">
-                <label>User (Designation)</label><select id="p">${options}</select>
-                <label>Type</label><select id="t"><option value="Withdraw">Withdraw (+)</option><option value="Deposit">Deposit (-)</option></select>
-                <label>Category</label><input id="c" value="Imprest">
-                <label>Amount</label><input id="a" type="number" placeholder="৳ 0.00">
-                <div class="quick-row">
-                    <button class="q-btn" onclick="document.getElementById('a').value=100">100</button>
-                    <button class="q-btn" onclick="document.getElementById('a').value=500">500</button>
-                    <button class="q-btn" onclick="document.getElementById('a').value=1000">1000</button>
-                </div>
-                <label>Reference</label><input id="n" placeholder="Advance / Voucher details">
-                <button class="submit-btn" onclick="postTX()">SUBMIT</button>
-            </div>`;
+    async function removeUser(name) {
+        if(confirm("Delete "+name+"?")) {
+            await fetch(API, {method:"POST", mode:"no-cors", body:JSON.stringify({action:"removeUser", name:name})});
+            sync();
+        }
     }
 
     function loadAddUserForm() {
         document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">Register User</span><span onclick="renderDash()" style="color:red;">Back</span></div>
+            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">REGISTER USER</span><span onclick="renderDash()" style="color:red;">Back</span></div>
             <div class="form-box">
-                <label>Full Name</label><input id="un">
-                <label>Designation</label><input id="ud">
-                <label>Email</label><input id="ue">
-                <label>Phone/Mobile</label><input id="up">
-                <label>Opening Receivable</label><input id="ub" type="number" placeholder="Enter Amount">
-                <div class="quick-row">
-                    <button class="q-btn" onclick="document.getElementById('ub').value=100">100</button>
-                    <button class="q-btn" onclick="document.getElementById('ub').value=500">500</button>
-                    <button class="q-btn" onclick="document.getElementById('ub').value=1000">1000</button>
-                </div>
-                <button class="submit-btn" style="background:#388e3c" onclick="submitUser()">SAVE USER</button>
+                <input id="un" placeholder="Full Name">
+                <input id="ud" placeholder="Designation">
+                <input id="up" placeholder="Phone/Mobile">
+                <input id="ub" type="number" placeholder="Opening Balance">
+                <div style="display:flex; margin-bottom:15px;"><button class="q-btn" onclick="document.getElementById('ub').value=100">100</button><button class="q-btn" onclick="document.getElementById('ub').value=500">500</button><button class="q-btn" onclick="document.getElementById('ub').value=1000">1000</button></div>
+                <button onclick="submitUser()" style="width:100%; padding:15px; background:green; color:white; border:none; border-radius:10px; font-weight:bold;">SAVE USER</button>
+            </div>`;
+    }
+
+    function loadAddForm() {
+        let opts = Object.keys(DATA.users).map(u => `<option value="${u}">${u} (${DATA.users[u].designation})</option>`).join('');
+        document.getElementById('main-content').innerHTML = `
+            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">TRANSACT</span><span onclick="renderDash()" style="color:red;">Back</span></div>
+            <div class="form-box">
+                <select id="p">${opts}</select>
+                <select id="t"><option value="Withdraw">Withdraw (+)</option><option value="Deposit">Deposit (-)</option></select>
+                <input id="a" type="number" placeholder="Amount ৳">
+                <input id="n" placeholder="Reference / Note">
+                <button onclick="postTX()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">SUBMIT</button>
             </div>`;
     }
 
     async function postTX() {
-        const p = { person:document.getElementById('p').value, type:document.getElementById('t').value, category:document.getElementById('c').value, amount:document.getElementById('a').value, note:document.getElementById('n').value };
-        await fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify(p) });
+        const p = { person:document.getElementById('p').value, type:document.getElementById('t').value, category:"General", amount:document.getElementById('a').value, note:document.getElementById('n').value };
+        await fetch(API, { method:"POST", mode:"no-cors", body:JSON.stringify(p) });
         sync();
     }
 
     async function submitUser() {
-        const u = { action:"addUser", name:document.getElementById('un').value, designation:document.getElementById('ud').value, email:document.getElementById('ue').value, phone:document.getElementById('up').value, balance:document.getElementById('ub').value };
-        await fetch(API, { method: "POST", mode: "no-cors", body: JSON.stringify(u) });
+        const u = { action:"addUser", name:document.getElementById('un').value, designation:document.getElementById('ud').value, email:"", phone:document.getElementById('up').value, balance:document.getElementById('ub').value };
+        await fetch(API, { method:"POST", mode:"no-cors", body:JSON.stringify(u) });
         sync();
     }
 
     function loadHistory() {
-        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">History</span><span onclick="renderDash()" style="color:red;">Back</span></div>`;
+        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">FULL HISTORY</span><span onclick="renderDash()" style="color:red;">Back</span></div>`;
         DATA.transactions.slice().reverse().forEach(t => {
             h += `<div class="tx-card">
                 <div class="user-initial">${t.person.charAt(0)}</div>
-                <div class="user-details"><b>${t.person}</b><small>${t.date.split('T')[0]}</small></div>
-                <b style="color:${t.type=='Withdraw'?'red':'green'}">৳${t.amount}</b>
+                <div class="center-meta"><b>${t.person}</b><span>${t.date.split('T')[0]} • ${t.note}</span></div>
+                <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">৳${t.amount}</div>
             </div>`;
         });
         document.getElementById('main-content').innerHTML = h;
