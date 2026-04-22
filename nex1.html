@@ -50,7 +50,12 @@
 <div id="login-screen">
     <div style="font-size:30px; color:var(--g4s-red); margin-bottom:20px; font-weight:bold;">G4SPay Wallet</div>
     <div class="form-box" style="width:80%;">
-        <input type="password" id="app-pass" placeholder="Enter Access Password" style="text-align:center;">
+        <input type="password" 
+               id="app-pass" 
+               inputmode="numeric" 
+               pattern="[0-9]*" 
+               placeholder="Enter Numeric Passcode" 
+               style="text-align:center; font-size: 20px; letter-spacing: 4px;">
         <button onclick="login()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">ENTER WALLET</button>
     </div>
 </div>
@@ -86,7 +91,6 @@
 </div>
 
 <script>
-    // UPDATED LINK
     const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
     
     let DATA = {transactions:[], users:{}, centralBalance:0};
