@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Wallet Simple</title>
+<title>Enterprise Wallet</title>
 
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#0b1220;
+  background:#0a0f1c;
   color:white;
 }
 
@@ -16,114 +16,200 @@ body{
   padding:15px;
   text-align:center;
   background:#111827;
+  font-size:20px;
   font-weight:bold;
+}
+
+/* TOP CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:10px;
 }
 
 .card{
-  margin:10px;
-  padding:12px;
   background:#111827;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
 }
 
-input,select,button{
+/* NAV */
+.nav{
+  display:flex;
+}
+
+.nav button{
+  flex:1;
+  padding:10px;
+  background:#1f2937;
+  color:white;
+  border:none;
+}
+
+/* CONTENT */
+.section{
+  padding:12px;
+}
+
+/* INPUT */
+input,select{
   width:100%;
   padding:10px;
   margin:5px 0;
-  border:none;
-  border-radius:8px;
 }
 
+/* BUTTON */
 button{
+  width:100%;
+  padding:12px;
   background:#22c55e;
   color:white;
-  font-weight:bold;
+  border:none;
+  border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">💰 Wallet System</div>
+<div class="header">🏦 Enterprise Wallet System</div>
 
-<!-- BALANCE -->
-<div class="card">
-  <h3>Balance</h3>
-  <h2 id="balance">0</h2>
+<div class="grid">
+  <div class="card">Balance: <span id="bal">0</span></div>
+  <div class="card">Users: <span id="users">0</span></div>
 </div>
 
-<!-- RECENT -->
-<div class="card">
-  <h3>Recent Transactions</h3>
-  <div id="recent"></div>
+<div class="nav">
+  <button onclick="loadDash()">Dashboard</button>
+  <button onclick="loadAdd()">Add</button>
+  <button onclick="loadTx()">Transactions</button>
 </div>
 
-<!-- ADD -->
-<div class="card">
+<div class="section" id="view"></div>
+
+<script>
+
+const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
+
+let DATA = {transactions:[],users:{}};
+let currentView = "dash";
+
+/* ======================
+   LIVE AUTO REFRESH
+====================== */
+function loadData(){
+
+  fetch(API)
+  .then(r=>r.json())
+  .then(res=>{
+
+    DATA = res;
+
+    let bal = 0;
+
+    if(res.transactions.length > 0){
+      bal = res.transactions[res.transactions.length - 1].balance;
+    }
+
+    document.getElementById("bal").innerText = bal;
+    document.getElementById("users").innerText = Object.keys(res.users).length;
+
+    if(currentView === "dash") loadDash();
+    if(currentView === "tx") loadTx();
+
+  });
+
+}
+
+/* AUTO REFRESH EVERY 4s */
+setInterval(loadData, 4000);
+loadData();
+
+/* ======================
+   DASHBOARD
+====================== */
+function loadDash(){
+  currentView = "dash";
+
+  let users = DATA.users;
+  let html = "<h3>Users Summary</h3>";
+
+  for(let u in users){
+    html += `
+    <div class="card">
+      <b>${u}</b><br>
+      Income: ${users[u].income || 0}<br>
+      Expense: ${users[u].expense || 0}<br>
+      Balance: ${users[u].balance || 0}
+    </div>`;
+  }
+
+  view.innerHTML = html;
+}
+
+/* ======================
+   ADD PAGE
+====================== */
+function loadAdd(){
+  currentView = "add";
+
+  view.innerHTML = `
   <h3>Add Transaction</h3>
 
-  <select id="person"></select>
-
-  <select id="type">
+  <input id="p" placeholder="Person">
+  <select id="t">
     <option>Income</option>
     <option>Expense</option>
   </select>
 
-  <input id="amount" type="number" placeholder="Amount">
-  <input id="category" placeholder="Category">
-  <input id="note" placeholder="Note">
+  <input id="c" placeholder="Category">
+  <input id="a" type="number" placeholder="Amount">
+  <input id="n" placeholder="Note">
 
-  <button onclick="send()">Save</button>
-</div>
+  <button onclick="send()">Submit</button>
+  `;
+}
 
-<script>
+/* ======================
+   TRANSACTIONS
+====================== */
+function loadTx(){
+  currentView = "tx";
 
-const API = "YOUR_APPS_SCRIPT_URL";
+  let html = "<h3>All Transactions</h3>";
 
-let DATA = [];
-
-fetch(API)
-.then(r=>r.json())
-.then(d=>{
-
-  DATA = d.transactions;
-
-  let bal = 0;
-  let html = "";
-
-  let last = DATA.slice(-2);
-
-  last.forEach(t=>{
-    html += `<div>${t.person} | ${t.amount} | ${t.type}</div>`;
-    bal = t.balance;
+  DATA.transactions.slice().reverse().forEach(t=>{
+    html += `
+    <div class="card">
+      <b>${t.person}</b> | ${t.type} | ${t.amount}<br>
+      <small>${t.category || ""} ${t.note || ""}</small>
+    </div>`;
   });
 
-  document.getElementById("balance").innerText = bal;
-  document.getElementById("recent").innerHTML = html;
+  view.innerHTML = html;
+}
 
-  let users = [...new Set(DATA.map(x=>x.person))];
-
-  document.getElementById("person").innerHTML =
-    users.map(u=>`<option>${u}</option>`).join("");
-
-});
-
-// SEND DATA
+/* ======================
+   SEND DATA
+====================== */
 function send(){
 
   fetch(API,{
     method:"POST",
     mode:"no-cors",
     body:JSON.stringify({
-      person:person.value,
-      type:type.value,
-      amount:amount.value,
-      category:category.value,
-      note:note.value
+      person:p.value,
+      type:t.value,
+      category:c.value,
+      amount:a.value,
+      note:n.value
     })
   });
 
-  alert("Transaction saved ✔");
+  alert("Saved ✔");
+
+  setTimeout(loadData, 1500);
 }
 
 </script>
