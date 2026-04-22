@@ -12,6 +12,7 @@ body{
   color:white;
 }
 
+/* HEADER */
 .header{
   padding:15px;
   text-align:center;
@@ -29,9 +30,19 @@ body{
 }
 
 .card{
-  background:#111827;
-  padding:12px;
-  border-radius:12px;
+  padding:15px;
+  border-radius:16px;
+  color:white;
+  box-shadow:0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* COLORFUL CARDS */
+.balanceCard{
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+}
+
+.userCard{
+  background:linear-gradient(135deg,#8b5cf6,#ec4899);
 }
 
 /* NAV */
@@ -41,10 +52,11 @@ body{
 
 .nav button{
   flex:1;
-  padding:10px;
+  padding:12px;
   background:#1f2937;
   color:white;
   border:none;
+  font-weight:bold;
 }
 
 /* CONTENT */
@@ -56,17 +68,38 @@ body{
 input,select{
   width:100%;
   padding:10px;
-  margin:5px 0;
+  margin:6px 0;
+  border-radius:10px;
+  border:none;
 }
 
 /* BUTTON */
 button{
   width:100%;
   padding:12px;
-  background:#22c55e;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
   color:white;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
+  font-weight:bold;
+}
+
+/* TRANSACTION CARDS */
+.txCard{
+  background:#111827;
+  padding:12px;
+  margin:10px 0;
+  border-radius:14px;
+  border-left:5px solid #22c55e;
+}
+
+.txExpense{
+  border-left-color:#ef4444;
+}
+
+.small{
+  font-size:12px;
+  opacity:0.7;
 }
 </style>
 </head>
@@ -76,14 +109,21 @@ button{
 <div class="header">🏦 Enterprise Wallet System</div>
 
 <div class="grid">
-  <div class="card">Balance: <span id="bal">0</span></div>
-  <div class="card">Users: <span id="users">0</span></div>
+  <div class="card balanceCard">
+    <div>💰 Balance</div>
+    <div style="font-size:22px;font-weight:bold" id="bal">0</div>
+  </div>
+
+  <div class="card userCard">
+    <div>👥 Users</div>
+    <div style="font-size:22px;font-weight:bold" id="users">0</div>
+  </div>
 </div>
 
 <div class="nav">
-  <button onclick="loadDash()">Dashboard</button>
-  <button onclick="loadAdd()">Add</button>
-  <button onclick="loadTx()">Transactions</button>
+  <button onclick="loadDash()">🏠 Dashboard</button>
+  <button onclick="loadAdd()">➕ Add</button>
+  <button onclick="loadTx()">📄 Transactions</button>
 </div>
 
 <div class="section" id="view"></div>
@@ -95,11 +135,8 @@ const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpi
 let DATA = {transactions:[],users:{}};
 let currentView = "dash";
 
-/* ======================
-   LIVE AUTO REFRESH
-====================== */
+/* AUTO REFRESH */
 function loadData(){
-
   fetch(API)
   .then(r=>r.json())
   .then(res=>{
@@ -119,43 +156,37 @@ function loadData(){
     if(currentView === "tx") loadTx();
 
   });
-
 }
 
-/* AUTO REFRESH EVERY 4s */
 setInterval(loadData, 4000);
 loadData();
 
-/* ======================
-   DASHBOARD
-====================== */
+/* DASHBOARD */
 function loadDash(){
   currentView = "dash";
 
   let users = DATA.users;
-  let html = "<h3>Users Summary</h3>";
+  let html = "<h3>📊 Users Summary</h3>";
 
   for(let u in users){
     html += `
-    <div class="card">
+    <div class="card" style="background:linear-gradient(135deg,#1f2937,#374151)">
       <b>${u}</b><br>
-      Income: ${users[u].income || 0}<br>
-      Expense: ${users[u].expense || 0}<br>
-      Balance: ${users[u].balance || 0}
+      💵 Income: ${users[u].income || 0}<br>
+      💸 Expense: ${users[u].expense || 0}<br>
+      💰 Balance: ${users[u].balance || 0}
     </div>`;
   }
 
   view.innerHTML = html;
 }
 
-/* ======================
-   ADD PAGE
-====================== */
+/* ADD */
 function loadAdd(){
   currentView = "add";
 
   view.innerHTML = `
-  <h3>Add Transaction</h3>
+  <h3>➕ Add Transaction</h3>
 
   <input id="p" placeholder="Person">
   <select id="t">
@@ -167,34 +198,34 @@ function loadAdd(){
   <input id="a" type="number" placeholder="Amount">
   <input id="n" placeholder="Note">
 
-  <button onclick="send()">Submit</button>
+  <button onclick="send()">Save Transaction</button>
   `;
 }
 
-/* ======================
-   TRANSACTIONS
-====================== */
+/* TRANSACTIONS */
 function loadTx(){
   currentView = "tx";
 
-  let html = "<h3>All Transactions</h3>";
+  let html = "<h3>📄 Transactions</h3>";
 
   DATA.transactions.slice().reverse().forEach(t=>{
+
+    let cls = t.type === "Expense" ? "txCard txExpense" : "txCard";
+
     html += `
-    <div class="card">
-      <b>${t.person}</b> | ${t.type} | ${t.amount}<br>
-      <small>${t.category || ""} ${t.note || ""}</small>
-    </div>`;
+    <div class="${cls}">
+      <b>${t.person}</b> • ${t.type}<br>
+      <div style="font-size:18px;font-weight:bold">${t.amount}</div>
+      <div class="small">${t.category || ""} ${t.note || ""}</div>
+    </div>
+    `;
   });
 
   view.innerHTML = html;
 }
 
-/* ======================
-   SEND DATA
-====================== */
+/* SEND */
 function send(){
-
   fetch(API,{
     method:"POST",
     mode:"no-cors",
@@ -208,8 +239,7 @@ function send(){
   });
 
   alert("Saved ✔");
-
-  setTimeout(loadData, 1500);
+  setTimeout(loadData,1500);
 }
 
 </script>
