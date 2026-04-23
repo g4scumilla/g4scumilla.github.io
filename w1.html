@@ -1,0 +1,38 @@
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 1. YOUR FIREBASE CONFIG (Ensure these match your Firebase project)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCgRtUxdvUww0LOfGcKr43l0HI9rOY-Gpg",
+            authDomain: "my-wallet-920a6.firebaseapp.com",
+            projectId: "my-wallet-920a6",
+            storageBucket: "my-wallet-920a6.firebasestorage.app",
+            messagingSenderId: "414624520334",
+            appId: "1:414624520334:web:c36fa879d7e28808f691df"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 2. YOUR PHONE NUMBER (Make sure this matches the Document ID)
+        const userRef = doc(db, "users", "017XXXXXXXX");
+
+        onSnapshot(userRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                // MATCHING YOUR EXACT CASE-SENSITIVE FIELDS
+                // We use data.Balance (Capital B) and data.Name (Capital N)
+                document.getElementById("balanceDisplay").innerText = Number(data.Balance).toLocaleString();
+                document.getElementById("nameDisplay").innerText = data.Name;
+                
+                console.log("Success! Data loaded for:", data.Name);
+            } else {
+                console.log("Error: Could not find that phone number in Firebase.");
+            }
+        }, (error) => {
+            console.error("Firebase Error:", error.message);
+        });
+    </script>
+
