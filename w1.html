@@ -218,7 +218,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, where, getDocs, addDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, where, getDocs, addDoc, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCgRtUxdvUww0LOfGcKr43l0HI9rOY-Gpg",
@@ -290,8 +290,9 @@
                 list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">Account Statement</p>`;
                 sn.forEach(d => {
                     const t = d.data();
+                    const dStr = t.Timestamp ? new Date(t.Timestamp.seconds * 1000).toLocaleString() : "Just now";
                     list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2">
-                        <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${t.Date}</p></div>
+                        <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${dStr}</p></div>
                         <p class="font-bold ${t.Amount.toString().includes('-')?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
                 });
             });
@@ -376,8 +377,7 @@
                 User: targetId, 
                 Title: `System ${type}`, 
                 Amount: (type === 'MINT' ? "+" : "-") + amt, 
-                Date: "Auth By Admin", 
-                Timestamp: new Date() 
+                Timestamp: serverTimestamp() 
             });
             
             alert(`Assets ${type === 'MINT' ? 'Forged' : 'Burned'}`);
@@ -392,13 +392,13 @@
             const s = await getDoc(doc(db, "users", p));
             if(s.data().Balance < amt) return alert("Not enough fund");
             await updateDoc(doc(db, "users", p), { Balance: s.data().Balance - amt });
-            await addDoc(collection(db, "cashout_requests"), { User: p, UserName: s.data().Name, Amount: amt, Method: document.getElementById('coMethod').value, AccountNumber: document.getElementById('coNum').value, Status: "Pending", Timestamp: new Date() });
+            await addDoc(collection(db, "cashout_requests"), { User: p, UserName: s.data().Name, Amount: amt, Method: document.getElementById('coMethod').value, AccountNumber: document.getElementById('coNum').value, Status: "Pending", Timestamp: serverTimestamp() });
             alert("Request Sent"); closeModals();
         };
 
         window.clearPayout = async (id, p, a, m) => {
             await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" });
-            await addDoc(collection(db, "transactions"), { User: p, Title: `Payout (${m})`, Amount: `-${a}`, Date: "Today", Timestamp: new Date() });
+            await addDoc(collection(db, "transactions"), { User: p, Title: `Payout (${m})`, Amount: `-${a}`, Timestamp: serverTimestamp() });
         };
 
         window.executeTransfer = async () => {
@@ -412,8 +412,8 @@
             if(sDoc.data().Balance < amt) return alert("Not enough fund");
             await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
-            await addDoc(collection(db, "transactions"), { User: myP, Title: "To: "+uid, Amount: "-"+amt, Timestamp: new Date(), Date: "Now" });
-            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "Received Assets", Amount: "+"+amt, Timestamp: new Date(), Date: "Now" });
+            await addDoc(collection(db, "transactions"), { User: myP, Title: "To: "+uid, Amount: "-"+amt, Timestamp: serverTimestamp() });
+            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "Received Assets", Amount: "+"+amt, Timestamp: serverTimestamp() });
             alert("Transfer Complete"); closeModals();
         };
     </script>
