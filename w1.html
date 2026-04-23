@@ -64,7 +64,7 @@
             </div>
             <div>
                 <p class="text-[9px] uppercase opacity-50 tracking-[0.3em] mb-1">Total Assets</p>
-                <div class="text-4xl font-bold">৳<span id="dBal">0</span></div>
+                <div class="text-4xl font-bold">$<span id="dBal">0</span></div>
             </div>
             <div class="flex justify-between items-end">
                 <div>
@@ -82,7 +82,7 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="glass-panel p-4 rounded-[1.5rem] text-center">
                     <p class="text-[8px] opacity-40 uppercase mb-1">Circulation</p>
-                    <p class="text-lg font-bold text-blue-400">৳<span id="totalCirc">0</span></p>
+                    <p class="text-lg font-bold text-blue-400">$<span id="totalCirc">0</span></p>
                 </div>
                 <div class="glass-panel p-4 rounded-[1.5rem] text-center">
                     <p class="text-[8px] opacity-40 uppercase mb-1">Users</p>
@@ -93,7 +93,7 @@
             <div class="glass-panel p-6 rounded-[2rem]">
                 <p class="text-[9px] uppercase opacity-40 mb-4 tracking-widest font-bold">Currency Forge</p>
                 <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase mb-2">
-                <input id="forgeAmt" type="number" placeholder="৳ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
+                <input id="forgeAmt" type="number" placeholder="$ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
                 <div class="flex gap-2">
                     <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
                     <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
@@ -122,7 +122,7 @@
                 <div class="space-y-3">
                     <div class="flex gap-2">
                         <select id="coMethod" class="flex-1 text-xs"><option>bKash</option><option>Nagad</option><option>Rocket</option></select>
-                        <input id="coAmt" type="number" placeholder="৳" class="w-24 nexus-input p-3 rounded-xl text-xs">
+                        <input id="coAmt" type="number" placeholder="$" class="w-24 nexus-input p-3 rounded-xl text-xs">
                     </div>
                     <input id="coNum" type="tel" placeholder="Wallet Number" class="w-full nexus-input p-3 rounded-xl text-xs">
                     <button onclick="submitCashout()" class="w-full bg-orange-600/20 text-orange-500 border border-orange-500/30 font-bold py-3 rounded-xl text-[10px] uppercase">Submit Request</button>
@@ -133,7 +133,7 @@
                 <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4 text-blue-400">P2P Transfer</p>
                 <div class="flex gap-2">
                     <input id="sendTo" type="text" placeholder="UID" class="flex-1 nexus-input p-3 rounded-xl text-xs uppercase">
-                    <input id="sendAmt" type="number" placeholder="৳" class="w-20 nexus-input p-3 rounded-xl text-xs">
+                    <input id="sendAmt" type="number" placeholder="$" class="w-20 nexus-input p-3 rounded-xl text-xs">
                     <button onclick="executeTransfer()" class="bg-blue-600 px-5 rounded-xl font-bold text-[10px]">SEND</button>
                 </div>
             </div>
@@ -212,7 +212,7 @@
                     const t = d.data();
                     list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between">
                         <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${t.Date}</p></div>
-                        <p class="font-bold ${t.Amount.includes('-')?'text-red-400':'text-green-400'}">${t.Amount} ৳</p></div>`;
+                        <p class="font-bold ${t.Amount.includes('-')?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
                 });
             });
         }
@@ -230,7 +230,7 @@
                 sn.forEach(dDoc => {
                     const r = dDoc.data();
                     list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between items-center mb-2">
-                        <div><p class="text-[10px] font-bold">${r.UserName} (${r.Method})</p><p class="text-[8px] text-yellow-500">${r.AccountNumber} • ৳${r.Amount}</p></div>
+                        <div><p class="text-[10px] font-bold">${r.UserName} (${r.Method})</p><p class="text-[8px] text-yellow-500">${r.AccountNumber} • $${r.Amount}</p></div>
                         <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="bg-green-600 px-4 py-2 rounded-xl text-[10px] font-bold">PAID</button>
                     </div>`;
                 });
