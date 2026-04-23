@@ -25,6 +25,7 @@
         .nexus-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; color: white; }
         .nexus-input:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
         select { background: #000; color: white; border-radius: 12px; padding: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .notice-glow { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%); }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
@@ -71,6 +72,19 @@
                     <p id="dName" class="text-lg font-medium leading-none mb-1"></p>
                     <p id="dUID" class="text-[9px] font-mono opacity-40 uppercase tracking-widest"></p>
                 </div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-5 rounded-[1.8rem] notice-glow">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
+                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Notice Board</p>
+            </div>
+            <p id="displayNotice" class="text-xs leading-relaxed opacity-80 italic">Loading protocol updates...</p>
+            
+            <div id="noticeAdmin" class="hidden mt-4 pt-3 border-t border-white/5">
+                <textarea id="noticeInput" placeholder="Write new broadcast message..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
+                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Update Notice</button>
             </div>
         </div>
 
@@ -194,9 +208,16 @@
         function startBank(phone) {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
+            
+            // Sync Notice Board for Everyone
+            onSnapshot(doc(db, "system_config", "broadcast"), d => {
+                if(d.exists()) document.getElementById('displayNotice').innerText = d.data().message;
+            });
+
             if(phone === MASTER_PHONE) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('userTools').classList.add('hidden');
+                document.getElementById('noticeAdmin').classList.remove('hidden');
                 initMaster();
             }
             onSnapshot(doc(db, "users", phone), s => {
@@ -216,6 +237,14 @@
                 });
             });
         }
+
+        window.updateNotice = async () => {
+            const msg = document.getElementById('noticeInput').value;
+            if(!msg) return;
+            await setDoc(doc(db, "system_config", "broadcast"), { message: msg });
+            document.getElementById('noticeInput').value = "";
+            alert("Broadcast Updated");
+        };
 
         function initMaster() {
             onSnapshot(doc(db, "system_config", "access_codes"), ds => { document.getElementById('liveOTP').innerText = ds.data().current_otp; });
