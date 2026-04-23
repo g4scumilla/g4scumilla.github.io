@@ -22,8 +22,9 @@
         .hidden { display: none; }
         .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-blur: 10px; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .nexus-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; }
+        .nexus-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; color: white; }
         .nexus-input:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+        select { background: #000; color: white; border-radius: 12px; padding: 8px; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
@@ -35,14 +36,14 @@
         </div>
         <div class="bg-gray-900/50 p-8 rounded-[2.5rem] w-full max-w-sm border border-white/5 backdrop-blur-xl">
             <div id="loginFields">
-                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4 text-white">
+                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4">
                 <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full nexus-input p-4 rounded-2xl mb-6 text-center tracking-[1em] font-bold">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Register Account</button>
             </div>
             <div id="signupFields" class="hidden space-y-4">
-                <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl text-white">
-                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl text-white">
+                <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl">
+                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl">
                 <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
                 <div class="pt-4 border-t border-white/10">
                     <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Enter Access Key</p>
@@ -74,11 +75,9 @@
         </div>
 
         <div id="adminPanel" class="hidden space-y-4">
-            <div class="flex items-center justify-between px-2">
-                <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
-                </h3>
-            </div>
+            <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 px-2">
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
+            </h3>
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="glass-panel p-4 rounded-[1.5rem] text-center">
@@ -93,13 +92,11 @@
 
             <div class="glass-panel p-6 rounded-[2rem]">
                 <p class="text-[9px] uppercase opacity-40 mb-4 tracking-widest font-bold">Currency Forge</p>
-                <div class="space-y-3">
-                    <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase">
-                    <input id="forgeAmt" type="number" placeholder="৳ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs">
-                    <div class="flex gap-2">
-                        <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
-                        <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
-                    </div>
+                <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase mb-2">
+                <input id="forgeAmt" type="number" placeholder="৳ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
+                <div class="flex gap-2">
+                    <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
+                    <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
                 </div>
             </div>
 
@@ -108,20 +105,36 @@
                     <p class="text-[8px] opacity-40 uppercase tracking-widest mb-1">Access Key</p>
                     <p id="liveOTP" class="font-mono text-yellow-500 font-black text-2xl tracking-[0.2em]">------</p>
                 </div>
-                <button onclick="generateNewOTP()" class="bg-white/10 p-4 rounded-2xl active:scale-90 transition border border-white/5">
+                <button onclick="generateNewOTP()" class="bg-white/10 p-4 rounded-2xl border border-white/5">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                 </button>
             </div>
-            <div id="pendingPayouts" class="space-y-2"></div>
+
+            <div class="px-2">
+                <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest font-bold">Payout Queue</p>
+                <div id="pendingPayouts" class="space-y-2"></div>
+            </div>
         </div>
 
         <div id="userTools" class="space-y-4">
             <div class="glass-panel p-6 rounded-[2rem]">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Transmission</p>
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Payout Request</p>
+                <div class="space-y-3">
+                    <div class="flex gap-2">
+                        <select id="coMethod" class="flex-1 text-xs"><option>bKash</option><option>Nagad</option><option>Rocket</option></select>
+                        <input id="coAmt" type="number" placeholder="৳" class="w-24 nexus-input p-3 rounded-xl text-xs">
+                    </div>
+                    <input id="coNum" type="tel" placeholder="Wallet Number" class="w-full nexus-input p-3 rounded-xl text-xs">
+                    <button onclick="submitCashout()" class="w-full bg-orange-600/20 text-orange-500 border border-orange-500/30 font-bold py-3 rounded-xl text-[10px] uppercase">Submit Request</button>
+                </div>
+            </div>
+            
+            <div class="glass-panel p-6 rounded-[2rem]">
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4 text-blue-400">P2P Transfer</p>
                 <div class="flex gap-2">
-                    <input id="sendTo" type="text" placeholder="UID" class="flex-1 nexus-input p-4 rounded-2xl text-xs uppercase">
-                    <input id="sendAmt" type="number" placeholder="৳" class="w-24 nexus-input p-4 rounded-2xl text-xs">
-                    <button onclick="executeTransfer()" class="bg-blue-600 px-6 rounded-2xl font-bold active:scale-95 transition">Send</button>
+                    <input id="sendTo" type="text" placeholder="UID" class="flex-1 nexus-input p-3 rounded-xl text-xs uppercase">
+                    <input id="sendAmt" type="number" placeholder="৳" class="w-20 nexus-input p-3 rounded-xl text-xs">
+                    <button onclick="executeTransfer()" class="bg-blue-600 px-5 rounded-xl font-bold text-[10px]">SEND</button>
                 </div>
             </div>
         </div>
@@ -158,33 +171,24 @@
             document.getElementById('signupFields').classList.toggle('hidden', isLogin);
         };
 
-        window.handleLogout = () => {
-            if(confirm("Terminate current session?")) {
-                location.reload();
-            }
-        };
+        window.handleLogout = () => { if(confirm("Terminate session?")) location.reload(); };
 
         window.handleLogin = async () => {
             const p = document.getElementById('lPhone').value;
             const pin = document.getElementById('lPass').value;
             const s = await getDoc(doc(db, "users", p));
             if(s.exists() && s.data().Password == pin) startBank(p);
-            else alert("Authentication Failed");
+            else alert("Credentials Fail");
         };
 
         window.handleSignup = async () => {
             const otp = document.getElementById('sOTP').value;
             const conf = await getDoc(doc(db, "system_config", "access_codes"));
-            if(otp !== conf.data().current_otp) return alert("Invalid Key");
+            if(otp !== conf.data().current_otp) return alert("Key Fail");
             const p = document.getElementById('sPhone').value;
             const myUID = `NEX-${Math.floor(1000+Math.random()*8999)}-${p.slice(-4)}`;
-            await setDoc(doc(db, "users", p), { 
-                Name: document.getElementById('sName').value, 
-                Password: document.getElementById('sPass').value, 
-                UID: myUID.toUpperCase(), Balance: 0 
-            });
-            alert("Protocol Initialized!");
-            location.reload();
+            await setDoc(doc(db, "users", p), { Name: document.getElementById('sName').value, Password: document.getElementById('sPass').value, UID: myUID.toUpperCase(), Balance: 0 });
+            alert("Success!"); location.reload();
         };
 
         function startBank(phone) {
@@ -203,7 +207,7 @@
             });
             onSnapshot(query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc")), sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">Recent Activity</p>`;
+                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">History</p>`;
                 sn.forEach(d => {
                     const t = d.data();
                     list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between">
@@ -214,13 +218,22 @@
         }
 
         function initMaster() {
-            onSnapshot(doc(db, "system_config", "access_codes"), ds => {
-                document.getElementById('liveOTP').innerText = ds.data().current_otp;
-            });
+            onSnapshot(doc(db, "system_config", "access_codes"), ds => { document.getElementById('liveOTP').innerText = ds.data().current_otp; });
             onSnapshot(collection(db, "users"), snap => {
                 let total = 0; snap.forEach(d => total += (d.data().Balance || 0));
                 document.getElementById('totalCirc').innerText = total.toLocaleString();
                 document.getElementById('totalUsers').innerText = snap.size;
+            });
+            onSnapshot(query(collection(db, "cashout_requests"), where("Status", "==", "Pending")), sn => {
+                const list = document.getElementById('pendingPayouts');
+                list.innerHTML = "";
+                sn.forEach(dDoc => {
+                    const r = dDoc.data();
+                    list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between items-center mb-2">
+                        <div><p class="text-[10px] font-bold">${r.UserName} (${r.Method})</p><p class="text-[8px] text-yellow-500">${r.AccountNumber} • ৳${r.Amount}</p></div>
+                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="bg-green-600 px-4 py-2 rounded-xl text-[10px] font-bold">PAID</button>
+                    </div>`;
+                });
             });
         }
 
@@ -234,12 +247,27 @@
             const amt = parseInt(document.getElementById('forgeAmt').value);
             const q = query(collection(db, "users"), where("UID", "==", uid));
             const s = await getDocs(q);
-            if(s.empty) return alert("UID Not Found");
+            if(s.empty) return alert("UID Fail");
             const uDoc = s.docs[0];
             const nb = type === 'MINT' ? (uDoc.data().Balance + amt) : (uDoc.data().Balance - amt);
             await updateDoc(doc(db, "users", uDoc.id), { Balance: nb });
-            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: `Central ${type}`, Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Today", Timestamp: new Date() });
-            alert("Forge Protocol Success");
+            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: `System ${type}`, Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Today", Timestamp: new Date() });
+            alert("Success");
+        };
+
+        window.submitCashout = async () => {
+            const p = document.getElementById('lPhone').value;
+            const amt = parseInt(document.getElementById('coAmt').value);
+            const s = await getDoc(doc(db, "users", p));
+            if(s.data().Balance < amt) return alert("Insufficient Balance");
+            await updateDoc(doc(db, "users", p), { Balance: s.data().Balance - amt });
+            await addDoc(collection(db, "cashout_requests"), { User: p, UserName: s.data().Name, Amount: amt, Method: document.getElementById('coMethod').value, AccountNumber: document.getElementById('coNum').value, Status: "Pending", Timestamp: new Date() });
+            alert("Request Sent");
+        };
+
+        window.clearPayout = async (id, p, a, m) => {
+            await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" });
+            await addDoc(collection(db, "transactions"), { User: p, Title: `Payout (${m})`, Amount: `-${a}`, Date: "Today", Timestamp: new Date() });
         };
 
         window.executeTransfer = async () => {
@@ -247,16 +275,15 @@
             const amt = parseInt(document.getElementById('sendAmt').value);
             const myP = document.getElementById('lPhone').value;
             const rSnap = await getDocs(query(collection(db, "users"), where("UID", "==", uid)));
-            if(rSnap.empty) return alert("Recipient Invalid");
+            if(rSnap.empty) return alert("UID Fail");
             const rDoc = rSnap.docs[0];
             const sDoc = await getDoc(doc(db, "users", myP));
-            if(sDoc.data().Balance < amt) return alert("Insufficient Liquidity");
+            if(sDoc.data().Balance < amt) return alert("Low Liquidity");
             await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
-            const ts = { Timestamp: new Date(), Date: "Now" };
-            await addDoc(collection(db, "transactions"), { ...ts, User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt });
-            await addDoc(collection(db, "transactions"), { ...ts, User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt });
-            alert("Transmission Complete");
+            await addDoc(collection(db, "transactions"), { User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt, Timestamp: new Date(), Date: "Now" });
+            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt, Timestamp: new Date(), Date: "Now" });
+            alert("Complete");
         };
     </script>
 </body>
