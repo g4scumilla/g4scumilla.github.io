@@ -8,13 +8,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
-        .bank-card { background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .bank-card::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 90%; background-image: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png'); background-size: contain; background-repeat: no-repeat; opacity: 0.1; filter: brightness(2); pointer-events: none; }
-        .hidden { display: none; }
         body { background-color: #0a0a0c; color: white; font-family: 'Inter', sans-serif; }
+        .bank-card { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%); 
+            position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .bank-card::before { 
+            content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 80%; height: 80%; background-image: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png'); 
+            background-size: contain; background-repeat: no-repeat; opacity: 0.08; filter: brightness(2); pointer-events: none; 
+        }
+        .hidden { display: none; }
+        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-blur: 10px; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .glass-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); outline: none; transition: all 0.3s; }
-        .glass-input:focus { border-color: #3b82f6; background: rgba(255,255,255,0.07); }
+        .nexus-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; }
+        .nexus-input:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
@@ -24,100 +33,107 @@
             <h1 class="text-6xl font-black italic tracking-tighter text-blue-500">NEX1</h1>
             <p class="text-[10px] uppercase tracking-[0.5em] opacity-40 mt-2">Central Protocol</p>
         </div>
-
         <div class="bg-gray-900/50 p-8 rounded-[2.5rem] w-full max-w-sm border border-white/5 backdrop-blur-xl">
             <div id="loginFields">
-                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full glass-input p-4 rounded-2xl mb-4 text-white">
-                <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full glass-input p-4 rounded-2xl mb-6 text-center tracking-[1em] font-bold">
+                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4 text-white">
+                <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full nexus-input p-4 rounded-2xl mb-6 text-center tracking-[1em] font-bold">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Register Account</button>
             </div>
-
             <div id="signupFields" class="hidden space-y-4">
-                <input id="sName" type="text" placeholder="Full Name" class="w-full glass-input p-4 rounded-2xl text-white">
-                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full glass-input p-4 rounded-2xl text-white">
-                <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set 6-Digit PIN" class="w-full glass-input p-4 rounded-2xl text-center">
-                <input id="sRefer" type="text" placeholder="Referral UID" class="w-full glass-input p-4 rounded-2xl uppercase" oninput="lookupReferrer()">
-                <p id="referNameDisplay" class="text-[10px] ml-2 text-blue-400 hidden"></p>
-                
+                <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl text-white">
+                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl text-white">
+                <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
                 <div class="pt-4 border-t border-white/10">
-                    <p class="text-[9px] uppercase opacity-40 mb-2 ml-2">6-Digit Access Key</p>
+                    <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Enter Access Key</p>
                     <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full bg-red-900/10 p-4 rounded-2xl border border-red-500/20 text-center font-mono tracking-[0.5em] text-red-400">
                 </div>
-                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Initialize Account</button>
+                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Create Account</button>
                 <button onclick="toggleAuth(true)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Back to Login</button>
             </div>
         </div>
     </div>
 
     <div id="mainDashboard" class="hidden max-w-sm mx-auto space-y-6">
-        <div class="flex justify-between items-center">
-            <h2 class="text-xl font-black italic tracking-tighter text-blue-500">NEX1</h2>
-            <button onclick="handleLogout()" class="text-[10px] font-bold uppercase opacity-40 hover:opacity-100 transition">Secure Exit</button>
+        
+        <div class="bank-card p-8 rounded-[2.5rem] shadow-2xl aspect-[1.6/1] flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <h2 class="text-2xl font-black italic tracking-tighter text-white">NEX1</h2>
+                <div class="w-12 h-9 bg-gradient-to-br from-yellow-200/40 to-yellow-600/40 rounded-lg border border-white/10"></div>
+            </div>
+            <div>
+                <p class="text-[9px] uppercase opacity-50 tracking-[0.3em] mb-1">Total Assets</p>
+                <div class="text-4xl font-bold">৳<span id="dBal">0</span></div>
+            </div>
+            <div class="flex justify-between items-end">
+                <div>
+                    <p id="dName" class="text-lg font-medium leading-none mb-1"></p>
+                    <p id="dUID" class="text-[9px] font-mono opacity-40 uppercase tracking-widest"></p>
+                </div>
+            </div>
         </div>
 
-        <div id="adminPanel" class="hidden bg-red-600/10 border border-red-500/30 p-6 rounded-[2.5rem]">
-            <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest mb-5 flex items-center gap-2">
-                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
-            </h3>
-            
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <div class="bg-black/40 p-4 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[8px] opacity-50 uppercase mb-1">Circulation</p>
+        <div id="adminPanel" class="hidden space-y-4">
+            <div class="flex items-center justify-between px-2">
+                <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-panel p-4 rounded-[1.5rem] text-center">
+                    <p class="text-[8px] opacity-40 uppercase mb-1">Circulation</p>
                     <p class="text-lg font-bold text-blue-400">৳<span id="totalCirc">0</span></p>
                 </div>
-                <div class="bg-black/40 p-4 rounded-2xl border border-white/5 text-center">
-                    <p class="text-[8px] opacity-50 uppercase mb-1">Users</p>
+                <div class="glass-panel p-4 rounded-[1.5rem] text-center">
+                    <p class="text-[8px] opacity-40 uppercase mb-1">Users</p>
                     <p class="text-lg font-bold text-purple-400" id="totalUsers">0</p>
                 </div>
             </div>
 
-            <div class="bg-black/60 p-5 rounded-2xl border border-red-500/20 mb-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-[8px] opacity-40 uppercase tracking-widest mb-1">Live Access Key</p>
-                        <p id="liveOTP" class="font-mono text-yellow-500 font-black text-2xl tracking-[0.2em]">------</p>
-                    </div>
-                    <button onclick="generateNewOTP()" class="bg-red-600 p-3 rounded-xl active:scale-90 transition">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                    </button>
-                </div>
-                <p class="text-[7px] opacity-30 mt-3 italic uppercase text-center">Refreshing generates a new 6-digit registration key</p>
-            </div>
-
-            <div class="space-y-4">
-                <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <p class="text-[8px] uppercase opacity-50 mb-3 tracking-widest">Target Forge</p>
-                    <input id="forgeUID" type="text" placeholder="UID" class="w-full bg-black p-3 rounded-xl text-[10px] mb-2 uppercase border border-white/5">
-                    <input id="forgeAmt" type="number" placeholder="Amount" class="w-full bg-black p-3 rounded-xl text-[10px] mb-3 border border-white/5">
+            <div class="glass-panel p-6 rounded-[2rem]">
+                <p class="text-[9px] uppercase opacity-40 mb-4 tracking-widest font-bold">Currency Forge</p>
+                <div class="space-y-3">
+                    <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase">
+                    <input id="forgeAmt" type="number" placeholder="৳ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs">
                     <div class="flex gap-2">
-                        <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-bold uppercase">Mint</button>
-                        <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-bold uppercase">Burn</button>
+                        <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
+                        <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
                     </div>
                 </div>
-                <div id="pendingPayouts" class="space-y-2"></div>
             </div>
-        </div>
 
-        <div class="bank-card p-8 rounded-[2.5rem] shadow-2xl aspect-[1.6/1] flex flex-col justify-between">
-            <div class="flex justify-between items-start"><h2 class="text-2xl font-black italic tracking-tighter">NEX1</h2><div class="w-12 h-9 bg-yellow-500/50 rounded-lg"></div></div>
-            <div><p class="text-[9px] uppercase opacity-50 mb-1">Assets</p><div class="text-4xl font-bold">৳<span id="dBal">0</span></div></div>
-            <div class="flex justify-between items-end">
-                <div><p id="dName" class="text-lg font-medium leading-none mb-1"></p><p id="dUID" class="text-[9px] font-mono opacity-40 uppercase"></p></div>
+            <div class="glass-panel p-5 rounded-[2rem] flex items-center justify-between">
+                <div>
+                    <p class="text-[8px] opacity-40 uppercase tracking-widest mb-1">Access Key</p>
+                    <p id="liveOTP" class="font-mono text-yellow-500 font-black text-2xl tracking-[0.2em]">------</p>
+                </div>
+                <button onclick="generateNewOTP()" class="bg-white/10 p-4 rounded-2xl active:scale-90 transition border border-white/5">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
             </div>
+            <div id="pendingPayouts" class="space-y-2"></div>
         </div>
 
         <div id="userTools" class="space-y-4">
-            <div class="bg-gray-900/40 p-6 rounded-[2.5rem] border border-white/5">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Transfer</p>
+            <div class="glass-panel p-6 rounded-[2rem]">
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Transmission</p>
                 <div class="flex gap-2">
-                    <input id="sendTo" type="text" placeholder="UID" class="flex-1 bg-black p-4 rounded-2xl text-xs uppercase border border-white/5">
-                    <input id="sendAmt" type="number" placeholder="৳" class="w-24 bg-black p-4 rounded-2xl text-xs border border-white/5">
+                    <input id="sendTo" type="text" placeholder="UID" class="flex-1 nexus-input p-4 rounded-2xl text-xs uppercase">
+                    <input id="sendAmt" type="number" placeholder="৳" class="w-24 nexus-input p-4 rounded-2xl text-xs">
                     <button onclick="executeTransfer()" class="bg-blue-600 px-6 rounded-2xl font-bold active:scale-95 transition">Send</button>
                 </div>
             </div>
-            <div id="txList" class="space-y-3 pb-12"></div>
         </div>
+
+        <div class="flex justify-center pt-4">
+            <button onclick="handleLogout()" class="flex items-center gap-2 px-6 py-3 bg-red-600/10 border border-red-500/20 rounded-full text-red-500 text-[10px] font-black uppercase tracking-widest active:scale-95 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Secure Exit
+            </button>
+        </div>
+
+        <div id="txList" class="space-y-3 pb-12"></div>
     </div>
 
     <script type="module">
@@ -142,28 +158,32 @@
             document.getElementById('signupFields').classList.toggle('hidden', isLogin);
         };
 
+        window.handleLogout = () => {
+            if(confirm("Terminate current session?")) {
+                location.reload();
+            }
+        };
+
         window.handleLogin = async () => {
             const p = document.getElementById('lPhone').value;
             const pin = document.getElementById('lPass').value;
             const s = await getDoc(doc(db, "users", p));
             if(s.exists() && s.data().Password == pin) startBank(p);
-            else alert("Error in Credentials");
+            else alert("Authentication Failed");
         };
 
         window.handleSignup = async () => {
             const otp = document.getElementById('sOTP').value;
             const conf = await getDoc(doc(db, "system_config", "access_codes"));
-            if(otp !== conf.data().current_otp) return alert("Access Denied: Invalid Key");
-            
-            const phone = document.getElementById('sPhone').value;
-            const myUID = `NEX-${Math.floor(1000+Math.random()*8999)}-${phone.slice(-4)}`;
-            await setDoc(doc(db, "users", phone), { 
+            if(otp !== conf.data().current_otp) return alert("Invalid Key");
+            const p = document.getElementById('sPhone').value;
+            const myUID = `NEX-${Math.floor(1000+Math.random()*8999)}-${p.slice(-4)}`;
+            await setDoc(doc(db, "users", p), { 
                 Name: document.getElementById('sName').value, 
                 Password: document.getElementById('sPass').value, 
-                UID: myUID.toUpperCase(), 
-                Balance: 0 
+                UID: myUID.toUpperCase(), Balance: 0 
             });
-            alert("Account Protocol Activated!");
+            alert("Protocol Initialized!");
             location.reload();
         };
 
@@ -183,10 +203,10 @@
             });
             onSnapshot(query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc")), sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = "";
+                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">Recent Activity</p>`;
                 sn.forEach(d => {
                     const t = d.data();
-                    list.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl flex justify-between border border-white/5">
+                    list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between">
                         <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${t.Date}</p></div>
                         <p class="font-bold ${t.Amount.includes('-')?'text-red-400':'text-green-400'}">${t.Amount} ৳</p></div>`;
                 });
@@ -194,7 +214,6 @@
         }
 
         function initMaster() {
-            // Real-time Access Code monitoring
             onSnapshot(doc(db, "system_config", "access_codes"), ds => {
                 document.getElementById('liveOTP').innerText = ds.data().current_otp;
             });
@@ -215,7 +234,7 @@
             const amt = parseInt(document.getElementById('forgeAmt').value);
             const q = query(collection(db, "users"), where("UID", "==", uid));
             const s = await getDocs(q);
-            if(s.empty) return alert("UID Fail");
+            if(s.empty) return alert("UID Not Found");
             const uDoc = s.docs[0];
             const nb = type === 'MINT' ? (uDoc.data().Balance + amt) : (uDoc.data().Balance - amt);
             await updateDoc(doc(db, "users", uDoc.id), { Balance: nb });
@@ -228,15 +247,15 @@
             const amt = parseInt(document.getElementById('sendAmt').value);
             const myP = document.getElementById('lPhone').value;
             const rSnap = await getDocs(query(collection(db, "users"), where("UID", "==", uid)));
-            if(rSnap.empty) return alert("Target Fail");
+            if(rSnap.empty) return alert("Recipient Invalid");
             const rDoc = rSnap.docs[0];
             const sDoc = await getDoc(doc(db, "users", myP));
-            if(sDoc.data().Balance < amt) return alert("Low Liquidity");
+            if(sDoc.data().Balance < amt) return alert("Insufficient Liquidity");
             await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
             const ts = { Timestamp: new Date(), Date: "Now" };
-            await addDoc(collection(db, "transactions"), { ...ts, User: myP, Title: "Sent To: "+rDoc.data().Name, Amount: "-"+amt });
-            await addDoc(collection(db, "transactions"), { ...ts, User: rDoc.id, Title: "Received From: "+sDoc.data().Name, Amount: "+"+amt });
+            await addDoc(collection(db, "transactions"), { ...ts, User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt });
+            await addDoc(collection(db, "transactions"), { ...ts, User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt });
             alert("Transmission Complete");
         };
     </script>
