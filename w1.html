@@ -96,15 +96,15 @@
         </div>
         <div class="glass-panel p-8 w-full max-w-sm">
             <div id="loginFields">
-                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4">
+                <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4 text-center font-bold tracking-widest">
                 <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full nexus-input p-4 rounded-2xl mb-6 text-center tracking-[1em] font-bold">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Register Account</button>
             </div>
             <div id="signupFields" class="hidden space-y-4">
-                <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl">
-                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl">
-                <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
+                <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl text-center">
+                <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl text-center font-bold tracking-widest">
+                <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center font-bold tracking-[1em]">
                 <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Create Account</button>
                 <button onclick="toggleAuth(true)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Back to Login</button>
             </div>
