@@ -26,6 +26,14 @@
         .nexus-input:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
         select { background: #000; color: white; border-radius: 12px; padding: 8px; border: 1px solid rgba(255,255,255,0.1); }
         .notice-glow { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%); }
+        
+        /* Floating Text Animation */
+        .scrolling-container { overflow: hidden; white-space: nowrap; width: 100%; }
+        .scrolling-text { display: inline-block; animation: scroll-left 15s linear infinite; }
+        @keyframes scroll-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
@@ -78,13 +86,15 @@
         <div class="glass-panel p-5 rounded-[1.8rem] notice-glow">
             <div class="flex items-center gap-2 mb-2">
                 <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Notice Board</p>
+                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Live Broadcast</p>
             </div>
-            <p id="displayNotice" class="text-xs leading-relaxed opacity-80 italic">Loading protocol updates...</p>
+            <div class="scrolling-container">
+                <p id="displayNotice" class="scrolling-text text-xs leading-relaxed font-medium">Synchronizing with server...</p>
+            </div>
             
             <div id="noticeAdmin" class="hidden mt-4 pt-3 border-t border-white/5">
-                <textarea id="noticeInput" placeholder="Write new broadcast message..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
-                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Update Notice</button>
+                <textarea id="noticeInput" placeholder="New broadcast text..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
+                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Broadcast Message</button>
             </div>
         </div>
 
@@ -209,7 +219,6 @@
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
             
-            // Sync Notice Board for Everyone
             onSnapshot(doc(db, "system_config", "broadcast"), d => {
                 if(d.exists()) document.getElementById('displayNotice').innerText = d.data().message;
             });
