@@ -157,13 +157,15 @@
             </div>
             <div class="glass-panel p-6">
                 <p class="text-[9px] uppercase opacity-40 mb-4 tracking-widest font-bold">Currency Forge</p>
-                <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase mb-2">
+                <input id="forgeInput" type="text" placeholder="UID or Phone Number" oninput="lookupForgeUser()" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase mb-2">
+                <div id="forgeTargetName" class="text-[10px] text-blue-400 font-bold mb-2 ml-2 h-4"></div>
                 <input id="forgeAmt" type="number" placeholder="Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
                 <div class="flex gap-2">
                     <button onclick="handleForge('MINT')" class="flex-1 bg-green-600/20 text-green-400 border border-green-500/20 py-3 rounded-xl text-[10px] font-black uppercase">Mint</button>
                     <button onclick="handleForge('BURN')" class="flex-1 bg-red-600/20 text-red-400 border border-red-500/20 py-3 rounded-xl text-[10px] font-black uppercase">Burn</button>
                 </div>
             </div>
+            <p class="text-[9px] uppercase opacity-30 font-bold ml-2">Queue</p>
             <div id="pendingPayouts" class="space-y-2"></div>
         </div>
 
@@ -209,7 +211,7 @@
             <button onclick="submitCashout()" class="w-full bg-orange-600 py-3 rounded-xl font-bold text-xs uppercase">Submit Request</button>
         </div>
 
-        <div id="statementSection" class="pt-4 min-h-[50vh]">
+        <div id="statementSection" class="pt-4 min-h-[40vh]">
             <div id="txList" class="space-y-3 pb-24"></div>
         </div>
     </div>
@@ -236,9 +238,7 @@
 
         window.scrollToStatement = () => {
             const el = document.getElementById('statementSection');
-            if(el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         window.toggleAuth = (isLogin) => {
@@ -292,7 +292,7 @@
                     const t = d.data();
                     list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2">
                         <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${t.Date}</p></div>
-                        <p class="font-bold ${t.Amount.includes('-')?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
+                        <p class="font-bold ${t.Amount.toString().includes('-')?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
                 });
             });
         }
@@ -324,17 +324,66 @@
             });
         }
 
+        window.lookupForgeUser = async () => {
+            const val = document.getElementById('forgeInput').value.trim();
+            const display = document.getElementById('forgeTargetName');
+            if(val.length < 5) { display.innerText = ""; return; }
+
+            let userDoc = null;
+            if(val.toUpperCase().startsWith("NEX-")) {
+                const q = query(collection(db, "users"), where("UID", "==", val.toUpperCase()));
+                const snap = await getDocs(q);
+                if(!snap.empty) userDoc = snap.docs[0].data();
+            } else {
+                const snap = await getDoc(doc(db, "users", val));
+                if(snap.exists()) userDoc = snap.data();
+            }
+
+            display.innerText = userDoc ? `Verified: ${userDoc.Name}` : "User not found";
+        };
+
         window.handleForge = async (type) => {
-            const uid = document.getElementById('forgeUID').value.toUpperCase().trim();
+            const val = document.getElementById('forgeInput').value.trim();
             const amt = parseInt(document.getElementById('forgeAmt').value);
-            const q = query(collection(db, "users"), where("UID", "==", uid));
-            const s = await getDocs(q);
-            if(s.empty) return alert("UID Fail");
-            const uDoc = s.docs[0];
-            const nb = type === 'MINT' ? (uDoc.data().Balance + amt) : (uDoc.data().Balance - amt);
-            await updateDoc(doc(db, "users", uDoc.id), { Balance: nb });
-            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: `System ${type}`, Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Now", Timestamp: new Date() });
-            alert("Assets Modified");
+            
+            if(!val || isNaN(amt)) return alert("Invalid Input");
+
+            let targetId = null;
+            let targetData = null;
+
+            if(val.toUpperCase().startsWith("NEX-")) {
+                const q = query(collection(db, "users"), where("UID", "==", val.toUpperCase()));
+                const snap = await getDocs(q);
+                if(!snap.empty) {
+                    targetId = snap.docs[0].id;
+                    targetData = snap.docs[0].data();
+                }
+            } else {
+                const snap = await getDoc(doc(db, "users", val));
+                if(snap.exists()) {
+                    targetId = snap.id;
+                    targetData = snap.data();
+                }
+            }
+            
+            if(!targetId) return alert("User Not Found");
+            
+            const currentBal = targetData.Balance || 0;
+            const newBal = type === 'MINT' ? (currentBal + amt) : (currentBal - amt);
+            
+            await updateDoc(doc(db, "users", targetId), { Balance: newBal });
+            await addDoc(collection(db, "transactions"), { 
+                User: targetId, 
+                Title: `System ${type}`, 
+                Amount: (type === 'MINT' ? "+" : "-") + amt, 
+                Date: "Auth By Admin", 
+                Timestamp: new Date() 
+            });
+            
+            alert(`Assets ${type === 'MINT' ? 'Forged' : 'Burned'}`);
+            document.getElementById('forgeAmt').value = "";
+            document.getElementById('forgeInput').value = "";
+            document.getElementById('forgeTargetName').innerText = "";
         };
 
         window.submitCashout = async () => {
