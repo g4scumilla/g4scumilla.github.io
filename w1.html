@@ -3,153 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nex1 - Nexus Style</title>
+    <title>Nex1 Central</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
-        :root { --nexus-red: #d32f2f; }
-        body { background-color: #f4f6f8; color: #333; font-family: 'Segoe UI', Roboto, sans-serif; }
-        .nexus-header { background: linear-gradient(180deg, #b71c1c 0%, #d32f2f 100%); color: white; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; }
-        .bank-card { background: linear-gradient(135deg, #121212 0%, #2c2c2c 100%); color: white; border-radius: 24px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .bank-card::after { content: ""; position: absolute; top: 15px; right: 20px; width: 50px; height: 50px; background: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png') no-repeat center; background-size: contain; opacity: 0.1; }
+        body { background-color: #f3f4f6; color: #1f2937; }
+        .nexus-red { background: linear-gradient(180deg, #b91c1c 0%, #dc2626 100%); }
+        .bank-card { background: linear-gradient(135deg, #111827 0%, #374151 100%); color: white; border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .bank-card::after { content: ""; position: absolute; top: 10px; right: 15px; width: 50px; height: 50px; background: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png') no-repeat center; background-size: contain; opacity: 0.1; }
         .hidden { display: none; }
-        .nexus-input { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; width: 100%; font-size: 14px; }
-        .nexus-input:focus { border-color: var(--nexus-red); outline: none; box-shadow: 0 0 0 2px rgba(211,47,47,0.1); }
-        .menu-item { background: white; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 11px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        input, select { border: 1px solid #d1d5db; padding: 12px; border-radius: 12px; width: 100%; outline: none; }
+        input:focus { border-color: #dc2626; }
     </style>
 </head>
 <body class="pb-10">
 
     <div id="authSection" class="min-h-screen">
-        <div class="nexus-header pt-16 pb-12 text-center mb-8 shadow-xl">
-            <h1 class="text-5xl font-black italic tracking-tighter">NEX1</h1>
-            <p class="text-[10px] uppercase tracking-[0.4em] opacity-70 font-bold mt-2">Premium Digital Banking</p>
+        <div class="nexus-red pt-12 pb-10 text-center mb-6 shadow-lg rounded-b-[40px]">
+            <h1 class="text-5xl font-black italic tracking-tighter text-white">NEX1</h1>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-white/70 font-bold">Secure Banking</p>
         </div>
 
         <div class="px-6 max-w-md mx-auto">
-            <div id="loginFields" class="space-y-6">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl space-y-4">
-                    <input id="lPhone" type="tel" placeholder="Mobile Number" class="nexus-input">
-                    <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="nexus-input text-center tracking-[1em] font-bold">
-                    <button onclick="handleLogin()" class="w-full bg-[#d32f2f] text-white font-bold py-4 rounded-xl shadow-lg shadow-red-200 active:scale-95 transition">Secure Login</button>
+            <div id="loginFields" class="space-y-4">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <input id="lPhone" type="tel" placeholder="Mobile Number" class="mb-4">
+                    <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="6-Digit PIN" style="-webkit-text-security: disc;" class="text-center font-bold tracking-[0.5em] mb-6">
+                    <button onclick="handleLogin()" class="w-full bg-red-600 text-white font-bold py-4 rounded-xl shadow-md active:scale-95 transition">Login</button>
                 </div>
                 <div class="flex justify-between px-2 text-[11px] font-bold text-gray-500 uppercase">
-                    <button onclick="showForgot()" class="hover:text-red-600">Forgot PIN?</button>
-                    <button onclick="toggleAuth(false)" class="text-red-600">Join Nex1</button>
+                    <button onclick="showForgot()">Forgot PIN?</button>
+                    <button onclick="toggleAuth(false)" class="text-red-600">Register</button>
                 </div>
             </div>
 
-            <div id="signupFields" class="hidden space-y-6 pb-12">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl space-y-4">
-                    <input id="sName" type="text" placeholder="Full Name" class="nexus-input">
-                    <input id="sEmail" type="email" placeholder="Email Address" class="nexus-input">
-                    
+            <div id="signupFields" class="hidden space-y-4 pb-12">
+                <div class="bg-white p-6 rounded-3xl shadow-sm space-y-3">
+                    <input id="sName" type="text" placeholder="Full Name">
+                    <input id="sEmail" type="email" placeholder="Email Address">
                     <div class="flex gap-2">
-                        <select id="sCountry" class="nexus-input w-28 text-xs">
+                        <select id="sCountry" class="w-28 text-xs">
                             <option value="+880">BD +880</option>
                             <option value="+91">IN +91</option>
-                            <option value="+971">UAE +971</option>
                         </select>
-                        <input id="sPhone" type="tel" placeholder="Mobile Number" class="nexus-input">
+                        <input id="sPhone" type="tel" placeholder="Mobile">
                     </div>
-
-                    <select id="sDistrict" class="nexus-input text-xs">
+                    <select id="sDistrict" class="text-xs">
                         <option value="">Select District</option>
                         <option>Bagerhat</option><option>Bandarban</option><option>Barguna</option><option>Barisal</option><option>Bhola</option><option>Bogra</option><option>Brahmanbaria</option><option>Chandpur</option><option>Chapainawabganj</option><option>Chittagong</option><option>Chuadanga</option><option>Cumilla</option><option>Cox's Bazar</option><option>Dhaka</option><option>Dinajpur</option><option>Faridpur</option><option>Feni</option><option>Gaibandha</option><option>Gazipur</option><option>Gopalganj</option><option>Habiganj</option><option>Jamalpur</option><option>Jessore</option><option>Jhalokathi</option><option>Jhenaidaha</option><option>Joypurhat</option><option>Khagrachhari</option><option>Khulna</option><option>Kishoreganj</option><option>Kurigram</option><option>Kushtia</option><option>Laksmipur</option><option>Lalmonirhat</option><option>Madaripur</option><option>Magura</option><option>Manikganj</option><option>Meherpur</option><option>Moulvibazar</option><option>Munshiganj</option><option>Mymensingh</option><option>Naogaon</option><option>Narail</option><option>Narayanganj</option><option>Natore</option><option>Nawabganj</option><option>Netrokona</option><option>Nilphamari</option><option>Noakhali</option><option>Norsingdi</option><option>Pabna</option><option>Panchgarh</option><option>Patuakhali</option><option>Pirojpur</option><option>Rajbari</option><option>Rajshahi</option><option>Rangamati</option><option>Rangpur</option><option>Satkhira</option><option>Shariatpur</option><option>Sherpur</option><option>Sirajganj</option><option>Sunamganj</option><option>Sylhet</option><option>Tangail</option><option>Thakurgaon</option>
                     </select>
-
                     <div class="grid grid-cols-2 gap-2">
-                        <input id="sPass1" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" style="-webkit-text-security: disc;" class="nexus-input text-center font-bold">
-                        <input id="sPass2" type="tel" inputmode="numeric" maxlength="6" placeholder="Confirm PIN" style="-webkit-text-security: disc;" class="nexus-input text-center font-bold">
+                        <input id="sPass1" type="tel" maxlength="6" inputmode="numeric" placeholder="Set PIN" style="-webkit-text-security: disc;" class="text-center font-bold">
+                        <input id="sPass2" type="tel" maxlength="6" inputmode="numeric" placeholder="Confirm" style="-webkit-text-security: disc;" class="text-center font-bold">
                     </div>
-
-                    <input id="sRefer" type="text" placeholder="Referral (Mobile or UID)" class="nexus-input uppercase text-xs" oninput="lookupReferrer()">
-                    <p id="referNameDisplay" class="text-[10px] ml-2 font-bold text-red-600 hidden"></p>
-
-                    <div class="pt-2">
-                        <p class="text-[9px] uppercase opacity-40 mb-2 font-bold ml-1">Admin Access Key</p>
-                        <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full p-4 rounded-xl bg-red-50 border-red-200 text-center font-mono tracking-[0.5em] text-red-600 font-bold">
+                    <input id="sRefer" type="text" placeholder="Referral (UID or Mobile)" class="text-xs uppercase" oninput="lookupReferrer()">
+                    <p id="referNameDisplay" class="text-[10px] ml-2 font-bold text-blue-600 hidden"></p>
+                    <div class="pt-2 border-t border-gray-100">
+                        <p class="text-[9px] font-bold text-gray-400 mb-1">Access Key</p>
+                        <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="bg-red-50 text-center font-mono tracking-widest text-red-600 font-bold border-red-200">
                     </div>
-                    
-                    <button onclick="handleSignup()" class="w-full bg-[#1b5e20] text-white font-bold py-4 rounded-xl shadow-lg mt-2">Initialize Account</button>
+                    <button onclick="handleSignup()" class="w-full bg-green-700 text-white font-bold py-4 rounded-xl mt-2">Create Account</button>
                 </div>
-                <button onclick="toggleAuth(true)" class="w-full text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">Back to Secure Login</button>
+                <button onclick="toggleAuth(true)" class="w-full text-center text-[10px] font-bold text-gray-400 uppercase">Back to Login</button>
             </div>
 
-            <div id="forgotFields" class="hidden space-y-6">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl text-center space-y-6">
-                    <p id="maskPhone" class="text-lg font-black text-gray-400 tracking-widest bg-gray-50 p-4 rounded-xl"></p>
-                    <input id="fEmail" type="email" placeholder="Registered Email Address" class="nexus-input">
-                    <button onclick="requestReset()" class="w-full bg-[#d32f2f] text-white font-bold py-4 rounded-xl">Verify & Request PIN Reset</button>
-                </div>
-                <button onclick="location.reload()" class="w-full text-center text-[10px] font-bold text-gray-400 uppercase">Back</button>
+            <div id="forgotFields" class="hidden bg-white p-8 rounded-3xl shadow-sm text-center space-y-4">
+                <p id="maskPhone" class="text-lg font-bold text-gray-400 tracking-widest"></p>
+                <input id="fEmail" type="email" placeholder="Registered Email" class="w-full">
+                <button onclick="alert('Verification sent to email')" class="w-full bg-red-600 text-white font-bold py-4 rounded-xl">Verify & Reset</button>
+                <button onclick="location.reload()" class="text-xs text-gray-400 font-bold uppercase">Cancel</button>
             </div>
         </div>
     </div>
 
     <div id="mainDashboard" class="hidden max-w-md mx-auto px-5">
-        <div class="flex justify-between items-center py-8">
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nexus-Pay Service</p>
-                <h2 id="dName" class="text-2xl font-black text-gray-800">---</h2>
-            </div>
-            <button onclick="handleLogout()" class="p-3 bg-white rounded-full shadow-md text-red-600">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <div class="flex justify-between items-center py-6">
+            <div><p class="text-[10px] font-bold text-gray-400 uppercase">NEX1 User</p><h2 id="dName" class="text-xl font-black text-gray-800">Loading...</h2></div>
+            <button onclick="handleLogout()" class="p-3 bg-white rounded-full shadow-sm text-red-600">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
             </button>
         </div>
 
-        <div class="bank-card p-8 aspect-[1.6/1] flex flex-col justify-between mb-8">
-            <div class="flex justify-between items-start">
-                <span class="text-2xl font-black italic">NEX1</span>
-                <div class="w-12 h-8 bg-yellow-600/30 rounded-lg border border-yellow-600/40 shadow-inner"></div>
+        <div class="bank-card p-6 aspect-[1.6/1] flex flex-col justify-between mb-8">
+            <div class="flex justify-between">
+                <span class="text-xl font-black italic">NEX1</span>
+                <div class="w-10 h-7 bg-yellow-500/20 rounded-md border border-yellow-500/20"></div>
             </div>
             <div>
-                <p class="text-[10px] opacity-60 font-bold tracking-widest uppercase">Available Funds</p>
-                <h3 class="text-4xl font-black">৳<span id="dBal">0</span></h3>
+                <p class="text-[10px] opacity-60 font-bold tracking-widest uppercase">Asset Value</p>
+                <h3 class="text-3xl font-bold">৳<span id="dBal">0</span></h3>
             </div>
-            <p id="dUID" class="text-[10px] font-mono opacity-50 tracking-[0.3em] uppercase">UID: NEX-0000-0000</p>
+            <p id="dUID" class="text-[9px] font-mono opacity-50 tracking-widest uppercase">UID: NEX-0000-0000</p>
         </div>
 
-        <div id="adminPanel" class="hidden space-y-6">
-            <div class="grid grid-cols-3 gap-4">
-                <button onclick="toggleBox('forgeBox')" class="menu-item"><span class="text-2xl">⚡</span>FORGE</button>
-                <button onclick="toggleBox('payoutBox')" class="menu-item"><span class="text-2xl">🏧</span>PAYOUTS</button>
-                <button onclick="generatePDFReport()" class="menu-item"><span class="text-2xl">📑</span>AUDIT</button>
+        <div id="adminPanel" class="hidden space-y-4 mb-8">
+            <p class="text-[10px] font-black text-red-600 uppercase ml-1">Admin Control</p>
+            <div class="grid grid-cols-2 gap-3 bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">
+                <input id="forgeUID" type="text" placeholder="User UID" class="text-xs uppercase">
+                <input id="forgeAmt" type="number" placeholder="Amount" class="text-xs">
+                <button onclick="handleForge('MINT')" class="bg-green-600 text-white py-3 rounded-xl text-[10px] font-bold">MINT (+)</button>
+                <button onclick="handleForge('BURN')" class="bg-red-600 text-white py-3 rounded-xl text-[10px] font-bold">BURN (-)</button>
             </div>
-
-            <div id="forgeBox" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-[9px] font-black text-red-600 uppercase mb-4">Currency Management</p>
-                <input id="forgeUID" type="text" placeholder="Target UID" class="nexus-input mb-2 uppercase">
-                <input id="forgeAmt" type="number" placeholder="৳ Amount" class="nexus-input mb-4">
-                <div class="flex gap-2">
-                    <button onclick="handleForge('MINT')" class="flex-1 bg-green-700 text-white py-3 rounded-xl font-bold text-xs">MINT (+)</button>
-                    <button onclick="handleForge('BURN')" class="flex-1 bg-red-700 text-white py-3 rounded-xl font-bold text-xs">BURN (-)</button>
-                </div>
+            <div class="flex gap-2">
+                <input id="reportDate" type="date" class="bg-white p-3 rounded-xl text-xs flex-1">
+                <button onclick="generatePDFReport()" class="bg-gray-800 text-white px-6 rounded-xl text-[10px] font-bold">AUDIT PDF</button>
             </div>
-            
-            <div id="payoutBox" class="hidden space-y-3"></div>
+            <div id="payoutSection" class="bg-white p-4 rounded-3xl border border-gray-100"><p class="text-[9px] font-bold text-gray-400 mb-3 uppercase">Pending Payouts</p><div id="pendingPayouts" class="space-y-2"></div></div>
         </div>
 
-        <div id="userTools" class="space-y-4">
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Transfer & Payments</p>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <p class="text-[9px] font-bold text-blue-600 uppercase mb-3">Send Money</p>
-                    <input id="sendTo" type="text" placeholder="Target UID" class="w-full text-xs p-3 bg-gray-50 rounded-xl mb-2">
-                    <input id="sendAmt" type="number" placeholder="Amount" class="w-full text-xs p-3 bg-gray-50 rounded-xl mb-3">
-                    <button onclick="executeTransfer()" class="w-full bg-blue-600 text-white py-3 rounded-xl text-xs font-bold shadow-md">Transfer</button>
-                </div>
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <p class="text-[9px] font-bold text-orange-600 uppercase mb-3">Cashout</p>
-                    <input id="coAmt" type="number" placeholder="Amount" class="w-full text-xs p-3 bg-gray-50 rounded-xl mb-2">
-                    <input id="coNum" type="tel" placeholder="Wallet No" class="w-full text-xs p-3 bg-gray-50 rounded-xl mb-3">
-                    <button onclick="submitCashout()" class="w-full bg-orange-600 text-white py-3 rounded-xl text-xs font-bold shadow-md">Withdraw</button>
-                </div>
+        <div id="userTools" class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-3xl shadow-sm">
+                <p class="text-[9px] font-bold text-blue-600 uppercase mb-3">Send</p>
+                <input id="sendTo" type="text" placeholder="UID" class="text-[10px] p-2 bg-gray-50 mb-2">
+                <input id="sendAmt" type="number" placeholder="৳" class="text-[10px] p-2 bg-gray-50 mb-3">
+                <button onclick="executeTransfer()" class="w-full bg-blue-600 text-white py-2 rounded-lg text-[10px] font-bold">Transfer</button>
+            </div>
+            <div class="bg-white p-5 rounded-3xl shadow-sm">
+                <p class="text-[9px] font-bold text-orange-600 uppercase mb-3">Cashout</p>
+                <input id="coAmt" type="number" placeholder="৳" class="text-[10px] p-2 bg-gray-50 mb-2">
+                <input id="coNum" type="tel" placeholder="Number" class="text-[10px] p-2 bg-gray-50 mb-3">
+                <button onclick="submitCashout()" class="w-full bg-orange-600 text-white py-2 rounded-lg text-[10px] font-bold">Request</button>
             </div>
         </div>
 
-        <div id="txList" class="mt-10 space-y-3 pb-24"></div>
+        <div id="txList" class="space-y-3 pb-24"></div>
     </div>
 
     <script type="module">
@@ -176,50 +154,46 @@
 
         window.showForgot = () => {
             const p = document.getElementById('lPhone').value;
-            if(p.length < 10) return alert("Enter mobile first");
-            document.getElementById('maskPhone').innerText = `+880${p.slice(1,4)}****${p.slice(-3)}`;
+            if(p.length < 10) return alert("Enter number");
+            document.getElementById('maskPhone').innerText = `+88${p.slice(0,5)}****${p.slice(-2)}`;
             document.getElementById('loginFields').classList.add('hidden');
             document.getElementById('forgotFields').classList.remove('hidden');
         };
-
-        window.toggleBox = (id) => document.getElementById(id).classList.toggle('hidden');
 
         window.handleLogin = async () => {
             const p = document.getElementById('lPhone').value;
             const pin = document.getElementById('lPass').value;
             const s = await getDoc(doc(db, "users", p));
             if(s.exists() && s.data().Password == pin) startBank(p);
-            else alert("Credentials Failed");
+            else alert("Error: Wrong PIN/Mobile");
         };
 
         window.lookupReferrer = async () => {
             const val = document.getElementById('sRefer').value.trim();
-            const disp = document.getElementById('referNameDisplay');
-            if(val.length < 5) return disp.classList.add('hidden');
-            let q = query(collection(db, "users"), where("UID", "==", val.toUpperCase()));
-            let s = await getDocs(q);
-            if(s.empty) {
-                const d = await getDoc(doc(db, "users", val.replace(/\D/g,'')));
-                if(d.exists()) { disp.innerText = "✓ Found: "+d.data().Name; disp.classList.remove('hidden'); }
-            } else { disp.innerText = "✓ Found: "+s.docs[0].data().Name; disp.classList.remove('hidden'); }
+            if(val.length < 5) return;
+            const q = query(collection(db, "users"), where("UID", "==", val.toUpperCase()));
+            const s = await getDocs(q);
+            if(!s.empty) {
+                document.getElementById('referNameDisplay').innerText = "✓ Found: " + s.docs[0].data().Name;
+                document.getElementById('referNameDisplay').classList.remove('hidden');
+            }
         };
 
         window.handleSignup = async () => {
             const p1 = document.getElementById('sPass1').value;
             const p2 = document.getElementById('sPass2').value;
-            const email = document.getElementById('sEmail').value;
             const phone = document.getElementById('sPhone').value;
             const otp = document.getElementById('sOTP').value;
-            if(p1 !== p2) return alert("PIN Mismatch");
+            if(p1 !== p2) return alert("PINs do not match");
             const conf = await getDoc(doc(db, "system_config", "access_codes"));
-            if(otp !== conf.data().current_otp) return alert("Access Key Denied");
+            if(otp !== conf.data().current_otp) return alert("Wrong Access Key");
 
             const uid = `NEX-${Math.floor(1000+Math.random()*8999)}-${phone.slice(-4)}`;
             await setDoc(doc(db, "users", phone), { 
-                Name: document.getElementById('sName').value, Email: email, Password: p1,
-                District: document.getElementById('sDistrict').value, UID: uid.toUpperCase(), Balance: 0
+                Name: document.getElementById('sName').value, Email: document.getElementById('sEmail').value,
+                Password: p1, District: document.getElementById('sDistrict').value, UID: uid.toUpperCase(), Balance: 0
             });
-            alert("Success! UID: " + uid);
+            alert("Account Protocol Activated! UID: " + uid);
             location.reload();
         };
 
@@ -239,18 +213,89 @@
             });
             onSnapshot(query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc")), sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = `<p class="text-[9px] font-black uppercase text-gray-400 ml-1">Digital Ledger</p>`;
+                list.innerHTML = `<p class="text-[9px] font-bold text-gray-400 uppercase">Transaction History</p>`;
                 sn.forEach(d => {
                     const t = d.data();
-                    list.innerHTML += `<div class="bg-white p-5 rounded-2xl flex justify-between shadow-sm border border-gray-100">
-                        <div><p class="text-xs font-bold text-gray-700">${t.Title}</p><p class="text-[8px] text-gray-400 uppercase">${t.Date}</p></div>
-                        <p class="font-black ${t.Amount.includes('-')?'text-red-500':'text-green-600'}">${t.Amount} ৳</p></div>`;
+                    list.innerHTML += `<div class="bg-white p-4 rounded-2xl flex justify-between shadow-sm border border-gray-50">
+                        <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] text-gray-400 uppercase">${t.Date}</p></div>
+                        <p class="font-bold ${t.Amount.includes('-')?'text-red-500':'text-green-600'}">${t.Amount} ৳</p></div>`;
                 });
             });
         }
-        
-        window.handleLogout = () => confirm("Close vault?") && location.reload();
-        // (Remaining functions like handleForge, executeTransfer, etc follow the same logic as previous build)
+
+        function initMaster() {
+            onSnapshot(query(collection(db, "cashout_requests"), where("Status", "==", "Pending")), sn => {
+                const list = document.getElementById('pendingPayouts');
+                list.innerHTML = sn.empty ? "<p class='text-[10px] text-gray-300'>No pending requests.</p>" : "";
+                sn.forEach(dDoc => {
+                    const r = dDoc.data();
+                    list.innerHTML += `<div class="p-3 bg-gray-50 rounded-xl flex justify-between items-center">
+                        <div class="text-[9px]"><b>${r.UserName}</b><br>${r.Amount}৳ - ${r.AccountNumber}</div>
+                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount})" class="bg-green-600 text-white px-3 py-1 rounded text-[8px] font-bold">PAID</button>
+                    </div>`;
+                });
+            });
+        }
+
+        window.handleForge = async (type) => {
+            const uid = document.getElementById('forgeUID').value.toUpperCase();
+            const amt = parseInt(document.getElementById('forgeAmt').value);
+            const q = query(collection(db, "users"), where("UID", "==", uid));
+            const s = await getDocs(q);
+            if(s.empty) return alert("UID Not Found");
+            const u = s.docs[0];
+            const current = u.data().Balance || 0;
+            const nb = type === 'MINT' ? current + amt : current - amt;
+            await updateDoc(doc(db, "users", u.id), { Balance: nb });
+            await addDoc(collection(db, "transactions"), { User: u.id, Title: `Central ${type}`, Amount: (type=='MINT'?'+':'-')+amt, Date: "Today", Timestamp: new Date() });
+            alert("Forge Successful");
+        };
+
+        window.clearPayout = async (id, p, a) => {
+            await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" });
+            await addDoc(collection(db, "transactions"), { User: p, Title: "Payout Cleared", Amount: "-"+a, Date: "Today", Timestamp: new Date() });
+        };
+
+        window.generatePDFReport = async () => {
+            const date = document.getElementById('reportDate').value;
+            if(!date) return alert("Select Date");
+            const s = await getDocs(query(collection(db, "cashout_requests"), where("Date", "==", date)));
+            const { jsPDF } = window.jspdf;
+            const docP = new jsPDF();
+            docP.text("Audit Report: " + date, 14, 20);
+            const rows = []; s.forEach(x => { const v = x.data(); rows.push([v.UserName, v.Amount, v.AccountNumber, v.Status]); });
+            docP.autoTable({ startY: 30, head: [['Name', 'Amount', 'Number', 'Status']], body: rows });
+            docP.save(`Audit_${date}.pdf`);
+        };
+
+        window.executeTransfer = async () => {
+            const uid = document.getElementById('sendTo').value.toUpperCase().trim();
+            const amt = parseInt(document.getElementById('sendAmt').value);
+            const myP = document.getElementById('lPhone').value;
+            const rSnap = await getDocs(query(collection(db, "users"), where("UID", "==", uid)));
+            if(rSnap.empty) return alert("Recipient not found");
+            const rDoc = rSnap.docs[0];
+            const sDoc = await getDoc(doc(db, "users", myP));
+            if(sDoc.data().Balance < amt) return alert("Insufficient Balance");
+            await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
+            await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
+            await addDoc(collection(db, "transactions"), { Timestamp: new Date(), Date: "Now", User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt });
+            await addDoc(collection(db, "transactions"), { Timestamp: new Date(), Date: "Now", User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt });
+            alert("Sent!");
+        };
+
+        window.submitCashout = async () => {
+            const p = document.getElementById('lPhone').value;
+            const amt = parseInt(document.getElementById('coAmt').value);
+            const num = document.getElementById('coNum').value;
+            const s = await getDoc(doc(db, "users", p));
+            if(s.data().Balance < amt) return alert("Low Balance");
+            await updateDoc(doc(db, "users", p), { Balance: s.data().Balance - amt });
+            await addDoc(collection(db, "cashout_requests"), { User: p, UserName: s.data().Name, Amount: amt, AccountNumber: num, Status: "Pending", Date: new Date().toISOString().split('T')[0], Timestamp: new Date() });
+            alert("Requested!");
+        };
+
+        window.handleLogout = () => location.reload();
     </script>
 </body>
 </html>
