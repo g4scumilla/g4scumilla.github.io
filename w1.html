@@ -5,58 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXGEN CRYPTO Central Bank</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
-        body { background-color: #0a0a0c; color: white; font-family: 'Inter', sans-serif; }
-        .bank-card { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%); 
-            position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body { 
+            background-color: #050508; 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
         }
+
+        /* Attractive Animated Background */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #1e3a8a 0%, #050508 60%);
+            z-index: -1;
+        }
+
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .bank-card { 
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); 
+            position: relative; overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
         .bank-card::before { 
             content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
             width: 80%; height: 80%; background-image: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png'); 
-            background-size: contain; background-repeat: no-repeat; opacity: 0.08; filter: brightness(2); pointer-events: none; 
+            background-size: contain; background-repeat: no-repeat; opacity: 0.1; filter: brightness(2); pointer-events: none; 
         }
+
         .hidden { display: none; }
-        .glass-panel { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-blur: 10px; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .nexus-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); outline: none; transition: 0.3s; color: white; }
-        .nexus-input:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
-        select { background: #000; color: white; border-radius: 12px; padding: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        .notice-glow { border-left: 3px solid #3b82f6; background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%); }
         
-        /* Floating Text Animation */
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+        }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .nexus-input { 
+            background: rgba(0, 0, 0, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            outline: none; transition: 0.3s; color: white; 
+        }
+        .nexus-input:focus { 
+            border-color: #3b82f6; 
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); 
+        }
+
+        .notice-glow { 
+            border-left: 4px solid #3b82f6; 
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%); 
+        }
+        
         .scrolling-container { overflow: hidden; white-space: nowrap; width: 100%; }
         .scrolling-text { display: inline-block; animation: scroll-left 15s linear infinite; }
         @keyframes scroll-left {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            transition: all 0.3s;
+        }
+        .btn-gradient:active { transform: scale(0.95); opacity: 0.9; }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
 
+    <div class="bg-glow"></div>
+    <div class="orb bg-blue-600 top-0 left-0"></div>
+    <div class="orb bg-purple-600 bottom-0 right-0" style="animation-delay: -10s;"></div>
+
     <div id="authSection" class="flex flex-col items-center justify-center min-h-[90vh]">
         <div class="mb-10 text-center">
-            <h1 class="text-6xl font-black italic tracking-tighter text-blue-500 uppercase">NEXGEN CRYPTO</h1>
-            <p class="text-[10px] uppercase tracking-[0.5em] opacity-40 mt-2">Central Protocol</p>
+            <h1 class="text-6xl font-black italic tracking-tighter text-blue-500 uppercase drop-shadow-2xl">NEXGEN</h1>
+            <p class="text-[10px] uppercase tracking-[0.6em] opacity-50 mt-2">Central Protocol</p>
         </div>
-        <div class="bg-gray-900/50 p-8 rounded-[2.5rem] w-full max-sm border border-white/5 backdrop-blur-xl">
+        <div class="glass-panel p-8 w-full max-w-sm">
             <div id="loginFields">
                 <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4">
                 <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full nexus-input p-4 rounded-2xl mb-6 text-center tracking-[1em] font-bold">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition">Authorize Access</button>
+                <button onclick="handleLogin()" class="w-full btn-gradient font-bold py-4 rounded-2xl mb-4 shadow-lg shadow-blue-900/20">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Register Account</button>
             </div>
             <div id="signupFields" class="hidden space-y-4">
                 <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl">
                 <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl">
                 <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
-                <div class="pt-4 border-t border-white/10">
-                    <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Enter Access Key</p>
-                    <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full bg-red-900/10 p-4 rounded-2xl border border-red-500/20 text-center font-mono tracking-[0.5em] text-red-400">
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Access Key Required</p>
+                    <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full bg-blue-900/20 p-4 rounded-2xl border border-blue-500/30 text-center font-mono tracking-[0.5em] text-blue-400">
                 </div>
                 <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Create Account</button>
                 <button onclick="toggleAuth(true)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Back to Login</button>
@@ -66,93 +128,77 @@
 
     <div id="mainDashboard" class="hidden max-w-sm mx-auto space-y-6">
         
-        <div class="bank-card p-8 rounded-[2.5rem] shadow-2xl aspect-[1.6/1] flex flex-col justify-between">
+        <div class="bank-card p-8 rounded-[2.5rem] aspect-[1.6/1] flex flex-col justify-between">
             <div class="flex justify-between items-start">
                 <h2 class="text-2xl font-black italic tracking-tighter text-white">NEXGEN CRYPTO</h2>
-                <div class="w-12 h-9 bg-gradient-to-br from-yellow-200/40 to-yellow-600/40 rounded-lg border border-white/10"></div>
+                <div class="w-12 h-8 bg-white/10 rounded-lg backdrop-blur-md border border-white/20"></div>
             </div>
             <div>
-                <p class="text-[9px] uppercase opacity-50 tracking-[0.3em] mb-1">Total Assets</p>
-                <div class="text-4xl font-bold">$<span id="dBal">0</span></div>
+                <p class="text-[9px] uppercase opacity-60 tracking-[0.3em] mb-1">Total Assets</p>
+                <div class="text-4xl font-bold tracking-tight">$<span id="dBal">0</span></div>
             </div>
             <div class="flex justify-between items-end">
                 <div>
-                    <p id="dName" class="text-lg font-medium leading-none mb-1"></p>
-                    <p id="dUID" class="text-[9px] font-mono opacity-40 uppercase tracking-widest"></p>
+                    <p id="dName" class="text-lg font-semibold leading-none mb-1"></p>
+                    <p id="dUID" class="text-[9px] font-mono opacity-50 uppercase tracking-widest"></p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                    <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
                 </div>
             </div>
         </div>
 
-        <div class="glass-panel p-5 rounded-[1.8rem] notice-glow">
+        <div class="glass-panel p-5 notice-glow">
             <div class="flex items-center gap-2 mb-2">
                 <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Live Notice Board</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-400">Live Notice Board</p>
             </div>
             <div class="scrolling-container">
-                <p id="displayNotice" class="scrolling-text text-xs leading-relaxed font-medium">Synchronizing with server...</p>
+                <p id="displayNotice" class="scrolling-text text-xs leading-relaxed font-medium">Synchronizing protocol...</p>
             </div>
             <div id="noticeAdmin" class="hidden mt-4 pt-3 border-t border-white/5">
-                <textarea id="noticeInput" placeholder="New board text..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
-                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Update Board</button>
+                <textarea id="noticeInput" placeholder="Update message..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
+                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase">Update Board</button>
             </div>
         </div>
 
         <div id="adminPanel" class="hidden space-y-4">
-            <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 px-2">
-                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
-            </h3>
-
             <div class="grid grid-cols-2 gap-3">
-                <div class="glass-panel p-4 rounded-[1.5rem] text-center">
+                <div class="glass-panel p-4 text-center">
                     <p class="text-[8px] opacity-40 uppercase mb-1">Circulation</p>
                     <p class="text-lg font-bold text-blue-400">$<span id="totalCirc">0</span></p>
                 </div>
-                <div class="glass-panel p-4 rounded-[1.5rem] text-center">
-                    <p class="text-[8px] opacity-40 uppercase mb-1">Users</p>
+                <div class="glass-panel p-4 text-center">
+                    <p class="text-[8px] opacity-40 uppercase mb-1">Active Nodes</p>
                     <p class="text-lg font-bold text-purple-400" id="totalUsers">0</p>
                 </div>
             </div>
-
-            <div class="glass-panel p-6 rounded-[2rem]">
+            <div class="glass-panel p-6">
                 <p class="text-[9px] uppercase opacity-40 mb-4 tracking-widest font-bold">Currency Forge</p>
                 <input id="forgeUID" type="text" placeholder="Target UID" class="w-full nexus-input p-4 rounded-2xl text-xs uppercase mb-2">
-                <input id="forgeAmt" type="number" placeholder="$ Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
+                <input id="forgeAmt" type="number" placeholder="Amount" class="w-full nexus-input p-4 rounded-2xl text-xs mb-3">
                 <div class="flex gap-2">
-                    <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
-                    <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
+                    <button onclick="handleForge('MINT')" class="flex-1 bg-green-600/20 text-green-400 border border-green-500/20 py-3 rounded-xl text-[10px] font-black uppercase">Mint</button>
+                    <button onclick="handleForge('BURN')" class="flex-1 bg-red-600/20 text-red-400 border border-red-500/20 py-3 rounded-xl text-[10px] font-black uppercase">Burn</button>
                 </div>
             </div>
-
-            <div class="glass-panel p-5 rounded-[2rem] flex items-center justify-between">
-                <div>
-                    <p class="text-[8px] opacity-40 uppercase tracking-widest mb-1">Access Key</p>
-                    <p id="liveOTP" class="font-mono text-yellow-500 font-black text-2xl tracking-[0.2em]">------</p>
-                </div>
-                <button onclick="generateNewOTP()" class="bg-white/10 p-4 rounded-2xl border border-white/5">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                </button>
-            </div>
-
-            <div class="px-2">
-                <p class="text-[9px] uppercase opacity-40 mb-3 tracking-widest font-bold">Payout Queue</p>
-                <div id="pendingPayouts" class="space-y-2"></div>
-            </div>
+            <div id="pendingPayouts" class="space-y-2"></div>
         </div>
 
         <div id="userTools" class="space-y-4">
-            <div class="glass-panel p-6 rounded-[2rem]">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Payout Request</p>
+            <div class="glass-panel p-6">
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Payout Portal</p>
                 <div class="space-y-3">
                     <div class="flex gap-2">
-                        <select id="coMethod" class="flex-1 text-xs"><option>bKash</option><option>Nagad</option><option>Rocket</option></select>
-                        <input id="coAmt" type="number" placeholder="$" class="w-24 nexus-input p-3 rounded-xl text-xs">
+                        <select id="coMethod" class="flex-1 text-xs nexus-input px-3"><option>bKash</option><option>Nagad</option><option>Rocket</option></select>
+                        <input id="coAmt" type="number" placeholder="$ Amt" class="w-24 nexus-input p-3 rounded-xl text-xs">
                     </div>
-                    <input id="coNum" type="tel" placeholder="Wallet Number" class="w-full nexus-input p-3 rounded-xl text-xs">
-                    <button onclick="submitCashout()" class="w-full bg-orange-600/20 text-orange-500 border border-orange-500/30 font-bold py-3 rounded-xl text-[10px] uppercase">Submit Request</button>
+                    <input id="coNum" type="tel" placeholder="Account Number" class="w-full nexus-input p-3 rounded-xl text-xs">
+                    <button onclick="submitCashout()" class="w-full btn-gradient py-3 rounded-xl text-[10px] font-bold uppercase">Submit Payout</button>
                 </div>
             </div>
             
-            <div class="glass-panel p-6 rounded-[2rem]">
+            <div class="glass-panel p-6">
                 <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4 text-blue-400">P2P Transfer</p>
                 <div class="flex gap-2">
                     <input id="sendTo" type="text" placeholder="UID" class="flex-1 nexus-input p-3 rounded-xl text-xs uppercase">
@@ -163,8 +209,7 @@
         </div>
 
         <div class="flex justify-center pt-4">
-            <button onclick="handleLogout()" class="flex items-center gap-2 px-6 py-3 bg-red-600/10 border border-red-500/20 rounded-full text-red-500 text-[10px] font-black uppercase tracking-widest active:scale-95 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <button onclick="handleLogout()" class="px-8 py-3 bg-red-500/10 border border-red-500/20 rounded-full text-red-500 text-[10px] font-black uppercase tracking-[0.2em] transition">
                 Secure Exit
             </button>
         </div>
@@ -201,13 +246,13 @@
             const pin = document.getElementById('lPass').value;
             const s = await getDoc(doc(db, "users", p));
             if(s.exists() && s.data().Password == pin) startBank(p);
-            else alert("Credentials Fail");
+            else alert("Protocol Rejection: Invalid Credentials");
         };
 
         window.handleSignup = async () => {
             const otp = document.getElementById('sOTP').value;
             const conf = await getDoc(doc(db, "system_config", "access_codes"));
-            if(otp !== conf.data().current_otp) return alert("Key Fail");
+            if(otp !== conf.data().current_otp) return alert("Access Key Fail");
             const p = document.getElementById('sPhone').value;
             const myUID = `NEX-${Math.floor(1000+Math.random()*8999)}-${p.slice(-4)}`;
             await setDoc(doc(db, "users", p), { Name: document.getElementById('sName').value, Password: document.getElementById('sPass').value, UID: myUID.toUpperCase(), Balance: 0 });
@@ -236,10 +281,10 @@
             });
             onSnapshot(query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc")), sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">History</p>`;
+                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">History Log</p>`;
                 sn.forEach(d => {
                     const t = d.data();
-                    list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between">
+                    list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2">
                         <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40">${t.Date}</p></div>
                         <p class="font-bold ${t.Amount.includes('-')?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
                 });
@@ -251,11 +296,9 @@
             if(!msg) return;
             await setDoc(doc(db, "system_config", "broadcast"), { message: msg });
             document.getElementById('noticeInput').value = "";
-            alert("Board Updated");
         };
 
         function initMaster() {
-            onSnapshot(doc(db, "system_config", "access_codes"), ds => { document.getElementById('liveOTP').innerText = ds.data().current_otp; });
             onSnapshot(collection(db, "users"), snap => {
                 let total = 0; snap.forEach(d => total += (d.data().Balance || 0));
                 document.getElementById('totalCirc').innerText = total.toLocaleString();
@@ -266,18 +309,13 @@
                 list.innerHTML = "";
                 sn.forEach(dDoc => {
                     const r = dDoc.data();
-                    list.innerHTML += `<div class="glass-panel p-4 rounded-2xl flex justify-between items-center mb-2">
-                        <div><p class="text-[10px] font-bold">${r.UserName} (${r.Method})</p><p class="text-[8px] text-yellow-500">${r.AccountNumber} • $${r.Amount}</p></div>
-                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="bg-green-600 px-4 py-2 rounded-xl text-[10px] font-bold">PAID</button>
+                    list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2">
+                        <div><p class="text-[10px] font-bold">${r.UserName}</p><p class="text-[8px] text-yellow-500">${r.Method} • $${r.Amount}</p></div>
+                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="bg-blue-600 px-4 py-2 rounded-xl text-[10px] font-bold">SETTLE</button>
                     </div>`;
                 });
             });
         }
-
-        window.generateNewOTP = async () => {
-            const k = Math.floor(100000 + Math.random() * 900000).toString();
-            await updateDoc(doc(db, "system_config", "access_codes"), { current_otp: k });
-        };
 
         window.handleForge = async (type) => {
             const uid = document.getElementById('forgeUID').value.toUpperCase().trim();
@@ -288,7 +326,7 @@
             const uDoc = s.docs[0];
             const nb = type === 'MINT' ? (uDoc.data().Balance + amt) : (uDoc.data().Balance - amt);
             await updateDoc(doc(db, "users", uDoc.id), { Balance: nb });
-            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: `System ${type}`, Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Today", Timestamp: new Date() });
+            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: `System ${type}`, Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Now", Timestamp: new Date() });
             alert("Success");
         };
 
@@ -318,9 +356,9 @@
             if(sDoc.data().Balance < amt) return alert("Not enough fund");
             await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
-            await addDoc(collection(db, "transactions"), { User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt, Timestamp: new Date(), Date: "Now" });
-            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt, Timestamp: new Date(), Date: "Now" });
-            alert("Complete");
+            await addDoc(collection(db, "transactions"), { User: myP, Title: "To: "+uid, Amount: "-"+amt, Timestamp: new Date(), Date: "Now" });
+            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "From Node", Amount: "+"+amt, Timestamp: new Date(), Date: "Now" });
+            alert("Transfer Complete");
         };
     </script>
 </body>
