@@ -10,40 +10,41 @@
         * { -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: sans-serif; padding-top: 320px; padding-bottom: 80px; background: #fdfdfd; user-select: none; }
         
-        /* LOGIN OVERLAY */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10001; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
         #sync-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 12px; display: none; z-index: 9999; }
         .fixed-header { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(180deg, #f44336 0%, #fff 100%); z-index: 1000; }
         .top-bar { display: flex; justify-content: space-between; padding: 10px 20px; color: white; font-weight: bold; font-size: 20px; }
         
         .card-container { padding: 0 15px; }
         
-        /* VISA CARD WITH WATERMARK */
+        /* UPDATED DEBIT CARD SIZE & COLORFUL WATERMARK */
         .visa-card { 
             background: #1a1a1a; 
-            border-radius: 12px; 
-            height: 180px; 
+            border-radius: 15px; 
+            aspect-ratio: 1.58 / 1; /* Standard ID-1 Credit Card Ratio */
             width: 100%; 
             color: white; 
             display: flex; 
             flex-direction: column; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
             position: relative; 
             overflow: hidden; 
         }
 
-        /* The Flower Watermark Layer */
         .visa-card::before {
-            content: "\f537"; /* FontAwesome Flower Icon */
+            content: "\f537"; 
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
             position: absolute;
             top: 50%;
-            right: 10%;
-            transform: translateY(-50%);
-            font-size: 150px;
-            color: rgba(255, 255, 255, 0.05); /* Very subtle opacity */
+            right: -5%;
+            transform: translateY(-50%) rotate(-15deg);
+            font-size: 180px;
+            /* Colorful Gradient Watermark */
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.15;
             pointer-events: none;
         }
         
@@ -60,6 +61,7 @@
         .center-meta { flex: 1; overflow: hidden; user-select: text; }
         .center-meta b { display: block; font-size: 13px; color: #333; }
         .center-meta span { font-size: 11px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .center-meta .label-tag { font-weight: bold; color: #777; font-size: 9px; text-transform: uppercase; margin-right: 4px; }
         .amount-side { text-align: right; min-width: 70px; font-weight: bold; font-size: 14px; }
 
         .form-box { padding: 20px; background: #fff; border-radius: 15px; margin: 0 15px; border: 1px solid #eee; }
@@ -77,12 +79,7 @@
 <div id="login-screen">
     <div style="font-size:30px; color:var(--g4s-red); margin-bottom:20px; font-weight:bold;">G4SPay Wallet</div>
     <div class="form-box" style="width:80%;">
-        <input type="password" 
-               id="app-pass" 
-               inputmode="numeric" 
-               pattern="[0-9]*" 
-               placeholder="Enter Numeric Passcode" 
-               style="text-align:center; font-size: 20px; letter-spacing: 4px;">
+        <input type="password" id="app-pass" inputmode="numeric" pattern="[0-9]*" placeholder="Enter Numeric Passcode" style="text-align:center; font-size: 20px; letter-spacing: 4px;">
         <button onclick="login()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">ENTER WALLET</button>
     </div>
 </div>
@@ -93,12 +90,12 @@
     <div class="top-bar"><span>G4SPay</span><i class="fa-solid fa-shield-halved"></i></div>
     <div class="card-container">
         <div class="visa-card">
-            <div style="padding:15px 20px; z-index: 2;"><div style="width:35px; height:25px; background:#c0c0c0; border-radius:4px; opacity:0.6;"></div></div>
+            <div style="padding:15px 20px; z-index: 2;"><div style="width:45px; height:32px; background: linear-gradient(135deg, #ffd700, #b8860b); border-radius:6px; opacity:0.8;"></div></div>
             <div class="card-split">
-                <div class="split-box" onclick="showBalance()"><span style="font-size:9px;opacity:0.6">BALANCE</span><span id="bal-text" style="font-weight:bold">Tap for Balance</span></div>
+                <div class="split-box" onclick="showBalance()"><span style="font-size:9px;opacity:0.6">CENTRAL BALANCE</span><span id="bal-text" style="font-weight:bold">Tap for Balance</span></div>
                 <div class="split-box" onclick="sync()"><span style="font-size:9px;opacity:0.6">REFRESH</span><span id="sync-status"><i id="card-sync-icon" class="fa-solid fa-rotate"></i> Refresh</span></div>
             </div>
-            <div style="padding:10px 20px; font-size:10px; letter-spacing:2px; opacity:0.5; z-index: 2;">ABDULLAHIL KUAFI</div>
+            <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.7; z-index: 2; font-weight: bold;">ABDULLAHIL KUAFI</div>
         </div>
     </div>
     <div class="service-grid">
@@ -119,7 +116,6 @@
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
-    
     let DATA = {transactions:[], users:{}, centralBalance:0};
     let PASS = "";
 
@@ -134,22 +130,12 @@
         const toast = document.getElementById('sync-toast');
         if(syncStatus) syncStatus.innerHTML = `<i class="fa-solid fa-rotate fa-spin"></i> Syncing...`;
         toast.style.display = 'block';
-
         try {
             const r = await fetch(`${API}?pass=${encodeURIComponent(PASS)}`);
             const result = await r.json();
-            
-            if(result.error === "Locked") {
-                alert("Incorrect Password!");
-            } else {
-                DATA = result;
-                document.getElementById('login-screen').style.display = 'none';
-                renderDash();
-            }
-        } catch(e) { 
-            alert("Connection failed. Check Deployment settings."); 
-        }
-
+            if(result.error === "Locked") { alert("Incorrect Password!"); } 
+            else { DATA = result; document.getElementById('login-screen').style.display = 'none'; renderDash(); }
+        } catch(e) { alert("Connection failed."); }
         setTimeout(() => { 
             if(syncStatus) syncStatus.innerHTML = `<i id="card-sync-icon" class="fa-solid fa-rotate"></i> Refresh`;
             toast.style.display = 'none'; 
@@ -162,25 +148,32 @@
     }
 
     function renderDash() {
-        document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; font-weight:800; font-size:14px; color:#555;">RECENT STATEMENTS</div>
-            ${DATA.transactions.slice(-10).reverse().map(t => `
-                <div class="tx-card">
-                    <div class="user-initial">${t.person.charAt(0)}</div>
-                    <div class="center-meta"><b>${t.person}</b><span>${t.note || 'No Reference'}</span></div>
-                    <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">${t.type=='Withdraw'?'+':'-'}৳${t.amount}</div>
+        let h = `<div style="padding:10px 20px; font-weight:800; font-size:14px; color:#555;">RECENT STATEMENTS</div>`;
+        DATA.transactions.slice(-15).reverse().forEach(t => {
+            const userDetails = DATA.users[t.person] || {designation: "N/A"};
+            h += `<div class="tx-card">
+                <div class="user-initial">${t.person.charAt(0)}</div>
+                <div class="center-meta">
+                    <b>${t.person} <small style="color:#888; font-weight:normal">(${userDetails.designation})</small></b>
+                    <span><span class="label-tag">Note:</span>${t.note || 'No Reference'}</span>
                 </div>
-            `).join('')}
-        `;
+                <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">
+                    <div style="font-size:9px; opacity:0.5">${t.type.toUpperCase()}</div>
+                    ৳${t.amount}
+                </div>
+            </div>`;
+        });
+        document.getElementById('main-content').innerHTML = h;
     }
 
     function loadUsers() {
         let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:800;">USER DIRECTORY</span><span onclick="renderDash()" style="color:red; font-size:12px;">Back</span></div>`;
         for(let u in DATA.users) {
+            const bal = DATA.users[u].balance;
             h += `<div class="tx-card">
                 <div class="user-initial">${u.charAt(0)}</div>
                 <div class="center-meta"><b>${u}</b><span>${DATA.users[u].designation} • ${DATA.users[u].phone}</span></div>
-                <div class="amount-side" style="color:var(--g4s-red)">৳${DATA.users[u].balance}</div>
+                <div class="amount-side" style="color:${bal > 0 ? 'green' : 'red'}">৳${bal}</div>
                 <i class="fa-solid fa-trash-can" style="color:red; margin-left:10px;" onclick="removeUser('${u}')"></i>
             </div>`;
         }
@@ -195,23 +188,19 @@
     }
 
     function loadAddForm() {
-        let opts = Object.keys(DATA.users).map(u => `<option value="${u}">${u}</option>`).join('');
+        let opts = Object.keys(DATA.users).map(u => `<option value="${u}">${u} (${DATA.users[u].designation})</option>`).join('');
         document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">TRANSACT</span><span onclick="renderDash()" style="color:red;">Back</span></div>
+            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">NEW TRANSACTION</span><span onclick="renderDash()" style="color:red;">Back</span></div>
             <div class="form-box">
                 <select id="p">${opts}</select>
-                <select id="t"><option value="Withdraw">Withdraw (+)</option><option value="Deposit">Deposit (-)</option></select>
-                <input id="a" type="number" placeholder="Amount ৳">
-                <div class="q-row"><button class="q-btn" onclick="document.getElementById('a').value=100">100</button><button class="q-btn" onclick="document.getElementById('a').value=500">500</button><button class="q-btn" onclick="document.getElementById('a').value=1000">1000</button></div>
-                
+                <select id="t"><option value="Withdraw">Withdraw (+ Debt)</option><option value="Deposit">Deposit (- Debt)</option></select>
+                <input id="a" type="number" placeholder="Enter Amount ৳">
+                <div class="q-row"><button class="q-btn" onclick="document.getElementById('a').value=500">500</button><button class="q-btn" onclick="document.getElementById('a').value=1000">1k</button><button class="q-btn" onclick="document.getElementById('a').value=5000">5k</button></div>
                 <select id="n-select" onchange="document.getElementById('n-custom').style.display=(this.value==='Other'?'block':'none')">
-                    <option value="Imprest Advance">Imprest Advance</option>
-                    <option value="Imprest Voucher">Imprest Voucher</option>
-                    <option value="Other">Other...</option>
+                    <option value="Imprest Advance">Imprest Advance</option><option value="Imprest Voucher">Imprest Voucher</option><option value="Other">Other...</option>
                 </select>
-                <input id="n-custom" placeholder="Custom Note..." style="display:none">
-                
-                <button onclick="postTX()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">SUBMIT</button>
+                <input id="n-custom" placeholder="Write custom note..." style="display:none">
+                <button onclick="postTX()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">SUBMIT TRANSACTION</button>
             </div>`;
     }
 
@@ -226,14 +215,13 @@
 
     function loadAddUserForm() {
         document.getElementById('main-content').innerHTML = `
-            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">REGISTER USER</span><span onclick="renderDash()" style="color:red;">Back</span></div>
+            <div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">ADD NEW USER</span><span onclick="renderDash()" style="color:red;">Back</span></div>
             <div class="form-box">
                 <input id="un" placeholder="Full Name">
                 <input id="ud" placeholder="Designation">
-                <input id="up" placeholder="Phone/Mobile">
-                <input id="ub" type="number" placeholder="Opening Balance">
-                <div class="q-row"><button class="q-btn" onclick="document.getElementById('ub').value=100">100</button><button class="q-btn" onclick="document.getElementById('ub').value=1000">1000</button><button class="q-btn" onclick="document.getElementById('ub').value=5000">5000</button></div>
-                <button onclick="submitUser()" style="width:100%; padding:15px; background:green; color:white; border:none; border-radius:10px; font-weight:bold;">SAVE USER</button>
+                <input id="up" placeholder="Phone Number">
+                <input id="ub" type="number" placeholder="Opening Balance (Optional)">
+                <button onclick="submitUser()" style="width:100%; padding:15px; background:green; color:white; border:none; border-radius:10px; font-weight:bold;">CREATE ACCOUNT</button>
             </div>`;
     }
 
@@ -243,11 +231,16 @@
     }
 
     function loadHistory() {
-        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">FULL HISTORY</span><span onclick="renderDash()" style="color:red;">Back</span></div>`;
+        let h = `<div style="padding:10px 20px; display:flex; justify-content:space-between;"><span style="font-weight:800;">FULL TRANSACTION LOG</span><span onclick="renderDash()" style="color:red;">Back</span></div>`;
         DATA.transactions.slice().reverse().forEach(t => {
+            const userDetails = DATA.users[t.person] || {designation: "N/A"};
             h += `<div class="tx-card">
                 <div class="user-initial">${t.person.charAt(0)}</div>
-                <div class="center-meta"><b>${t.person}</b><span>${t.date.split('T')[0]} • ${t.note || ''}</span></div>
+                <div class="center-meta">
+                    <b>${t.person} <small>(${userDetails.designation})</small></b>
+                    <span><span class="label-tag">Date:</span>${t.date.split('T')[0]}</span>
+                    <span><span class="label-tag">Ref:</span>${t.note || 'None'}</span>
+                </div>
                 <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">৳${t.amount}</div>
             </div>`;
         });
