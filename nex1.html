@@ -18,9 +18,36 @@
         .top-bar { display: flex; justify-content: space-between; padding: 10px 20px; color: white; font-weight: bold; font-size: 20px; }
         
         .card-container { padding: 0 15px; }
-        .visa-card { background: #1a1a1a; border-radius: 12px; height: 180px; width: 100%; color: white; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
         
-        .card-split { display: flex; flex: 1; border-top: 1px solid rgba(255,255,255,0.1); }
+        /* VISA CARD WITH WATERMARK */
+        .visa-card { 
+            background: #1a1a1a; 
+            border-radius: 12px; 
+            height: 180px; 
+            width: 100%; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* The Flower Watermark Layer */
+        .visa-card::before {
+            content: "\f537"; /* FontAwesome Flower Icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            font-size: 150px;
+            color: rgba(255, 255, 255, 0.05); /* Very subtle opacity */
+            pointer-events: none;
+        }
+        
+        .card-split { display: flex; flex: 1; border-top: 1px solid rgba(255,255,255,0.1); z-index: 2; }
         .split-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         .split-box:first-child { border-right: 1px solid rgba(255,255,255,0.1); }
 
@@ -48,30 +75,30 @@
 <body>
 
 <div id="login-screen">
-    <div style="font-size:30px; color:var(--g4s-red); margin-bottom:20px; font-weight:bold;">G4SPay_Kuafi</div>
+    <div style="font-size:30px; color:var(--g4s-red); margin-bottom:20px; font-weight:bold;">G4SPay Wallet</div>
     <div class="form-box" style="width:80%;">
         <input type="password" 
                id="app-pass" 
                inputmode="numeric" 
                pattern="[0-9]*" 
-               placeholder="Enter PIN" 
+               placeholder="Enter Numeric Passcode" 
                style="text-align:center; font-size: 20px; letter-spacing: 4px;">
-        <button onclick="login()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">LOGIN</button>
+        <button onclick="login()" style="width:100%; padding:15px; background:#1a1a1a; color:white; border:none; border-radius:10px; font-weight:bold;">ENTER WALLET</button>
     </div>
 </div>
 
 <div id="sync-toast"><i class="fa-solid fa-rotate fa-spin"></i> Synchronizing...</div>
 
 <div class="fixed-header">
-    <div class="top-bar"><span>G4SPay_Abdullahil_Kuafi</span><i class="fa-solid fa-shield-halved"></i></div>
+    <div class="top-bar"><span>G4SPay</span><i class="fa-solid fa-shield-halved"></i></div>
     <div class="card-container">
         <div class="visa-card">
-            <div style="padding:15px 20px;"><div style="width:35px; height:25px; background:#c0c0c0; border-radius:4px; opacity:0.6;"></div></div>
+            <div style="padding:15px 20px; z-index: 2;"><div style="width:35px; height:25px; background:#c0c0c0; border-radius:4px; opacity:0.6;"></div></div>
             <div class="card-split">
                 <div class="split-box" onclick="showBalance()"><span style="font-size:9px;opacity:0.6">BALANCE</span><span id="bal-text" style="font-weight:bold">Tap for Balance</span></div>
                 <div class="split-box" onclick="sync()"><span style="font-size:9px;opacity:0.6">REFRESH</span><span id="sync-status"><i id="card-sync-icon" class="fa-solid fa-rotate"></i> Refresh</span></div>
             </div>
-            <div style="padding:10px 20px; font-size:10px; letter-spacing:2px; opacity:0.5;">ABDULLAHIL KUAFI</div>
+            <div style="padding:10px 20px; font-size:10px; letter-spacing:2px; opacity:0.5; z-index: 2;">ABDULLAHIL KUAFI</div>
         </div>
     </div>
     <div class="service-grid">
