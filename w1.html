@@ -86,15 +86,15 @@
         <div class="glass-panel p-5 rounded-[1.8rem] notice-glow">
             <div class="flex items-center gap-2 mb-2">
                 <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Live Broadcast</p>
+                <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Live Notice Board</p>
             </div>
             <div class="scrolling-container">
                 <p id="displayNotice" class="scrolling-text text-xs leading-relaxed font-medium">Synchronizing with server...</p>
             </div>
             
             <div id="noticeAdmin" class="hidden mt-4 pt-3 border-t border-white/5">
-                <textarea id="noticeInput" placeholder="New broadcast text..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
-                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Broadcast Message</button>
+                <textarea id="noticeInput" placeholder="New board text..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-16"></textarea>
+                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 border border-blue-500/30 font-bold py-2 rounded-xl text-[9px] uppercase tracking-wider">Update Board</button>
             </div>
         </div>
 
@@ -252,7 +252,7 @@
             if(!msg) return;
             await setDoc(doc(db, "system_config", "broadcast"), { message: msg });
             document.getElementById('noticeInput').value = "";
-            alert("Broadcast Updated");
+            alert("Board Updated");
         };
 
         function initMaster() {
