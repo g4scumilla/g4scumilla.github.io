@@ -12,6 +12,7 @@
         .bank-card::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 90%; background-image: url('https://www.transparentpng.com/download/flower/lotus-flower-free-png-transparent-8.png'); background-size: contain; background-repeat: no-repeat; opacity: 0.1; filter: brightness(2); pointer-events: none; }
         .hidden { display: none; }
         body { background-color: #0a0a0c; color: white; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="min-h-screen font-sans p-4 pb-24">
@@ -25,7 +26,7 @@
         <div class="bg-gray-900/50 p-8 rounded-[2.5rem] w-full max-w-sm border border-white/5 backdrop-blur-xl">
             <div id="loginFields">
                 <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full bg-black/40 p-4 rounded-2xl mb-4 outline-none border border-white/5 focus:border-blue-500 transition text-white">
-                <input id="lPass" type="password" placeholder="Password" class="w-full bg-black/40 p-4 rounded-2xl mb-6 outline-none border border-white/5 focus:border-blue-500 transition text-white">
+                <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full bg-black/40 p-4 rounded-2xl mb-6 outline-none border border-white/5 focus:border-blue-500 transition text-white text-center tracking-[1em] font-bold">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition text-white">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Create New Account</button>
             </div>
@@ -33,16 +34,16 @@
             <div id="signupFields" class="hidden space-y-4">
                 <input id="sName" type="text" placeholder="Full Name" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white">
                 <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white">
-                <input id="sPass" type="password" placeholder="New Password" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white">
+                <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set 6-Digit PIN" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white text-center">
                 <div>
-                    <input id="sRefer" type="text" placeholder="Referral (UID)" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white" oninput="lookupReferrer()">
+                    <input id="sRefer" type="text" placeholder="Referral (UID)" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/5 text-white uppercase" oninput="lookupReferrer()">
                     <p id="referNameDisplay" class="text-[10px] mt-2 ml-2 font-medium text-blue-400 hidden"></p>
                 </div>
                 <div class="pt-2 border-t border-white/5 mt-4">
                     <p class="text-[9px] uppercase opacity-40 mb-2 ml-2 text-white">6-Digit Access Key</p>
-                    <input id="sOTP" type="text" maxlength="6" placeholder="000000" class="w-full bg-red-900/10 p-4 rounded-2xl outline-none border border-red-500/20 text-center font-mono tracking-[0.5em] text-red-400">
+                    <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full bg-red-900/10 p-4 rounded-2xl outline-none border border-red-500/20 text-center font-mono tracking-[0.5em] text-red-400">
                 </div>
-                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl text-white shadow-lg shadow-green-900/20">Initialize Account</button>
+                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl text-white shadow-lg">Initialize Account</button>
                 <button onclick="toggleAuth(true)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Back to Login</button>
             </div>
         </div>
@@ -50,6 +51,13 @@
 
     <div id="mainDashboard" class="hidden max-w-sm mx-auto space-y-6">
         
+        <div class="flex justify-end">
+            <button onclick="handleLogout()" class="text-[10px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 flex items-center gap-1 transition p-2">
+                Secure Exit 
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+        </div>
+
         <div id="adminPanel" class="hidden bg-red-600/10 border border-red-500/30 p-6 rounded-[2.5rem]">
             <h3 class="text-red-500 text-[11px] font-black uppercase tracking-widest mb-5 flex items-center gap-2">
                 <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
@@ -72,8 +80,8 @@
                     <input id="forgeUID" type="text" placeholder="Target UID" class="w-full bg-black/40 p-3 rounded-xl text-[10px] outline-none border border-white/5 uppercase text-white">
                     <input id="forgeAmt" type="number" placeholder="৳ Amount" class="w-full bg-black/40 p-3 rounded-xl text-[10px] outline-none border border-white/5 text-white">
                     <div class="flex gap-2">
-                        <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 text-white py-3 rounded-xl text-[10px] font-black uppercase">Mint (+)</button>
-                        <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 text-white py-3 rounded-xl text-[10px] font-black uppercase">Burn (-)</button>
+                        <button onclick="handleForge('MINT')" class="flex-1 bg-green-600 text-white py-3 rounded-xl text-[10px] font-black uppercase active:scale-95 transition">Mint (+)</button>
+                        <button onclick="handleForge('BURN')" class="flex-1 bg-red-600 text-white py-3 rounded-xl text-[10px] font-black uppercase active:scale-95 transition">Burn (-)</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +89,7 @@
             <div class="space-y-4">
                 <div class="flex items-center justify-between bg-black/60 p-4 rounded-2xl border border-red-500/10">
                     <div><p class="text-[8px] opacity-40 uppercase">Access Key</p><p id="liveOTP" class="font-mono text-yellow-500 font-bold text-xl tracking-widest">------</p></div>
-                    <button onclick="generateNewOTP()" class="bg-red-600 px-4 py-2 rounded-xl text-[10px] font-bold">Refresh</button>
+                    <button onclick="generateNewOTP()" class="bg-red-600 px-4 py-2 rounded-xl text-[10px] font-bold active:scale-90 transition">Refresh</button>
                 </div>
                 <div class="flex gap-2">
                     <input id="reportDate" type="date" class="flex-1 bg-black p-4 rounded-2xl text-[10px] border border-white/5 text-white outline-none">
@@ -116,7 +124,7 @@
                     <input id="sendTo" type="text" placeholder="Recipient UID" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none uppercase border border-white/5 text-white">
                     <div class="flex gap-2">
                         <input id="sendAmt" type="number" placeholder="৳ Amount" class="flex-1 bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5 text-white">
-                        <button onclick="executeTransfer()" class="bg-blue-600 px-8 rounded-2xl font-bold transition hover:bg-blue-500 active:scale-95">Send</button>
+                        <button onclick="executeTransfer()" class="bg-blue-600 px-8 rounded-2xl font-bold transition active:scale-95">Send</button>
                     </div>
                 </div>
             </div>
@@ -131,7 +139,7 @@
                         <input id="coAmt" type="number" placeholder="৳" class="bg-black/40 p-4 rounded-2xl text-xs flex-1 outline-none border border-white/5 text-white">
                     </div>
                     <input id="coNum" type="tel" placeholder="Account Number" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5 text-white">
-                    <button onclick="submitCashout()" class="w-full bg-orange-600/10 border border-orange-500/20 py-4 rounded-2xl text-[11px] font-bold text-orange-500 transition">Request Payout</button>
+                    <button onclick="submitCashout()" class="w-full bg-orange-600/10 border border-orange-500/20 py-4 rounded-2xl text-[11px] font-bold text-orange-500 transition active:scale-95">Request Payout</button>
                 </div>
             </div>
         </div>
@@ -161,12 +169,24 @@
             document.getElementById('signupFields').classList.toggle('hidden', isLogin);
         };
 
+        window.handleLogout = () => {
+            if(confirm("Securely close your session?")) {
+                document.getElementById('lPass').value = "";
+                document.getElementById('mainDashboard').classList.add('hidden');
+                document.getElementById('authSection').classList.remove('hidden');
+                document.getElementById('adminPanel').classList.add('hidden');
+                document.getElementById('userTools').classList.remove('hidden');
+                window.scrollTo(0,0);
+            }
+        };
+
         window.handleLogin = async () => {
             const p = document.getElementById('lPhone').value;
-            const pass = document.getElementById('lPass').value;
+            const pin = document.getElementById('lPass').value;
+            if(!p || !pin) return alert("Enter credentials");
             const s = await getDoc(doc(db, "users", p));
-            if(s.exists() && s.data().Password === pass) startBank(p);
-            else alert("Credentials incorrect.");
+            if(s.exists() && s.data().Password == pin) startBank(p);
+            else alert("Phone or PIN incorrect.");
         };
 
         window.lookupReferrer = async () => {
@@ -188,13 +208,14 @@
         window.handleSignup = async () => {
             const name = document.getElementById('sName').value;
             const phone = document.getElementById('sPhone').value;
-            const pass = document.getElementById('sPass').value;
+            const pin = document.getElementById('sPass').value;
             const otp = document.getElementById('sOTP').value;
+            if(!name || !phone || !pin || !otp) return alert("Fill all fields");
             const conf = await getDoc(doc(db, "system_config", "access_codes"));
             if(otp !== conf.data().current_otp) return alert("Invalid Key");
             const myUID = `NEX-${Math.floor(1000+Math.random()*8999)}-${phone.slice(-4)}`;
-            await setDoc(doc(db, "users", phone), { Name: name, Password: pass, UID: myUID, Balance: 0 });
-            alert("Success! UID: " + myUID);
+            await setDoc(doc(db, "users", phone), { Name: name, Password: pin, UID: myUID, Balance: 0 });
+            alert("Protocol Initialized! UID: " + myUID);
             location.reload();
         };
 
@@ -215,7 +236,7 @@
             const q = query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc"));
             onSnapshot(q, sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = `<p class="text-[10px] font-bold uppercase opacity-30 tracking-[0.4em] mb-4 text-blue-400">History</p>`;
+                list.innerHTML = `<p class="text-[10px] font-bold uppercase opacity-30 tracking-[0.4em] mb-4 text-blue-400">Statement</p>`;
                 sn.forEach(d => {
                     const t = d.data();
                     list.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl flex justify-between border border-white/5">
@@ -238,10 +259,10 @@
                 list.innerHTML = "";
                 sn.forEach(dDoc => {
                     const r = dDoc.data();
-                    list.innerHTML += `<div class="bg-black/60 p-4 rounded-2xl border border-white/10">
-                        <p class="text-[10px] font-bold">${r.UserName} - ৳${r.Amount}</p>
+                    list.innerHTML += `<div class="bg-black/60 p-4 rounded-2xl border border-white/10 mb-2">
+                        <p class="text-[10px] font-bold text-white">${r.UserName} - ৳${r.Amount}</p>
                         <p class="text-[8px] opacity-50 mb-3">${r.Method} • ${r.AccountNumber}</p>
-                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="w-full bg-green-600 text-[10px] font-bold py-2 rounded-xl">MARK PAID</button>
+                        <button onclick="clearPayout('${dDoc.id}', '${r.User}', ${r.Amount}, '${r.Method}')" class="w-full bg-green-600 text-[10px] font-bold py-2 rounded-xl active:scale-95 transition">MARK PAID</button>
                     </div>`;
                 });
             });
@@ -250,13 +271,13 @@
         window.handleForge = async (type) => {
             const uid = document.getElementById('forgeUID').value.toUpperCase().trim();
             const amt = parseInt(document.getElementById('forgeAmt').value);
-            if(!uid || !amt) return alert("Fill data");
+            if(!uid || !amt) return alert("Enter UID & Amount");
             const q = query(collection(db, "users"), where("UID", "==", uid));
             const s = await getDocs(q);
-            if(s.empty) return alert("UID not found");
+            if(s.empty) return alert("UID Not Found");
             const uDoc = s.docs[0];
             const current = uDoc.data().Balance || 0;
-            if(type === 'BURN' && current < amt) return alert("Insufficient Balance");
+            if(type === 'BURN' && current < amt) return alert("Insufficient user balance");
             const nb = type === 'MINT' ? current + amt : current - amt;
             await updateDoc(doc(db, "users", uDoc.id), { Balance: nb });
             await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: type === 'MINT' ? "Central Issue" : "Central Recovery", Amount: (type === 'MINT' ? "+" : "-") + amt, Date: "Today", Timestamp: new Date() });
@@ -264,10 +285,9 @@
         };
 
         window.clearPayout = async (id, p, a, m) => {
-            if(!confirm("Clear this payout?")) return;
+            if(!confirm("Mark this as paid?")) return;
             await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" });
             await addDoc(collection(db, "transactions"), { User: p, Title: `Payout (${m})`, Amount: `-${a}`, Date: "Today", Timestamp: new Date() });
-            alert("Payout Removed & Ledger Updated");
         };
 
         window.generateNewOTP = async () => {
@@ -276,20 +296,21 @@
         };
 
         window.executeTransfer = async () => {
-            const uid = document.getElementById('sendTo').value.toUpperCase();
+            const uid = document.getElementById('sendTo').value.toUpperCase().trim();
             const amt = parseInt(document.getElementById('sendAmt').value);
             const myP = document.getElementById('lPhone').value;
+            if(!uid || !amt) return alert("Fill data");
             const rSnap = await getDocs(query(collection(db, "users"), where("UID", "==", uid)));
-            if(rSnap.empty) return alert("Not found");
+            if(rSnap.empty) return alert("User not found");
             const rDoc = rSnap.docs[0];
             const sDoc = await getDoc(doc(db, "users", myP));
-            if(sDoc.data().Balance < amt) return alert("Low Funds");
+            if(sDoc.data().Balance < amt) return alert("Insufficient Balance");
             await updateDoc(doc(db, "users", myP), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rDoc.id), { Balance: (rDoc.data().Balance || 0) + amt });
             const ts = { Timestamp: new Date(), Date: "Now" };
             await addDoc(collection(db, "transactions"), { ...ts, User: myP, Title: "To: "+rDoc.data().Name, Amount: "-"+amt });
             await addDoc(collection(db, "transactions"), { ...ts, User: rDoc.id, Title: "From: "+sDoc.data().Name, Amount: "+"+amt });
-            alert("Sent!");
+            alert("Transfer Complete");
         };
 
         window.submitCashout = async () => {
@@ -298,21 +319,21 @@
             const m = document.getElementById('coMethod').value;
             const n = document.getElementById('coNum').value;
             const s = await getDoc(doc(db, "users", p));
-            if(s.data().Balance < amt) return alert("Low Funds");
+            if(s.data().Balance < amt) return alert("Insufficient Balance");
             await updateDoc(doc(db, "users", p), { Balance: s.data().Balance - amt });
             await addDoc(collection(db, "cashout_requests"), { User: p, UserName: s.data().Name, Amount: amt, Method: m, AccountNumber: n, Status: "Pending", Date: new Date().toISOString().split('T')[0], Timestamp: new Date() });
-            alert("Requested!");
+            alert("Requested successfully!");
         };
 
         window.generatePDFReport = async () => {
             const d = document.getElementById('reportDate').value;
-            if(!d) return alert("Select Date");
+            if(!d) return alert("Pick a date");
             const s = await getDocs(query(collection(db, "cashout_requests"), where("Date", "==", d)));
             const { jsPDF } = window.jspdf;
             const docP = new jsPDF();
-            docP.text("Nex1 Audit: " + d, 14, 20);
-            const r = []; s.forEach(x => { const v = x.data(); r.push([v.UserName, v.Method, v.AccountNumber, v.Amount, v.Status]); });
-            docP.autoTable({ startY: 30, head: [['Client', 'Method', 'Acc', 'Amt', 'Status']], body: r });
+            docP.text("Nex1 Audit Report: " + d, 14, 20);
+            const rows = []; s.forEach(x => { const v = x.data(); rows.push([v.UserName, v.Method, v.AccountNumber, v.Amount, v.Status]); });
+            docP.autoTable({ startY: 30, head: [['User', 'Method', 'Acc', 'Amt', 'Status']], body: rows });
             docP.save(`Nex1_Audit_${d}.pdf`);
         };
     </script>
