@@ -14,6 +14,7 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         .bg-glow {
@@ -171,7 +172,7 @@
                 <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                 </div>
-                <span class="text-[9px] font-bold uppercase opacity-60">Send</span>
+                <span class="text-[9px] font-bold uppercase opacity-60">Transfer</span>
             </div>
             <div onclick="showModal('payoutModal')" class="menu-item p-4 rounded-2xl flex flex-col items-center gap-2">
                 <div class="w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center text-orange-400">
@@ -179,11 +180,11 @@
                 </div>
                 <span class="text-[9px] font-bold uppercase opacity-60">Payout</span>
             </div>
-            <div onclick="location.reload()" class="menu-item p-4 rounded-2xl flex flex-col items-center gap-2">
+            <div onclick="scrollToStatement()" class="menu-item p-4 rounded-2xl flex flex-col items-center gap-2">
                 <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-green-400">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 2v-6m-8-5h11a2 2 0 012 2v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
                 </div>
-                <span class="text-[9px] font-bold uppercase opacity-60">Reload</span>
+                <span class="text-[9px] font-bold uppercase opacity-60">Statement</span>
             </div>
             <div onclick="handleLogout()" class="menu-item p-4 rounded-2xl flex flex-col items-center gap-2 text-red-400">
                 <div class="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
@@ -208,7 +209,9 @@
             <button onclick="submitCashout()" class="w-full bg-orange-600 py-3 rounded-xl font-bold text-xs uppercase">Submit Request</button>
         </div>
 
-        <div id="txList" class="space-y-3 pb-12"></div>
+        <div id="statementSection">
+            <div id="txList" class="space-y-3 pb-12"></div>
+        </div>
     </div>
 
     <script type="module">
@@ -230,6 +233,10 @@
 
         window.showModal = (id) => { closeModals(); document.getElementById(id).classList.remove('hidden'); };
         window.closeModals = () => { document.getElementById('transferModal').classList.add('hidden'); document.getElementById('payoutModal').classList.add('hidden'); };
+
+        window.scrollToStatement = () => {
+            document.getElementById('statementSection').scrollIntoView({ behavior: 'smooth' });
+        };
 
         window.toggleAuth = (isLogin) => {
             document.getElementById('loginFields').classList.toggle('hidden', !isLogin);
@@ -257,7 +264,6 @@
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
             
-            // Logic to switch between panels
             if (phone === MASTER_PHONE) {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('noticeAdmin').classList.remove('hidden');
@@ -278,7 +284,7 @@
             });
             onSnapshot(query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc")), sn => {
                 const list = document.getElementById('txList');
-                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">History</p>`;
+                list.innerHTML = `<p class="text-[9px] uppercase opacity-30 font-bold ml-2 mb-2">Account Statement</p>`;
                 sn.forEach(d => {
                     const t = d.data();
                     list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2">
