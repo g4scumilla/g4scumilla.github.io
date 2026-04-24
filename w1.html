@@ -20,7 +20,6 @@
         .scrolling-container { overflow: hidden; white-space: nowrap; width: 100%; }
         .scrolling-text { display: inline-block; animation: scroll-left 15s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        select option { background: #050508; color: white; }
     </style>
 </head>
 <body class="min-h-screen p-4 pb-24">
@@ -29,18 +28,22 @@
     <div id="authSection" class="flex flex-col items-center justify-center min-h-[90vh]">
         <h1 class="text-6xl font-black italic text-blue-500 uppercase mb-10 tracking-tighter">NEXGEN</h1>
         <div class="glass-panel p-8 w-full max-w-sm">
+            
             <div id="loginFields">
                 <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full nexus-input p-4 rounded-2xl mb-4 text-center font-bold">
                 <input id="lPass" type="tel" maxlength="6" placeholder="PIN" style="-webkit-text-security: disc;" class="w-full nexus-input p-4 rounded-2xl mb-6 text-center">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4">Authorize</button>
-                <button onclick="toggleAuth(false)" class="w-full text-[10px] opacity-40 uppercase tracking-widest text-center">Register</button>
+                <button onclick="toggleAuth(false)" class="w-full text-[10px] opacity-40 uppercase tracking-widest text-center">Register Protocol</button>
             </div>
+
             <div id="signupFields" class="hidden space-y-4">
                 <input id="sName" type="text" placeholder="Full Name" class="w-full nexus-input p-4 rounded-2xl text-center">
                 <input id="sPhone" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-4 rounded-2xl text-center font-bold">
-                <input id="sPass" type="tel" maxlength="6" placeholder="Set PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
-                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Create</button>
-                <button onclick="toggleAuth(true)" class="w-full text-[10px] opacity-40 uppercase tracking-widest text-center">Back</button>
+                <input id="sPass" type="tel" maxlength="6" placeholder="Set 6-Digit PIN" class="w-full nexus-input p-4 rounded-2xl text-center">
+                <input id="sAccess" type="text" placeholder="Access Code" class="w-full nexus-input p-4 rounded-2xl text-center border-blue-500/30">
+                
+                <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl">Initialize Identity</button>
+                <button onclick="toggleAuth(true)" class="w-full text-[10px] opacity-40 uppercase tracking-widest text-center">Return</button>
             </div>
         </div>
     </div>
@@ -49,7 +52,7 @@
         <div class="bank-card p-8 rounded-[2.5rem] aspect-[1.6/1] flex flex-col justify-between">
             <h2 class="text-2xl font-black text-white italic tracking-tighter">NEXGEN CRYPTO</h2>
             <div>
-                <p class="text-[9px] opacity-60 uppercase mb-1 tracking-widest">Balance</p>
+                <p class="text-[9px] opacity-60 uppercase mb-1 tracking-widest">Available Assets</p>
                 <div class="text-4xl font-bold">$<span id="dBal">0</span></div>
             </div>
             <div>
@@ -62,8 +65,8 @@
             <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">Broadcast</p>
             <div class="scrolling-container"><p id="displayNotice" class="scrolling-text text-xs">Syncing Protocol...</p></div>
             <div id="noticeAdmin" class="hidden mt-4 pt-3 border-t border-white/5">
-                <textarea id="noticeInput" placeholder="New alert..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-14"></textarea>
-                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 py-2 rounded-xl text-[9px] uppercase font-bold border border-blue-500/20">Broadcast</button>
+                <textarea id="noticeInput" placeholder="Enter message..." class="w-full nexus-input p-3 rounded-xl text-[11px] mb-2 h-14"></textarea>
+                <button onclick="updateNotice()" class="w-full bg-blue-600/20 text-blue-400 py-2 rounded-xl text-[9px] uppercase font-bold border border-blue-500/20">Update</button>
             </div>
         </div>
 
@@ -88,7 +91,7 @@
 
         <div id="adminPanel" class="hidden space-y-4">
             <div class="glass-panel p-6">
-                <p class="text-[9px] uppercase opacity-40 mb-4 font-bold tracking-widest">Asset Forge</p>
+                <p class="text-[9px] uppercase opacity-40 mb-4 font-bold tracking-widest">Protocol Forge</p>
                 <input id="forgeInput" type="text" placeholder="UID or Phone" class="w-full nexus-input p-3 rounded-xl text-xs uppercase mb-2">
                 <input id="forgeAmt" type="number" placeholder="Amount" class="w-full nexus-input p-3 rounded-xl text-xs mb-3">
                 <div class="flex gap-2">
@@ -102,16 +105,16 @@
         <div id="statementSection" class="hidden pt-4 pb-20">
             <div class="glass-panel p-5 mb-4">
                 <div class="flex justify-between items-center mb-4">
-                    <p class="text-[10px] font-bold uppercase opacity-40">Protocol History</p>
-                    <button onclick="downloadPDF()" class="bg-blue-600/20 text-blue-400 text-[9px] font-bold px-3 py-1 rounded-lg">PDF</button>
+                    <p class="text-[10px] font-bold uppercase opacity-40">Statement Logs</p>
+                    <button onclick="downloadPDF()" class="bg-blue-600/20 text-blue-400 text-[9px] font-bold px-3 py-1 rounded-lg">Export PDF</button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <select id="filterType" onchange="applyFilters()" class="nexus-input p-2 rounded-xl text-[10px]">
-                        <option value="ALL">All</option>
+                        <option value="ALL">All Actions</option>
                         <option value="TRANSFER">Transfers</option>
                         <option value="PAYOUT">Payouts</option>
-                        <option value="MINT">Minted</option>
-                        <option value="BURN">Burned</option>
+                        <option value="MINT">Forge Mint</option>
+                        <option value="BURN">Forge Burn</option>
                     </select>
                     <input type="date" id="filterDate" onchange="applyFilters()" class="nexus-input p-2 rounded-xl text-[10px]">
                 </div>
@@ -124,8 +127,8 @@
         <div class="glass-panel p-6 w-full max-w-sm">
             <input id="sendTo" type="text" placeholder="Receiver UID" class="w-full nexus-input p-3 rounded-xl text-xs uppercase mb-2">
             <input id="sendAmt" type="number" placeholder="Amount" class="w-full nexus-input p-3 rounded-xl text-xs mb-3">
-            <button onclick="executeTransfer()" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs uppercase">Send Assets</button>
-            <button onclick="closeModals()" class="w-full text-[10px] mt-4 opacity-30 text-center uppercase">Close</button>
+            <button onclick="executeTransfer()" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs uppercase">Send</button>
+            <button onclick="closeModals()" class="w-full text-[10px] mt-4 opacity-30 text-center uppercase">Cancel</button>
         </div>
     </div>
 
@@ -133,9 +136,9 @@
         <div class="glass-panel p-6 w-full max-w-sm">
             <select id="coMethod" class="w-full nexus-input p-3 rounded-xl text-xs mb-2"><option>bKash</option><option>Nagad</option></select>
             <input id="coAmt" type="number" placeholder="Amount" class="w-full nexus-input p-3 rounded-xl text-xs mb-2">
-            <input id="coNum" type="tel" placeholder="Mobile Number" class="w-full nexus-input p-3 rounded-xl text-xs mb-3">
-            <button onclick="submitCashout()" class="w-full bg-orange-600 py-3 rounded-xl font-bold text-xs uppercase">Submit Request</button>
-            <button onclick="closeModals()" class="w-full text-[10px] mt-4 opacity-30 text-center uppercase">Close</button>
+            <input id="coNum" type="tel" placeholder="Receiver Number" class="w-full nexus-input p-3 rounded-xl text-xs mb-3">
+            <button onclick="submitCashout()" class="w-full bg-orange-600 py-3 rounded-xl font-bold text-xs uppercase">Request Payout</button>
+            <button onclick="closeModals()" class="w-full text-[10px] mt-4 opacity-30 text-center uppercase">Cancel</button>
         </div>
     </div>
 
@@ -161,35 +164,50 @@
 
         window.handleSignup = async () => {
             const p = document.getElementById('sPhone').value; 
+            const n = document.getElementById('sName').value;
+            const pin = document.getElementById('sPass').value;
+            const acc = document.getElementById('sAccess').value; // Restored field
+
+            if(!p || !n || !pin || !acc) return alert("Fill all fields");
+            
             const uid = `NEX-${Math.floor(1000+Math.random()*8999)}-${p.slice(-4)}`;
-            await setDoc(doc(db, "users", p), { Name: document.getElementById('sName').value, Password: document.getElementById('sPass').value, UID: uid.toUpperCase(), Balance: 0 });
-            alert("Account Protocol Activated"); location.reload();
+            await setDoc(doc(db, "users", p), { 
+                Name: n, 
+                Password: pin, 
+                AccessCode: acc, // Saved to DB
+                UID: uid.toUpperCase(), 
+                Balance: 0 
+            });
+            alert("Protocol Identity Created"); location.reload();
         };
 
         function startBank(phone) {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
-            if(phone === MASTER_PHONE) { document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('noticeAdmin').classList.remove('hidden'); initMaster(); }
+            if(phone === MASTER_PHONE) { 
+                document.getElementById('adminPanel').classList.remove('hidden'); 
+                document.getElementById('noticeAdmin').classList.remove('hidden'); 
+                initMaster(); 
+            }
             
             onSnapshot(doc(db, "system_config", "broadcast"), d => { if(d.exists()) document.getElementById('displayNotice').innerText = d.data().message; });
-            onSnapshot(doc(db, "users", phone), s => { const d = s.data(); document.getElementById('dBal').innerText = (d.Balance || 0).toLocaleString(); document.getElementById('dName').innerText = d.Name; document.getElementById('dUID').innerText = d.UID; });
+            onSnapshot(doc(db, "users", phone), s => { 
+                const d = s.data(); 
+                document.getElementById('dBal').innerText = (d.Balance || 0).toLocaleString(); 
+                document.getElementById('dName').innerText = d.Name; 
+                document.getElementById('dUID').innerText = d.UID; 
+            });
             
-            // SMART QUERY FALLBACK LOGIC
+            // SMART FALLBACK QUERY
             const q = (phone === MASTER_PHONE) 
                 ? query(collection(db, "transactions"), orderBy("Timestamp", "desc")) 
                 : query(collection(db, "transactions"), where("User", "==", phone), orderBy("Timestamp", "desc"));
 
             onSnapshot(q, sn => {
-                masterData = [];
-                sn.forEach(d => masterData.push(d.data()));
-                applyFilters();
+                masterData = []; sn.forEach(d => masterData.push(d.data())); applyFilters();
             }, (err) => {
-                // If index missing, pull data unsorted so user isn't stuck with "No Data"
-                console.warn("Index building, using fallback...");
                 onSnapshot(query(collection(db, "transactions"), where("User", "==", phone)), sn => {
-                    masterData = [];
-                    sn.forEach(d => masterData.push(d.data()));
-                    // Sort locally since Firebase index isn't ready
+                    masterData = []; sn.forEach(d => masterData.push(d.data()));
                     masterData.sort((a,b) => (b.Timestamp?.seconds || 0) - (a.Timestamp?.seconds || 0));
                     applyFilters();
                 });
@@ -212,10 +230,10 @@
                 return matchType && matchDate;
             });
 
-            if(filtered.length === 0) { list.innerHTML = `<p class="text-center opacity-20 text-[10px] py-10 uppercase tracking-widest">No Logs Found</p>`; return; }
+            if(filtered.length === 0) { list.innerHTML = `<p class="text-center opacity-20 text-[10px] py-10 uppercase tracking-widest">No Protocol Logs</p>`; return; }
 
             filtered.forEach(t => {
-                const d = t.Timestamp ? new Date(t.Timestamp.seconds * 1000).toLocaleString() : "Processing...";
+                const d = t.Timestamp ? new Date(t.Timestamp.seconds * 1000).toLocaleString() : "Syncing...";
                 const isNeg = t.Amount.toString().includes('-');
                 list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2"><div><p class="text-xs font-bold uppercase">${t.Title}</p><p class="text-[8px] opacity-40">${d}</p></div><p class="font-bold ${isNeg?'text-red-400':'text-green-400'}">${t.Amount} $</p></div>`;
             });
@@ -225,7 +243,7 @@
             const { jsPDF } = window.jspdf; const docP = new jsPDF();
             docP.text("NEXGEN TRANSACTION LOG", 105, 20, {align:'center'});
             const rows = masterData.map(t => [t.Timestamp ? new Date(t.Timestamp.seconds*1000).toLocaleString() : 'N/A', t.Title, t.Amount + " $"]);
-            docP.autoTable({ startY: 30, head: [['Date', 'Action', 'Amount']], body: rows });
+            docP.autoTable({ startY: 30, head: [['Date', 'Description', 'Amount']], body: rows });
             docP.save("NEXGEN_Log.pdf");
         };
 
@@ -236,36 +254,36 @@
             const q = query(collection(db, "users"), where("UID", "==", val));
             const snap = await getDocs(q);
             if(!snap.empty) tId = snap.docs[0].id; else { const s = await getDoc(doc(db, "users", val.toLowerCase())); if(s.exists()) tId = s.id; }
-            if(!tId) return alert("Target Invalid");
+            if(!tId) return alert("UID Fail");
             const s = await getDoc(doc(db, "users", tId));
             const nB = type === 'MINT' ? (s.data().Balance + amt) : (s.data().Balance - amt);
             await updateDoc(doc(db, "users", tId), { Balance: nB });
-            await addDoc(collection(db, "transactions"), { User: tId, Title: `System ${type}`, Category: type, Amount: (type==='MINT'?'+':'-')+amt, Timestamp: serverTimestamp() });
-            alert("Forge Action Confirmed");
+            await addDoc(collection(db, "transactions"), { User: tId, Title: `Central ${type}`, Category: type, Amount: (type==='MINT'?'+':'-')+amt, Timestamp: serverTimestamp() });
+            alert("Protocol Forge Successful");
         };
 
         window.executeTransfer = async () => {
             const uid = document.getElementById('sendTo').value.toUpperCase();
             const amt = parseInt(document.getElementById('sendAmt').value);
             const rSnap = await getDocs(query(collection(db, "users"), where("UID", "==", uid)));
-            if(rSnap.empty) return alert("UID Not Found");
+            if(rSnap.empty) return alert("Receiver Fail");
             const rId = rSnap.docs[0].id; const sDoc = await getDoc(doc(db, "users", activePhone));
-            if(sDoc.data().Balance < amt) return alert("Insufficent Assets");
+            if(sDoc.data().Balance < amt) return alert("Low Assets");
             await updateDoc(doc(db, "users", activePhone), { Balance: sDoc.data().Balance - amt });
             await updateDoc(doc(db, "users", rId), { Balance: (rSnap.docs[0].data().Balance || 0) + amt });
             await addDoc(collection(db, "transactions"), { User: activePhone, Title: "To: "+uid, Category: "TRANSFER", Amount: "-"+amt, Timestamp: serverTimestamp() });
             await addDoc(collection(db, "transactions"), { User: rId, Title: "From: "+sDoc.data().UID, Category: "TRANSFER", Amount: "+"+amt, Timestamp: serverTimestamp() });
-            alert("Transfer Successful"); closeModals();
+            alert("Transfer Sent"); closeModals();
         };
 
         window.submitCashout = async () => {
             const amt = parseInt(document.getElementById('coAmt').value);
             const s = await getDoc(doc(db, "users", activePhone));
-            if(s.data().Balance < amt) return alert("Low Funds");
+            if(s.data().Balance < amt) return alert("Low Assets");
             await updateDoc(doc(db, "users", activePhone), { Balance: s.data().Balance - amt });
             await addDoc(collection(db, "cashout_requests"), { User: activePhone, UserName: s.data().Name, Amount: amt, Method: document.getElementById('coMethod').value, Status: "Pending", Timestamp: serverTimestamp() });
-            await addDoc(collection(db, "transactions"), { User: activePhone, Title: "Payout Requested", Category: "PAYOUT", Amount: "-"+amt, Timestamp: serverTimestamp() });
-            alert("Request Registered"); closeModals();
+            await addDoc(collection(db, "transactions"), { User: activePhone, Title: "Payout Request", Category: "PAYOUT", Amount: "-"+amt, Timestamp: serverTimestamp() });
+            alert("Payout Logged"); closeModals();
         };
 
         window.updateNotice = async () => { await setDoc(doc(db, "system_config", "broadcast"), { message: document.getElementById('noticeInput').value }); document.getElementById('noticeInput').value = ""; alert("Board Updated"); };
@@ -275,7 +293,7 @@
                 sn.forEach(d => { const r = d.data(); list.innerHTML += `<div class="glass-panel p-4 flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${r.UserName}</p><p class="text-[8px] text-yellow-500">${r.Method} • $${r.Amount}</p></div><button onclick="clearPayout('${d.id}')" class="bg-blue-600 px-4 py-2 rounded-xl text-[10px] font-bold uppercase">Settle</button></div>`; });
             });
         }
-        window.clearPayout = async (id) => { await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" }); alert("Settle Success"); };
+        window.clearPayout = async (id) => { await updateDoc(doc(db, "cashout_requests", id), { Status: "Cleared" }); alert("Settled"); };
     </script>
 </body>
 </html>
