@@ -11,11 +11,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
         body { 
             background: #0a0a0c; 
-            background-image: radial-gradient(circle at 10% 20%, rgba(91, 33, 182, 0.2) 0%, transparent 40%),
-                              radial-gradient(circle at 90% 80%, rgba(29, 78, 216, 0.2) 0%, transparent 40%);
+            background-image: radial-gradient(circle at 10% 20%, rgba(91, 33, 182, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(29, 78, 216, 0.15) 0%, transparent 40%);
             color: white; 
             font-family: 'Inter', sans-serif; 
-            min-height: 100-vh;
+            min-height: 100vh;
         }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .visa-card {
@@ -36,7 +36,6 @@
         @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .btn-exit { background: linear-gradient(to right, #ef4444, #b91c1c); transition: all 0.3s; }
-        .btn-exit:hover { filter: hue-rotate(15deg) brightness(1.2); }
     </style>
 </head>
 <body class="p-4 pb-20">
@@ -50,8 +49,8 @@
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <div id="loginFields">
                 <input id="lPhone" type="tel" inputmode="numeric" placeholder="Phone Number" class="w-full bg-black/40 p-4 rounded-2xl mb-4 outline-none border border-white/10 focus:border-blue-500 text-white">
-                <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full bg-black/40 p-4 rounded-2xl mb-6 outline-none border border-white/10 focus:border-blue-500 text-center font-bold tracking-[1em]">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition shadow-lg shadow-blue-900/20">Authorize Access</button>
+                <input id="lPass" type="tel" inputmode="numeric" maxlength="6" placeholder="6-Digit PIN" style="-webkit-text-security: disc;" class="w-full bg-black/40 p-4 rounded-2xl mb-6 outline-none border border-white/10 focus:border-blue-500 text-center font-bold tracking-[1em]">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition shadow-lg">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Initialize New Protocol</button>
             </div>
 
@@ -62,7 +61,7 @@
                 <input id="sDist" type="text" placeholder="District" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/10">
                 <input id="sPass" type="tel" inputmode="numeric" maxlength="6" placeholder="Set 6-Digit PIN" class="w-full bg-black/40 p-4 rounded-2xl outline-none border border-white/10 text-center">
                 <div class="pt-2 border-t border-white/5">
-                    <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Required Admin Access Key</p>
+                    <p class="text-[9px] uppercase opacity-40 mb-2 text-center">Required Access Key</p>
                     <input id="sOTP" type="tel" maxlength="6" placeholder="000000" class="w-full bg-red-900/10 p-4 rounded-2xl outline-none border border-red-500/20 text-center font-mono tracking-[0.5em] text-red-400">
                 </div>
                 <button onclick="handleSignup()" class="w-full bg-green-600 font-bold py-4 rounded-2xl active:scale-95 transition">Initialize Identity</button>
@@ -78,7 +77,6 @@
                 <h3 class="text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                     <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Master Terminal
                 </h3>
-                <span id="totalCirc" class="text-[10px] font-bold text-blue-400"></span>
             </div>
 
             <div class="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5">
@@ -88,7 +86,7 @@
 
             <div class="space-y-3">
                 <p class="text-[9px] uppercase opacity-40 ml-1">Asset Forge</p>
-                <input id="forgeTarget" oninput="lookupName(this.value, 'forgeName')" type="text" placeholder="UID or Phone" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none uppercase border border-white/5">
+                <input id="forgeTarget" oninput="lookupName(this.value, 'forgeName')" type="text" placeholder="UID or Phone" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5 uppercase">
                 <p id="forgeName" class="text-[10px] text-blue-400 ml-2 hidden"></p>
                 <input id="forgeAmt" type="number" placeholder="Amount ($)" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5">
                 <div class="flex gap-2">
@@ -98,9 +96,9 @@
             </div>
 
             <div class="space-y-3">
-                <p class="text-[9px] uppercase opacity-40 ml-1">System Notice</p>
+                <p class="text-[9px] uppercase opacity-40 ml-1">Global Notice</p>
                 <div class="flex gap-2">
-                    <input id="newNotice" type="text" placeholder="Update message..." class="flex-1 bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5">
+                    <input id="newNotice" type="text" placeholder="Notice text..." class="flex-1 bg-black/40 p-4 rounded-2xl text-xs border border-white/5">
                     <button onclick="updateNotice()" class="bg-blue-600 px-4 rounded-2xl font-bold text-xs">Post</button>
                 </div>
             </div>
@@ -109,72 +107,63 @@
 
         <div class="visa-card p-7 rounded-[2rem] shadow-2xl flex flex-col justify-between">
             <div class="flex justify-between items-start">
-                <h2 class="text-2xl font-black italic tracking-tighter text-white/90">NEXGEN</h2>
-                <div class="w-12 h-9 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-200 rounded-md opacity-80 shadow-inner"></div>
+                <h2 class="text-2xl font-black italic tracking-tighter">NEXGEN</h2>
+                <div class="w-12 h-9 bg-gradient-to-br from-yellow-200 to-yellow-500 rounded-md opacity-80"></div>
             </div>
             <div>
-                <p class="text-[10px] uppercase opacity-60 tracking-[0.2em] mb-1">Available Assets</p>
+                <p class="text-[10px] uppercase opacity-60 tracking-[0.2em] mb-1">Total Balance</p>
                 <div class="text-4xl font-bold tracking-tight">$<span id="dBal">0.00</span></div>
             </div>
             <div class="flex justify-between items-end">
                 <div>
-                    <p id="dName" class="text-sm font-semibold tracking-wide uppercase"></p>
+                    <p id="dName" class="text-sm font-semibold uppercase"></p>
                     <p id="dUID" class="text-[10px] font-mono opacity-50 tracking-widest"></p>
-                </div>
-                <div class="text-right">
-                    <p class="text-[8px] font-black italic opacity-60">PREMIUM</p>
-                    <div class="flex -space-x-2 mt-1">
-                        <div class="w-6 h-6 rounded-full bg-red-500/80"></div>
-                        <div class="w-6 h-6 rounded-full bg-yellow-500/80"></div>
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="marquee-area glass p-3">
-            <div class="marquee-content text-blue-400 text-xs font-bold" id="noticeBoard">Initializing network connection...</div>
+            <div class="marquee-content text-blue-400 text-xs font-bold" id="noticeBoard">Synchronizing with Protocol...</div>
         </div>
 
         <div id="userTools" class="space-y-4">
             <div class="glass p-6 rounded-[2.5rem]">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Capital Transfer</p>
-                <input id="sendTo" oninput="lookupName(this.value, 'sendName')" type="text" placeholder="Recipient UID or Phone" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none uppercase border border-white/10 mb-2">
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Transfer Assets</p>
+                <input id="sendTo" oninput="lookupName(this.value, 'sendName')" type="text" placeholder="Recipient UID or Phone" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/10 mb-2 uppercase">
                 <p id="sendName" class="text-[10px] text-blue-400 ml-2 mb-3 hidden"></p>
                 <div class="flex gap-2">
-                    <input id="sendAmt" type="number" placeholder="Amount" class="flex-1 bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/10">
-                    <button onclick="executeTransfer()" class="bg-blue-600 px-8 rounded-2xl font-bold active:scale-95 transition">Send</button>
+                    <input id="sendAmt" type="number" placeholder="Amount" class="flex-1 bg-black/40 p-4 rounded-2xl text-xs border border-white/10">
+                    <button onclick="executeTransfer()" class="bg-blue-600 px-8 rounded-2xl font-bold active:scale-95">Send</button>
                 </div>
             </div>
 
             <div class="glass p-6 rounded-[2.5rem]">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Request Withdrawal</p>
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest mb-4">Withdrawal Request</p>
                 <div class="grid grid-cols-2 gap-2 mb-3">
-                    <select id="coMethod" class="bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/10">
-                        <option value="bKash">bKash 🟢</option>
-                        <option value="Nagad">Nagad 🟠</option>
-                        <option value="Rocket">Rocket 🟣</option>
+                    <select id="coMethod" class="bg-black/40 p-4 rounded-2xl text-xs border border-white/10">
+                        <option value="bKash">bKash</option><option value="Nagad">Nagad</option><option value="Rocket">Rocket</option>
                     </select>
-                    <input id="coAmt" type="number" placeholder="Amount" class="bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/10">
+                    <input id="coAmt" type="number" placeholder="Amount" class="bg-black/40 p-4 rounded-2xl text-xs border border-white/10">
                 </div>
-                <input id="coNum" type="tel" inputmode="numeric" placeholder="Account Number" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/10 mb-3">
-                <button onclick="submitCashout()" class="w-full bg-blue-600/10 text-blue-400 border border-blue-500/20 py-4 rounded-2xl text-[11px] font-bold active:scale-95 transition">Request Settlement</button>
+                <input id="coNum" type="tel" inputmode="numeric" placeholder="Account Number" class="w-full bg-black/40 p-4 rounded-2xl text-xs border border-white/10 mb-3">
+                <button onclick="submitCashout()" class="w-full bg-blue-600/10 text-blue-400 border border-blue-500/20 py-4 rounded-2xl text-[11px] font-bold">Request Settlement</button>
             </div>
         </div>
 
         <div class="space-y-4">
             <div class="flex justify-between items-center px-2">
-                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest">Statements</p>
+                <p class="text-[10px] font-bold uppercase opacity-30 tracking-widest">History</p>
                 <button onclick="downloadPDF()" class="text-[9px] bg-white/10 px-3 py-1 rounded-lg">Export PDF</button>
             </div>
             <div id="txList" class="space-y-2 pb-10"></div>
         </div>
 
-        <button onclick="handleLogout()" class="w-full btn-exit py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl active:scale-95">Secure Session Termination</button>
+        <button onclick="handleLogout()" class="w-full btn-exit py-4 rounded-2xl font-black uppercase text-xs shadow-xl active:scale-95">Secure Session Termination</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, where, getDocs, addDoc, orderBy, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, where, getDocs, addDoc, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCgRtUxdvUww0LOfGcKr43l0HI9rOY-Gpg", authDomain: "my-wallet-920a6.firebaseapp.com", projectId: "my-wallet-920a6", storageBucket: "my-wallet-920a6.firebasestorage.app", messagingSenderId: "414624520334", appId: "1:414624520334:web:c36fa879d7e28808f691df" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app);
@@ -187,12 +176,14 @@
         };
 
         window.handleLogin = async () => {
-            const p = document.getElementById('lPhone').value;
-            const pin = document.getElementById('lPass').value;
+            const p = document.getElementById('lPhone').value.trim();
+            const pin = document.getElementById('lPass').value.trim();
             if(!p || !pin) return alert("Credentials required");
             const s = await getDoc(doc(db, "users", p));
-            if(s.exists() && s.data().PIN == pin) { userSess = s.data(); userSess.id = p; startBank(); }
-            else alert("Access Denied: Invalid Phone or PIN");
+            if(s.exists() && (s.data().PIN == pin || s.data().pin == pin)) { 
+                userSess = s.data(); userSess.id = p; 
+                startBank(); 
+            } else alert("Access Denied: Invalid Credentials");
         };
 
         window.handleSignup = async () => {
@@ -208,11 +199,18 @@
         function startBank() {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
-            if(userSess.id === MASTER_PHONE) { document.getElementById('adminPanel').classList.remove('hidden'); initMaster(); }
+            if(userSess.id === MASTER_PHONE) { 
+                document.getElementById('adminPanel').classList.remove('hidden'); 
+                initMaster(); 
+            }
             
             onSnapshot(doc(db, "users", userSess.id), s => {
-                const d = s.data(); document.getElementById('dBal').innerText = (d.Balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('dName').innerText = d.Name; document.getElementById('dUID').innerText = d.UID;
+                if(s.exists()){
+                    const d = s.data(); 
+                    document.getElementById('dBal').innerText = (d.Balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    document.getElementById('dName').innerText = d.Name; 
+                    document.getElementById('dUID').innerText = d.UID;
+                }
             });
 
             onSnapshot(doc(db, "system_config", "access_codes"), s => document.getElementById('noticeBoard').innerText = s.data().notice_text);
@@ -223,7 +221,7 @@
                 sn.forEach(d => {
                     const t = d.data(); const isNeg = t.Amount.toString().includes('-');
                     list.innerHTML += `<div class="bg-white/5 p-4 rounded-2xl flex justify-between border border-white/5">
-                        <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40 uppercase tracking-tighter">${t.Timestamp?.toDate().toLocaleString() || 'Pending...'}</p></div>
+                        <div><p class="text-xs font-bold">${t.Title}</p><p class="text-[8px] opacity-40 uppercase">${t.Timestamp?.toDate().toLocaleString() || '...'}</p></div>
                         <p class="font-black ${isNeg?'text-red-400':'text-green-400'}">${isNeg ? '' : '+'}${t.Amount} $</p></div>`;
                 });
             });
@@ -231,15 +229,15 @@
 
         window.lookupName = async (val, displayId) => {
             const el = document.getElementById(displayId);
-            if(val.length < 5) return el.classList.add('hidden');
+            if(val.length < 4) return el.classList.add('hidden');
             let q = val.startsWith('NEX') ? query(collection(db, "users"), where("UID", "==", val.toUpperCase())) : query(collection(db, "users"), where("phone", "==", val));
-            if(!val.startsWith('NEX')) { // phone fallback
-                const s = await getDoc(doc(db, "users", val));
-                if(s.exists()){ el.innerText = "✓ " + s.data().Name; el.classList.remove('hidden'); return; }
-            }
             const snap = await getDocs(q);
             if(!snap.empty) { el.innerText = "✓ " + snap.docs[0].data().Name; el.classList.remove('hidden'); }
-            else { el.innerText = "✗ Not Found"; el.classList.remove('hidden'); }
+            else { 
+                const sDirect = await getDoc(doc(db, "users", val));
+                if(sDirect.exists()){ el.innerText = "✓ " + sDirect.data().Name; el.classList.remove('hidden'); }
+                else { el.innerText = "✗ Not Found"; el.classList.remove('hidden'); }
+            }
         };
 
         window.generateNewOTP = async () => {
@@ -250,37 +248,43 @@
         window.updateNotice = async () => {
             const msg = document.getElementById('newNotice').value;
             await updateDoc(doc(db, "system_config", "access_codes"), { notice_text: msg });
-            alert("Broadcasting...");
         };
 
         window.handleForge = async (type) => {
-            const target = document.getElementById('forgeTarget').value.toUpperCase();
+            const target = document.getElementById('forgeTarget').value.toUpperCase().trim();
             const amt = parseFloat(document.getElementById('forgeAmt').value);
-            const q = target.startsWith('NEX') ? query(collection(db, "users"), where("UID", "==", target)) : null;
-            let uDoc = null;
-            if(q) { const s = await getDocs(q); uDoc = s.docs[0]; } 
-            else { uDoc = await getDoc(doc(db, "users", target)); }
-            
-            if(!uDoc || !uDoc.exists) return alert("Target missing");
-            const nb = type === 'MINT' ? (uDoc.data().Balance + amt) : (uDoc.data().Balance - amt);
-            await updateDoc(doc(db, uDoc.ref.path), { Balance: nb });
-            await addDoc(collection(db, "transactions"), { User: uDoc.id, Title: "Central " + type, Amount: (type === 'MINT' ? "" : "-") + amt, Timestamp: serverTimestamp() });
-            alert("Forge Complete");
+            let uRef = doc(db, "users", target);
+            let uSnap = await getDoc(uRef);
+            if(!uSnap.exists()){
+                const q = query(collection(db, "users"), where("UID", "==", target));
+                const s = await getDocs(q);
+                if(!s.empty) { uRef = s.docs[0].ref; uSnap = s.docs[0]; }
+                else return alert("Target missing");
+            }
+            const nb = type === 'MINT' ? (uSnap.data().Balance + amt) : (uSnap.data().Balance - amt);
+            await updateDoc(uRef, { Balance: nb });
+            await addDoc(collection(db, "transactions"), { User: uSnap.id, Title: "Central " + type, Amount: (type === 'MINT' ? "" : "-") + amt, Timestamp: serverTimestamp() });
+            alert("Forge Successful");
         };
 
         window.executeTransfer = async () => {
-            const to = document.getElementById('sendTo').value.toUpperCase();
+            const to = document.getElementById('sendTo').value.toUpperCase().trim();
             const amt = parseFloat(document.getElementById('sendAmt').value);
-            const q = to.startsWith('NEX') ? query(collection(db, "users"), where("UID", "==", to)) : null;
-            let rDoc = null;
-            if(q) { const s = await getDocs(q); rDoc = s.docs[0]; } else { rDoc = await getDoc(doc(db, "users", to)); }
-            if(!rDoc || !rDoc.exists) return alert("Recipient not found");
+            let rSnap = null;
+            let rRef = doc(db, "users", to);
+            const dSnap = await getDoc(rRef);
+            if(dSnap.exists()) { rSnap = dSnap; } else {
+                const q = query(collection(db, "users"), where("UID", "==", to));
+                const s = await getDocs(q);
+                if(!s.empty) { rSnap = s.docs[0]; rRef = s.docs[0].ref; }
+            }
+            if(!rSnap) return alert("Recipient not found");
             const sSnap = await getDoc(doc(db, "users", userSess.id));
             if(sSnap.data().Balance < amt) return alert("Insufficient Assets");
             await updateDoc(doc(db, "users", userSess.id), { Balance: sSnap.data().Balance - amt });
-            await updateDoc(doc(db, rDoc.ref.path), { Balance: (rDoc.data().Balance || 0) + amt });
-            await addDoc(collection(db, "transactions"), { User: userSess.id, Title: "To: " + rDoc.data().Name, Amount: "-" + amt, Timestamp: serverTimestamp() });
-            await addDoc(collection(db, "transactions"), { User: rDoc.id, Title: "From: " + sSnap.data().Name, Amount: amt, Timestamp: serverTimestamp() });
+            await updateDoc(rRef, { Balance: (rSnap.data().Balance || 0) + amt });
+            await addDoc(collection(db, "transactions"), { User: userSess.id, Title: "To: " + rSnap.data().Name, Amount: "-" + amt, Timestamp: serverTimestamp() });
+            await addDoc(collection(db, "transactions"), { User: rSnap.id, Title: "From: " + sSnap.data().Name, Amount: amt, Timestamp: serverTimestamp() });
             alert("Transfer Successful");
         };
 
@@ -317,7 +321,7 @@
             const sn = await getDocs(query(collection(db, "transactions"), where("User", "==", userSess.id), orderBy("Timestamp", "desc")));
             const rows = []; sn.forEach(x => { const v = x.data(); rows.push([v.Timestamp?.toDate().toLocaleDateString(), v.Title, v.Amount + " $"]); });
             docP.autoTable({ startY: 30, head: [['Date', 'Description', 'Amount']], body: rows });
-            docP.save(`NEXGEN_Statement_${userSess.id}.pdf`);
+            docP.save(`NEXGEN_Stmt.pdf`);
         };
 
         window.handleLogout = () => { location.reload(); };
