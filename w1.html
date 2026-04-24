@@ -28,8 +28,7 @@
         <div class="glass p-8 rounded-[2.5rem] w-full max-w-sm">
             <div id="loginFields">
                 <input id="lPhone" type="tel" placeholder="Phone Number" class="w-full bg-black/40 p-4 rounded-2xl mb-4 outline-none border border-white/5 focus:border-blue-500 transition text-white">
-                <input id="lPass" type="tel" maxlength="6" placeholder="PIN" style="-webkit-text-security: disc;" class="w-full bg-black/40 p-4 rounded-2xl mb-4 outline-none border border-white/5 focus:border-blue-500 text-center font-bold tracking-widest">
-                <input id="lAccess" type="tel" maxlength="6" placeholder="Access Code" class="w-full bg-blue-900/10 p-4 rounded-2xl mb-6 outline-none border border-blue-500/20 text-center font-mono tracking-[0.3em] text-blue-400">
+                <input id="lPass" type="tel" maxlength="6" placeholder="Enter PIN" style="-webkit-text-security: disc;" class="w-full bg-black/40 p-4 rounded-2xl mb-6 outline-none border border-white/5 focus:border-blue-500 text-center font-bold tracking-widest">
                 <button onclick="handleLogin()" class="w-full bg-blue-600 font-bold py-4 rounded-2xl mb-4 active:scale-95 transition">Authorize Access</button>
                 <button onclick="toggleAuth(false)" class="w-full text-[10px] uppercase tracking-widest opacity-40">Create New Account</button>
             </div>
@@ -70,7 +69,7 @@
             
             <div class="flex items-center justify-between bg-black/60 p-5 rounded-2xl border border-red-500/10">
                 <div>
-                    <p class="text-[8px] opacity-40 uppercase">Live Access Key</p>
+                    <p class="text-[8px] opacity-40 uppercase">Reg. Access Key</p>
                     <p id="liveOTP" class="font-mono text-yellow-500 font-bold text-2xl tracking-widest">------</p>
                 </div>
                 <button onclick="generateNewOTP()" class="bg-red-600 px-5 py-3 rounded-xl text-[10px] font-bold active:scale-90 transition">REFRESH</button>
@@ -148,11 +147,7 @@
         window.handleLogin = async () => {
             const p = document.getElementById('lPhone').value;
             const pin = document.getElementById('lPass').value;
-            const access = document.getElementById('lAccess').value;
-            if(!p || !pin || !access) return alert("All fields required");
-            
-            const conf = await getDoc(doc(db, "system_config", "access_codes"));
-            if(access !== conf.data().current_otp) return alert("Invalid Access Code");
+            if(!p || !pin) return alert("Credentials required");
 
             const s = await getDoc(doc(db, "users", p));
             if(s.exists() && s.data().Password == pin) {
