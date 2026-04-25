@@ -81,21 +81,21 @@ body {
     background-position: center;
 }
 
-/* UPDATED: GitHub image moved strictly to the LEFT */
+/* UPDATED: Watermark shifted to the left by 30% */
 .visa-card::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
+    left: -30%; /* Shifting image start point */
     bottom: 0;
-    width: 60%; 
+    width: 80%; /* Width adjusted for the shift */
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
-    background-position: left center; 
+    background-position: center left; 
     opacity: 0.5;
     z-index: 1;
-    mask-image: linear-gradient(to right, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    mask-image: linear-gradient(to right, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
 }
 
 .visa-card::after {
