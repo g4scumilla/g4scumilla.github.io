@@ -1,72 +1,128 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Gemini Prompt Page</title>
-  <style>
-    body{
-      font-family: Arial, sans-serif;
-      background:#0a0f1c;
-      color:white;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-      margin:0;
-    }.container{
-  width:90%;
-  max-width:500px;
-  background:#11182b;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
+<meta charset="UTF-8">
+<title>Free AI Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#0f172a;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
 }
 
-h2{
+.header{
+  padding:15px;
+  background:#1e293b;
   text-align:center;
-  margin-bottom:15px;
+  font-weight:bold;
 }
 
-textarea{
-  width:100%;
-  height:100px;
+.chat{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.msg{
+  margin:8px 0;
+  padding:10px;
+  border-radius:10px;
+  max-width:80%;
+}
+
+.user{
+  background:#3b82f6;
+  margin-left:auto;
+}
+
+.bot{
+  background:#334155;
+}
+
+.input-area{
+  display:flex;
+  padding:10px;
+  background:#1e293b;
+}
+
+input{
+  flex:1;
+  padding:10px;
   border:none;
   border-radius:8px;
-  padding:10px;
-  font-size:14px;
-  resize:none;
 }
 
 button{
-  width:100%;
+  margin-left:10px;
   padding:10px;
-  margin-top:10px;
-  background:#0070c0;
   border:none;
   border-radius:8px;
+  background:#22c55e;
   color:white;
-  font-size:16px;
-  cursor:pointer;
 }
-
-button:hover{
-  background:#005fa3;
-}
-
-.response{
-  margin-top:15px;
-  background:#0a0f1c;
-  padding:10px;
-  border-radius:8px;
-  min-height:80px;
-}
-
-  </style>
+</style>
 </head>
-<body><div class="container">
-  <h2>Gemini Prompt</h2>
-  <textarea id="prompt" placeholder="Type your prompt..."></textarea>
-  <button onclick="sendPrompt()">Ask Gemini</button>  <div class="response" id="response">Response will appear here...</div>
-</div><script>
-async function sendPrompt(){
-  const prompt = document.getElementById("prompt").value;
-  const responseBox = document.getElementById("response");
+
+<body>
+
+<div class="header">Free AI Chat</div>
+
+<div id="chat" class="chat"></div>
+
+<div class="input-area">
+  <input id="prompt" placeholder="Type message..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+
+function add(text, type){
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+  document.getElementById("chat").appendChild(div);
+  div.scrollIntoView();
+}
+
+async function send(){
+  const input = document.getElementById("prompt");
+  const text = input.value.trim();
+  if(!text) return;
+
+  add(text, "user");
+  input.value = "";
+
+  add("Thinking...", "bot");
+
+  try{
+    const res = await fetch("https://api.affiliateplus.xyz/api/chatbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        user: "user1"
+      })
+    });
+
+    const data = await res.json();
+
+    document.querySelector(".bot:last-child").remove();
+
+    add(data.message || "No reply", "bot");
+
+  } catch(e){
+    document.querySelector(".bot:last-child").remove();
+    add("Error: " + e.message, "bot");
+  }
+}
+
+</script>
+
+</body>
+</html>
