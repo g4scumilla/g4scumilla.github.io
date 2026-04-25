@@ -17,7 +17,7 @@
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
 }
 
-/* APK VIBE */
+/* APK VIBE: Prevent web behaviors */
 * { 
     -webkit-tap-highlight-color: transparent; 
     -webkit-touch-callout: none;
@@ -26,13 +26,14 @@
     box-sizing: border-box;
 }
 
+/* BODY: Background image with overlay */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: 320px;
     padding-bottom: calc(80px + var(--safe-area-inset-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.9)), 
-                url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
+                url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
@@ -75,34 +76,33 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
-    background: #fff; /* Base color for the left side */
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+    background-position: center;
 }
 
-/* Flower Image on the Right */
+/* UPDATED: GitHub image moved to the right */
 .visa-card::before {
     content: "";
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 80%; 
-    background: url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
+    width: 60%; /* Occupies the right portion */
+    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
-    background-position: right center;
-    opacity: 0.8;
+    background-position: right center; /* Aligns flower to the right edge */
+    opacity: 0.5;
     z-index: 1;
+    mask-image: linear-gradient(to left, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
 }
 
-/* UPDATED: Overlay to make the LEFT side whiter/transparent */
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    /* Gradient: Whiter on the left, fading to red/transparent on the right */
-    background: linear-gradient(to right, 
-        rgba(255, 255, 255, 0.95) 0%, 
-        rgba(255, 255, 255, 0.7) 30%, 
-        rgba(211, 47, 47, 0.3) 100%);
+    background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(211, 47, 47, 0.3));
     z-index: 2;
 }
 
@@ -123,6 +123,7 @@ body {
     align-items: center;
     font-size: 10px;
     font-weight: 700;
+    transition: transform 0.1s ease;
 }
 
 .service-item:active { transform: scale(0.9); }
@@ -149,6 +150,7 @@ body {
     display: flex;
     align-items: center;
     border: 1px solid #f0f0f0;
+    transition: background 0.2s;
     animation: slideIn 0.3s ease-out;
 }
 
@@ -156,6 +158,8 @@ body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.tx-card:active { background: #f0f0f0; }
 
 .user-initial {
     width: 38px;
@@ -196,8 +200,13 @@ body {
     flex: 1;
 }
 
+.nav-item:active { opacity: 0.5; }
 .nav-active { color: var(--g4s-red); }
+
+/* NEW: Sync Animation */
 .fa-spin-custom { animation: fa-spin 2s infinite linear; }
+
+/* Scrollbar Hide */
 ::-webkit-scrollbar { display: none; }
 </style>
 </head>
@@ -212,15 +221,15 @@ body {
     <div class="card-container">
         <div class="visa-card">
             <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 10px;">
-                <div style="font-size:10px; color: #444; opacity:0.9; letter-spacing: 1px;">BALANCE</div>
-                <div id="bal-text" style="font-size:24px; color: #000; font-weight:bold;">
+                <div style="font-size:10px; opacity:0.9; letter-spacing: 1px;">BALANCE</div>
+                <div id="bal-text" style="font-size:24px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
                     <i class="fa-solid fa-rotate fa-spin-custom"></i> Syncing...
                 </div>
             </div>
 
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.05);">
-                <div style="font-size:11px; font-weight:bold; color: #333;">ABDULLAHIL KUAFI</div>
-                <div style="font-size:8px; color: #555; margin-top:2px;">
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.2);">
+                <div style="font-size:11px; font-weight:bold; color: #fff;">ABDULLAHIL KUAFI</div>
+                <div style="font-size:8px; opacity:0.8; margin-top:2px;">
                     Executive - Manned Services | ID: 2000417<br>
                     Joined: 5 MAY 2023 | Service: <span id="duration-text">...</span>
                 </div>
@@ -253,41 +262,67 @@ let DATA = {transactions:[], users:{}};
 function updateDuration() {
     const joinDate = new Date("2023-05-05");
     const now = new Date();
+
     let years = now.getFullYear() - joinDate.getFullYear();
     let months = now.getMonth() - joinDate.getMonth();
     let days = now.getDate() - joinDate.getDate();
-    if (days < 0) { months--; let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += lastMonth.getDate(); }
-    if (months < 0) { years--; months += 12; }
+
+    if (days < 0) {
+        months--;
+        let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += lastMonth.getDate();
+    }
+
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
     document.getElementById("duration-text").innerText = `${years}Y ${months}M ${days}D`;
 }
 
-async function sync() { try { const r = await fetch(DATA_API); DATA = await r.json(); renderDash(); } catch(e) {} }
+async function sync() {
+    try {
+        const r = await fetch(DATA_API);
+        DATA = await r.json();
+        renderDash();
+    } catch(e) {}
+}
 
 async function fetchBalance() {
     try {
         const r = await fetch(BAL_API);
         const d = await r.json();
         document.getElementById("bal-text").innerText = "৳ " + Math.floor(d.balance || 0);
-    } catch(e) { document.getElementById("bal-text").innerText = "Error"; }
+    } catch(e) {
+        document.getElementById("bal-text").innerText = "Error";
+    }
 }
 
 function renderDash() {
     let h = `<div style="padding:10px 20px;font-weight:bold; color:#d32f2f; font-size:12px;">RECENT TRANSACTIONS</div>`;
+
     (DATA.transactions || []).slice(-10).reverse().forEach(t => {
-        h += `<div class="tx-card">
+        h += `
+        <div class="tx-card">
             <div class="user-initial">${t.person ? t.person[0] : "?"}</div>
             <div class="center-meta">
                 <div style="font-size:13px; font-weight:bold;">${t.person || ""}</div>
                 <div style="font-size:11px; color:#888;">${t.note || ""}</div>
             </div>
-            <div class="amount-side" style="color:${t.type=='Withdraw'?'#d32f2f':'#2e7d32'}">৳${t.amount}</div>
+            <div class="amount-side" style="color:${t.type=='Withdraw'?'#d32f2f':'#2e7d32'}">
+                ৳${t.amount}
+            </div>
         </div>`;
     });
+
     document.getElementById("main-content").innerHTML = h;
 }
 
 window.onload = function () {
-    sync(); fetchBalance(); updateDuration();
+    sync();
+    fetchBalance();
+    updateDuration();
     setInterval(fetchBalance, 10000);
 };
 </script>
