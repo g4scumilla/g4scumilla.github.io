@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G4SPay</title>
+<title>G4S FUND</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -42,7 +42,7 @@ body {
 
 .card-container { padding: 0 15px; }
 
-/* 💳 FINAL PREMIUM CARD (ONLY MODIFIED PART) */
+/* 💳 PREMIUM CARD */
 .visa-card {
     border-radius: 15px;
     aspect-ratio: 1.58 / 1;
@@ -53,32 +53,36 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
+    background: #1a1a1a; /* Dark base for better contrast */
+}
 
-    /* 🌸 Flower background */
+/* 🌸 Flower Watermark Overlay */
+.visa-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
     background-position: center;
-
-    backdrop-filter: blur(6px) brightness(0.75);
+    opacity: 0.3; /* Subtle watermark effect */
+    z-index: 0;
 }
 
-/* overlay */
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
         135deg,
-        rgba(0,0,0,0.55),
-        rgba(255,0,80,0.15),
-        rgba(0,180,255,0.15)
+        rgba(0,0,0,0.6),
+        rgba(211, 47, 47, 0.3)
     );
-    z-index: 0;
+    z-index: 1;
 }
 
 .visa-card > * {
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 /* SERVICE GRID */
@@ -126,7 +130,8 @@ body {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: #f4f4f4;
+    background: #f44336;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,24 +170,24 @@ body {
 
 <div class="fixed-header">
     <div class="top-bar">
-        <span>G4SPay</span>
+        <span>G4S FUND</span>
         <i class="fa-solid fa-shield-halved"></i>
     </div>
 
     <div class="card-container">
         <div class="visa-card">
-
-            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-                <div style="font-size:12px; opacity:0.7;">CENTRAL BALANCE</div>
-
-                <!-- 🔥 NO DECIMAL BALANCE -->
-                <div id="bal-text" style="font-size:22px; font-weight:bold;">Loading...</div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 10px;">
+                <div style="font-size:10px; opacity:0.9; letter-spacing: 1px;">G4S_FUND</div>
+                <div id="bal-text" style="font-size:28px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Loading...</div>
             </div>
 
-            <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.8; font-weight:bold;">
-                ABDULLAHIL KUAFI
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.2);">
+                <div style="font-size:11px; font-weight:bold; color: #fff;">ABDULLAHIL KUAFI</div>
+                <div style="font-size:8px; opacity:0.8; margin-top:2px;">
+                    ID: G4SNM2000417 | Executive - Manned Services<br>
+                    Joined: 5 MAY 2023 | Service: <span id="duration-text">...</span>
+                </div>
             </div>
-
         </div>
     </div>
 
@@ -208,6 +213,21 @@ const BAL_API  = "https://script.google.com/macros/s/AKfycbyQxeX1xqmSEcksnoxxZZM
 
 let DATA = {transactions:[], users:{}};
 
+// Logic to calculate job duration
+function updateDuration() {
+    const joinDate = new Date("2023-05-05");
+    const now = new Date();
+    let years = now.getFullYear() - joinDate.getFullYear();
+    let months = now.getMonth() - joinDate.getMonth();
+    
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+    
+    document.getElementById("duration-text").innerText = `${years}Y ${months}M`;
+}
+
 async function sync() {
     try {
         const r = await fetch(DATA_API);
@@ -216,32 +236,28 @@ async function sync() {
     } catch(e) {}
 }
 
-/* 🔥 BALANCE WITHOUT DECIMAL */
 async function fetchBalance() {
     try {
         const r = await fetch(BAL_API);
         const d = await r.json();
-
-        document.getElementById("bal-text").innerText =
-            "৳ " + Math.floor(d.balance || 0);
-
+        document.getElementById("bal-text").innerText = "৳ " + Math.floor(d.balance || 0);
     } catch(e) {
         document.getElementById("bal-text").innerText = "Error";
     }
 }
 
 function renderDash() {
-    let h = `<div style="padding:10px 20px;font-weight:bold;">RECENT</div>`;
+    let h = `<div style="padding:10px 20px;font-weight:bold; color:#666; font-size:12px;">RECENT TRANSACTIONS</div>`;
 
     (DATA.transactions || []).slice(-10).reverse().forEach(t => {
         h += `
         <div class="tx-card">
             <div class="user-initial">${t.person ? t.person[0] : "?"}</div>
             <div class="center-meta">
-                <b>${t.person || ""}</b>
-                <span>${t.note || ""}</span>
+                <div style="font-size:13px; font-weight:bold;">${t.person || ""}</div>
+                <div style="font-size:11px; color:#888;">${t.note || ""}</div>
             </div>
-            <div class="amount-side" style="color:${t.type=='Withdraw'?'red':'green'}">
+            <div class="amount-side" style="color:${t.type=='Withdraw'?'#d32f2f':'#2e7d32'}">
                 ৳${t.amount}
             </div>
         </div>`;
@@ -253,7 +269,7 @@ function renderDash() {
 window.onload = function () {
     sync();
     fetchBalance();
-
+    updateDuration();
     setInterval(fetchBalance, 10000);
 };
 </script>
