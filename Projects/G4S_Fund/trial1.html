@@ -26,13 +26,12 @@
     box-sizing: border-box;
 }
 
-/* BODY UPDATED: Added background image with overlay */
+/* BODY: Background image with overlay */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: 320px;
     padding-bottom: calc(80px + var(--safe-area-inset-bottom));
-    /* The requested background image */
     background: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.9)), 
                 url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
     background-size: cover;
@@ -82,15 +81,21 @@ body {
     background-position: center;
 }
 
+/* UPDATED: Flower image moved to the right */
 .visa-card::before {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 60%; /* Occupies the right portion */
     background: url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
     background-size: cover;
-    background-position: center;
+    background-position: right center; /* Aligns flower to the right edge */
     opacity: 0.5;
     z-index: 1;
+    mask-image: linear-gradient(to left, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
 }
 
 .visa-card::after {
@@ -136,7 +141,7 @@ body {
     font-size: 18px;
 }
 
-/* TRANSACTIONS - Slightly transparent to show background */
+/* TRANSACTIONS */
 .tx-card {
     background: rgba(255, 255, 255, 0.9);
     padding: 12px 15px;
