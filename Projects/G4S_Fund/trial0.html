@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G4S FUND</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -10,10 +10,7 @@
 <style>
 :root { --g4s-red: #d32f2f; }
 
-* { 
-    -webkit-tap-highlight-color: transparent; 
-    box-sizing: border-box;
-}
+* { -webkit-tap-highlight-color: transparent; }
 
 body {
     margin: 0;
@@ -22,11 +19,7 @@ body {
     padding-bottom: 80px;
     background: #fdfdfd;
     user-select: none;
-    overflow-x: hidden;
 }
-
-/* Hide scrollbar for APK feel */
-body::-webkit-scrollbar { display: none; }
 
 /* HEADER */
 .fixed-header {
@@ -36,7 +29,6 @@ body::-webkit-scrollbar { display: none; }
     right: 0;
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     z-index: 1000;
-    padding-top: env(safe-area-inset-top);
 }
 
 .top-bar {
@@ -61,11 +53,13 @@ body::-webkit-scrollbar { display: none; }
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
+    /* BASE LAYER: The Flower Background */
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
     background-position: center;
 }
 
+/* SECOND LAYER: Mixing the Baby Photo */
 .visa-card::before {
     content: "";
     position: absolute;
@@ -73,19 +67,27 @@ body::-webkit-scrollbar { display: none; }
     background: url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
     background-size: cover;
     background-position: center;
-    opacity: 0.5;
+    opacity: 0.5; /* This creates the mix effect with the flowers */
     z-index: 1;
 }
 
+/* THIRD LAYER: Dark Gradient for Readability */
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(211, 47, 47, 0.3));
+    background: linear-gradient(
+        135deg,
+        rgba(0,0,0,0.65),
+        rgba(211, 47, 47, 0.3)
+    );
     z-index: 2;
 }
 
-.visa-card > * { position: relative; z-index: 3; }
+.visa-card > * {
+    position: relative;
+    z-index: 3; /* Keeps text on top of all images */
+}
 
 /* SERVICE GRID */
 .service-grid {
@@ -179,7 +181,7 @@ body::-webkit-scrollbar { display: none; }
     <div class="card-container">
         <div class="visa-card">
             <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 10px;">
-                <div style="font-size:10px; opacity:0.9; letter-spacing: 1px;">BALANCE</div>
+                <div style="font-size:10px; opacity:0.9; letter-spacing: 1px;">G4S_FUND</div>
                 <div id="bal-text" style="font-size:28px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Loading...</div>
             </div>
 
@@ -218,10 +220,23 @@ let DATA = {transactions:[], users:{}};
 function updateDuration() {
     const joinDate = new Date("2023-05-05");
     const now = new Date();
+    
     let years = now.getFullYear() - joinDate.getFullYear();
     let months = now.getMonth() - joinDate.getMonth();
-    if (months < 0) { years--; months += 12; }
-    document.getElementById("duration-text").innerText = `${years}Y ${months}M`;
+    let days = now.getDate() - joinDate.getDate();
+    
+    if (days < 0) {
+        months--;
+        let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += lastMonth.getDate();
+    }
+    
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+    
+    document.getElementById("duration-text").innerText = `${years}Y ${months}M ${days}D`;
 }
 
 async function sync() {
@@ -244,6 +259,7 @@ async function fetchBalance() {
 
 function renderDash() {
     let h = `<div style="padding:10px 20px;font-weight:bold; color:#666; font-size:12px;">RECENT TRANSACTIONS</div>`;
+
     (DATA.transactions || []).slice(-10).reverse().forEach(t => {
         h += `
         <div class="tx-card">
@@ -257,6 +273,7 @@ function renderDash() {
             </div>
         </div>`;
     });
+
     document.getElementById("main-content").innerHTML = h;
 }
 
