@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Kuafi Dashboard</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f44336">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root { 
+    --g4s-red: #d32f2f; 
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+}
+
+* { 
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: 390px; /* Increased to fit the new header info */
+    padding-bottom: calc(80px + var(--safe-area-inset-bottom));
+    background: linear-gradient(rgba(248, 249, 250, 0.95), rgba(248, 249, 250, 0.95)), 
+                url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    overscroll-behavior-y: contain;
+    overflow-x: hidden;
+}
+
+/* HEADER - Now with Subtitles */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.top-bar-content {
+    padding: 15px 15px 5px;
+    color: white;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 800;
+    display: block;
+    letter-spacing: 0.5px;
+}
+
+.user-role {
+    font-size: 11px;
+    font-weight: 400;
+    display: block;
+    opacity: 0.9;
+    margin-top: 2px;
+}
+
+.card-container { padding: 0 15px; margin-top: 5px; }
+
+/* 💳 THE CARD */
+.visa-card {
+    border-radius: 15px;
+    aspect-ratio: 1.58 / 1;
+    width: 100%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+}
+
+.visa-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -25%; 
+    bottom: 0;
+    width: 85%; 
+    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
+    background-size: cover;
+    opacity: 0.6; 
+    z-index: 1;
+}
+
+.visa-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(211, 47, 47, 0.2));
+    z-index: 2;
+}
+
+.visa-card > * { position: relative; z-index: 3; }
+
+/* SERVICE GRID */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 0;
+    padding: 15px;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.service-item {
+    text-decoration: none;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    margin-bottom: 4px;
+    font-size: 16px;
+    color: var(--g4s-red);
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 calc(10px + var(--safe-area-inset-bottom));
+    border-top: 1px solid #eee;
+}
+
+.nav-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+    color: #bbb;
+}
+
+.nav-active { color: var(--g4s-red); }
+
+</style>
+</head>
+
+<body>
+
+<div class="fixed-header">
+    <div class="top-bar-content">
+        <span class="user-name">Abdullahil Kuafi</span>
+        <span class="user-role">Executive - Manned Services</span>
+        <span style="font-size: 9px; opacity: 0.8; display: block;">G4S Secure Solutions Bangladesh (P) Ltd.</span>
+        <span style="font-size: 9px; opacity: 0.8; display: block;">G4S Cumilla Branch</span>
+    </div>
+
+    <div class="card-container">
+        <div class="visa-card">
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 20px; text-align: center;">
+                <div style="font-size:18px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                    Welcome to my Dashboard
+                </div>
+                <div style="font-size: 9px; margin-top: 10px; line-height: 1.4; opacity: 0.9;">
+                    <i class="fa-solid fa-graduation-cap"></i> MA & BA in English (DU Affiliated)<br>
+                    Govt. Titumir College
+                </div>
+            </div>
+
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:10px; font-weight:bold;">ID: 2000417</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="service-grid">
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-folder-open"></i></div>Projects</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-lines"></i></div>Reports</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-calendar-check"></i></div>Tasks</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-users-gear"></i></div>Team</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-simple"></i></div>Analysis</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-user-shield"></i></div>Security</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
+    </div>
+</div>
+
+<div id="main-content">
+    <div style="padding:20px; text-align:center; color:#888; font-size: 12px;">
+        <i class="fa-solid fa-circle-info"></i> Activity feed will appear here.
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Profile</span></a>
+</div>
+
+</body>
+</html>
