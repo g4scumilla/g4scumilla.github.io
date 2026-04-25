@@ -81,28 +81,28 @@ body {
     background-position: center;
 }
 
-/* UPDATED: Watermark shifted to the left by exactly 25% */
+/* UPDATED: Watermark effect reduced by 75% (Much more visible) */
 .visa-card::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -25%; /* Adjusted to 25% */
+    left: -25%; 
     bottom: 0;
-    width: 80%; 
+    width: 85%; 
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
     background-position: center left; 
-    opacity: 0.5;
+    opacity: 0.85; /* Increased opacity */
     z-index: 1;
-    mask-image: linear-gradient(to right, black 40%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
+    mask-image: linear-gradient(to right, black 75%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%);
 }
 
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(211, 47, 47, 0.3));
+    background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(211, 47, 47, 0.2));
     z-index: 2;
 }
 
