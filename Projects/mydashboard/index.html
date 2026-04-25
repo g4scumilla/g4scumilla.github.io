@@ -28,18 +28,15 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: 360px; /* Adjusted for larger grid */
+    padding-top: 550px; 
     padding-bottom: calc(80px + var(--safe-area-inset-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.9)), 
+    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
     background-attachment: fixed;
-    background-position: center;
-    overscroll-behavior-y: contain;
-    overflow-x: hidden;
 }
 
-/* HEADER - Updated Name */
+/* HEADER SECTION */
 .fixed-header {
     position: fixed;
     top: 0;
@@ -47,23 +44,35 @@ body {
     right: 0;
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
-.top-bar {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    padding: 15px 10px 10px;
+.top-bar-content {
+    padding: 15px 15px 5px;
     color: white;
-    font-weight: bold;
-    font-size: 18px; /* Slightly larger for your name */
-    letter-spacing: 1px;
 }
 
-.card-container { padding: 0 15px; }
+.user-name {
+    font-size: 19px;
+    font-weight: 800;
+    display: block;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
 
-/* 💳 THE CARD - Updated to Welcome Message */
+.user-info-text {
+    font-size: 10px;
+    display: block;
+    opacity: 0.95;
+    margin-top: 4px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.card-container { padding: 0 15px; margin-top: 5px; }
+
+/* 💳 THE CARD */
 .visa-card {
     border-radius: 15px;
     aspect-ratio: 1.58 / 1;
@@ -71,12 +80,11 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     position: relative;
     overflow: hidden;
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
-    background-position: center;
 }
 
 .visa-card::before {
@@ -88,7 +96,6 @@ body {
     width: 85%; 
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
-    background-position: center left; 
     opacity: 0.75; 
     z-index: 1;
     mask-image: linear-gradient(to right, black 60%, transparent 100%);
@@ -99,86 +106,75 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(211, 47, 47, 0.2));
+    background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(211, 47, 47, 0.25));
     z-index: 2;
 }
 
 .visa-card > * { position: relative; z-index: 3; }
 
-/* SERVICE GRID - More Menu Items */
+/* 16 MENU GRID */
 .service-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px 0;
-    padding: 15px;
+    gap: 15px 0;
+    padding: 20px 10px;
     background: white;
     border-bottom: 1px solid #eee;
 }
 
 .service-item {
-    text-decoration: none; /* For the anchor tags */
-    color: inherit;
+    text-decoration: none;
+    color: #333;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
-    transition: transform 0.1s ease;
 }
 
-.service-item:active { transform: scale(0.9); }
-
 .icon-circle {
-    width: 42px;
-    height: 42px;
-    background: #fff;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    background: #fdfdfd;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin-bottom: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    margin-bottom: 6px;
     font-size: 18px;
     color: var(--g4s-red);
 }
 
-/* TRANSACTIONS (Kept same as requested) */
-.tx-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 12px 15px;
+/* FILLER CONTENT */
+.content-filler {
+    padding: 15px;
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px;
     border-radius: 12px;
-    margin: 0 15px 8px;
-    display: flex;
-    align-items: center;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #eee;
+    text-align: center;
 }
-
-.user-initial {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #f44336;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    font-weight: bold;
-}
-
-.center-meta { flex: 1; }
-.amount-side { text-align: right; min-width: 70px; font-weight: bold; }
 
 /* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: white;
     display: flex;
     justify-content: space-around;
-    padding: 12px 0 calc(12px + var(--safe-area-inset-bottom));
+    padding: 10px 0 calc(10px + var(--safe-area-inset-bottom));
     border-top: 1px solid #eee;
     z-index: 2000;
 }
@@ -202,84 +198,74 @@ body {
 <body>
 
 <div class="fixed-header">
-    <div class="top-bar">
-        <span>Abdullahil Kuafi</span>
+    <div class="top-bar-content">
+        <span class="user-name">Abdullahil Kuafi</span>
+        <span class="user-info-text">
+            Executive - Manned Services | G4S Cumilla Branch<br>
+            G4S Secure Solutions Bangladesh (P) Ltd.
+        </span>
     </div>
 
     <div class="card-container">
         <div class="visa-card">
-            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 10px;">
-                <div style="font-size:22px; font-weight:bold; text-align:center; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                    Welcome to my<br>Dashboard
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 20px; text-align: center;">
+                <div style="font-size:20px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                    Welcome to my Dashboard
+                </div>
+                <div style="font-size: 9px; margin-top: 12px; line-height: 1.5; opacity: 0.95; font-weight: 500;">
+                    MA & BA in English (DU Affiliated Seven College)<br>
+                    Govt. Titumir College, Dhaka
                 </div>
             </div>
-
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.2);">
-                <div style="font-size:11px; font-weight:bold; color: #fff;">ABDULLAHIL KUAFI</div>
-                <div style="font-size:8px; opacity:0.8; margin-top:2px;">
-                    Executive - Manned Services | ID: 2000417<br>
-                    Status: Active & Online
-                </div>
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.2); font-size: 9px; text-align: left; letter-spacing: 1px;">
+                <i class="fa-solid fa-circle-check"></i> VERIFIED PROFESSIONAL PORTFOLIO
             </div>
         </div>
     </div>
 
     <div class="service-grid">
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-folder"></i></div>Projects</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-invoice"></i></div>Reports</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-calendar-day"></i></div>Events</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-users-gear"></i></div>Team</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Stats</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-shield-halved"></i></div>Admin</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
+
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Setup</a>
+
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-circle-question"></i></div>Help</a>
     </div>
 </div>
 
-<div id="main-content">
-    <div style="padding:10px 20px;font-weight:bold; color:#d32f2f; font-size:12px;">SYSTEM ACTIVITY</div>
+<div class="content-filler">
+    <div class="stat-row">
+        <div class="stat-card">
+            <div style="font-size: 10px; color: #888;">ACTIVE PROJECTS</div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--g4s-red);">12</div>
+        </div>
+        <div class="stat-card">
+            <div style="font-size: 10px; color: #888;">TOTAL REACH</div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--g4s-red);">2.4K</div>
+        </div>
+    </div>
 </div>
 
 <div class="bottom-nav">
     <a href="#" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
 </div>
-
-<script>
-// Kept the transaction sync just to keep the "Activity" section alive as requested
-const DATA_API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
-let DATA = {transactions:[]};
-
-async function sync() {
-    try {
-        const r = await fetch(DATA_API);
-        DATA = await r.json();
-        renderActivity();
-    } catch(e) {}
-}
-
-function renderActivity() {
-    let h = `<div style="padding:10px 20px;font-weight:bold; color:#d32f2f; font-size:12px;">SYSTEM ACTIVITY</div>`;
-    (DATA.transactions || []).slice(-5).reverse().forEach(t => {
-        h += `
-        <div class="tx-card">
-            <div class="user-initial">${t.person ? t.person[0] : "?"}</div>
-            <div class="center-meta">
-                <div style="font-size:13px; font-weight:bold;">${t.person || ""}</div>
-                <div style="font-size:11px; color:#888;">${t.note || ""}</div>
-            </div>
-            <div class="amount-side">
-                <i class="fa-solid fa-chevron-right" style="color:#ccc"></i>
-            </div>
-        </div>`;
-    });
-    document.getElementById("main-content").innerHTML = h;
-}
-
-window.onload = sync;
-</script>
 
 </body>
 </html>
