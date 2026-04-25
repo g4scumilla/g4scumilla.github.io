@@ -15,10 +15,15 @@
 body {
     margin: 0;
     font-family: sans-serif;
-    padding-top: 320px;
-    padding-bottom: 80px;
-    background: #fdfdfd;
+    background: #f2f4f7;
     user-select: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-top: 20px;
+    padding-bottom: 80px;
 }
 
 /* HEADER */
@@ -26,7 +31,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
+    width: 100%;
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     z-index: 1000;
 }
@@ -42,7 +47,7 @@ body {
 
 .card-container { padding: 0 15px; }
 
-/* 💳 FINAL PREMIUM CARD (ONLY MODIFIED PART) */
+/* 💳 FINAL CARD */
 .visa-card {
     border-radius: 15px;
     aspect-ratio: 1.58 / 1;
@@ -54,24 +59,21 @@ body {
     position: relative;
     overflow: hidden;
 
-    /* 🌸 Flower background */
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
     background-position: center;
-
-    backdrop-filter: blur(6px) brightness(0.75);
 }
 
-/* overlay */
+/* 🌸 watermark overlay (readable) */
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
         135deg,
-        rgba(0,0,0,0.55),
-        rgba(255,0,80,0.15),
-        rgba(0,180,255,0.15)
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.60),
+        rgba(0,0,0,0.70)
     );
     z-index: 0;
 }
@@ -168,34 +170,28 @@ body {
         <span>G4SPay</span>
         <i class="fa-solid fa-shield-halved"></i>
     </div>
+</div>
 
-    <div class="card-container">
-        <div class="visa-card">
+<!-- CARD -->
+<div class="card-container">
+    <div class="visa-card">
 
-            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-                <div style="font-size:12px; opacity:0.7;">CENTRAL BALANCE</div>
-
-                <!-- 🔥 NO DECIMAL BALANCE -->
-                <div id="bal-text" style="font-size:22px; font-weight:bold;">Loading...</div>
-            </div>
-
-            <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.8; font-weight:bold;">
-                ABDULLAHIL KUAFI
-            </div>
-
+        <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+            <div style="font-size:12px; opacity:0.8;">CENTRAL BALANCE</div>
+            <div id="bal-text" style="font-size:22px; font-weight:bold;">Loading...</div>
         </div>
-    </div>
 
-    <div class="service-grid">
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-plus"></i></div>Transact</div>
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-users"></i></div>Users</div>
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-user-plus"></i></div>Add</div>
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-receipt"></i></div>History</div>
+        <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.85; font-weight:bold;">
+            ABDULLAHIL KUAFI
+        </div>
+
     </div>
 </div>
 
+<!-- MAIN -->
 <div id="main-content"></div>
 
+<!-- NAV -->
 <div class="bottom-nav">
     <div class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></div>
     <div class="nav-item"><i class="fa-solid fa-list"></i><span>History</span></div>
@@ -216,7 +212,7 @@ async function sync() {
     } catch(e) {}
 }
 
-/* 🔥 BALANCE WITHOUT DECIMAL */
+/* BALANCE (NO DECIMAL) */
 async function fetchBalance() {
     try {
         const r = await fetch(BAL_API);
@@ -253,7 +249,6 @@ function renderDash() {
 window.onload = function () {
     sync();
     fetchBalance();
-
     setInterval(fetchBalance, 10000);
 };
 </script>
