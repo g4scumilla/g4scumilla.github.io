@@ -26,7 +26,7 @@
     box-sizing: border-box;
 }
 
-/* BODY: Background image with overlay */
+/* BODY: Background image remains as before */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -81,21 +81,21 @@ body {
     background-position: center;
 }
 
-/* UPDATED: GitHub image moved to the right */
+/* UPDATED: Watermark strictly on the LEFT 50% of the card */
 .visa-card::before {
     content: "";
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     bottom: 0;
-    width: 60%; /* Occupies the right portion */
+    width: 50%; 
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
-    background-position: right center; /* Aligns flower to the right edge */
-    opacity: 0.5;
+    background-position: left center;
+    opacity: 0.4;
     z-index: 1;
-    mask-image: linear-gradient(to left, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
+    mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
 }
 
 .visa-card::after {
