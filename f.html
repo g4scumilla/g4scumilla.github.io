@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gemini Prompt Page</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#0a0f1c;
+      color:white;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      margin:0;
+    }.container{
+  width:90%;
+  max-width:500px;
+  background:#11182b;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
+}
+
+h2{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+textarea{
+  width:100%;
+  height:100px;
+  border:none;
+  border-radius:8px;
+  padding:10px;
+  font-size:14px;
+  resize:none;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  background:#0070c0;
+  border:none;
+  border-radius:8px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#005fa3;
+}
+
+.response{
+  margin-top:15px;
+  background:#0a0f1c;
+  padding:10px;
+  border-radius:8px;
+  min-height:80px;
+}
+
+  </style>
+</head>
+<body><div class="container">
+  <h2>Gemini Prompt</h2>
+  <textarea id="prompt" placeholder="Type your prompt..."></textarea>
+  <button onclick="sendPrompt()">Ask Gemini</button>  <div class="response" id="response">Response will appear here...</div>
+</div><script>
+async function sendPrompt(){
+  const prompt = document.getElementById("prompt").value;
+  const responseBox = document.getElementById("response");
