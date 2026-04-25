@@ -50,11 +50,13 @@ body {
 
 .top-bar {
     display: flex;
-    justify-content: space-between;
-    padding: 15px 20px 10px;
+    justify-content: center; /* Centered content */
+    align-items: center;
+    padding: 15px 10px 10px;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 14px; /* Reduced size to fit single line */
+    white-space: nowrap; /* Forces single line */
 }
 
 .card-container { padding: 0 15px; }
@@ -203,8 +205,7 @@ body {
 <div class="fixed-header">
     <div class="top-bar">
         <span>G4S Secure Solutions Bangladesh (P) Ltd.</span>
-        <i class="fa-solid fa-shield-halved"></i>
-    </div>
+        </div>
 
     <div class="card-container">
         <div class="visa-card">
@@ -248,22 +249,22 @@ let DATA = {transactions:[], users:{}};
 function updateDuration() {
     const joinDate = new Date("2023-05-05");
     const now = new Date();
-    
+
     let years = now.getFullYear() - joinDate.getFullYear();
     let months = now.getMonth() - joinDate.getMonth();
     let days = now.getDate() - joinDate.getDate();
-    
+
     if (days < 0) {
         months--;
         let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
         days += lastMonth.getDate();
     }
-    
+
     if (months < 0) {
         years--;
         months += 12;
     }
-    
+
     document.getElementById("duration-text").innerText = `${years}Y ${months}M ${days}D`;
 }
 
