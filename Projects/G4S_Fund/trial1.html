@@ -81,27 +81,28 @@ body {
     background-position: center;
 }
 
-/* UPDATED: Full visibility (No Watermark/Transparency) shifted left by 25% */
+/* UPDATED: Watermark shifted to the left by exactly 25% */
 .visa-card::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -25%; 
+    left: -25%; /* Adjusted to 25% */
     bottom: 0;
     width: 80%; 
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
     background-position: center left; 
-    opacity: 1.0; /* Full visibility */
+    opacity: 0.5;
     z-index: 1;
-    /* Removed mask-image to remove watermark fading effect */
+    mask-image: linear-gradient(to right, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 100%);
 }
 
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(211, 47, 47, 0.2));
+    background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(211, 47, 47, 0.3));
     z-index: 2;
 }
 
