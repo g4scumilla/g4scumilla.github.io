@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>G4S FUND</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -10,56 +10,66 @@
 <style>
 :root { --g4s-red: #d32f2f; }
 
-* { -webkit-tap-highlight-color: transparent; }
+* { 
+    -webkit-tap-highlight-color: transparent; 
+    box-sizing: border-box;
+    outline: none;
+}
 
 body {
     margin: 0;
-    font-family: sans-serif;
-    padding-top: 320px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: 330px;
     padding-bottom: 80px;
-    background: #fdfdfd;
+    background: #f8f9fa;
     user-select: none;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* HEADER */
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar { display: none; }
+
+/* HEADER - Android Elevation Style */
 .fixed-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    background: linear-gradient(180deg, #f44336 0%, #ffffff 100%);
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding-top: env(safe-area-inset-top); /* Notch support */
 }
 
 .top-bar {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 15px 20px;
     color: white;
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.5px;
 }
 
 .card-container { padding: 0 15px; }
 
 /* 💳 PREMIUM CARD */
 .visa-card {
-    border-radius: 15px;
+    border-radius: 20px; /* Rounder corners for modern Android */
     aspect-ratio: 1.58 / 1;
     width: 100%;
     color: white;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     position: relative;
     overflow: hidden;
-    /* BASE LAYER: The Flower Background */
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
     background-position: center;
 }
 
-/* SECOND LAYER: Mixing the Baby Photo */
 .visa-card::before {
     content: "";
     position: absolute;
@@ -67,95 +77,98 @@ body {
     background: url('https://G4scumilla.github.io/Files/Img/Messenger_creation_262E13AA-47AB-4F31-A617-5AA86D783173.jpeg');
     background-size: cover;
     background-position: center;
-    opacity: 0.5; /* This creates the mix effect with the flowers */
+    opacity: 0.5;
     z-index: 1;
 }
 
-/* THIRD LAYER: Dark Gradient for Readability */
 .visa-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(0,0,0,0.65),
-        rgba(211, 47, 47, 0.3)
-    );
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.2));
     z-index: 2;
 }
 
-.visa-card > * {
-    position: relative;
-    z-index: 3; /* Keeps text on top of all images */
-}
+.visa-card > * { position: relative; z-index: 3; }
 
-/* SERVICE GRID */
+/* SERVICE GRID - Native Button Feel */
 .service-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: 15px;
+    padding: 20px 10px;
     background: white;
-    border-bottom: 1px solid #eee;
+    margin-top: 10px;
 }
 
 .service-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+    transition: transform 0.1s;
 }
 
+.service-item:active { transform: scale(0.9); }
+
 .icon-circle {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     background: #fff;
-    border-radius: 12px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    margin-bottom: 5px;
-    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 8px;
+    font-size: 20px;
+    color: var(--g4s-red);
 }
 
 /* TRANSACTIONS */
 .tx-card {
     background: white;
-    padding: 12px 15px;
-    border-radius: 12px;
-    margin: 0 15px 8px;
+    padding: 15px;
+    border-radius: 16px;
+    margin: 0 15px 12px;
     display: flex;
     align-items: center;
-    border: 1px solid #f0f0f0;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
 .user-initial {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #f44336;
-    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px; /* Square-ish profile like new Android */
+    background: #fdeaea;
+    color: var(--g4s-red);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
+    margin-right: 15px;
     font-weight: bold;
+    font-size: 18px;
 }
 
 .center-meta { flex: 1; }
-.amount-side { text-align: right; min-width: 70px; font-weight: bold; }
+.amount-side { text-align: right; min-width: 80px; font-weight: 800; font-size: 15px; }
 
-/* NAV */
+/* BOTTOM NAV - Floating Style */
 .bottom-nav {
     position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: white;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-around;
     padding: 12px 0;
-    border-top: 1px solid #eee;
+    border-radius: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .nav-item {
@@ -163,10 +176,12 @@ body {
     flex-direction: column;
     align-items: center;
     font-size: 10px;
-    color: #bbb;
+    color: #999;
+    font-weight: 600;
 }
 
 .nav-active { color: var(--g4s-red); }
+.nav-item i { font-size: 18px; margin-bottom: 4px; }
 </style>
 </head>
 
@@ -175,20 +190,20 @@ body {
 <div class="fixed-header">
     <div class="top-bar">
         <span>G4S FUND</span>
-        <i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-circle-user" style="opacity: 0.8;"></i>
     </div>
 
     <div class="card-container">
         <div class="visa-card">
-            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 10px;">
-                <div style="font-size:10px; opacity:0.9; letter-spacing: 1px;">G4S_FUND</div>
-                <div id="bal-text" style="font-size:28px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Loading...</div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding-top: 15px;">
+                <div style="font-size:12px; font-weight: 600; opacity:0.8; letter-spacing: 2px;">TOTAL BALANCE</div>
+                <div id="bal-text" style="font-size:32px; font-weight:900; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Loading...</div>
             </div>
 
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.2);">
-                <div style="font-size:11px; font-weight:bold; color: #fff;">ABDULLAHIL KUAFI</div>
-                <div style="font-size:8px; opacity:0.8; margin-top:2px;">
-                    ID: G4SNM2000417 | Executive - Manned Services<br>
+            <div style="padding:15px; background: rgba(0,0,0,0.25); backdrop-filter: blur(4px);">
+                <div style="font-size:13px; font-weight:800; color: #fff;">ABDULLAHIL KUAFI</div>
+                <div style="font-size:9px; opacity:0.9; margin-top:4px; line-height: 1.4;">
+                    ID: G4SNM2000417 • <span style="color: #ffc107;">Executive</span><br>
                     Joined: 5 MAY 2023 | Service: <span id="duration-text">...</span>
                 </div>
             </div>
@@ -196,22 +211,23 @@ body {
     </div>
 
     <div class="service-grid">
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-plus"></i></div>Transact</div>
+        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-paper-plane"></i></div>Send</div>
         <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-users"></i></div>Users</div>
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-user-plus"></i></div>Add</div>
-        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-receipt"></i></div>History</div>
+        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-circle-plus"></i></div>Add</div>
+        <div class="service-item"><div class="icon-circle"><i class="fa-solid fa-clock-rotate-left"></i></div>Logs</div>
     </div>
 </div>
 
 <div id="main-content"></div>
 
 <div class="bottom-nav">
-    <div class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></div>
-    <div class="nav-item"><i class="fa-solid fa-list"></i><span>History</span></div>
-    <div class="nav-item"><i class="fa-solid fa-user"></i><span>Users</span></div>
+    <div class="nav-item nav-active"><i class="fa-solid fa-house-chimney"></i><span>Home</span></div>
+    <div class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Stats</span></div>
+    <div class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></div>
 </div>
 
 <script>
+// Logic remains unchanged as requested
 const DATA_API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
 const BAL_API  = "https://script.google.com/macros/s/AKfycbyQxeX1xqmSEcksnoxxZZMGqaXVkdNLcze5VzIE5qdtJFzhvahlHiq4RQ-tnjJZxR1l/exec";
 
@@ -222,12 +238,7 @@ function updateDuration() {
     const now = new Date();
     let years = now.getFullYear() - joinDate.getFullYear();
     let months = now.getMonth() - joinDate.getMonth();
-    
-    if (months < 0) {
-        years--;
-        months += 12;
-    }
-    
+    if (months < 0) { years--; months += 12; }
     document.getElementById("duration-text").innerText = `${years}Y ${months}M`;
 }
 
@@ -250,22 +261,20 @@ async function fetchBalance() {
 }
 
 function renderDash() {
-    let h = `<div style="padding:10px 20px;font-weight:bold; color:#666; font-size:12px;">RECENT TRANSACTIONS</div>`;
-
+    let h = `<div style="padding:15px 20px 10px; font-weight:800; color:#444; font-size:13px; letter-spacing: 0.5px;">RECENT ACTIVITY</div>`;
     (DATA.transactions || []).slice(-10).reverse().forEach(t => {
         h += `
         <div class="tx-card">
             <div class="user-initial">${t.person ? t.person[0] : "?"}</div>
             <div class="center-meta">
-                <div style="font-size:13px; font-weight:bold;">${t.person || ""}</div>
-                <div style="font-size:11px; color:#888;">${t.note || ""}</div>
+                <div style="font-size:14px; font-weight:700; color: #333;">${t.person || ""}</div>
+                <div style="font-size:11px; color:#999; margin-top: 2px;">${t.note || "Transaction"}</div>
             </div>
             <div class="amount-side" style="color:${t.type=='Withdraw'?'#d32f2f':'#2e7d32'}">
-                ৳${t.amount}
+                ${t.type=='Withdraw'?'-':'+'} ৳${t.amount}
             </div>
         </div>`;
     });
-
     document.getElementById("main-content").innerHTML = h;
 }
 
