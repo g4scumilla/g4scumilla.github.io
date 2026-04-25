@@ -28,7 +28,6 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    /* Dynamic padding to ensure everything fits the viewport */
     padding-top: 550px; 
     padding-bottom: calc(80px + var(--safe-area-inset-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
@@ -73,7 +72,7 @@ body {
 
 .card-container { padding: 0 15px; margin-top: 5px; }
 
-/* 💳 THE CARD (Regular Size Kept) */
+/* 💳 THE CARD */
 .visa-card {
     border-radius: 15px;
     aspect-ratio: 1.58 / 1;
@@ -167,18 +166,6 @@ body {
     text-align: center;
 }
 
-.feed-item {
-    background: white;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    border-left: 4px solid var(--g4s-red);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-}
-
 /* BOTTOM NAV */
 .bottom-nav {
     position: fixed;
@@ -269,20 +256,6 @@ body {
             <div style="font-size: 10px; color: #888;">TOTAL REACH</div>
             <div style="font-size: 18px; font-weight: bold; color: var(--g4s-red);">2.4K</div>
         </div>
-    </div>
-
-    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px; color: #555;">SYSTEM LOGS</div>
-    <div class="feed-item">
-        <span>Portfolio Synced</span>
-        <span style="color: #2e7d32; font-weight: bold;">Online</span>
-    </div>
-    <div class="feed-item">
-        <span>Cloud Storage</span>
-        <span style="color: #2e7d32; font-weight: bold;">Connected</span>
-    </div>
-    <div class="feed-item">
-        <span>Last Login</span>
-        <span style="color: #888;">Just now</span>
     </div>
 </div>
 
