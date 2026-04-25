@@ -9,6 +9,7 @@
 
 <style>
 :root { --g4s-red: #d32f2f; }
+
 * { -webkit-tap-highlight-color: transparent; }
 
 body {
@@ -39,35 +40,45 @@ body {
     font-size: 20px;
 }
 
-/* CARD */
 .card-container { padding: 0 15px; }
 
+/* 💳 FINAL PREMIUM CARD (ONLY MODIFIED PART) */
 .visa-card {
-    background: #1a1a1a;
     border-radius: 15px;
     aspect-ratio: 1.58 / 1;
     width: 100%;
     color: white;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
+
+    /* 🌸 Flower background */
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+    background-position: center;
+
+    backdrop-filter: blur(6px) brightness(0.75);
 }
 
-.visa-card::before {
-    content: "\f537";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
+/* overlay */
+.visa-card::after {
+    content: "";
     position: absolute;
-    top: 50%;
-    right: -5%;
-    transform: translateY(-50%) rotate(-15deg);
-    font-size: 180px;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0.15;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0,0,0,0.55),
+        rgba(255,0,80,0.15),
+        rgba(0,180,255,0.15)
+    );
+    z-index: 0;
+}
+
+.visa-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* SERVICE GRID */
@@ -152,7 +163,6 @@ body {
 
 <body>
 
-<!-- HEADER -->
 <div class="fixed-header">
     <div class="top-bar">
         <span>G4SPay</span>
@@ -162,14 +172,14 @@ body {
     <div class="card-container">
         <div class="visa-card">
 
-            <div style="padding:15px 20px;"></div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                <div style="font-size:12px; opacity:0.7;">CENTRAL BALANCE</div>
 
-            <div style="display:flex; flex:1; align-items:center; justify-content:center; flex-direction:column;">
-                <div style="font-size:12px; opacity:0.6;">CENTRAL BALANCE</div>
+                <!-- 🔥 NO DECIMAL BALANCE -->
                 <div id="bal-text" style="font-size:22px; font-weight:bold;">Loading...</div>
             </div>
 
-            <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.7; font-weight:bold;">
+            <div style="padding:15px 20px; font-size:11px; letter-spacing:2px; opacity:0.8; font-weight:bold;">
                 ABDULLAHIL KUAFI
             </div>
 
@@ -184,10 +194,8 @@ body {
     </div>
 </div>
 
-<!-- MAIN -->
 <div id="main-content"></div>
 
-<!-- NAV -->
 <div class="bottom-nav">
     <div class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></div>
     <div class="nav-item"><i class="fa-solid fa-list"></i><span>History</span></div>
@@ -195,41 +203,33 @@ body {
 </div>
 
 <script>
-/* ===== YOUR EXISTING API (transactions system) ===== */
 const DATA_API = "https://script.google.com/macros/s/AKfycbyh6Z8MlywiLhDQtjh1dVmMBGpiA3AceFotlcno1VCRAsHxXpgsyVoNEF3nVuLTW6douA/exec";
-
-/* ===== NEW BALANCE API (your sheet E19) ===== */
-const BAL_API = "https://script.google.com/macros/s/AKfycbyQxeX1xqmSEcksnoxxZZMGqaXVkdNLcze5VzIE5qdtJFzhvahlHiq4RQ-tnjJZxR1l/exec";
+const BAL_API  = "https://script.google.com/macros/s/AKfycbyQxeX1xqmSEcksnoxxZZMGqaXVkdNLcze5VzIE5qdtJFzhvahlHiq4RQ-tnjJZxR1l/exec";
 
 let DATA = {transactions:[], users:{}};
 
-/* ===== LOAD TRANSACTIONS (existing system) ===== */
 async function sync() {
     try {
         const r = await fetch(DATA_API);
-        const res = await r.json();
-        DATA = res;
+        DATA = await r.json();
         renderDash();
-    } catch(e) {
-        console.log("sync error");
-    }
+    } catch(e) {}
 }
 
-/* ===== LOAD BALANCE (NEW) ===== */
+/* 🔥 BALANCE WITHOUT DECIMAL */
 async function fetchBalance() {
     try {
         const r = await fetch(BAL_API);
         const d = await r.json();
 
         document.getElementById("bal-text").innerText =
-            "৳ " + (d.balance || 0);
+            "৳ " + Math.floor(d.balance || 0);
 
     } catch(e) {
         document.getElementById("bal-text").innerText = "Error";
     }
 }
 
-/* ===== DASHBOARD ===== */
 function renderDash() {
     let h = `<div style="padding:10px 20px;font-weight:bold;">RECENT</div>`;
 
@@ -250,12 +250,11 @@ function renderDash() {
     document.getElementById("main-content").innerHTML = h;
 }
 
-/* ===== INIT ===== */
 window.onload = function () {
     sync();
     fetchBalance();
 
-    setInterval(fetchBalance, 10000); // auto refresh balance
+    setInterval(fetchBalance, 10000);
 };
 </script>
 
