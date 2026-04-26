@@ -24,7 +24,8 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: calc(620px + var(--safe-top)); 
+    /* Adjusted padding to fit the new header height */
+    padding-top: calc(660px + var(--safe-top)); 
     padding-bottom: calc(80px + var(--safe-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
@@ -69,31 +70,13 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
-.service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px; background: white;
-    border-bottom: 1px solid #eee;
-}
-
-.service-item {
-    text-decoration: none; color: #333;
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 9px; font-weight: 700;
-}
-
-.icon-circle {
-    width: 44px; height: 44px; background: #fff; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
-    font-size: 18px; color: var(--g4s-red);
-}
-
+/* Notice Bar specifically for placement between Card and Grid */
 .notif-bar {
-    position: fixed; bottom: 65px; left: 10px; right: 10px;
-    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+    margin: 15px 15px 5px; /* Added spacing to breathe between sections */
+    background: rgba(255, 255, 255, 0.95);
     height: 35px; border-radius: 20px; display: flex; align-items: center;
-    overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    z-index: 1500; border: 1px solid rgba(211, 47, 47, 0.2);
+    overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(211, 47, 47, 0.15);
 }
 
 .notif-label {
@@ -111,6 +94,25 @@ body {
 
 @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
+.service-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 15px 0; padding: 15px 10px 20px; background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.service-item {
+    text-decoration: none; color: #333;
+    display: flex; flex-direction: column; align-items: center;
+    font-size: 9px; font-weight: 700;
+}
+
+.icon-circle {
+    width: 44px; height: 44px; background: #fff; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
+    font-size: 18px; color: var(--g4s-red);
+}
+
 .rotating { animation: rotate 1s linear; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
@@ -125,7 +127,7 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    .fixed-header, .bottom-nav, .notif-bar { width: 100%; max-width: 450px; left: 50% !important; transform: translateX(-50%); }
+    .fixed-header, .bottom-nav { width: 100%; max-width: 450px; left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
@@ -163,6 +165,13 @@ body {
         </div>
     </div>
 
+    <div class="notif-bar" onclick="releaseNotice()">
+        <div class="notif-label">NOTICE</div>
+        <div class="marquee">
+            <span id="notice-text">Welcome to the Kuafi Family Dashboard. Tap here to release a new message.</span>
+        </div>
+    </div>
+
     <div class="service-grid">
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
@@ -186,13 +195,6 @@ body {
         <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
             <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync
         </a>
-    </div>
-</div>
-
-<div class="notif-bar" onclick="releaseNotice()">
-    <div class="notif-label">NOTICE</div>
-    <div class="marquee">
-        <span id="notice-text">Welcome to the Kuafi Family Dashboard. Tap here to release a new message.</span>
     </div>
 </div>
 
