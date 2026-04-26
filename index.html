@@ -3,14 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Dashboard</title>
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#8b0000">
+<title>404 - Page Not Found</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
@@ -26,10 +21,14 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     padding-bottom: calc(60px + var(--safe-bottom));
+    /* Floral Background Restored */
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://www.transparenttextures.com/patterns/floral-paper.png');
     background-size: auto;
     background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .header-section {
@@ -77,32 +76,52 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
-.service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px 40px;
-    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
-    min-height: 50vh; 
+/* 404 CONTENT STYLING (Replacing Grid) */
+.error-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.1) 0%, transparent 60%);
 }
 
-.service-item {
-    text-decoration: none; color: #333;
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 10px; font-weight: 800;
+.error-section h1 {
+    font-family: 'Lobster', cursive;
+    font-size: 80px;
+    color: var(--g4s-red);
+    margin: 0;
 }
 
-.icon-circle {
-    width: 46px; height: 46px; background: #fff; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
-    font-size: 19px; color: var(--g4s-red);
+.error-section p {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.action-btn {
+    text-decoration: none;
+    width: 200px;
+    padding: 12px;
+    margin: 8px 0;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--g4s-red);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: transform 0.2s;
 }
 
-.service-item:active .icon-circle { transform: scale(0.9); }
+.action-btn:active { transform: scale(0.95); }
 
-.rotating { animation: rotate 1s linear; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
+/* BOTTOM NAV RESTORED */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -113,13 +132,15 @@ body {
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
 .nav-active { color: var(--g4s-red); }
 
+.rotating { animation: rotate 1s linear; }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
 @media (min-width: 768px) {
     body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
     .bottom-nav { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
-
 <body>
 
 <div class="header-section"></div>
@@ -146,35 +167,29 @@ body {
     </div>
 </div>
 
-<div class="service-grid">
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
-    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+<div class="error-section">
+    <h1>404</h1>
+    <p>PAGE NOT FOUND</p>
+
+    <a href="/index" class="action-btn">
+        <i class="fa-solid fa-house-chimney"></i> Home Page
+    </a>
+    
+    <a href="https://kaficumilla.shop/Projects/mydashboard/index" class="action-btn">
+        <i class="fa-solid fa-user-shield"></i> Developer Hub
+    </a>
+
+    <a href="javascript:void(0)" class="action-btn" onclick="syncPage(this)">
+        <i class="fa-solid fa-arrows-rotate" id="sync-icon"></i> Refresh Sync
+    </a>
 </div>
 
 <div class="bottom-nav">
-    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="/index" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
+    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
 </div>
 
 <script>
@@ -190,11 +205,12 @@ body {
     setInterval(updateClock, 1000);
     updateClock();
 
-    function syncData(el) {
+    function syncPage(el) {
         const icon = document.getElementById('sync-icon');
-        icon.classList.remove('rotating');
-        void icon.offsetWidth; 
         icon.classList.add('rotating');
+        setTimeout(() => {
+            location.reload();
+        }, 800);
     }
 </script>
 
