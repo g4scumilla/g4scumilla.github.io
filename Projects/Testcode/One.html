@@ -26,6 +26,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: var(--safe-top); 
     padding-bottom: calc(60px + var(--safe-bottom));
+    /* FLOWER WATERMARK BACKGROUND RESTORED */
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://www.transparenttextures.com/patterns/floral-paper.png');
     background-size: auto;
@@ -56,16 +57,16 @@ body {
     background-size: cover;
 }
 
-/* LOGO ZOOMED IN BY 50% */
+/* LOGO ZOOMED OUT BY 50% (-50% scale) */
 .visa-card::before {
-    content: ""; position: absolute; inset: 0; left: -35%; width: 100%;
+    content: ""; position: absolute; inset: 0; left: -15%; width: 60%;
     background: url('https://g4scumilla.github.io/Files/Img/logo.png');
-    background-size: 150%; /* Zoomed by 50% (from 100% to 150%) */
+    background-size: 50%; /* Adjusted to 50% as requested */
     background-repeat: no-repeat;
-    background-position: center left;
+    background-position: center;
     opacity: 0.8; z-index: 1;
-    mask-image: linear-gradient(to right, black 40%, transparent 85%);
-    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 85%);
+    mask-image: linear-gradient(to right, black 40%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 95%);
 }
 
 .visa-card::after {
@@ -147,108 +148,28 @@ body {
 </div>
 
 <div class="service-grid">
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
-        Work
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
-        Edu
-    </a>
-
-    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
-        Dev
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
-        Mail
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
-        CV
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
-        Links
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
-        Media
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
-        Social
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
-        Docs
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
-        Blog
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-vault"></i></div>
-        Secure
-    </a>
-
-    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-gears"></i></div>
-        Finance
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
-        Growth
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
-        Awards
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
-        Travel
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
-        Scan
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-heart"></i></div>
-        Health
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
-        Home
-    </a>
-
-    <a href="#" class="service-item">
-        <div class="icon-circle"><i class="fa-solid fa-gear"></i></div>
-        Settings
-    </a>
-
-    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
-        <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
-        Sync
-    </a>
-
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
+    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
 </div>
+
 <div class="bottom-nav">
     <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
