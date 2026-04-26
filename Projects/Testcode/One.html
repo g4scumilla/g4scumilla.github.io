@@ -25,22 +25,22 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     padding-bottom: calc(60px + var(--safe-bottom));
+    /* FLORAL TEXTURE REMAINS */
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://www.transparenttextures.com/patterns/floral-paper.png');
     background-size: auto;
     background-attachment: fixed;
 }
 
-/* HEADER BACKGROUND RESTORED - TEXT REMOVED */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
-    height: 60px; /* Provides the background space at the top */
+    height: 60px; 
     padding-top: var(--safe-top);
 }
 
 .card-container { 
     padding: 0 15px 20px; 
-    margin-top: -30px; /* Pulls the card slightly up into the gradient */
+    margin-top: -30px; 
     position: relative;
     z-index: 10;
 }
@@ -77,10 +77,12 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
+/* GRID MENU BACKGROUND GRADIENT ADDED */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 10px 10px 30px;
-    background: transparent; 
+    gap: 15px 0; padding: 20px 10px 40px;
+    /* Fades from red at the top back to the floral white */
+    background: linear-gradient(180deg, rgba(244, 67, 54, 0.1) 0%, transparent 40%);
     min-height: 50vh; 
 }
 
