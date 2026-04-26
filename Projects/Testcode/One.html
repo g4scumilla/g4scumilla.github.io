@@ -24,8 +24,6 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    /* Adjusted padding to account for removed header */
-    padding-top: calc(10px + var(--safe-top)); 
     padding-bottom: calc(60px + var(--safe-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://www.transparenttextures.com/patterns/floral-paper.png');
@@ -33,9 +31,18 @@ body {
     background-attachment: fixed;
 }
 
+/* HEADER BACKGROUND RESTORED - TEXT REMOVED */
+.header-section {
+    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    height: 60px; /* Provides the background space at the top */
+    padding-top: var(--safe-top);
+}
+
 .card-container { 
     padding: 0 15px 20px; 
-    margin-top: 5px; 
+    margin-top: -30px; /* Pulls the card slightly up into the gradient */
+    position: relative;
+    z-index: 10;
 }
 
 .visa-card {
@@ -114,6 +121,8 @@ body {
 </head>
 
 <body>
+
+<div class="header-section"></div>
 
 <div class="card-container">
     <div class="visa-card">
