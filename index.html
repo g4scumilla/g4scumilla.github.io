@@ -1,69 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>G4S Dashboard</title>
-
-<link rel="stylesheet" href="regular_pages/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-    /* Laptop View Mode Fix */
-    body {
-        margin: 0; background: #121212; /* Background for PC */
-        display: flex; justify-content: center;
-    }
-    .app-container {
-        width: 100%; max-width: 450px; /* APK Vibe width */
-        background: #f8f9fa; min-height: 100vh;
-        position: relative; padding-bottom: 80px;
-        box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    }
-    section { padding: 20px; }
-</style>
-</head>
-<body>
-
-<div class="app-container">
-    <div id="header"></div>
-
-    <section>
-        <div class="section-title">AUTOMATION TOOLS</div>
-        <div class="links">
-            <div class="link-card">
-                <a href="pages/resignation_automations.html">
-                    <i class="fas fa-file-signature"></i> Resignation Automations
-                </a>
-            </div>
-            </div>
-    </section>
-
-    <div id="footer"></div>
-</div>
-
 <script>
-// Improved loader that works for dynamically added JS
 function loadHTML(id, file) {
     fetch(file)
         .then(response => response.text())
         .then(data => {
-            const element = document.getElementById(id);
-            element.innerHTML = data;
+            const container = document.getElementById(id);
+            container.innerHTML = data;
             
-            // Execute scripts found in the fetched HTML
-            const scripts = element.querySelectorAll("script");
+            // This part is CRITICAL: it finds the script we just loaded and runs it
+            const scripts = container.querySelectorAll("script");
             scripts.forEach(oldScript => {
                 const newScript = document.createElement("script");
                 newScript.text = oldScript.text;
                 document.body.appendChild(newScript);
             });
-        });
+        })
+        .catch(err => console.error("Error loading component:", err));
 }
 
 loadHTML("header", "regular_pages/header.html");
 loadHTML("footer", "regular_pages/footer.html");
 </script>
-
-</body>
-</html>
