@@ -101,7 +101,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(211, 47, 47, 0.25));
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
     z-index: 2;
 }
 
@@ -144,61 +144,6 @@ body {
     color: var(--g4s-red);
 }
 
-.content-filler { padding: 15px; }
-
-/* REFINED FAMILY CARD LAYOUT */
-.family-card {
-    background: white;
-    padding: 12px 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Pushes content to the edges */
-}
-
-.family-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.family-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background: #fff0f0;
-    color: var(--g4s-red);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-}
-
-.family-name h4 { 
-    margin: 0; 
-    font-size: 11px; 
-    color: #333; 
-    font-weight: 800; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px;
-}
-
-.family-details {
-    text-align: right;
-    max-width: 50%;
-}
-
-.family-details p { 
-    margin: 0; 
-    font-size: 9px; 
-    color: #777; 
-    line-height: 1.2; 
-    font-style: italic;
-}
-
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -235,7 +180,7 @@ body {
         align-items: center;
         background-attachment: scroll;
     }
-    .fixed-header, .content-filler, .bottom-nav { width: 100%; max-width: 450px; }
+    .fixed-header, .bottom-nav { width: 100%; max-width: 450px; }
     .fixed-header { position: relative; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
     .bottom-nav { left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; }
 }
@@ -251,16 +196,31 @@ body {
 
     <div class="card-container">
         <div class="visa-card">
-            <div style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 20px; text-align: center;">
-                <div style="font-size:20px; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                    Family Dashboard
+            <div style="flex:1; display:flex; padding: 20px; position: relative;">
+                
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,0.2);">
+                    <div style="font-size: 16px; font-weight: 800; letter-spacing: 1px;">KUAFI</div>
+                    <div style="font-size: 8px; margin-top: 4px; line-height: 1.4; opacity: 0.9; font-weight: 500;">
+                        MA & BA in English<br>
+                        Govt. Titumir College
+                    </div>
                 </div>
-                <div style="font-size: 9px; margin-top: 12px; line-height: 1.5; opacity: 0.95; font-weight: 500;">
-                    Personalized Portfolio & Family Directory
+
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 15px; text-align: left;">
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 10px; font-weight: 700; color: #ffeb3b;">ZAMILA KHATUN</div>
+                        <div style="font-size: 7px; opacity: 0.9; font-style: italic;">MA & BA in Math (RC)</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; font-weight: 700; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
+                        <div style="font-size: 7px; opacity: 0.9; font-style: italic;">Born: 12 Nov 2025</div>
+                    </div>
                 </div>
             </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.2); font-size: 9px; text-align: left; letter-spacing: 1px;">
-                <i class="fa-solid fa-house-user"></i> KUAFI FAMILY RESIDENCE
+            
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between;">
+                <span><i class="fa-solid fa-shield-heart"></i> FAMILY LEGACY</span>
+                <span style="opacity: 0.8;">EST. 2024</span>
             </div>
         </div>
     </div>
@@ -282,40 +242,6 @@ body {
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-circle-question"></i></div>Help</a>
-    </div>
-</div>
-
-<div class="content-filler">
-    <div style="font-size: 10px; font-weight: bold; color: #d32f2f; margin-bottom: 12px; letter-spacing: 2px; text-align: center;">FAMILY DIRECTORY</div>
-    
-    <div class="family-card">
-        <div class="family-left">
-            <div class="family-icon"><i class="fa-solid fa-user-tie"></i></div>
-            <div class="family-name"><h4>Kuafi</h4></div>
-        </div>
-        <div class="family-details">
-            <p>MA & BA in English<br>Govt. Titumir College</p>
-        </div>
-    </div>
-
-    <div class="family-card">
-        <div class="family-left">
-            <div class="family-icon"><i class="fa-solid fa-heart"></i></div>
-            <div class="family-name"><h4>Zamila</h4></div>
-        </div>
-        <div class="family-details">
-            <p>BA & MA in Mathematics<br>Rajshahi College</p>
-        </div>
-    </div>
-
-    <div class="family-card">
-        <div class="family-left">
-            <div class="family-icon"><i class="fa-solid fa-baby"></i></div>
-            <div class="family-name"><h4>Zayaan</h4></div>
-        </div>
-        <div class="family-details">
-            <p>12 Nov 2025<br>Family Joy</p>
-        </div>
     </div>
 </div>
 
