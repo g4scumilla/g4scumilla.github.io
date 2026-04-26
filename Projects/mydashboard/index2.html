@@ -148,7 +148,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* ADDED SHADOW FOR DISTINCTION */
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     border: 1px solid rgba(0,0,0,0.03);
     margin-bottom: 6px;
@@ -171,7 +170,6 @@ body {
     background: white;
     padding: 15px;
     border-radius: 12px;
-    /* ADDED SHADOW FOR DISTINCTION */
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     border: 1px solid #eee;
     text-align: center;
@@ -207,6 +205,39 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 ::-webkit-scrollbar { display: none; }
+
+/* 💻 LAPTOP & DESKTOP OPTIMIZATION */
+@media (min-width: 768px) {
+    body {
+        padding-top: 40px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-attachment: scroll;
+    }
+
+    .fixed-header {
+        position: relative; 
+        width: 100%;
+        max-width: 450px; 
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .bottom-nav {
+        width: 100%;
+        max-width: 450px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .content-filler {
+        width: 100%;
+        max-width: 450px;
+    }
+}
 </style>
 </head>
 
