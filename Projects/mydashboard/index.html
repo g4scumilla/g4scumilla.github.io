@@ -24,7 +24,6 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    /* Adjusted padding so content starts at top and ends at nav */
     padding-top: var(--safe-top); 
     padding-bottom: calc(60px + var(--safe-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
@@ -33,7 +32,6 @@ body {
     background-attachment: fixed;
 }
 
-/* Header now flows with the page to allow grid to reach bottom */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
@@ -78,7 +76,6 @@ body {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px;
     background: #fdfdfd; 
-    /* This ensures it fills space down to the nav */
     min-height: 50vh; 
 }
 
@@ -150,30 +147,108 @@ body {
 </div>
 
 <div class="service-grid">
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
-    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
-        <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync
-    </a>
-</div>
 
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
+        Work
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
+        Edu
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
+        Dev
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
+        Mail
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
+        CV
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
+        Links
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
+        Media
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
+        Social
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
+        Docs
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
+        Blog
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-vault"></i></div>
+        Secure
+    </a>
+
+    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-gears"></i></div>
+        Finance
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
+        Growth
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
+        Awards
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
+        Travel
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
+        Scan
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-heart"></i></div>
+        Health
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
+        Home
+    </a>
+
+    <a href="#" class="service-item">
+        <div class="icon-circle"><i class="fa-solid fa-gear"></i></div>
+        Settings
+    </a>
+
+    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
+        <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
+        Sync
+    </a>
+
+</div>
 <div class="bottom-nav">
     <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
