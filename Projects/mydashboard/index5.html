@@ -93,7 +93,6 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* Floating Notification Bar */
 .notif-bar {
     position: fixed; bottom: 65px; left: 10px; right: 10px;
     background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
@@ -128,8 +127,6 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2); color: var(--g4s-red);
     border: none; font-size: 18px; transition: 0.2s;
 }
-
-.fab:active { transform: scale(0.9); }
 
 .sync-btn i.rotating { animation: rotate 1s linear; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -179,7 +176,7 @@ body {
             </div>
             <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
                 <span><i class="fa-solid fa-shield-heart"></i> SECURE PERSONAL HUB</span>
-                <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">ACTIVE</span>
+                <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">--:--:-- --</span>
             </div>
         </div>
     </div>
@@ -229,32 +226,37 @@ body {
 </div>
 
 <script>
-    // Updates notice bar message
+    function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit', 
+            hour12: true 
+        });
+        document.getElementById('live-clock').innerText = timeString;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // Initial call
+
     function releaseNotice() {
         const msg = prompt("Enter new dashboard notice:");
         if (msg) document.getElementById('notice-text').innerText = msg;
     }
 
-    // Displays the current time and date in an alert
     function showDateTime() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         alert("Today is: " + now.toLocaleDateString(undefined, options) + "\nTime: " + now.toLocaleTimeString());
     }
 
-    // Sync button rotation logic
     function syncData(btn) {
         const icon = btn.querySelector('i');
         icon.classList.remove('rotating');
         void icon.offsetWidth; 
         icon.classList.add('rotating');
     }
-
-    // Optional: Real-time clock in the card
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }, 1000);
 </script>
 
 </body>
