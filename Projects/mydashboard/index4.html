@@ -124,7 +124,6 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* Notification Bar */
 .notif-bar {
     position: fixed;
     bottom: 65px;
@@ -153,11 +152,7 @@ body {
     align-items: center;
 }
 
-.marquee {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-}
+.marquee { flex: 1; white-space: nowrap; overflow: hidden; }
 
 .marquee span {
     display: inline-block;
@@ -173,7 +168,6 @@ body {
     100% { transform: translate(-100%, 0); }
 }
 
-/* Sync Button */
 .sync-btn {
     position: fixed;
     bottom: 110px;
@@ -191,7 +185,7 @@ body {
     border: none;
 }
 
-.sync-btn i.rotating { animation: rotate 1s linear infinite; }
+.sync-btn i.rotating { animation: rotate 1s linear; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .bottom-nav {
@@ -295,11 +289,9 @@ body {
 <script>
     function syncData(btn) {
         const icon = btn.querySelector('i');
+        icon.classList.remove('rotating');
+        void icon.offsetWidth; // Trigger reflow to restart animation
         icon.classList.add('rotating');
-        setTimeout(() => {
-            icon.classList.remove('rotating');
-            alert('Family Data Synchronized Successfully!');
-        }, 1500);
     }
 
     function manageNotice() {
