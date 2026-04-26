@@ -10,7 +10,6 @@
 <meta name="theme-color" content="#f44336">
 
 <link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
@@ -20,17 +19,13 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-* { 
-    -webkit-tap-highlight-color: transparent; 
-    box-sizing: border-box;
-    user-select: none;
-}
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
 
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: calc(560px + var(--safe-top)); 
-    padding-bottom: calc(120px + var(--safe-bottom));
+    padding-top: calc(620px + var(--safe-top)); 
+    padding-bottom: calc(80px + var(--safe-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
@@ -116,19 +111,7 @@ body {
 
 @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-.floating-actions {
-    position: fixed; bottom: 110px; right: 20px;
-    display: flex; gap: 12px; z-index: 1500;
-}
-
-.fab {
-    width: 45px; height: 45px; background: white; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2); color: var(--g4s-red);
-    border: none; font-size: 18px; transition: 0.2s;
-}
-
-.sync-btn i.rotating { animation: rotate 1s linear; }
+.rotating { animation: rotate 1s linear; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .bottom-nav {
@@ -143,7 +126,6 @@ body {
 
 @media (min-width: 768px) {
     .fixed-header, .bottom-nav, .notif-bar { width: 100%; max-width: 450px; left: 50% !important; transform: translateX(-50%); }
-    .floating-actions { right: calc(50% - 210px); }
 }
 </style>
 </head>
@@ -197,17 +179,14 @@ body {
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-circle-question"></i></div>Help</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+        <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
+        <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
+            <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync
+        </a>
     </div>
-</div>
-
-<div class="floating-actions">
-    <button class="fab info-btn" onclick="showDateTime()" title="Date & Time">
-        <i class="fa-solid fa-calendar-day"></i>
-    </button>
-    <button class="fab sync-btn" onclick="syncData(this)" title="Sync Data">
-        <i class="fa-solid fa-arrows-rotate"></i>
-    </button>
 </div>
 
 <div class="notif-bar" onclick="releaseNotice()">
@@ -228,31 +207,20 @@ body {
 <script>
     function updateClock() {
         const now = new Date();
-        const timeString = now.toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit', 
-            hour12: true 
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString([], { 
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
         });
-        document.getElementById('live-clock').innerText = timeString;
     }
-
     setInterval(updateClock, 1000);
-    updateClock(); // Initial call
+    updateClock();
 
     function releaseNotice() {
         const msg = prompt("Enter new dashboard notice:");
         if (msg) document.getElementById('notice-text').innerText = msg;
     }
 
-    function showDateTime() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        alert("Today is: " + now.toLocaleDateString(undefined, options) + "\nTime: " + now.toLocaleTimeString());
-    }
-
-    function syncData(btn) {
-        const icon = btn.querySelector('i');
+    function syncData(el) {
+        const icon = document.getElementById('sync-icon');
         icon.classList.remove('rotating');
         void icon.offsetWidth; 
         icon.classList.add('rotating');
