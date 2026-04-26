@@ -26,7 +26,10 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: var(--safe-top); 
     padding-bottom: calc(60px + var(--safe-bottom));
-    background: #f8f9fa;
+    /* RESTORED: Floral texture background for the whole page */
+    background: linear-gradient(rgba(248, 249, 250, 0.95), rgba(248, 249, 250, 0.95)), 
+                url('https://www.transparenttextures.com/patterns/floral-paper.png');
+    background-attachment: fixed;
 }
 
 .header-section {
@@ -47,26 +50,32 @@ body {
 .visa-card {
     border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     position: relative; overflow: hidden;
-    /* Clean gradient background */
     background: linear-gradient(135deg, #1a1a1a 0%, #d32f2f 100%);
 }
 
-/* G4S LOGO WATERMARK SYSTEM */
+/* COMBINED WATERMARK: G4S Logo + Flower Icon */
 .visa-card::before {
-    content: ""; position: absolute; 
-    inset: 0;
-    /* Use G4S Logo as background watermark */
-    background: url('https://G4scumilla.github.io/Files/Img/logo.png') no-repeat center;
-    background-size: 60%; /* Adjust size of watermark */
-    opacity: 0.15; /* Transparency of watermark */
+    content: "\f06c"; /* Font Awesome Flower/Leaf */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 120px;
+    color: rgba(255, 255, 255, 0.05);
+    transform: rotate(-15deg);
     z-index: 1;
 }
 
 .visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent);
+    content: ""; 
+    position: absolute; 
+    inset: 0;
+    background: url('https://G4scumilla.github.io/Files/Img/logo.png') no-repeat center;
+    background-size: 55%;
+    opacity: 0.12;
     z-index: 2;
 }
 
@@ -75,7 +84,7 @@ body {
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px;
-    background: #fdfdfd; 
+    background: rgba(253, 253, 253, 0.8); /* Slight transparency to show page texture */
     min-height: 50vh; 
 }
 
@@ -130,7 +139,7 @@ body {
                     </div>
                     <div>
                         <div style="font-size: 9px; font-weight: 600; color: #ffeb3b;">SECURE ACCESS</div>
-                        <div style="font-size: 7px; opacity: 0.8; line-height: 1.3;">Quick access to forms, sheets, web apps, and professional resources.</div>
+                        <div style="font-size: 7px; opacity: 0.8; line-height: 1.3;">Quick access to forms, sheets, and professional resources.</div>
                     </div>
                 </div>
             </div>
