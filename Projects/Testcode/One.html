@@ -14,7 +14,6 @@
 
 <style>
 :root { 
-    /* Deepened red (approx 130% deeper/darker) */
     --g4s-red: #8b0000; 
     --safe-top: env(safe-area-inset-top, 20px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -32,7 +31,6 @@ body {
     background-attachment: fixed;
 }
 
-/* DEEPENED TOP GRADIENT */
 .header-section {
     background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
     height: 60px; 
@@ -70,7 +68,6 @@ body {
     -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
 }
 
-/* DEEPENED CARD OVERLAY */
 .visa-card::after {
     content: ""; position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
@@ -79,11 +76,12 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
-/* DEEPENED GRID GRADIENT */
+/* GRID MENU BACKGROUND: RED INCREASED BY 135% */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 40px;
-    background: linear-gradient(180deg, rgba(139, 0, 0, 0.1) 0%, transparent 40%);
+    /* Opacity increased from 0.1 to 0.235 for a 135% gain in visibility */
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
     min-height: 50vh; 
 }
 
@@ -96,7 +94,7 @@ body {
 .icon-circle {
     width: 46px; height: 46px; background: #fff; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
     font-size: 19px; color: var(--g4s-red);
     transition: transform 0.2s;
 }
