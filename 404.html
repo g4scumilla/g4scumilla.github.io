@@ -79,7 +79,6 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
-/* ENLARGED 404 CONTENT */
 .error-section {
     flex: 1;
     display: flex;
@@ -105,23 +104,22 @@ body {
     font-weight: 800;
     color: #444;
     margin-top: -5px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     letter-spacing: 2px;
 }
 
-/* LARGE ACTION BUTTONS */
 .action-btn {
     text-decoration: none;
     width: 280px;
-    padding: 16px;
-    margin: 10px 0;
+    padding: 14px;
+    margin: 6px 0;
     background: #fff;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     color: var(--g4s-red);
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
@@ -129,10 +127,14 @@ body {
     transition: all 0.2s ease;
 }
 
-.action-btn i { font-size: 20px; }
-.action-btn:active { transform: scale(0.95); background: #fdf2f2; }
+.btn-back {
+    background: var(--g4s-red);
+    color: #fff;
+}
 
-/* BOTTOM NAV RESTORED */
+.action-btn i { font-size: 18px; }
+.action-btn:active { transform: scale(0.95); opacity: 0.9; }
+
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -182,6 +184,11 @@ body {
 <div class="error-section">
     <h1>404</h1>
     <p>LOCATION NOT FOUND</p>
+
+    <a href="javascript:void(0)" onclick="history.back()" class="action-btn btn-back">
+        <i class="fa-solid fa-arrow-left"></i> 
+        <span>Go Back</span>
+    </a>
 
     <a href="/index" class="action-btn">
         <i class="fa-solid fa-house-chimney"></i> 
