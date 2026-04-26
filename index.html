@@ -1,12 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>G4S Internal Dashboard</title>
+
+<link rel="stylesheet" href="regular_pages/style.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary-red: #d32f2f;
+        --app-bg: #f8f9fa;
+        --desktop-bg: #121212;
+    }
+
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+
+    /* LAPTOP/COMPUTER VIEW MODE */
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--desktop-bg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        justify-content: center; /* Centers the app on PC */
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* THE APK CONTAINER */
+    .app-shell {
+        width: 100%;
+        max-width: 450px; /* Limits width on Laptop to look like a phone */
+        background-color: var(--app-bg);
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    }
+
+    /* SCROLLABLE MAIN CONTENT */
+    .main-scroll-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        padding-bottom: 100px; /* Space for fixed footer */
+    }
+
+    /* Placeholder for fetched content */
+    #header { width: 100%; }
+    #footer { width: 100%; }
+
+    /* Error / Welcome Section styling */
+    .section-title {
+        font-weight: 800;
+        font-size: 14px;
+        color: #666;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    /* Example placeholder for your 'links' styles if not in style.css */
+    .link-card {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .link-card a {
+        text-decoration: none;
+        color: var(--primary-red);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .link-card p { font-size: 12px; color: #777; margin: 8px 0 0; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div id="header"></div>
+
+    <div class="main-scroll-area">
+        <section>
+            <div class="section-title">AUTOMATION TOOLS</div>
+
+            <div class="links">
+                <div class="link-card">
+                    <a href="pages/resignation_automations.html">
+                        <i class="fas fa-file-signature"></i> Resignation Automations
+                    </a>
+                    <p>Generate resignation documents automatically.</p>
+                </div>
+                
+                <div class="link-card">
+                    <a href="pages/prepare_sheet.html">
+                        <i class="fas fa-chalkboard-teacher"></i> Prepare Sheet
+                    </a>
+                    <p>Create new training sheets quickly and efficiently.</p>
+                </div>
+                
+                <div class="link-card">
+                    <a href="pages/training_sheet.html">
+                        <i class="fas fa-table"></i> Prepare Training Sheet
+                    </a>
+                    <p>Access and update existing training sheets.</p>
+                </div>
+                
+                <div class="link-card">
+                    <a href="/Projects/Wallet/index">
+                        <i class="fas fa-link"></i> Other Internal Links
+                    </a>
+                    <p>Access miscellaneous internal tools and pages.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="footer"></div>
+</div>
+
 <script>
-function loadHTML(id, file) {
+/**
+ * Fetches HTML and ensures any <script> tags inside the 
+ * fetched file are executed (required for the Menu button).
+ */
+function loadComponent(id, file) {
     fetch(file)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) throw new Error("Could not find " + file);
+            return response.text();
+        })
         .then(data => {
             const container = document.getElementById(id);
             container.innerHTML = data;
             
-            // This part is CRITICAL: it finds the script we just loaded and runs it
+            // Re-inject scripts to make them active
             const scripts = container.querySelectorAll("script");
             scripts.forEach(oldScript => {
                 const newScript = document.createElement("script");
@@ -14,9 +150,15 @@ function loadHTML(id, file) {
                 document.body.appendChild(newScript);
             });
         })
-        .catch(err => console.error("Error loading component:", err));
+        .catch(err => console.error(err));
 }
 
-loadHTML("header", "regular_pages/header.html");
-loadHTML("footer", "regular_pages/footer.html");
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    loadComponent("header", "regular_pages/header.html");
+    loadComponent("footer", "regular_pages/footer.html");
+});
 </script>
+
+</body>
+</html>
