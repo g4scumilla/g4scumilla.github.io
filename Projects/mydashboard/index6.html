@@ -42,9 +42,14 @@ body {
 
 .top-bar-content { padding: 15px 15px 10px; color: white; }
 .header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
-.card-container { padding: 0 15px; margin-top: 5px; }
 
-/* VISA CARD - ORIGINAL STYLES */
+/* CARD CONTAINER WITH NARROW BOTTOM BORDER */
+.card-container { 
+    padding: 0 15px 20px; 
+    margin-top: 5px; 
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* The narrow border */
+}
+
 .visa-card {
     border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
@@ -70,34 +75,10 @@ body {
 
 .visa-card > * { position: relative; z-index: 3; }
 
-.notif-bar {
-    margin: 15px 15px 5px;
-    background: rgba(255, 255, 255, 0.95);
-    height: 35px; border-radius: 20px; display: flex; align-items: center;
-    overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border: 1px solid rgba(211, 47, 47, 0.15);
-}
-
-.notif-label {
-    background: var(--g4s-red); color: white; font-size: 9px;
-    font-weight: 800; padding: 0 12px; height: 100%;
-    display: flex; align-items: center;
-}
-
-.marquee { flex: 1; white-space: nowrap; overflow: hidden; }
-.marquee span {
-    display: inline-block; padding-left: 100%;
-    animation: marquee 18s linear infinite;
-    font-size: 11px; font-weight: 600; color: #444;
-}
-
-@keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-/* SERVICE GRID - CLEAN BLACKISH-WHITE BACKGROUND */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 15px 10px 20px;
-    background: #fdfdfd; /* Off-white / Blackish-white */
+    gap: 15px 0; padding: 20px 10px 20px;
+    background: #fdfdfd; 
     border-bottom: 1px solid #eee;
 }
 
@@ -166,13 +147,6 @@ body {
         </div>
     </div>
 
-    <div class="notif-bar" onclick="releaseNotice()">
-        <div class="notif-label">NOTICE</div>
-        <div class="marquee">
-            <span id="notice-text">Welcome to the Kuafi Family Dashboard. Tap here to release a new message.</span>
-        </div>
-    </div>
-
     <div class="service-grid">
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
         <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
@@ -216,11 +190,6 @@ body {
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    function releaseNotice() {
-        const msg = prompt("Enter new dashboard notice:");
-        if (msg) document.getElementById('notice-text').innerText = msg;
-    }
 
     function syncData(el) {
         const icon = document.getElementById('sync-icon');
