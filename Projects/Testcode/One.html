@@ -3,24 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Dashboard</title>
+<title>G4S Internal Dashboard</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
     :root {
         --primary-red: #d32f2f;
-        --app-bg: #f4f6f8;
+        --app-bg: #f2f4f7;
+        /* Colors from your reference */
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     }
 
     * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
 
     body {
-        background-color: #121212;
+        margin: 0; padding: 0;
+        background-color: #1a1a1a;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         display: flex; justify-content: center; height: 100vh; overflow: hidden;
     }
 
+    /* THE APP SHELL */
     .app-shell {
         width: 100%;
         max-width: 450px;
@@ -29,26 +34,71 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        box-shadow: 0 0 60px rgba(0,0,0,0.6);
+        /* Flower Watermark Background from reference */
+        background-image: url('https://www.transparenttextures.com/patterns/floral-paper.png');
     }
 
-    #header { flex-shrink: 0; background: #fff; z-index: 100; min-height: 60px; }
+    /* HEADER AREA WITH THE REFERENCE "CARD" STYLE */
+    #header-area {
+        padding: 20px 15px 10px;
+        flex-shrink: 0;
+    }
 
-    /* The Secret to the APK Vibe: Flex-Grow and Height Calculation */
-    .main-content {
-        flex: 1;
+    .main-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 20px;
+        box-shadow: var(--card-shadow);
+        position: relative;
+        overflow: hidden;
         display: flex;
-        flex-direction: column;
-        padding: 10px 10px 90px; /* Space for footer */
-        overflow-y: auto;
+        align-items: center;
+        gap: 15px;
     }
 
+    /* The 'flower' or decorative pattern inside the card as requested */
+    .main-card::after {
+        content: "\f06c"; /* Font Awesome Leaf/Flower */
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        right: -10px;
+        bottom: -10px;
+        font-size: 80px;
+        color: rgba(211, 47, 47, 0.05);
+        transform: rotate(-20deg);
+    }
+
+    .card-info h2 {
+        font-size: 18px;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+
+    .card-info p {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.4;
+    }
+
+    /* MAIN CONTENT SCROLL AREA */
+    .main-content {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px 15px 100px;
+        scrollbar-width: none;
+    }
+    .main-content::-webkit-scrollbar { display: none; }
+
+    /* 4-COLUMN APK GRID */
     .service-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: minmax(100px, 1fr); /* Forces items to expand vertically */
-        gap: 10px;
-        flex-grow: 1; /* This forces the grid to fill all empty space */
+        gap: 12px;
     }
 
     .grid-item {
@@ -58,68 +108,76 @@
         align-items: center;
         justify-content: center;
         background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-        transition: transform 0.1s;
-        border: 1px solid rgba(0,0,0,0.02);
+        aspect-ratio: 1/1;
+        border-radius: 18px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: transform 0.1s ease;
+        border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    .grid-item:active { transform: scale(0.9); background: #fafafa; }
+    .grid-item:active { transform: scale(0.9); background: #f0f0f0; }
 
     .icon-box {
-        font-size: 26px;
+        font-size: 22px;
         color: var(--primary-red);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .grid-label {
-        font-size: 10px;
-        font-weight: 700;
-        color: #333;
+        font-size: 9px;
+        font-weight: 800;
+        color: #444;
         text-align: center;
-        line-height: 1.2;
+        text-transform: uppercase;
     }
 
-    /* REFRESH BUTTON */
-    .refresh-fab {
+    /* FLOATING REFRESH BUTTON */
+    .refresh-btn {
         position: absolute;
-        bottom: 80px; 
+        bottom: 85px;
         right: 20px;
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
         background: var(--primary-red);
         color: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
-        cursor: pointer;
+        box-shadow: 0 8px 16px rgba(211, 47, 47, 0.3);
         z-index: 500;
-        border: none;
-        outline: none;
     }
-    
-    .refresh-fab i { font-size: 20px; }
-    .refresh-fab:active { transform: scale(0.85); background: #b71c1c; }
 
-    #footer { position: absolute; bottom: 0; width: 100%; z-index: 200; height: 70px; }
+    #footer-container {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        z-index: 1000;
+    }
 </style>
 </head>
 <body>
 
 <div class="app-shell">
-    <div id="header"></div>
+    
+    <div id="header-area">
+        <div class="main-card">
+            <div class="card-info">
+                <h2>G4S Automation</h2>
+                <p>Welcome to the Internal Management System. Access all tools and sheets below.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="main-content">
         <div class="service-grid">
             <a href="/pages/resignation_automations.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-file-signature"></i></div>
-                <span class="grid-label">Resignation</span>
+                <span class="grid-label">Resign</span>
             </a>
             <a href="/pages/prepare_sheet.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-table-list"></i></div>
-                <span class="grid-label">Prepare Sheet</span>
+                <span class="grid-label">Prepare</span>
             </a>
             <a href="/pages/training_sheet.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-graduation-cap"></i></div>
@@ -131,35 +189,35 @@
             </a>
             <a href="/pages/attendance.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
-                <span class="grid-label">Attendance</span>
+                <span class="grid-label">Attend</span>
             </a>
             <a href="/pages/inventory.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-boxes-stacked"></i></div>
-                <span class="grid-label">Inventory</span>
+                <span class="grid-label">Stock</span>
             </a>
             <a href="/pages/vouchers.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-receipt"></i></div>
-                <span class="grid-label">Vouchers</span>
+                <span class="grid-label">Voucher</span>
             </a>
             <a href="/pages/reports.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-chart-line"></i></div>
-                <span class="grid-label">Reports</span>
+                <span class="grid-label">Report</span>
             </a>
             <a href="/pages/staff.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-users-gear"></i></div>
-                <span class="grid-label">Staff DB</span>
+                <span class="grid-label">Staff</span>
             </a>
             <a href="/pages/payroll.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-money-check-dollar"></i></div>
-                <span class="grid-label">Payroll</span>
+                <span class="grid-label">Salary</span>
             </a>
             <a href="/pages/mushak.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-file-invoice-dollar"></i></div>
-                <span class="grid-label">Mushak 6.6</span>
+                <span class="grid-label">Mushak</span>
             </a>
             <a href="/pages/settings.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-sliders"></i></div>
-                <span class="grid-label">Settings</span>
+                <span class="grid-label">Setup</span>
             </a>
             <a href="/pages/cloud.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
@@ -171,7 +229,7 @@
             </a>
             <a href="/pages/support.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-headset"></i></div>
-                <span class="grid-label">Support</span>
+                <span class="grid-label">Help</span>
             </a>
             <a href="/pages/other_links.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-ellipsis"></i></div>
@@ -180,33 +238,22 @@
         </div>
     </div>
 
-    <button class="refresh-fab" onclick="window.location.reload();">
+    <div class="refresh-btn" onclick="window.location.reload();">
         <i class="fas fa-sync-alt"></i>
-    </button>
+    </div>
 
-    <div id="footer"></div>
+    <div id="footer-container"></div>
 </div>
 
 <script>
-function loadComponent(id, file) {
-    fetch(file)
-        .then(response => response.text())
+function loadFooter() {
+    fetch('/regular_pages/footer.html')
+        .then(res => res.text())
         .then(data => {
-            const container = document.getElementById(id);
-            container.innerHTML = data;
-            const scripts = container.querySelectorAll("script");
-            scripts.forEach(s => {
-                const ns = document.createElement("script");
-                ns.text = s.text;
-                document.body.appendChild(ns);
-            });
-        }).catch(e => console.error(e));
+            document.getElementById('footer-container').innerHTML = data;
+        });
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    loadComponent("header", "/regular_pages/header.html");
-    loadComponent("footer", "/regular_pages/footer.html");
-});
+window.onload = loadFooter;
 </script>
 
 </body>
