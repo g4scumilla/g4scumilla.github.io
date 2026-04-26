@@ -125,7 +125,6 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-/* ADDED CLICK EFFECT FOR SERVICE ITEMS */
 .service-item {
     text-decoration: none;
     color: #333;
@@ -144,12 +143,14 @@ body {
 .icon-circle {
     width: 44px;
     height: 44px;
-    background: #fdfdfd;
+    background: #fff;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    /* ADDED SHADOW FOR DISTINCTION */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,0.03);
     margin-bottom: 6px;
     font-size: 18px;
     color: var(--g4s-red);
@@ -170,6 +171,8 @@ body {
     background: white;
     padding: 15px;
     border-radius: 12px;
+    /* ADDED SHADOW FOR DISTINCTION */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     border: 1px solid #eee;
     text-align: center;
 }
@@ -186,7 +189,6 @@ body {
     z-index: 2000;
 }
 
-/* ADDED CLICK EFFECT FOR NAV ITEMS */
 .nav-item {
     text-decoration: none;
     display: flex;
