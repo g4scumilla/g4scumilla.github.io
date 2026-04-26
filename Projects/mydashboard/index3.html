@@ -144,35 +144,60 @@ body {
     color: var(--g4s-red);
 }
 
-/* FAMILY SECTION DECORATION */
 .content-filler { padding: 15px; }
 
+/* REFINED FAMILY CARD LAYOUT */
 .family-card {
     background: white;
-    padding: 15px;
+    padding: 12px 15px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     border: 1px solid #eee;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: space-between; /* Pushes content to the edges */
+}
+
+.family-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .family-icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background: #fff0f0;
     color: var(--g4s-red);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-.family-info h4 { margin: 0; font-size: 13px; color: #333; font-weight: 800; text-transform: uppercase; }
-.family-info p { margin: 2px 0 0; font-size: 10px; color: #666; line-height: 1.3; }
+.family-name h4 { 
+    margin: 0; 
+    font-size: 11px; 
+    color: #333; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+}
+
+.family-details {
+    text-align: right;
+    max-width: 50%;
+}
+
+.family-details p { 
+    margin: 0; 
+    font-size: 9px; 
+    color: #777; 
+    line-height: 1.2; 
+    font-style: italic;
+}
 
 .bottom-nav {
     position: fixed;
@@ -261,29 +286,35 @@ body {
 </div>
 
 <div class="content-filler">
-    <div style="font-size: 11px; font-weight: bold; color: #d32f2f; margin-bottom: 12px; letter-spacing: 1px;">FAMILY DIRECTORY</div>
+    <div style="font-size: 10px; font-weight: bold; color: #d32f2f; margin-bottom: 12px; letter-spacing: 2px; text-align: center;">FAMILY DIRECTORY</div>
     
     <div class="family-card">
-        <div class="family-icon"><i class="fa-solid fa-user-tie"></i></div>
-        <div class="family-info">
-            <h4>Abdullahil Kuafi</h4>
-            <p>MA & BA in English<br>Govt. Titumir College, Dhaka</p>
+        <div class="family-left">
+            <div class="family-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="family-name"><h4>Kuafi</h4></div>
+        </div>
+        <div class="family-details">
+            <p>MA & BA in English<br>Govt. Titumir College</p>
         </div>
     </div>
 
     <div class="family-card">
-        <div class="family-icon"><i class="fa-solid fa-heart"></i></div>
-        <div class="family-info">
-            <h4>Zamila Khatun</h4>
-            <p>BA & MA in Mathematics<br>Rajshahi College, Rajshahi</p>
+        <div class="family-left">
+            <div class="family-icon"><i class="fa-solid fa-heart"></i></div>
+            <div class="family-name"><h4>Zamila</h4></div>
+        </div>
+        <div class="family-details">
+            <p>BA & MA in Mathematics<br>Rajshahi College</p>
         </div>
     </div>
 
     <div class="family-card">
-        <div class="family-icon"><i class="fa-solid fa-baby"></i></div>
-        <div class="family-info">
-            <h4>Habibullah Zayaan</h4>
-            <p>Born: 12 November 2025<br>The Heart of Kuafi Family</p>
+        <div class="family-left">
+            <div class="family-icon"><i class="fa-solid fa-baby"></i></div>
+            <div class="family-name"><h4>Zayaan</h4></div>
+        </div>
+        <div class="family-details">
+            <p>12 Nov 2025<br>Family Joy</p>
         </div>
     </div>
 </div>
