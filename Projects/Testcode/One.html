@@ -26,10 +26,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: var(--safe-top); 
     padding-bottom: calc(60px + var(--safe-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
-                url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover;
-    background-attachment: fixed;
+    background: #f8f9fa;
 }
 
 .header-section {
@@ -50,23 +47,26 @@ body {
 .visa-card {
     border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
     position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
-    background-size: cover;
+    /* Clean gradient background */
+    background: linear-gradient(135deg, #1a1a1a 0%, #d32f2f 100%);
 }
 
+/* G4S LOGO WATERMARK SYSTEM */
 .visa-card::before {
-    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
-    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover; opacity: 0.75; z-index: 1;
-    mask-image: linear-gradient(to right, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    content: ""; position: absolute; 
+    inset: 0;
+    /* Use G4S Logo as background watermark */
+    background: url('https://G4scumilla.github.io/Files/Img/logo.png') no-repeat center;
+    background-size: 60%; /* Adjust size of watermark */
+    opacity: 0.15; /* Transparency of watermark */
+    z-index: 1;
 }
 
 .visa-card::after {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
+    background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent);
     z-index: 2;
 }
 
@@ -143,108 +143,88 @@ body {
 </div>
 
 <div class="service-grid">
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
         Work
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
         Edu
     </a>
-
     <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
         Dev
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
         Mail
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
         CV
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
         Links
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
         Media
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
         Social
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
         Docs
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
         Blog
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-vault"></i></div>
         Secure
     </a>
-
     <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-gears"></i></div>
         Finance
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
         Growth
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
         Awards
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
         Travel
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
         Scan
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-heart"></i></div>
         Health
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
         Home
     </a>
-
     <a href="#" class="service-item">
         <div class="icon-circle"><i class="fa-solid fa-gear"></i></div>
         Settings
     </a>
-
     <a href="javascript:void(0)" class="service-item" onclick="syncData(this)">
         <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
         Sync
     </a>
-
 </div>
+
 <div class="bottom-nav">
     <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
