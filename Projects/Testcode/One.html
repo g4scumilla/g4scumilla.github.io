@@ -23,7 +23,7 @@
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     padding-top: var(--safe-top); 
     padding-bottom: calc(60px + var(--safe-bottom));
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
@@ -39,7 +39,7 @@ body {
 }
 
 .top-bar-content { padding: 15px 15px 10px; color: white; }
-.header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
+.header-title { font-size: 19px; font-weight: 900; display: block; letter-spacing: 1.5px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
 .card-container { 
     padding: 0 15px 20px; 
@@ -50,23 +50,22 @@ body {
 .visa-card {
     border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
     position: relative; overflow: hidden;
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
 }
 
-/* LOGO SIZE: 70% with 15px Left Padding */
 .visa-card::before {
     content: ""; 
     position: absolute; 
     inset: 0; 
     width: 100%;
     background: url('https://g4scumilla.github.io/Files/Img/logo.png');
-    background-size: 35%; /* Scaled down to 70% of previous size */
+    background-size: 35%; 
     background-repeat: no-repeat;
     background-position: 15px center; 
-    opacity: 0.8; 
+    opacity: 0.85; 
     z-index: 1;
     mask-image: linear-gradient(to right, black 30%, transparent 80%);
     -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
@@ -74,31 +73,35 @@ body {
 
 .visa-card::after {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
+    background: linear-gradient(135deg, rgba(0,0,0,0.75), rgba(211, 47, 47, 0.45));
     z-index: 2;
 }
 
 .visa-card > * { position: relative; z-index: 3; }
 
+/* SERVICE GRID STYLES */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px;
-    background: #fdfdfd; 
+    background: transparent; 
     min-height: 50vh; 
 }
 
 .service-item {
     text-decoration: none; color: #333;
     display: flex; flex-direction: column; align-items: center;
-    font-size: 9px; font-weight: 700;
+    font-size: 10px; font-weight: 800;
 }
 
 .icon-circle {
-    width: 44px; height: 44px; background: #fff; border-radius: 14px;
+    width: 46px; height: 46px; background: #fff; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
-    font-size: 18px; color: var(--g4s-red);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 6px;
+    font-size: 19px; color: var(--g4s-red);
+    transition: transform 0.2s;
 }
+
+.service-item:active .icon-circle { transform: scale(0.9); }
 
 .rotating { animation: rotate 1s linear; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -110,7 +113,7 @@ body {
     border-top: 1px solid #eee; z-index: 2000;
 }
 
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
+.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
@@ -130,21 +133,21 @@ body {
     <div class="card-container">
         <div class="visa-card">
             <div style="flex:1; display:flex; padding: 20px; position: relative;">
-                <div style="flex: 0.45;"></div>
-                <div style="flex: 0.55; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px;">WELCOME TO G4S</div>
-                        <div style="font-size: 8px; opacity: 0.9; line-height: 1.3;">Internal Productivity & Automation Hub</div>
+                <div style="flex: 0.42;"></div>
+                <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 1.2px; text-transform: uppercase; border-bottom: 2px solid #f44336; display: inline-block; padding-bottom: 2px;">WELCOME TO G4S</div>
+                        <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">SECURE ACCESS</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Quick access to professional resources and internal web systems.</div>
+                        <div style="font-size: 11px; font-weight: 900; color: #ffeb3b; letter-spacing: 0.5px;">SECURE ACCESS</div>
+                        <div style="font-size: 7px; font-weight: 600; opacity: 0.9; line-height: 1.4; margin-top: 2px;">Professional internal resource hub.</div>
                     </div>
                 </div>
             </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fa-solid fa-shield-heart"></i> SECURE DASHBOARD</span>
-                <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">--:--:-- --</span>
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; font-weight: 800;">
+                <span><i class="fa-solid fa-shield-halved"></i> SECURE SYSTEM</span>
+                <span id="live-clock" style="background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 5px; font-family: 'Courier New', monospace;">--:--:-- --</span>
             </div>
         </div>
     </div>
