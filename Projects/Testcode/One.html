@@ -7,14 +7,15 @@
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#f44336">
+<meta name="theme-color" content="#8b0000">
 
 <link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
 :root { 
-    --g4s-red: #d32f2f; 
+    /* Deepened red (approx 130% deeper/darker) */
+    --g4s-red: #8b0000; 
     --safe-top: env(safe-area-inset-top, 20px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -25,15 +26,15 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     padding-bottom: calc(60px + var(--safe-bottom));
-    /* FLORAL TEXTURE REMAINS */
     background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
                 url('https://www.transparenttextures.com/patterns/floral-paper.png');
     background-size: auto;
     background-attachment: fixed;
 }
 
+/* DEEPENED TOP GRADIENT */
 .header-section {
-    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
     height: 60px; 
     padding-top: var(--safe-top);
 }
@@ -69,20 +70,20 @@ body {
     -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
 }
 
+/* DEEPENED CARD OVERLAY */
 .visa-card::after {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.75), rgba(211, 47, 47, 0.45));
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
     z-index: 2;
 }
 
 .visa-card > * { position: relative; z-index: 3; }
 
-/* GRID MENU BACKGROUND GRADIENT ADDED */
+/* DEEPENED GRID GRADIENT */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 40px;
-    /* Fades from red at the top back to the floral white */
-    background: linear-gradient(180deg, rgba(244, 67, 54, 0.1) 0%, transparent 40%);
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.1) 0%, transparent 40%);
     min-height: 50vh; 
 }
 
@@ -132,7 +133,7 @@ body {
             <div style="flex: 0.42;"></div>
             <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
                 <div style="margin-bottom: 12px;">
-                    <div style="font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 1.2px; text-transform: uppercase; border-bottom: 2px solid #f44336; display: inline-block; padding-bottom: 2px;">WELCOME TO G4S</div>
+                    <div style="font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 1.2px; text-transform: uppercase; border-bottom: 2px solid var(--g4s-red); display: inline-block; padding-bottom: 2px;">WELCOME TO G4S</div>
                     <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
                 </div>
                 <div>
