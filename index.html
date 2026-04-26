@@ -1,231 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Internal Dashboard</title>
+<div class="service-grid">
+    <a href="/pages/resignation_automations.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-file-signature"></i></div>
+        <span class="grid-label">Resignation</span>
+    </a>
+    
+    <a href="/pages/prepare_sheet.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-table-list"></i></div>
+        <span class="grid-label">Prepare Sheet</span>
+    </a>
+    
+    <a href="/pages/training_sheet.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-graduation-cap"></i></div>
+        <span class="grid-label">Training</span>
+    </a>
+    
+    <a href="/Projects/Wallet/index" class="grid-item">
+        <div class="icon-box"><i class="fas fa-wallet"></i></div>
+        <span class="grid-label">Wallet</span>
+    </a>
 
-<link rel="stylesheet" href="regular_pages/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <a href="/pages/attendance.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
+        <span class="grid-label">Attendance</span>
+    </a>
 
-<style>
-    :root {
-        --primary-red: #d32f2f;
-        --app-bg: #f2f4f7; /* Light grey app background */
-    }
+    <a href="/pages/inventory.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-boxes-stacked"></i></div>
+        <span class="grid-label">Inventory</span>
+    </a>
 
-    /* Basic Reset */
-    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+    <a href="/pages/vouchers.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-receipt"></i></div>
+        <span class="grid-label">Vouchers</span>
+    </a>
 
-    body {
-        margin: 0; padding: 0;
-        background-color: #121212; /* Dark background for Laptop view */
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        display: flex;
-        justify-content: center;
-        height: 100vh;
-        overflow: hidden;
-    }
+    <a href="/pages/reports.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+        <span class="grid-label">Reports</span>
+    </a>
 
-    /* THE APK SHELL: This acts as the phone frame */
-    .app-shell {
-        width: 100%;
-        max-width: 450px;
-        background-color: var(--app-bg);
-        height: 100vh;
-        display: flex;
-        flex-direction: column; /* Stacks Header, Content, and Footer vertically */
-        position: relative;
-        box-shadow: 0 0 60px rgba(0,0,0,0.6);
-    }
+    <a href="/pages/staff.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-users-gear"></i></div>
+        <span class="grid-label">Staff DB</span>
+    </a>
 
-    /* Header Container: Flex-shrink 0 ensures it keeps its height */
-    #header {
-        flex-shrink: 0;
-        width: 100%;
-        z-index: 100;
-    }
+    <a href="/pages/payroll.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-money-check-dollar"></i></div>
+        <span class="grid-label">Payroll</span>
+    </a>
 
-    /* Main Content: Flex-grow 1 takes up the remaining space */
-    .main-content {
-        flex-grow: 1;
-        overflow-y: auto; /* Enables scrolling for the grid */
-        padding: 20px 12px 110px; /* Extra bottom padding for the footer */
-        scrollbar-width: none;
-    }
-    .main-content::-webkit-scrollbar { display: none; }
+    <a href="/pages/mushak.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-file-invoice-dollar"></i></div>
+        <span class="grid-label">Mushak 6.6</span>
+    </a>
 
-    /* Section Title */
-    .section-title {
-        font-size: 11px;
-        font-weight: 800;
-        color: #888;
-        letter-spacing: 1.2px;
-        margin: 0 0 15px 5px;
-        text-transform: uppercase;
-    }
+    <a href="/pages/settings.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-sliders"></i></div>
+        <span class="grid-label">Settings</span>
+    </a>
 
-    /* 4-COLUMN GRID MENU */
-    .service-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px 10px;
-    }
+    <a href="/pages/cloud.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
+        <span class="grid-label">Cloud</span>
+    </a>
 
-    .grid-item {
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.1s ease;
-    }
-    .grid-item:active { transform: scale(0.9); }
+    <a href="/pages/archive.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-folder-open"></i></div>
+        <span class="grid-label">Archive</span>
+    </a>
 
-    .icon-box {
-        width: 62px;
-        height: 62px;
-        background: #fff;
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 8px;
-        font-size: 24px;
-        color: var(--primary-red);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.02);
-    }
+    <a href="/pages/support.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-headset"></i></div>
+        <span class="grid-label">Support</span>
+    </a>
 
-    .grid-label {
-        font-size: 9px;
-        font-weight: 700;
-        color: #333;
-        text-align: center;
-        line-height: 1.2;
-    }
-
-    /* Footer Container */
-    #footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        z-index: 200;
-    }
-</style>
-</head>
-<body>
-
-<div class="app-shell">
-    <div id="header"></div>
-
-    <div class="main-content">
-        <div class="section-title">Automation Tools</div>
-        
-        <div class="service-grid">
-            <a href="pages/resignation_automations.html" class="grid-item">
-                <div class="icon-box"><i class="fas fa-file-signature"></i></div>
-                <span class="grid-label">Resignation</span>
-            </a>
-            <a href="pages/prepare_sheet.html" class="grid-item">
-                <div class="icon-box"><i class="fas fa-table-list"></i></div>
-                <span class="grid-label">Prepare Sheet</span>
-            </a>
-            <a href="pages/training_sheet.html" class="grid-item">
-                <div class="icon-box"><i class="fas fa-graduation-cap"></i></div>
-                <span class="grid-label">Training</span>
-            </a>
-            <a href="/Projects/Wallet/index" class="grid-item">
-                <div class="icon-box"><i class="fas fa-wallet"></i></div>
-                <span class="grid-label">Wallet</span>
-            </a>
-
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
-                <span class="grid-label">Attendance</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-boxes-stacked"></i></div>
-                <span class="grid-label">Inventory</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-receipt"></i></div>
-                <span class="grid-label">Vouchers</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-chart-line"></i></div>
-                <span class="grid-label">Reports</span>
-            </a>
-
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-users-gear"></i></div>
-                <span class="grid-label">Staff DB</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-money-check-dollar"></i></div>
-                <span class="grid-label">Payroll</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-file-invoice-dollar"></i></div>
-                <span class="grid-label">Mushak 6.6</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-sliders"></i></div>
-                <span class="grid-label">Settings</span>
-            </a>
-
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
-                <span class="grid-label">Cloud</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-folder-open"></i></div>
-                <span class="grid-label">Archive</span>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box"><i class="fas fa-headset"></i></div>
-                <span class="grid-label">Support</span>
-            </a>
-            <a href="pages/other_links.html" class="grid-item">
-                <div class="icon-box"><i class="fas fa-ellipsis"></i></div>
-                <span class="grid-label">More</span>
-            </a>
-        </div>
-    </div>
-
-    <div id="footer"></div>
+    <a href="/pages/other_links.html" class="grid-item">
+        <div class="icon-box"><i class="fas fa-ellipsis"></i></div>
+        <span class="grid-label">More</span>
+    </a>
 </div>
-
-<script>
-/**
- * Global Loader for Header and Footer
- */
-function loadComponent(id, file) {
-    fetch(file)
-        .then(response => {
-            if (!response.ok) throw new Error("File not found: " + file);
-            return response.text();
-        })
-        .then(data => {
-            const container = document.getElementById(id);
-            container.innerHTML = data;
-            
-            // Critical for the footer menu toggle script to work
-            const scripts = container.querySelectorAll("script");
-            scripts.forEach(oldScript => {
-                const newScript = document.createElement("script");
-                newScript.text = oldScript.text;
-                document.body.appendChild(newScript);
-            });
-        })
-        .catch(err => console.error("Error loading component:", err));
-}
-
-// Start loading when page is ready
-window.addEventListener('DOMContentLoaded', () => {
-    loadComponent("header", "regular_pages/header.html");
-    loadComponent("footer", "regular_pages/footer.html");
-});
-</script>
-
-</body>
-</html>
