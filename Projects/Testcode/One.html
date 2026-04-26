@@ -18,12 +18,11 @@
 
     body {
         margin: 0; padding: 0;
-        background-color: #121212; /* Laptop View Background */
+        background-color: #121212;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         display: flex; justify-content: center; height: 100vh; overflow: hidden;
     }
 
-    /* THE APK CONTAINER */
     .app-shell {
         width: 100%;
         max-width: 450px;
@@ -35,36 +34,26 @@
         box-shadow: 0 0 60px rgba(0,0,0,0.6);
     }
 
-    /* HEADER: Stays at the top naturally */
-    #header {
-        flex-shrink: 0;
-        width: 100%;
-        z-index: 100;
-    }
+    #header { flex-shrink: 0; width: 100%; z-index: 100; }
 
-    /* MAIN CONTENT: The scrollable grid */
+    /* CONTENT AREA: Updated to flex to fill space */
     .main-content {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
         overflow-y: auto;
-        padding: 20px 12px 110px; /* Space for footer */
+        padding: 15px 12px 100px; /* Space for footer */
         scrollbar-width: none;
     }
     .main-content::-webkit-scrollbar { display: none; }
 
-    .section-title {
-        font-size: 11px;
-        font-weight: 800;
-        color: #888;
-        letter-spacing: 1.2px;
-        margin: 0 0 15px 5px;
-        text-transform: uppercase;
-    }
-
-    /* 4-COLUMN GRID MENU */
+    /* GRID: Now expands to fill the available height */
     .service-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 15px 10px;
+        grid-auto-rows: 1fr; /* Ensures all rows are equal height */
+        gap: 12px 8px;
+        flex-grow: 1; /* Fills the vertical space */
     }
 
     .grid-item {
@@ -72,23 +61,19 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        transition: transform 0.1s ease;
+        justify-content: center; /* Centers icon/label in the box */
+        background: #fff;
+        border-radius: 20px;
+        transition: transform 0.1s ease, background 0.2s;
+        border: 1px solid rgba(0,0,0,0.02);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
-    .grid-item:active { transform: scale(0.92); }
+    .grid-item:active { transform: scale(0.92); background: #f9f9f9; }
 
     .icon-box {
-        width: 62px;
-        height: 62px;
-        background: #fff;
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 8px;
         font-size: 24px;
         color: var(--primary-red);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.02);
+        margin-bottom: 6px;
     }
 
     .grid-label {
@@ -96,16 +81,31 @@
         font-weight: 700;
         color: #333;
         text-align: center;
-        line-height: 1.2;
+        line-height: 1.1;
+        padding: 0 4px;
     }
 
-    /* FOOTER: Fixed to the bottom of the shell */
-    #footer {
+    /* REFRESH FAB (Floating Action Button) */
+    .refresh-fab {
         position: absolute;
-        bottom: 0;
-        width: 100%;
-        z-index: 200;
+        bottom: 85px; /* Sits above the footer */
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary-red);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+        cursor: pointer;
+        z-index: 300;
+        transition: transform 0.2s;
     }
+    .refresh-fab:active { transform: scale(0.85) rotate(180deg); }
+
+    #footer { position: absolute; bottom: 0; width: 100%; z-index: 200; }
 </style>
 </head>
 <body>
@@ -114,8 +114,6 @@
     <div id="header"></div>
 
     <div class="main-content">
-        <div class="section-title">Automation Tools</div>
-        
         <div class="service-grid">
             <a href="/pages/resignation_automations.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-file-signature"></i></div>
@@ -133,7 +131,6 @@
                 <div class="icon-box"><i class="fas fa-wallet"></i></div>
                 <span class="grid-label">Wallet</span>
             </a>
-
             <a href="/pages/attendance.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
                 <span class="grid-label">Attendance</span>
@@ -150,7 +147,6 @@
                 <div class="icon-box"><i class="fas fa-chart-line"></i></div>
                 <span class="grid-label">Reports</span>
             </a>
-
             <a href="/pages/staff.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-users-gear"></i></div>
                 <span class="grid-label">Staff DB</span>
@@ -167,7 +163,6 @@
                 <div class="icon-box"><i class="fas fa-sliders"></i></div>
                 <span class="grid-label">Settings</span>
             </a>
-
             <a href="/pages/cloud.html" class="grid-item">
                 <div class="icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
                 <span class="grid-label">Cloud</span>
@@ -187,35 +182,29 @@
         </div>
     </div>
 
+    <div class="refresh-fab" onclick="window.location.reload();">
+        <i class="fas fa-sync-alt"></i>
+    </div>
+
     <div id="footer"></div>
 </div>
 
 <script>
-/**
- * Root-Relative Component Loader
- */
 function loadComponent(id, file) {
     fetch(file)
-        .then(response => {
-            if (!response.ok) throw new Error("File not found: " + file);
-            return response.text();
-        })
+        .then(response => response.text())
         .then(data => {
             const container = document.getElementById(id);
             container.innerHTML = data;
-            
-            // Execute any scripts found in header/footer (like menu toggles)
             const scripts = container.querySelectorAll("script");
             scripts.forEach(oldScript => {
                 const newScript = document.createElement("script");
                 newScript.text = oldScript.text;
                 document.body.appendChild(newScript);
             });
-        })
-        .catch(err => console.error("Loader Error:", err));
+        });
 }
 
-// Ensure components load from the site root
 window.addEventListener('DOMContentLoaded', () => {
     loadComponent("header", "/regular_pages/header.html");
     loadComponent("footer", "/regular_pages/footer.html");
