@@ -1,81 +1,202 @@
-<div class="service-grid">
-    <a href="/pages/resignation_automations.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-file-signature"></i></div>
-        <span class="grid-label">Resignation</span>
-    </a>
-    
-    <a href="/pages/prepare_sheet.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-table-list"></i></div>
-        <span class="grid-label">Prepare Sheet</span>
-    </a>
-    
-    <a href="/pages/training_sheet.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-graduation-cap"></i></div>
-        <span class="grid-label">Training</span>
-    </a>
-    
-    <a href="/Projects/Wallet/index" class="grid-item">
-        <div class="icon-box"><i class="fas fa-wallet"></i></div>
-        <span class="grid-label">Wallet</span>
-    </a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>G4S Dashboard</title>
 
-    <a href="/pages/attendance.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
-        <span class="grid-label">Attendance</span>
-    </a>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#8b0000">
 
-    <a href="/pages/inventory.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-boxes-stacked"></i></div>
-        <span class="grid-label">Inventory</span>
-    </a>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <a href="/pages/vouchers.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-receipt"></i></div>
-        <span class="grid-label">Vouchers</span>
-    </a>
+<style>
+:root { 
+    --g4s-red: #8b0000; 
+    --safe-top: env(safe-area-inset-top, 20px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
 
-    <a href="/pages/reports.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-chart-line"></i></div>
-        <span class="grid-label">Reports</span>
-    </a>
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
 
-    <a href="/pages/staff.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-users-gear"></i></div>
-        <span class="grid-label">Staff DB</span>
-    </a>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding-bottom: calc(60px + var(--safe-bottom));
+    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
+                url('https://www.transparenttextures.com/patterns/floral-paper.png');
+    background-size: auto;
+    background-attachment: fixed;
+}
 
-    <a href="/pages/payroll.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-money-check-dollar"></i></div>
-        <span class="grid-label">Payroll</span>
-    </a>
+.header-section {
+    background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
+    height: 60px; 
+    padding-top: var(--safe-top);
+}
 
-    <a href="/pages/mushak.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-file-invoice-dollar"></i></div>
-        <span class="grid-label">Mushak 6.6</span>
-    </a>
+.card-container { 
+    padding: 0 15px 20px; 
+    margin-top: -30px; 
+    position: relative;
+    z-index: 10;
+}
 
-    <a href="/pages/settings.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-sliders"></i></div>
-        <span class="grid-label">Settings</span>
-    </a>
+.visa-card {
+    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
+    color: white; display: flex; flex-direction: column;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+    position: relative; overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+}
 
-    <a href="/pages/cloud.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
-        <span class="grid-label">Cloud</span>
-    </a>
+.visa-card::before {
+    content: ""; 
+    position: absolute; 
+    inset: 0; 
+    width: 100%;
+    background: url('https://g4scumilla.github.io/Files/Img/logo.png');
+    background-size: 35%; 
+    background-repeat: no-repeat;
+    background-position: 15px center; 
+    opacity: 0.85; 
+    z-index: 1;
+    mask-image: linear-gradient(to right, black 30%, transparent 80%);
+    -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
+}
 
-    <a href="/pages/archive.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-folder-open"></i></div>
-        <span class="grid-label">Archive</span>
-    </a>
+.visa-card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
+    z-index: 2;
+}
 
-    <a href="/pages/support.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-headset"></i></div>
-        <span class="grid-label">Support</span>
-    </a>
+.visa-card > * { position: relative; z-index: 3; }
 
-    <a href="/pages/other_links.html" class="grid-item">
-        <div class="icon-box"><i class="fas fa-ellipsis"></i></div>
-        <span class="grid-label">More</span>
-    </a>
+.service-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 15px 0; padding: 20px 10px 40px;
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
+    min-height: 50vh; 
+}
+
+.service-item {
+    text-decoration: none; color: #333;
+    display: flex; flex-direction: column; align-items: center;
+    font-size: 10px; font-weight: 800;
+}
+
+.icon-circle {
+    width: 46px; height: 46px; background: #fff; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
+    font-size: 19px; color: var(--g4s-red);
+    transition: transform 0.2s;
+}
+
+.service-item:active .icon-circle { transform: scale(0.9); }
+
+.rotating { animation: rotate 1s linear; }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.bottom-nav {
+    position: fixed; bottom: 0; width: 100%; background: white;
+    display: flex; justify-content: space-around;
+    padding: 10px 0 calc(10px + var(--safe-bottom));
+    border-top: 1px solid #eee; z-index: 2000;
+}
+
+.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
+.nav-active { color: var(--g4s-red); }
+
+@media (min-width: 768px) {
+    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-section"></div>
+
+<div class="card-container">
+    <div class="visa-card">
+        <div style="flex:1; display:flex; padding: 20px; position: relative;">
+            <div style="flex: 0.42;"></div>
+            <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
+                <div style="margin-bottom: 12px;">
+                    <div style="font-family: 'Lobster', cursive; font-size: 20px; color: #fff; letter-spacing: 0.5px; border-bottom: 2px solid var(--g4s-red); display: inline-block; padding-bottom: 2px;">Welcome to G4S</div>
+                    <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
+                </div>
+                <div>
+                    <div style="font-family: 'Lobster', cursive; font-size: 14px; color: #ffeb3b; letter-spacing: 0.5px;">Secure Access</div>
+                    <div style="font-size: 7px; font-weight: 600; opacity: 0.9; line-height: 1.4; margin-top: 2px;">Professional internal resource hub.</div>
+                </div>
+            </div>
+        </div>
+        <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; font-weight: 800;">
+            <span style="font-family: 'Lobster', cursive; font-size: 11px; text-transform: none; letter-spacing: 0.5px;"><i class="fa-solid fa-code"></i> Developed By: Abdullahil Kuafi</span>
+            <span id="live-clock" style="background: rgba(255,255,255,0.15); padding: 3px 12px; border-radius: 5px; font-family: 'Lobster', cursive; font-size: 10px; font-weight: bold; letter-spacing: 0.8px;">--:--:-- --</span>
+        </div>
+    </div>
 </div>
+
+<div class="service-grid">
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
+    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+</div>
+
+<div class="bottom-nav">
+    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const clockEl = document.getElementById('live-clock');
+        if(clockEl) {
+            clockEl.innerText = now.toLocaleTimeString([], { 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+            });
+        }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function syncData(el) {
+        const icon = document.getElementById('sync-icon');
+        icon.classList.remove('rotating');
+        void icon.offsetWidth; 
+        icon.classList.add('rotating');
+    }
+</script>
+
+</body>
+</html>
