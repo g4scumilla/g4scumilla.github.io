@@ -3,21 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Internal Dashboard</title>
+<title>G4S Dashboard</title>
 
-<link rel="stylesheet" href="/regular_pages/style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
     :root {
         --primary-red: #d32f2f;
-        --app-bg: #f2f4f7;
+        --app-bg: #f4f6f8;
     }
 
-    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
 
     body {
-        margin: 0; padding: 0;
         background-color: #121212;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         display: flex; justify-content: center; height: 100vh; overflow: hidden;
@@ -31,29 +29,26 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: 0 0 60px rgba(0,0,0,0.6);
+        box-shadow: 0 0 60px rgba(0,0,0,0.8);
     }
 
-    #header { flex-shrink: 0; width: 100%; z-index: 100; }
+    #header { flex-shrink: 0; background: #fff; z-index: 100; min-height: 60px; }
 
-    /* CONTENT AREA: Updated to flex to fill space */
+    /* The Secret to the APK Vibe: Flex-Grow and Height Calculation */
     .main-content {
-        flex-grow: 1;
+        flex: 1;
         display: flex;
         flex-direction: column;
+        padding: 10px 10px 90px; /* Space for footer */
         overflow-y: auto;
-        padding: 15px 12px 100px; /* Space for footer */
-        scrollbar-width: none;
     }
-    .main-content::-webkit-scrollbar { display: none; }
 
-    /* GRID: Now expands to fill the available height */
     .service-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: 1fr; /* Ensures all rows are equal height */
-        gap: 12px 8px;
-        flex-grow: 1; /* Fills the vertical space */
+        grid-auto-rows: minmax(100px, 1fr); /* Forces items to expand vertically */
+        gap: 10px;
+        flex-grow: 1; /* This forces the grid to fill all empty space */
     }
 
     .grid-item {
@@ -61,51 +56,54 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center; /* Centers icon/label in the box */
-        background: #fff;
-        border-radius: 20px;
-        transition: transform 0.1s ease, background 0.2s;
+        justify-content: center;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        transition: transform 0.1s;
         border: 1px solid rgba(0,0,0,0.02);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
-    .grid-item:active { transform: scale(0.92); background: #f9f9f9; }
+
+    .grid-item:active { transform: scale(0.9); background: #fafafa; }
 
     .icon-box {
-        font-size: 24px;
+        font-size: 26px;
         color: var(--primary-red);
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
 
     .grid-label {
-        font-size: 9px;
+        font-size: 10px;
         font-weight: 700;
         color: #333;
         text-align: center;
-        line-height: 1.1;
-        padding: 0 4px;
+        line-height: 1.2;
     }
 
-    /* REFRESH FAB (Floating Action Button) */
+    /* REFRESH BUTTON */
     .refresh-fab {
         position: absolute;
-        bottom: 85px; /* Sits above the footer */
+        bottom: 80px; 
         right: 20px;
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
         background: var(--primary-red);
         color: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+        box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
         cursor: pointer;
-        z-index: 300;
-        transition: transform 0.2s;
+        z-index: 500;
+        border: none;
+        outline: none;
     }
-    .refresh-fab:active { transform: scale(0.85) rotate(180deg); }
+    
+    .refresh-fab i { font-size: 20px; }
+    .refresh-fab:active { transform: scale(0.85); background: #b71c1c; }
 
-    #footer { position: absolute; bottom: 0; width: 100%; z-index: 200; }
+    #footer { position: absolute; bottom: 0; width: 100%; z-index: 200; height: 70px; }
 </style>
 </head>
 <body>
@@ -182,9 +180,9 @@
         </div>
     </div>
 
-    <div class="refresh-fab" onclick="window.location.reload();">
+    <button class="refresh-fab" onclick="window.location.reload();">
         <i class="fas fa-sync-alt"></i>
-    </div>
+    </button>
 
     <div id="footer"></div>
 </div>
@@ -197,12 +195,12 @@ function loadComponent(id, file) {
             const container = document.getElementById(id);
             container.innerHTML = data;
             const scripts = container.querySelectorAll("script");
-            scripts.forEach(oldScript => {
-                const newScript = document.createElement("script");
-                newScript.text = oldScript.text;
-                document.body.appendChild(newScript);
+            scripts.forEach(s => {
+                const ns = document.createElement("script");
+                ns.text = s.text;
+                document.body.appendChild(ns);
             });
-        });
+        }).catch(e => console.error(e));
 }
 
 window.addEventListener('DOMContentLoaded', () => {
