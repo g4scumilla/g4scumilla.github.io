@@ -56,18 +56,21 @@ body {
     background-size: cover;
 }
 
-/* LOGO POSITION FIXED (NO LONGER TOUCHING LEFT EDGE) */
+/* FIXED LOGO POSITIONING: 15px Margin from Left */
 .visa-card::before {
-    content: ""; position: absolute; inset: 0; 
-    left: -5%; /* Slightly shifted right from previous -15% */
-    width: 60%;
+    content: ""; 
+    position: absolute; 
+    inset: 0; 
+    width: 100%;
     background: url('https://g4scumilla.github.io/Files/Img/logo.png');
     background-size: 50%; 
     background-repeat: no-repeat;
-    background-position: center left 10px; /* Added internal padding */
-    opacity: 0.8; z-index: 1;
-    mask-image: linear-gradient(to right, black 40%, transparent 95%);
-    -webkit-mask-image: linear-gradient(to right, black 40%, transparent 95%);
+    /* Fixed 15px space from the left border */
+    background-position: 15px center; 
+    opacity: 0.8; 
+    z-index: 1;
+    mask-image: linear-gradient(to right, black 30%, transparent 80%);
+    -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
 }
 
 .visa-card::after {
