@@ -54,22 +54,33 @@ body {
     background: linear-gradient(135deg, #1a1a1a 0%, #d32f2f 100%);
 }
 
-/* TRANSPARENT G4S LOGO WATERMARK */
+/* 1. RESTORED FLOWER WATERMARK BACKGROUND */
 .visa-card::before {
-    content: "";
+    content: "\f06c"; /* Font Awesome Flower/Leaf */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
     position: absolute;
-    inset: 0;
-    background: url('https://G4scumilla.github.io/Files/Img/logo.png') no-repeat center;
-    background-size: 65%; /* Large watermark size */
-    opacity: 0.1; /* High transparency */
-    filter: grayscale(1) brightness(2); /* Makes it blend into the dark card better */
+    right: -10px;
+    bottom: -10px;
+    font-size: 120px;
+    color: rgba(255, 255, 255, 0.05);
+    transform: rotate(-15deg);
     z-index: 1;
 }
 
+/* 2. TRANSPARENT G4S LOGO ON LEFT 50% */
 .visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent);
+    content: ""; 
+    position: absolute; 
+    inset: 0;
+    left: -25%; /* Positions it towards the left */
+    width: 85%;  /* Controls the spread */
+    background: url('https://G4scumilla.github.io/Files/Img/logo.png') no-repeat center;
+    background-size: contain;
+    opacity: 0.15;
     z-index: 2;
+    mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
 }
 
 .visa-card > * { position: relative; z-index: 3; }
