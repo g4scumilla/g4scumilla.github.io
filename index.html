@@ -2,88 +2,67 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G4S Cumilla Internal Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>G4S Dashboard</title>
 
-<!-- Global Style -->
 <link rel="stylesheet" href="regular_pages/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-pY1G1DvnQ7uX2YvXn7H1XjK7Y5p3d7hx2K3z8d7/X0rMzLgIzLqFA7O4bWqWzRmOYxFz9E+r7ZlMWY3Sb4V1Hg=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    /* Laptop View Mode Fix */
+    body {
+        margin: 0; background: #121212; /* Background for PC */
+        display: flex; justify-content: center;
+    }
+    .app-container {
+        width: 100%; max-width: 450px; /* APK Vibe width */
+        background: #f8f9fa; min-height: 100vh;
+        position: relative; padding-bottom: 80px;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    }
+    section { padding: 20px; }
+</style>
 </head>
 <body>
 
-<!-- Header placeholder -->
-<div id="header"></div>
+<div class="app-container">
+    <div id="header"></div>
 
-<section>
-    <div class="section-title">AUTOMATION TOOLS</div>
+    <section>
+        <div class="section-title">AUTOMATION TOOLS</div>
+        <div class="links">
+            <div class="link-card">
+                <a href="pages/resignation_automations.html">
+                    <i class="fas fa-file-signature"></i> Resignation Automations
+                </a>
+            </div>
+            </div>
+    </section>
 
-    <div class="links">
-        <div class="link-card">
-            <a href="pages/resignation_automations.html">
-                <i class="fas fa-file-signature"></i> Resignation Automations
-            </a>
-            <p>Generate resignation documents automatically.</p>
-        </div>
-        <div class="link-card">
-            <a href="#">
-                <i class="fas fa-chalkboard-teacher"></i> Prepare Sheet
-            </a>
-            <p>Create new training sheets quickly and efficiently.</p>
-        </div>
-        <div class="link-card">
-            <a href="#">
-                <i class="fas fa-table"></i> Prepare Training Sheet
-            </a>
-            <p>Access and update existing training sheets.</p>
-        </div>
-        <div class="link-card">
-            <a href="/Projects/Wallet/index">
-                <i class="fas fa-link"></i> Other Internal Links
-            </a>
-            <p>Access miscellaneous internal tools and pages.</p>
-        </div>
-    </div>
-</section>
+    <div id="footer"></div>
+</div>
 
-<!-- Footer placeholder -->
-<div id="footer"></div>
-
-<!-- Load header & footer dynamically -->
 <script>
+// Improved loader that works for dynamically added JS
 function loadHTML(id, file) {
     fetch(file)
         .then(response => response.text())
-        .then(data => document.getElementById(id).innerHTML = data)
-        .catch(err => console.log(err));
+        .then(data => {
+            const element = document.getElementById(id);
+            element.innerHTML = data;
+            
+            // Execute scripts found in the fetched HTML
+            const scripts = element.querySelectorAll("script");
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement("script");
+                newScript.text = oldScript.text;
+                document.body.appendChild(newScript);
+            });
+        });
 }
 
-// Load header & footer from regular_pages
 loadHTML("header", "regular_pages/header.html");
 loadHTML("footer", "regular_pages/footer.html");
-</script>
-
-<!-- Footer Menu Toggle JS -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const menuBtn = document.querySelector('.menu-btn');
-    const footerMenu = document.querySelector('.footer-menu');
-
-    if(menuBtn && footerMenu){
-        menuBtn.addEventListener('click', function(e) {
-            e.stopPropagation(); // prevent bubbling
-            footerMenu.classList.toggle('menu-open');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function() {
-            footerMenu.classList.remove('menu-open');
-        });
-    }
-});
 </script>
 
 </body>
