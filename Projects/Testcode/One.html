@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Family News Dashboard</title>
+<title>Family News Hub</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,13 +24,17 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: var(--safe-top); 
-    padding-bottom: calc(60px + var(--safe-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
-                url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover;
-    background-attachment: fixed;
+    background: #f8f9fa;
     overflow-x: hidden;
+}
+
+/* Persistent Header */
+.app-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 5000;
+    background: white;
 }
 
 .header-section {
@@ -38,8 +42,16 @@ body {
     text-align: center;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
+
 .top-bar-content { padding: 15px 15px 10px; color: white; }
 .header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
+
+/* Main Scrollable Area */
+#app-scroller {
+    margin-top: var(--safe-top);
+    padding-bottom: calc(70px + var(--safe-bottom));
+}
+
 .card-container { padding: 0 15px 20px; margin-top: 5px; border-bottom: 1px solid rgba(0,0,0,0.05); }
 
 .visa-card {
@@ -50,6 +62,7 @@ body {
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
 }
+
 .visa-card::before {
     content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
     background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
@@ -57,21 +70,26 @@ body {
     mask-image: linear-gradient(to right, black 60%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
 }
+
 .visa-card::after {
-    content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4)); z-index: 2;
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
+    z-index: 2;
 }
 .visa-card > * { position: relative; z-index: 3; }
 
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px;
-    background: #fdfdfd; min-height: 50vh; 
+    background: #fdfdfd;
 }
+
 .service-item {
     text-decoration: none; color: #333;
     display: flex; flex-direction: column; align-items: center;
     font-size: 9px; font-weight: 700; cursor: pointer;
 }
+
 .icon-circle {
     width: 44px; height: 44px; background: #fff; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
@@ -79,39 +97,54 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* App View Overlay */
-#news-viewer {
-    position: fixed; top: 0; left: 0; width: 100%; height: calc(100% - 60px - var(--safe-bottom));
-    background: white; z-index: 3000; display: none;
+/* Full Screen Browser View */
+#news-browser-container {
+    display: none;
+    position: fixed;
+    top: 60px; /* Below the header title */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 125px); /* Space for header and nav */
+    background: white;
+    z-index: 4000;
 }
-#news-frame { width: 100%; height: 100%; border: none; }
 
+#news-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Fixed Bottom Navigation */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
     padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 4000;
+    border-top: 1px solid #eee; z-index: 5000;
 }
+
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, #news-viewer { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
-    #news-viewer { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav, .app-header, #news-browser-container { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav, .app-header, #news-browser-container { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="news-viewer">
-    <iframe id="news-frame" src=""></iframe>
+<div class="app-header">
+    <div class="header-section">
+        <div class="top-bar-content">
+            <span class="header-title">Family Dashboard</span>
+        </div>
+    </div>
 </div>
 
-<div id="main-content">
-    <div class="header-section">
-        <div class="top-bar-content"><span class="header-title">Family Dashboard</span></div>
+<div id="app-scroller">
+    <div id="dashboard-main">
         <div class="card-container">
             <div class="visa-card">
                 <div style="flex:1; display:flex; padding: 20px; position: relative;">
@@ -133,54 +166,48 @@ body {
                 </div>
                 <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
                     <span><i class="fa-solid fa-shield-heart"></i> SECURE PERSONAL HUB</span>
-                    <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">--:--:-- --</span>
+                    <span id="live-clock">--:--:-- --</span>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="service-grid">
-        <div onclick="smartOpen('https://www.bbc.com/bengali', false)" class="service-item">
-            <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
-        </div>
-        <div onclick="smartOpen('https://www.prothomalo.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>Prothom Alo
-        </div>
-        <div onclick="smartOpen('https://www.thedailystar.net/', false)" class="service-item">
-            <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>Daily Star
-        </div>
-        <div onclick="smartOpen('https://bdnews24.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>Bdnews24
-        </div>
-        <div onclick="smartOpen('https://www.jugantor.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #2e7d32;"><i class="fa-solid fa-j"></i></div>Jugantor
-        </div>
-        <div onclick="smartOpen('https://www.somoynews.tv/', true)" class="service-item">
-            <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>Somoy TV
-        </div>
-        <div onclick="smartOpen('https://www.ittefaq.com.bd/', true)" class="service-item">
-            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>Ittefaq
-        </div>
-        <div onclick="smartOpen('https://samakal.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>Samakal
-        </div>
-        <div onclick="smartOpen('https://www.bd-pratidin.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #c62828;"><i class="fa-solid fa-b"></i></div>BD Pratidin
-        </div>
-        <div onclick="smartOpen('https://www.ntvbd.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #3949ab;"><i class="fa-solid fa-satellite-dish"></i></div>NTV News
-        </div>
-        <div onclick="smartOpen('https://www.independent24.tv/', true)" class="service-item">
-            <div class="icon-circle" style="color: #fbc02d;"><i class="fa-solid fa-circle-play"></i></div>Independent
-        </div>
-        <div onclick="smartOpen('https://www.channelionline.com/', true)" class="service-item">
-            <div class="icon-circle" style="color: #43a047;"><i class="fa-solid fa-leaf"></i></div>Channel I
+        <div class="service-grid">
+            <div onclick="loadNews('https://www.bbc.com/bengali')" class="service-item">
+                <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
+            </div>
+            <div onclick="loadNews('https://www.prothomalo.com/')" class="service-item">
+                <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>Prothom Alo
+            </div>
+            <div onclick="loadNews('https://www.thedailystar.net/')" class="service-item">
+                <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>Daily Star
+            </div>
+            <div onclick="loadNews('https://bdnews24.com/')" class="service-item">
+                <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>Bdnews24
+            </div>
+            <div onclick="loadNews('https://www.jugantor.com/')" class="service-item">
+                <div class="icon-circle" style="color: #2e7d32;"><i class="fa-solid fa-j"></i></div>Jugantor
+            </div>
+            <div onclick="loadNews('https://www.somoynews.tv/')" class="service-item">
+                <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>Somoy TV
+            </div>
+            <div onclick="loadNews('https://www.ittefaq.com.bd/')" class="service-item">
+                <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>Ittefaq
+            </div>
+            <div onclick="loadNews('https://samakal.com/')" class="service-item">
+                <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>Samakal
+            </div>
         </div>
     </div>
 </div>
 
+<div id="news-browser-container">
+    <iframe id="news-iframe"></iframe>
+</div>
+
 <div class="bottom-nav">
-    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="index.html" onclick="goHome(event)" class="nav-item nav-active">
+        <i class="fa-solid fa-house"></i><span>Home</span>
+    </a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
@@ -188,17 +215,28 @@ body {
 </div>
 
 <script>
-    function smartOpen(url, allowIframe) {
-        if (allowIframe) {
-            const viewer = document.getElementById('news-viewer');
-            const frame = document.getElementById('news-frame');
-            frame.src = url;
-            viewer.style.display = 'block';
-            window.scrollTo(0,0);
-        } else {
-            // For sites that block iframes, we open them directly.
-            // In a PWA/Android environment, this still feels like a smooth transition.
-            window.location.href = url;
+    function loadNews(url) {
+        const browser = document.getElementById('news-browser-container');
+        const iframe = document.getElementById('news-iframe');
+        const main = document.getElementById('dashboard-main');
+        
+        // Hide the dashboard contents, show the iframe
+        main.style.display = 'none';
+        browser.style.display = 'block';
+        iframe.src = url;
+        window.scrollTo(0,0);
+    }
+
+    function goHome(e) {
+        // If the browser is open, just close it instead of reloading the whole page
+        const browser = document.getElementById('news-browser-container');
+        const main = document.getElementById('dashboard-main');
+        
+        if (browser.style.display === 'block') {
+            e.preventDefault(); // Stop the link from jumping to index.html
+            browser.style.display = 'none';
+            main.style.display = 'block';
+            document.getElementById('news-iframe').src = '';
         }
     }
 
