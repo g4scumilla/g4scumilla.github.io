@@ -14,72 +14,85 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    margin: 0;
     font-family: -apple-system, system-ui, sans-serif;
     background: #f8f9fa;
     height: 100vh;
+    overflow: hidden;
 }
 
-/* Original Card & Header Design */
-.header-section {
-    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
-    text-align: center;
-    padding-top: var(--safe-top);
+/* Dashboard Header */
+.app-header {
+    background: var(--g4s-red);
+    padding: calc(var(--safe-top) + 12px) 15px 12px;
+    color: white; text-align: center;
+    position: sticky; top: 0; z-index: 10;
 }
-.header-title { font-size: 19px; font-weight: 800; color: white; padding: 15px; display: block; text-transform: uppercase; }
+.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-.card-container { padding: 0 15px 20px; }
+/* Dashboard Content */
+#dashboard {
+    padding-bottom: 80px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.card-container { padding: 15px; }
 .visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
+    border-radius: 18px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     position: relative; overflow: hidden;
     background: #222 url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80') center/cover;
 }
 .visa-card::after {
     content: ""; position: absolute; inset: 0; 
-    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(211, 47, 47, 0.4)); z-index: 1;
+    background: linear-gradient(135deg, rgba(0,0,0,0.88), rgba(211, 47, 47, 0.45)); z-index: 1;
 }
 .visa-card > * { position: relative; z-index: 2; }
 
 /* Grid */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px; background: #fff;
-    border-radius: 25px 25px 0 0;
+    gap: 15px 0; padding: 25px 10px; background: #fff;
+    border-radius: 30px 30px 0 0;
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; cursor: pointer;
 }
 .icon-circle {
-    width: 45px; height: 45px; background: #fff; border-radius: 14px;
+    width: 48px; height: 48px; background: #fff; border-radius: 16px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.12); margin-bottom: 6px;
-    font-size: 18px; color: var(--g4s-red);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
+    font-size: 20px; color: var(--g4s-red);
 }
 
-/* THE FLOATING HOME BUTTON (Real App Feel) */
-#floating-home {
+/* THE NEWS OVERLAY (This is the "App Browser") */
+#news-overlay {
     position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--g4s-red);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-weight: bold;
-    z-index: 9999;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    display: none; /* Only shows when news is open */
-    text-decoration: none;
-    border: 2px solid white;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: white;
+    z-index: 9000;
+    display: none;
+    flex-direction: column;
+}
+/* We use an Object or Embed tag as a backup for Iframe */
+#news-frame { width: 100%; height: calc(100% - 70px); border: none; }
+
+.overlay-nav {
+    height: 70px; background: #fff; border-top: 1px solid #ddd;
+    display: flex; justify-content: center; align-items: center;
+    padding-bottom: var(--safe-bottom);
+}
+.home-btn {
+    background: var(--g4s-red); color: white; border: none;
+    padding: 12px 30px; border-radius: 25px; font-weight: 800;
+    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
 }
 
-/* Bottom Nav */
+/* Global Bottom Navigation */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -90,7 +103,8 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, .header-section { width: 100%; max-width: 450px; margin: 0 auto; }
+    body, .bottom-nav, .app-header, #news-overlay { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav, .app-header, #news-overlay { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
@@ -98,70 +112,87 @@ body {
 <body>
 
 <div id="dashboard">
-    <div class="header-section">
-        <span class="header-title">Family Dashboard</span>
-        <div class="card-container">
-            <div class="visa-card">
-                <div style="flex:1; display:flex; padding: 20px;">
-                    <div style="flex: 0.4;"></div>
-                    <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; text-align: left;">
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</div>
-                            <div style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</div>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">ZAMILA KHATUN</div>
-                            <div style="font-size: 7px; opacity: 0.8;">B.Sc & M.Sc (Math)</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
-                            <div style="font-size: 7px; opacity: 0.8;">Born 12 Nov 2025</div>
-                        </div>
+    <div class="app-header">
+        <div class="header-title">Family Dashboard</div>
+    </div>
+
+    <div class="card-container">
+        <div class="visa-card">
+            <div style="flex:1; display:flex; padding: 20px;">
+                <div style="flex: 0.4;"></div>
+                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; text-align: left;">
+                    <div style="margin-bottom: 8px;">
+                        <p style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</p>
+                        <p style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</p>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <p style="font-size: 10px; font-weight: bold; color: #ffeb3b;">ZAMILA KHATUN</p>
+                        <p style="font-size: 7px; opacity: 0.8;">B.Sc & M.Sc (Math)</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 10px; font-weight: bold; color: #ffeb3b;">HABIBULLAH ZAYAAN</p>
+                        <p style="font-size: 7px; opacity: 0.8;">Born 12 Nov 2025</p>
                     </div>
                 </div>
-                <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; display: flex; justify-content: space-between;">
-                    <span><i class="fa-solid fa-shield-heart"></i> KUAFI HUB</span>
-                    <span id="live-clock">00:00:00</span>
-                </div>
+            </div>
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.5); font-size: 8px; display: flex; justify-content: space-between;">
+                <span><i class="fa-solid fa-shield-heart"></i> KUAFI PRIVATE HUB</span>
+                <span id="live-clock">00:00:00</span>
             </div>
         </div>
     </div>
 
     <div class="service-grid">
-        <div onclick="openNews('https://www.bbc.com/bengali')" class="service-item">
-            <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
+        <div onclick="openAppBrowser('https://www.bbc.com/bengali')" class="service-item">
+            <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC
         </div>
-        <div onclick="openNews('https://www.prothomalo.com/')" class="service-item">
+        <div onclick="openAppBrowser('https://www.prothomalo.com/')" class="service-item">
             <div class="icon-circle" style="color:#000"><i class="fa-solid fa-p"></i></div>Prothom Alo
         </div>
-        <div onclick="openNews('https://bdnews24.com/')" class="service-item">
+        <div onclick="openAppBrowser('https://bdnews24.com/')" class="service-item">
             <div class="icon-circle" style="color:#d32f2f"><i class="fa-solid fa-2"></i></div>Bdnews24
         </div>
-        <div onclick="openNews('https://www.somoynews.tv/')" class="service-item">
+        <div onclick="openAppBrowser('https://www.somoynews.tv/')" class="service-item">
             <div class="icon-circle" style="color:#ff5722"><i class="fa-solid fa-tv"></i></div>Somoy TV
         </div>
     </div>
 </div>
 
-<a href="index.html" id="floating-home"><i class="fa-solid fa-house-user"></i> BACK TO DASHBOARD</a>
+<div id="news-overlay">
+    <iframe id="news-frame" src="" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
+    <div class="overlay-nav">
+        <button class="home-btn" onclick="closeAppBrowser()"><i class="fa-solid fa-house"></i> GO HOME</button>
+    </div>
+</div>
 
 <div class="bottom-nav">
-    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" onclick="closeAppBrowser()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 28px; color: var(--g4s-red);"></i></a>
+    <div class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 30px; color: var(--g4s-red); margin-top: -5px;"></i></div>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
 </div>
 
 <script>
-    function openNews(url) {
-        // Show the floating button before leaving
-        document.getElementById('floating-home').style.display = 'block';
+    function openAppBrowser(url) {
+        const overlay = document.getElementById('news-overlay');
+        const frame = document.getElementById('news-frame');
         
-        // Use a small delay so the button renders, then redirect in the SAME window
-        setTimeout(() => {
-            window.location.href = url;
-        }, 100);
+        // Show the browser layer
+        overlay.style.display = 'flex';
+        
+        // If it's BBC, we try the "Google Viewer" trick which is the most reliable way 
+        // to bypass the 'Refused' error without a paid proxy.
+        if(url.includes('bbc.com')) {
+            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(url) + "&btnI=Im+Feeling+Lucky";
+        } else {
+            frame.src = url;
+        }
+    }
+
+    function closeAppBrowser() {
+        document.getElementById('news-overlay').style.display = 'none';
+        document.getElementById('news-frame').src = "";
     }
 
     function updateClock() {
@@ -169,13 +200,6 @@ body {
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    // If the user hits "Back" on their phone, hide the button
-    window.onpageshow = function(event) {
-        if (event.persisted) {
-            document.getElementById('floating-home').style.display = 'none';
-        }
-    };
 </script>
 
 </body>
