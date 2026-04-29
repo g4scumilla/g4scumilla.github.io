@@ -3,288 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Academic Portfolio | Abdullahil Kuafi</title>
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#f44336">
+<title>Social Connect | Abdullahil Kuafi</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
 :root { 
     --g4s-red: #d32f2f; 
-    --glass: rgba(255, 255, 255, 0.98);
+    --fb-blue: #1877F2;
+    --li-blue: #0A66C2;
+    --wa-green: #25D366;
+    --glass: rgba(255, 255, 255, 0.9);
     --safe-top: env(safe-area-inset-top, 20px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: var(--safe-top); 
-    padding-bottom: calc(80px + var(--safe-bottom));
-    background-color: #f0f2f5;
-    color: #1f2937;
-}
-
-/* RESTORED VISA CARD STYLING */
-.header-section {
-    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
-    text-align: center;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-}
-.top-bar-content { padding: 15px 15px 10px; color: white; }
-.header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
-.card-container { padding: 0 15px 20px; margin-top: 5px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-
-.visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
-    color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
-    position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding-top: var(--safe-top);
+    background: linear-gradient(rgba(240, 242, 245, 0.95), rgba(240, 242, 245, 0.95)), 
+                url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
     background-size: cover;
-}
-.visa-card::before {
-    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
-    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover; opacity: 0.75; z-index: 1;
-    mask-image: linear-gradient(to right, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
-}
-.visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
-    z-index: 2;
-}
-.visa-card > * { position: relative; z-index: 3; }
-
-/* EDUCATION SECTION STYLING (RETAINED) */
-.content-area { padding: 20px 15px; }
-.summary-box {
-    background: white; padding: 20px; border-radius: 16px;
-    margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border-left: 5px solid var(--g4s-red);
-}
-.summary-box h2 { font-size: 16px; margin: 0 0 10px; color: var(--g4s-red); font-weight: 800; }
-.summary-box p { font-size: 12px; line-height: 1.6; color: #4b5563; margin: 0; font-weight: 500; }
-
-.section-label {
-    font-size: 11px; font-weight: 900; color: #9ca3af;
-    text-transform: uppercase; letter-spacing: 1.5px;
-    margin: 20px 0 12px; display: flex; align-items: center; gap: 8px;
+    background-attachment: fixed;
+    color: #1f2937;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.edu-card {
-    background: var(--glass); border-radius: 16px; padding: 20px;
-    margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-    border: 1px solid white; border-left: 4px solid var(--g4s-red);
+.container { width: 100%; max-width: 450px; padding: 20px; }
+
+/* PROFILE HEADER */
+.profile-header {
+    text-align: center; margin-bottom: 30px;
+}
+.profile-img {
+    width: 100px; height: 100px; border-radius: 50%;
+    border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+.profile-header h1 { font-size: 22px; font-weight: 800; margin: 0; color: #111; }
+.profile-header p { font-size: 13px; color: #6b7280; margin-top: 5px; font-weight: 500; }
+
+/* SOCIAL CARDS */
+.social-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+.social-card {
+    background: var(--glass);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #1f2937;
+    transition: transform 0.2s;
+    border: 1px solid white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.edu-title { font-size: 15px; font-weight: 800; color: #111827; margin: 0; }
-.edu-sub { font-size: 12px; color: var(--g4s-red); font-weight: 700; display: block; margin-top: 4px; }
+.social-card:active { transform: scale(0.97); }
 
-.details-list { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
-.detail-row { font-size: 11px; font-weight: 600; color: #4b5563; display: flex; align-items: center; gap: 10px; }
-.detail-row i { color: var(--g4s-red); width: 14px; text-align: center; }
-
-.badge-row { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; }
-.grade-pill {
-    background: #fef9c3; color: #a16207; font-size: 10px; font-weight: 900;
-    padding: 4px 12px; border-radius: 8px; border: 1px solid #fde047;
-}
-.status-pill {
-    background: #f0fdf4; color: #166534; font-size: 10px; font-weight: 800;
-    padding: 4px 12px; border-radius: 8px; border: 1px solid #bbf7d0;
+.social-icon {
+    width: 45px; height: 45px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: white; margin-right: 15px;
 }
 
-.viewer-trigger {
-    margin-top: 18px; padding: 12px; border-radius: 12px;
-    background: #f3f4f6; color: #1f2937; text-decoration: none;
-    font-size: 11px; font-weight: 800; display: flex;
-    align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; width: 100%;
-}
+.card-info { flex: 1; }
+.card-info span { display: block; font-size: 14px; font-weight: 800; }
+.card-info small { font-size: 11px; color: #6b7280; font-weight: 500; }
 
-/* MODAL STYLES (RETAINED) */
-#pdf-modal {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-    z-index: 9999; flex-direction: column; padding-top: var(--safe-top);
-}
-.modal-header {
-    height: 54px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; color: white; background: #111;
-}
-.close-btn { font-size: 20px; color: #fff; cursor: pointer; background: rgba(255,255,255,0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-#pdf-frame { flex: 1; border: none; width: 100%; background: #fff; }
+.chevron { font-size: 12px; color: #9ca3af; }
 
-/* BOTTOM NAV (RETAINED) */
-.bottom-nav {
-    position: fixed; bottom: 0; width: 100%; background: white;
-    display: flex; justify-content: space-around;
-    padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 2000;
-}
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
-.nav-active { color: var(--g4s-red); }
+/* BRAND COLORS */
+.bg-linkedin { background: var(--li-blue); }
+.bg-facebook { background: var(--fb-blue); }
+.bg-whatsapp { background: var(--wa-green); }
+.bg-github { background: #333; }
+.bg-email { background: var(--g4s-red); }
 
-@media (min-width: 768px) {
-    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
+/* FOOTER BUTTON */
+.copy-btn {
+    margin-top: 40px; padding: 14px 30px; border-radius: 30px;
+    background: #111; color: white; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; gap: 10px; border: none; cursor: pointer;
 }
 </style>
 </head>
-
 <body>
 
-<div id="pdf-modal">
-    <div class="modal-header">
-        <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px;">DOCUMENT VIEWER</span>
-        <div class="close-btn" onclick="closeViewer()"><i class="fa-solid fa-times"></i></div>
-    </div>
-    <iframe id="pdf-frame" src=""></iframe>
-</div>
-
-<div class="header-section">
-    <div class="top-bar-content">
-        <span class="header-title">Family Dashboard</span>
+<div class="container">
+    <div class="profile-header">
+        <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" class="profile-img" alt="Abdullahil Kuafi">
+        <h1>Abdullahil Kuafi</h1>
+        <p>Scholar | Entrepreneur | Tech Developer</p>
     </div>
 
-    <div class="card-container">
-        <div class="visa-card">
-            <div style="flex:1; display:flex; padding: 20px; position: relative;">
-                <div style="flex: 0.5;"></div>
-                <div style="flex: 0.5; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Arts in English from Government Titumir College, Dhaka.</div>
-                    </div>
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Science in Mathematics from Rajshahi College, Rajshahi.</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Born on 12 November 2025. The beloved heart of the Kuafi family.</div>
-                    </div>
-                </div>
+    <div class="social-list">
+        <a href="#" class="social-card">
+            <div class="social-icon bg-linkedin"><i class="fa-brands fa-linkedin-in"></i></div>
+            <div class="card-info">
+                <span>LinkedIn</span>
+                <small>Professional Network & Career</small>
             </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fa-solid fa-shield-heart"></i> SECURE PERSONAL HUB</span>
-                <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">--:--:-- --</span>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
+
+        <a href="#" class="social-card">
+            <div class="social-icon bg-facebook"><i class="fa-brands fa-facebook-f"></i></div>
+            <div class="card-info">
+                <span>Facebook</span>
+                <small>Family, Friends & Community</small>
             </div>
-        </div>
-    </div>
-</div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
 
-<div class="content-area">
-    <div class="summary-box">
-        <h2>Professional Summary</h2>
-        <p>A highly accomplished academic professional with a Master of Arts in English from Govt. Titumir College (University of Dhaka). From achieving perfect scores in Madrasah and College levels in Chapainawabganj to mastering linguistics in the capital, my journey reflects a dedicated pursuit of excellence and linguistic expertise.</p>
-    </div>
+        <a href="https://wa.me/YOUR_NUMBER" class="social-card">
+            <div class="social-icon bg-whatsapp"><i class="fa-brands fa-whatsapp"></i></div>
+            <div class="card-info">
+                <span>WhatsApp</span>
+                <small>Direct Instant Messaging</small>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
 
-    <div class="section-label">University Education</div>
+        <a href="#" class="social-card">
+            <div class="social-icon bg-github"><i class="fa-brands fa-github"></i></div>
+            <div class="card-info">
+                <span>GitHub</span>
+                <small>Web Projects & Code Repos</small>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
 
-    <div class="edu-card">
-        <h3 class="edu-title">Master of Arts (MA) in English</h3>
-        <span class="edu-sub">Govt. Titumir College, Dhaka</span>
-        <div class="details-list">
-            <div class="detail-row"><i class="fa-solid fa-building-columns"></i> University of Dhaka (Affiliated)</div>
-            <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2022</div>
-            <div class="detail-row"><i class="fa-solid fa-book-open"></i> Post-Graduate Level</div>
-        </div>
-        <div class="badge-row"><span class="status-pill">Mastery Level</span></div>
-        <button class="viewer-trigger" onclick="openViewer('#')">
-            <i class="fa-solid fa-file-pdf"></i> View MA Certificate
-        </button>
-    </div>
-
-    <div class="edu-card">
-        <h3 class="edu-title">Bachelor of Arts (Honours) in English</h3>
-        <span class="edu-sub">Govt. Titumir College, Dhaka</span>
-        <div class="details-list">
-            <div class="detail-row"><i class="fa-solid fa-building-columns"></i> University of Dhaka (Affiliated)</div>
-            <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2020</div>
-            <div class="detail-row"><i class="fa-solid fa-graduation-cap"></i> Graduation Level</div>
-        </div>
-        <div class="badge-row"><span class="status-pill">Completed</span></div>
-        <button class="viewer-trigger" onclick="openViewer('https://drive.google.com/file/d/16NeLNkFdTvuuiKQW2vBbFjTikxI8YU5A/preview')">
-            <i class="fa-solid fa-file-pdf"></i> View BA Certificate
-        </button>
+        <a href="mailto:your-email@example.com" class="social-card">
+            <div class="social-icon bg-email"><i class="fa-solid fa-envelope"></i></div>
+            <div class="card-info">
+                <span>Contact Email</span>
+                <small>For Business Inquiries</small>
+            </div>
+            <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
     </div>
 
-    <div class="section-label">School & College Level</div>
-
-    <div class="edu-card">
-        <h3 class="edu-title">Higher Secondary Certificate (HSC)</h3>
-        <span class="edu-sub">Balugram Adarsha College</span>
-        <div class="details-list">
-            <div class="detail-row"><i class="fa-solid fa-map-location-dot"></i> Nayagola, Chapainawabganj</div>
-            <div class="detail-row"><i class="fa-solid fa-landmark"></i> Rajshahi Education Board</div>
-            <div class="detail-row"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2016</div>
-        </div>
-        <div class="badge-row">
-            <span class="grade-pill"><i class="fa-solid fa-star"></i> GPA 5.00 / A+</span>
-        </div>
-        <button class="viewer-trigger" onclick="openViewer('#')">
-            <i class="fa-solid fa-eye"></i> View HSC Transcript
-        </button>
-    </div>
-
-    <div class="edu-card">
-        <h3 class="edu-title">Dakhil (Secondary)</h3>
-        <span class="edu-sub">Palsha Alim Madrasha</span>
-        <div class="details-list">
-            <div class="detail-row"><i class="fa-solid fa-mosque"></i> Bangladesh Madrasah Education Board</div>
-            <div class="detail-row"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2014</div>
-            <div class="detail-row"><i class="fa-solid fa-award"></i> General Excellence</div>
-        </div>
-        <div class="badge-row">
-            <span class="grade-pill"><i class="fa-solid fa-star"></i> GPA 5.00 / A+</span>
-        </div>
-        <button class="viewer-trigger" onclick="openViewer('#')">
-            <i class="fa-solid fa-eye"></i> View Dakhil Marksheet
-        </button>
-    </div>
-</div>
-
-<div class="bottom-nav">
-    <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-graduation-cap"></i><span>Edu</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
+    <button class="copy-btn" onclick="copyProfile()">
+        <i class="fa-solid fa-share-nodes"></i> Share My Profile
+    </button>
 </div>
 
 <script>
-    function updateClock() {
-        const now = new Date();
-        const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
-            clockEl.innerText = now.toLocaleTimeString([], { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            });
-        }
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function openViewer(url) {
-        if(url === '#' || url === '') {
-            alert("This document link has not been added yet.");
-            return;
-        }
-        document.getElementById('pdf-frame').src = url;
-        document.getElementById('pdf-modal').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; 
-    }
-
-    function closeViewer() {
-        document.getElementById('pdf-modal').style.display = 'none';
-        document.getElementById('pdf-frame').src = "";
-        document.body.style.overflow = 'auto'; 
+    function copyProfile() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Profile Link Copied!");
+        });
     }
 </script>
 
