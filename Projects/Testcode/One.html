@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Education Profile | Abdullahil Kuafi</title>
+<title>Detailed Academic Profile | Abdullahil Kuafi</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,7 +14,7 @@
 <style>
 :root { 
     --g4s-red: #d32f2f; 
-    --glass: rgba(255, 255, 255, 0.96);
+    --glass: rgba(255, 255, 255, 0.98);
     --safe-top: env(safe-area-inset-top, 20px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -26,11 +26,10 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding-top: var(--safe-top); 
     padding-bottom: calc(80px + var(--safe-bottom));
-    background-color: #f8f9fa;
-    color: #2d3436;
+    background-color: #f0f2f5;
 }
 
-/* GLOBAL HEADER */
+/* HEADER & CARD - UNTOUCHED */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
@@ -62,16 +61,8 @@ body {
 }
 .visa-card > * { position: relative; z-index: 3; }
 
-/* CONTENT STYLING */
+/* ENHANCED CONTENT AREA */
 .content-area { padding: 20px 15px; }
-
-.intro-box {
-    background: white; padding: 20px; border-radius: 16px;
-    margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border-left: 5px solid var(--g4s-red);
-}
-.intro-box h2 { font-size: 16px; margin: 0 0 10px; color: var(--g4s-red); font-weight: 800; }
-.intro-box p { font-size: 12px; line-height: 1.6; color: #4b5563; margin: 0; font-weight: 500; }
 
 .section-label {
     font-size: 11px; font-weight: 900; color: #9ca3af;
@@ -81,40 +72,45 @@ body {
 
 .edu-card {
     background: var(--glass); border-radius: 16px; padding: 20px;
-    margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.05);
     border: 1px solid white; position: relative;
+    border-left: 4px solid var(--g4s-red);
 }
 
-.edu-title { font-size: 14px; font-weight: 800; color: #111827; margin: 0; }
-.edu-sub { font-size: 11px; color: var(--g4s-red); font-weight: 700; display: block; margin-top: 4px; }
+.edu-title { font-size: 15px; font-weight: 800; color: #111827; margin: 0; }
+.edu-sub { font-size: 12px; color: var(--g4s-red); font-weight: 700; display: block; margin-top: 4px; }
 
-.grade-tag {
-    margin-top: 15px; display: inline-flex; align-items: center; gap: 6px;
-    background: #fef9c3; color: #a16207; font-size: 9px; font-weight: 900;
-    padding: 5px 12px; border-radius: 20px; border: 1px solid #fde047;
+.details-list { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+.detail-row { font-size: 11px; font-weight: 600; color: #4b5563; display: flex; align-items: center; gap: 10px; }
+.detail-row i { color: var(--g4s-red); width: 14px; text-align: center; }
+
+.badge-row { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; }
+.grade-pill {
+    background: #fef9c3; color: #a16207; font-size: 10px; font-weight: 900;
+    padding: 4px 12px; border-radius: 8px; border: 1px solid #fde047;
+}
+.status-pill {
+    background: #f0fdf4; color: #166534; font-size: 10px; font-weight: 800;
+    padding: 4px 12px; border-radius: 8px; border: 1px solid #bbf7d0;
 }
 
-.action-row { margin-top: 18px; display: flex; gap: 10px; }
-.action-btn {
-    text-decoration: none; cursor: pointer; background: #f3f4f6; color: #374151;
-    padding: 10px; border-radius: 10px; font-size: 10px; font-weight: 700;
-    display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
-    border: none;
+.viewer-trigger {
+    margin-top: 18px; padding: 12px; border-radius: 12px;
+    background: #f3f4f6; color: #1f2937; text-decoration: none;
+    font-size: 11px; font-weight: 800; display: flex;
+    align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; width: 100%;
 }
 
-/* PDF VIEWER MODAL */
+/* MODAL STYLES */
 #pdf-modal {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
     z-index: 9999; flex-direction: column; padding-top: var(--safe-top);
 }
-
 .modal-header {
     height: 54px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; color: white; background: #1a1a1a;
+    padding: 0 20px; color: white; background: #111;
 }
-
-.close-btn { font-size: 20px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-
+.close-btn { font-size: 20px; color: #fff; cursor: pointer; }
 #pdf-frame { flex: 1; border: none; width: 100%; background: #fff; }
 
 /* BOTTOM NAV */
@@ -138,8 +134,8 @@ body {
 
 <div id="pdf-modal">
     <div class="modal-header">
-        <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px;">DOCUMENT VIEWER</span>
-        <div class="close-btn" onclick="closeViewer()"><i class="fa-solid fa-times"></i></div>
+        <span style="font-size: 13px; font-weight: bold;">DOCUMENT VIEWER</span>
+        <i class="fa-solid fa-times close-btn" onclick="closeViewer()"></i>
     </div>
     <iframe id="pdf-frame" src=""></iframe>
 </div>
@@ -166,7 +162,7 @@ body {
                 </div>
             </div>
             <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fa-solid fa-graduation-cap"></i> HIGHER EDUCATION HUB</span>
+                <span><i class="fa-solid fa-graduation-cap"></i> VERIFIED EDUCATIONAL RECORDS</span>
                 <span id="live-clock" style="font-family: monospace; font-weight: bold;">--:--:--</span>
             </div>
         </div>
@@ -174,53 +170,72 @@ body {
 </div>
 
 <div class="content-area">
-    <div class="intro-box">
-        <h2>Academic Summary</h2>
-        <p>A scholar of English Literature and Linguistics with a journey from Palsha Alim Madrasha to Govt. Titumir College, Dhaka. Consistently maintaining academic excellence across all levels.</p>
-    </div>
-
-    <div class="section-label">Certificates & Transcripts</div>
+    <div class="section-label">University Education</div>
 
     <div class="edu-card">
-        <h3 class="edu-title">Master of Arts in English</h3>
-        <span class="edu-sub">Govt. Titumir College, Dhaka (2022)</span>
-        <div class="action-row">
-            <button class="action-btn" onclick="openViewer('#')">
-                <i class="fa-solid fa-file-pdf"></i> View Certificate
-            </button>
+        <h3 class="edu-title">Master of Arts (MA) in English</h3>
+        <span class="edu-sub">Govt. Titumir College, Dhaka</span>
+        <div class="details-list">
+            <div class="detail-row"><i class="fa-solid fa-building-columns"></i> University of Dhaka (Affiliated)</div>
+            <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2022</div>
+            <div class="detail-row"><i class="fa-solid fa-book-open"></i> Post-Graduate Level</div>
         </div>
-    </div>
-
-    <div class="edu-card">
-        <h3 class="edu-title">Bachelor of Arts (Honours)</h3>
-        <span class="edu-sub">Govt. Titumir College, Dhaka (2020)</span>
-        <div class="action-row">
-            <button class="action-btn" onclick="openViewer('https://drive.google.com/file/d/16NeLNkFdTvuuiKQW2vBbFjTikxI8YU5A/preview')">
-                <i class="fa-solid fa-file-pdf"></i> View Certificate
-            </button>
+        <div class="badge-row">
+            <span class="status-pill">Mastery Level</span>
         </div>
+        <button class="viewer-trigger" onclick="openViewer('#')">
+            <i class="fa-solid fa-file-pdf"></i> View MA Certificate
+        </button>
     </div>
 
     <div class="edu-card">
-        <h3 class="edu-title">Higher Secondary Certificate</h3>
-        <span class="edu-sub">Balugram Adarsha College (2016)</span>
-        <div class="grade-tag">GPA 5.00 / A+</div>
-        <div class="action-row">
-            <button class="action-btn" onclick="openViewer('#')">
-                <i class="fa-solid fa-eye"></i> View Transcript
-            </button>
+        <h3 class="edu-title">Bachelor of Arts (Honours) in English</h3>
+        <span class="edu-sub">Govt. Titumir College, Dhaka</span>
+        <div class="details-list">
+            <div class="detail-row"><i class="fa-solid fa-building-columns"></i> University of Dhaka (Affiliated)</div>
+            <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2020</div>
+            <div class="detail-row"><i class="fa-solid fa-graduation-cap"></i> Graduation Level</div>
         </div>
+        <div class="badge-row">
+            <span class="status-pill">Completed</span>
+        </div>
+        <button class="viewer-trigger" onclick="openViewer('https://drive.google.com/file/d/16NeLNkFdTvuuiKQW2vBbFjTikxI8YU5A/preview')">
+            <i class="fa-solid fa-file-pdf"></i> View BA Certificate
+        </button>
+    </div>
+
+    <div class="section-label">School & College Education</div>
+
+    <div class="edu-card">
+        <h3 class="edu-title">Higher Secondary Certificate (HSC)</h3>
+        <span class="edu-sub">Balugram Adarsha College</span>
+        <div class="details-list">
+            <div class="detail-row"><i class="fa-solid fa-map-location-dot"></i> Nayagola, Chapainawabganj</div>
+            <div class="detail-row"><i class="fa-solid fa-landmark"></i> Rajshahi Education Board</div>
+            <div class="detail-row"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2016</div>
+        </div>
+        <div class="badge-row">
+            <span class="grade-pill"><i class="fa-solid fa-star"></i> GPA 5.00 / A+</span>
+        </div>
+        <button class="viewer-trigger" onclick="openViewer('#')">
+            <i class="fa-solid fa-eye"></i> View HSC Transcript
+        </button>
     </div>
 
     <div class="edu-card">
         <h3 class="edu-title">Dakhil (Secondary)</h3>
-        <span class="edu-sub">Palsha Alim Madrasha (2014)</span>
-        <div class="grade-tag">GPA 5.00 / A+</div>
-        <div class="action-row">
-            <button class="action-btn" onclick="openViewer('#')">
-                <i class="fa-solid fa-eye"></i> View Marksheet
-            </button>
+        <span class="edu-sub">Palsha Alim Madrasha</span>
+        <div class="details-list">
+            <div class="detail-row"><i class="fa-solid fa-mosque"></i> Bangladesh Madrasah Education Board</div>
+            <div class="detail-row"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2014</div>
+            <div class="detail-row"><i class="fa-solid fa-award"></i> General Excellence</div>
         </div>
+        <div class="badge-row">
+            <span class="grade-pill"><i class="fa-solid fa-star"></i> GPA 5.00 / A+</span>
+        </div>
+        <button class="viewer-trigger" onclick="openViewer('#')">
+            <i class="fa-solid fa-eye"></i> View Dakhil Marksheet
+        </button>
     </div>
 </div>
 
