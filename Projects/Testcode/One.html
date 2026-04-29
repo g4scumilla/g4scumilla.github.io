@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Family News Hub</title>
+<title>Family News Dashboard</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,11 +24,12 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: var(--safe-top); 
+    padding-bottom: calc(60px + var(--safe-bottom));
     background: #f8f9fa;
-    overflow: hidden; /* Prevent body scroll when app is open */
 }
 
-/* Header & Card CSS (Your Original Design) */
+/* Original Header & Visa Card Design */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
@@ -58,13 +59,13 @@ body {
 }
 .visa-card > * { position: relative; z-index: 3; }
 
-/* Grid Layout */
+/* Grid */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px; background: #fdfdfd;
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 9px; font-weight: 700; cursor: pointer;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 9px; font-weight: 700;
 }
 .icon-circle {
     width: 44px; height: 44px; background: #fff; border-radius: 14px;
@@ -73,26 +74,7 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* Independent Browser Overlay */
-#app-browser {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #fff;
-    z-index: 9999;
-    display: none; /* Hidden by default */
-    flex-direction: column;
-}
-
-#browser-toolbar {
-    background: #f44336;
-    padding: calc(var(--safe-top) + 10px) 15px 10px;
-    display: flex; justify-content: space-between; align-items: center;
-    color: white; font-weight: bold; font-size: 14px;
-}
-
-#browser-content { flex: 1; width: 100%; border: none; }
-
-/* Bottom Nav (Your Original) */
+/* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -103,25 +85,15 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, #app-browser { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav, #app-browser { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="app-browser">
-    <div id="browser-toolbar">
-        <span id="browser-title">Loading News...</span>
-        <div onclick="closeBrowser()" style="padding: 5px 10px; cursor: pointer;">
-            <i class="fa-solid fa-xmark" style="font-size: 20px;"></i>
-        </div>
-    </div>
-    <iframe id="browser-content" src=""></iframe>
-</div>
-
-<div id="dashboard-wrapper" style="overflow-y: auto; height: 100vh;">
+<div id="main-app">
     <div class="header-section">
         <div class="top-bar-content"><span class="header-title">Family Dashboard</span></div>
         <div class="card-container">
@@ -152,19 +124,31 @@ body {
     </div>
 
     <div class="service-grid">
-        <div onclick="openIndependent('https://www.bbc.com/bengali', 'BBC Bangla')" class="service-item">
+        <a href="https://www.bbc.com/bengali" class="service-item">
             <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
-        </div>
-        <div onclick="openIndependent('https://www.prothomalo.com/', 'Prothom Alo')" class="service-item">
+        </a>
+        <a href="https://www.prothomalo.com/" class="service-item">
             <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>Prothom Alo
-        </div>
-        <div onclick="openIndependent('https://bdnews24.com/', 'Bdnews24')" class="service-item">
+        </a>
+        <a href="https://www.thedailystar.net/" class="service-item">
+            <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>Daily Star
+        </a>
+        <a href="https://bdnews24.com/" class="service-item">
             <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>Bdnews24
-        </div>
-        <div onclick="openIndependent('https://www.somoynews.tv/', 'Somoy TV')" class="service-item">
+        </a>
+        <a href="https://www.somoynews.tv/" class="service-item">
             <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>Somoy TV
-        </div>
-        </div>
+        </a>
+        <a href="https://www.ittefaq.com.bd/" class="service-item">
+            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>Ittefaq
+        </a>
+        <a href="https://samakal.com/" class="service-item">
+            <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>Samakal
+        </a>
+        <a href="https://www.bd-pratidin.com/" class="service-item">
+            <div class="icon-circle" style="color: #c62828;"><i class="fa-solid fa-b"></i></div>BD Pratidin
+        </a>
+    </div>
 </div>
 
 <div class="bottom-nav">
@@ -176,30 +160,6 @@ body {
 </div>
 
 <script>
-    function openIndependent(url, name) {
-        const browser = document.getElementById('app-browser');
-        const frame = document.getElementById('browser-content');
-        const title = document.getElementById('browser-title');
-        
-        title.innerText = name;
-        browser.style.display = 'flex';
-
-        // Note on BBC/Star: Because they block iframes, 
-        // a common trick for "Independent Browser" feel in web apps is using a Proxy 
-        // OR simply letting the window location change but keeping a BACK BUTTON.
-        
-        // For this demo, let's try the frame. If BBC still shows blank, 
-        // you might need to use a proxy URL or open it as a direct overlay.
-        frame.src = url;
-    }
-
-    function closeBrowser() {
-        const browser = document.getElementById('app-browser');
-        const frame = document.getElementById('browser-content');
-        browser.style.display = 'none';
-        frame.src = "";
-    }
-
     function updateClock() {
         const now = new Date();
         const clockEl = document.getElementById('live-clock');
