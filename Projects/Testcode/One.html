@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Family News Hub</title>
+<title>Kuafi Family Hub</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -24,22 +24,21 @@ body {
     overflow: hidden;
 }
 
-/* Header stays on top always */
+/* Header */
 .app-header {
     background: var(--g4s-red);
-    padding: calc(var(--safe-top) + 10px) 15px 10px;
-    color: white;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: calc(var(--safe-top) + 12px) 15px 12px;
+    color: white; text-align: center;
     position: fixed; top: 0; width: 100%; z-index: 5000;
 }
-.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
 
-/* Main Dashboard Area */
-#dashboard-view {
+/* Main Content */
+#main-container {
     padding-top: 80px;
     height: 100vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .card-container { padding: 0 15px 20px; }
@@ -51,38 +50,50 @@ body {
     background: #222 url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80') center/cover;
 }
 .visa-card::after {
-    content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(211, 47, 47, 0.4)); z-index: 1;
+    content: ""; position: absolute; inset: 0; 
+    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(211, 47, 47, 0.4)); z-index: 1;
 }
 .visa-card > * { position: relative; z-index: 2; }
 
-/* News Grid */
+/* Grid */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 10px; background: #fff; border-radius: 20px 20px 0 0;
+    gap: 15px 0; padding: 20px 10px; background: #fff;
+    border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; cursor: pointer;
 }
 .icon-circle {
     width: 45px; height: 45px; background: #fff; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12); margin-bottom: 6px;
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* THE BROWSER COMPONENT */
-#app-browser {
+/* THE MOBILE BROWSER OVERLAY */
+#web-view-container {
     position: fixed;
-    top: 60px; /* Below Red Header */
-    bottom: 60px; /* Above Bottom Nav */
-    left: 0; width: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: white;
-    z-index: 4000;
-    display: none; /* Hidden at start */
+    z-index: 6000; /* Above everything */
+    display: none;
 }
-#browser-iframe { width: 100%; height: 100%; border: none; }
+#web-view-frame { width: 100%; height: calc(100% - 60px); border: none; }
 
-/* Fixed Bottom Navigation */
+/* Fixed Control Bar (The Back to App button) */
+.control-bar {
+    height: 60px; width: 100%; background: #f4f4f4;
+    display: flex; justify-content: center; align-items: center;
+    border-top: 1px solid #ddd;
+}
+.btn-exit {
+    background: var(--g4s-red); color: white; border: none;
+    padding: 10px 25px; border-radius: 20px; font-weight: bold;
+    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+}
+
+/* Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -93,8 +104,8 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, .app-header, #app-browser { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav, .app-header, #app-browser { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav, .app-header, #web-view-container { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav, .app-header, #web-view-container { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
@@ -102,19 +113,15 @@ body {
 <body>
 
 <div class="app-header">
-    <div class="header-title" id="top-title">Family Dashboard</div>
+    <div class="header-title">Family Dashboard</div>
 </div>
 
-<div id="app-browser">
-    <iframe id="browser-iframe" src=""></iframe>
-</div>
-
-<div id="dashboard-view">
+<div id="main-container">
     <div class="card-container">
         <div class="visa-card">
             <div style="flex:1; display:flex; padding: 20px;">
                 <div style="flex: 0.4;"></div>
-                <div style="flex: 0.6; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
+                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
                     <div style="margin-bottom: 10px;">
                         <div style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</div>
                         <div style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</div>
@@ -137,26 +144,30 @@ body {
     </div>
 
     <div class="service-grid">
-        <div onclick="openNews('https://www.bbc.com/bengali', 'BBC Bangla')" class="service-item">
+        <div onclick="launchSite('https://www.bbc.com/bengali')" class="service-item">
             <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
         </div>
-        <div onclick="openNews('https://www.prothomalo.com/', 'Prothom Alo')" class="service-item">
+        <div onclick="launchSite('https://www.prothomalo.com/')" class="service-item">
             <div class="icon-circle" style="color:#000"><i class="fa-solid fa-p"></i></div>Prothom Alo
         </div>
-        <div onclick="openNews('https://www.thedailystar.net/', 'Daily Star')" class="service-item">
-            <div class="icon-circle" style="color:#1a237e"><i class="fa-solid fa-star"></i></div>Daily Star
-        </div>
-        <div onclick="openNews('https://bdnews24.com/', 'Bdnews24')" class="service-item">
+        <div onclick="launchSite('https://bdnews24.com/')" class="service-item">
             <div class="icon-circle" style="color:#d32f2f"><i class="fa-solid fa-2"></i></div>Bdnews24
         </div>
-        <div onclick="openNews('https://www.somoynews.tv/', 'Somoy TV')" class="service-item">
+        <div onclick="launchSite('https://www.somoynews.tv/')" class="service-item">
             <div class="icon-circle" style="color:#ff5722"><i class="fa-solid fa-tv"></i></div>Somoy TV
         </div>
     </div>
 </div>
 
+<div id="web-view-container">
+    <iframe id="web-view-frame" src=""></iframe>
+    <div class="control-bar">
+        <button class="btn-exit" onclick="closeSite()"><i class="fa-solid fa-house"></i> EXIT TO DASHBOARD</button>
+    </div>
+</div>
+
 <div class="bottom-nav">
-    <a href="#" onclick="goHome()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 28px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
@@ -164,31 +175,29 @@ body {
 </div>
 
 <script>
-    function openNews(url, name) {
-        const browser = document.getElementById('app-browser');
-        const iframe = document.getElementById('browser-iframe');
-        const title = document.getElementById('top-title');
+    function launchSite(url) {
+        // If it's a "friendly" site like Prothom Alo, load in frame
+        // If it's BBC, we try the Google redirect to force it through
+        const container = document.getElementById('web-view-container');
+        const frame = document.getElementById('web-view-frame');
         
-        title.innerText = name;
-        browser.style.display = 'block';
-
-        // REALISTIC FIX: We use a 'Google Search' wrapper. 
-        // This makes BBC think it is being opened by Google, so it doesn't 'Refuse Connection'.
-        iframe.src = "https://www.google.com/search?q=" + encodeURIComponent(url) + "&btnI=Im+Feeling+Lucky";
+        container.style.display = 'block';
         
-        // If the above Google trick is slow, the backup is:
-        // iframe.src = "https://allorigins.win/get?url=" + encodeURIComponent(url);
+        // This logic helps bypass some frame-blocking
+        if(url.includes('bbc.com') || url.includes('thedailystar')) {
+            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(url) + "&btnI=Im+Feeling+Lucky";
+        } else {
+            frame.src = url;
+        }
     }
 
-    function goHome() {
-        document.getElementById('app-browser').style.display = 'none';
-        document.getElementById('top-title').innerText = "Family Dashboard";
-        document.getElementById('browser-iframe').src = "";
+    function closeSite() {
+        document.getElementById('web-view-container').style.display = 'none';
+        document.getElementById('web-view-frame').src = "";
     }
 
     function updateClock() {
-        const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString();
+        document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
     }
     setInterval(updateClock, 1000);
     updateClock();
