@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Detailed Academic Profile | Abdullahil Kuafi</title>
+<title>Academic Portfolio | Abdullahil Kuafi</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,9 +27,10 @@ body {
     padding-top: var(--safe-top); 
     padding-bottom: calc(80px + var(--safe-bottom));
     background-color: #f0f2f5;
+    color: #1f2937;
 }
 
-/* HEADER & CARD - UNTOUCHED */
+/* HEADER SECTION */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
@@ -61,20 +62,27 @@ body {
 }
 .visa-card > * { position: relative; z-index: 3; }
 
-/* ENHANCED CONTENT AREA */
+/* CONTENT AREA */
 .content-area { padding: 20px 15px; }
+
+.summary-box {
+    background: white; padding: 20px; border-radius: 16px;
+    margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--g4s-red);
+}
+.summary-box h2 { font-size: 16px; margin: 0 0 10px; color: var(--g4s-red); font-weight: 800; }
+.summary-box p { font-size: 12px; line-height: 1.6; color: #4b5563; margin: 0; font-weight: 500; }
 
 .section-label {
     font-size: 11px; font-weight: 900; color: #9ca3af;
     text-transform: uppercase; letter-spacing: 1.5px;
-    margin: 20px 0 15px; display: flex; align-items: center; gap: 8px;
+    margin: 20px 0 12px; display: flex; align-items: center; gap: 8px;
 }
 
 .edu-card {
     background: var(--glass); border-radius: 16px; padding: 20px;
     margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-    border: 1px solid white; position: relative;
-    border-left: 4px solid var(--g4s-red);
+    border: 1px solid white; border-left: 4px solid var(--g4s-red);
 }
 
 .edu-title { font-size: 15px; font-weight: 800; color: #111827; margin: 0; }
@@ -101,16 +109,16 @@ body {
     align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; width: 100%;
 }
 
-/* MODAL STYLES */
+/* PDF VIEWER MODAL */
 #pdf-modal {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
     z-index: 9999; flex-direction: column; padding-top: var(--safe-top);
 }
 .modal-header {
     height: 54px; display: flex; align-items: center; justify-content: space-between;
     padding: 0 20px; color: white; background: #111;
 }
-.close-btn { font-size: 20px; color: #fff; cursor: pointer; }
+.close-btn { font-size: 20px; color: #fff; cursor: pointer; background: rgba(255,255,255,0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 #pdf-frame { flex: 1; border: none; width: 100%; background: #fff; }
 
 /* BOTTOM NAV */
@@ -134,8 +142,8 @@ body {
 
 <div id="pdf-modal">
     <div class="modal-header">
-        <span style="font-size: 13px; font-weight: bold;">DOCUMENT VIEWER</span>
-        <i class="fa-solid fa-times close-btn" onclick="closeViewer()"></i>
+        <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px;">DOCUMENT VIEWER</span>
+        <div class="close-btn" onclick="closeViewer()"><i class="fa-solid fa-times"></i></div>
     </div>
     <iframe id="pdf-frame" src=""></iframe>
 </div>
@@ -170,6 +178,11 @@ body {
 </div>
 
 <div class="content-area">
+    <div class="summary-box">
+        <h2>Professional Summary</h2>
+        <p>A highly accomplished academic professional with a Master of Arts in English from Govt. Titumir College (University of Dhaka). From achieving perfect scores in Madrasah and College levels in Chapainawabganj to mastering linguistics in the capital, my journey reflects a dedicated pursuit of excellence and linguistic expertise.</p>
+    </div>
+
     <div class="section-label">University Education</div>
 
     <div class="edu-card">
@@ -180,9 +193,7 @@ body {
             <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2022</div>
             <div class="detail-row"><i class="fa-solid fa-book-open"></i> Post-Graduate Level</div>
         </div>
-        <div class="badge-row">
-            <span class="status-pill">Mastery Level</span>
-        </div>
+        <div class="badge-row"><span class="status-pill">Mastery Level</span></div>
         <button class="viewer-trigger" onclick="openViewer('#')">
             <i class="fa-solid fa-file-pdf"></i> View MA Certificate
         </button>
@@ -196,15 +207,13 @@ body {
             <div class="detail-row"><i class="fa-solid fa-calendar-check"></i> Session Year: 2020</div>
             <div class="detail-row"><i class="fa-solid fa-graduation-cap"></i> Graduation Level</div>
         </div>
-        <div class="badge-row">
-            <span class="status-pill">Completed</span>
-        </div>
+        <div class="badge-row"><span class="status-pill">Completed</span></div>
         <button class="viewer-trigger" onclick="openViewer('https://drive.google.com/file/d/16NeLNkFdTvuuiKQW2vBbFjTikxI8YU5A/preview')">
             <i class="fa-solid fa-file-pdf"></i> View BA Certificate
         </button>
     </div>
 
-    <div class="section-label">School & College Education</div>
+    <div class="section-label">School & College Level</div>
 
     <div class="edu-card">
         <h3 class="edu-title">Higher Secondary Certificate (HSC)</h3>
