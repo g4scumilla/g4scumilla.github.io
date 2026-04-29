@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Kuafi Family Hub</title>
+<title>Kuafi Family App</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -20,23 +20,20 @@ body {
     font-family: -apple-system, system-ui, sans-serif;
     background: #f8f9fa;
     height: 100vh;
-    overflow: hidden;
 }
 
-/* Dashboard Header */
+/* Header */
 .app-header {
     background: var(--g4s-red);
     padding: calc(var(--safe-top) + 12px) 15px 12px;
     color: white; text-align: center;
     position: sticky; top: 0; z-index: 10;
 }
-.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
 
 /* Dashboard Content */
 #dashboard {
     padding-bottom: 80px;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
 }
 
 .card-container { padding: 15px; }
@@ -56,11 +53,11 @@ body {
 /* Grid */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 25px 10px; background: #fff;
+    gap: 20px 0; padding: 25px 10px; background: #fff;
     border-radius: 30px 30px 0 0;
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; cursor: pointer;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700;
 }
 .icon-circle {
     width: 48px; height: 48px; background: #fff; border-radius: 16px;
@@ -69,30 +66,7 @@ body {
     font-size: 20px; color: var(--g4s-red);
 }
 
-/* THE NEWS OVERLAY (This is the "App Browser") */
-#news-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: white;
-    z-index: 9000;
-    display: none;
-    flex-direction: column;
-}
-/* We use an Object or Embed tag as a backup for Iframe */
-#news-frame { width: 100%; height: calc(100% - 70px); border: none; }
-
-.overlay-nav {
-    height: 70px; background: #fff; border-top: 1px solid #ddd;
-    display: flex; justify-content: center; align-items: center;
-    padding-bottom: var(--safe-bottom);
-}
-.home-btn {
-    background: var(--g4s-red); color: white; border: none;
-    padding: 12px 30px; border-radius: 25px; font-weight: 800;
-    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
-}
-
-/* Global Bottom Navigation */
+/* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -103,8 +77,7 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, .app-header, #news-overlay { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav, .app-header, #news-overlay { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav, .app-header { width: 100%; max-width: 450px; margin: 0 auto; }
 }
 </style>
 </head>
@@ -120,7 +93,7 @@ body {
         <div class="visa-card">
             <div style="flex:1; display:flex; padding: 20px;">
                 <div style="flex: 0.4;"></div>
-                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; text-align: left;">
+                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
                     <div style="margin-bottom: 8px;">
                         <p style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</p>
                         <p style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</p>
@@ -143,30 +116,23 @@ body {
     </div>
 
     <div class="service-grid">
-        <div onclick="openAppBrowser('https://www.bbc.com/bengali')" class="service-item">
+        <a href="https://www.bbc.com/bengali" target="_blank" class="service-item">
             <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC
-        </div>
-        <div onclick="openAppBrowser('https://www.prothomalo.com/')" class="service-item">
+        </a>
+        <a href="https://www.prothomalo.com/" target="_blank" class="service-item">
             <div class="icon-circle" style="color:#000"><i class="fa-solid fa-p"></i></div>Prothom Alo
-        </div>
-        <div onclick="openAppBrowser('https://bdnews24.com/')" class="service-item">
+        </a>
+        <a href="https://bdnews24.com/" target="_blank" class="service-item">
             <div class="icon-circle" style="color:#d32f2f"><i class="fa-solid fa-2"></i></div>Bdnews24
-        </div>
-        <div onclick="openAppBrowser('https://www.somoynews.tv/')" class="service-item">
+        </a>
+        <a href="https://www.somoynews.tv/" target="_blank" class="service-item">
             <div class="icon-circle" style="color:#ff5722"><i class="fa-solid fa-tv"></i></div>Somoy TV
-        </div>
-    </div>
-</div>
-
-<div id="news-overlay">
-    <iframe id="news-frame" src="" sandbox="allow-forms allow-scripts allow-same-origin allow-popups"></iframe>
-    <div class="overlay-nav">
-        <button class="home-btn" onclick="closeAppBrowser()"><i class="fa-solid fa-house"></i> GO HOME</button>
+        </a>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="#" onclick="closeAppBrowser()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <div class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 30px; color: var(--g4s-red); margin-top: -5px;"></i></div>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
@@ -174,27 +140,6 @@ body {
 </div>
 
 <script>
-    function openAppBrowser(url) {
-        const overlay = document.getElementById('news-overlay');
-        const frame = document.getElementById('news-frame');
-        
-        // Show the browser layer
-        overlay.style.display = 'flex';
-        
-        // If it's BBC, we try the "Google Viewer" trick which is the most reliable way 
-        // to bypass the 'Refused' error without a paid proxy.
-        if(url.includes('bbc.com')) {
-            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(url) + "&btnI=Im+Feeling+Lucky";
-        } else {
-            frame.src = url;
-        }
-    }
-
-    function closeAppBrowser() {
-        document.getElementById('news-overlay').style.display = 'none';
-        document.getElementById('news-frame').src = "";
-    }
-
     function updateClock() {
         document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
     }
