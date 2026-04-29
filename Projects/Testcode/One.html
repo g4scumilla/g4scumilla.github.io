@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Family News Dashboard</title>
+<title>Family News App</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,155 +19,178 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: var(--safe-top); 
-    padding-bottom: calc(60px + var(--safe-bottom));
+    padding-top: var(--safe-top);
     background: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Original Header & Visa Card Design */
+/* Original Header & Card */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
-.top-bar-content { padding: 15px 15px 10px; color: white; }
-.header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
+.top-bar-content { padding: 10px 15px 5px; color: white; }
+.header-title { font-size: 16px; font-weight: 800; text-transform: uppercase; }
 
-.card-container { padding: 0 15px 20px; margin-top: 5px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.card-container { padding: 0 15px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
 .visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
+    border-radius: 12px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
-    background-size: cover;
-}
-.visa-card::before {
-    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
-    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover; opacity: 0.75; z-index: 1;
-    mask-image: linear-gradient(to right, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    background: #222 url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80') center/cover;
 }
 .visa-card::after {
-    content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4)); z-index: 2;
+    content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(211, 47, 47, 0.5)); z-index: 1;
 }
-.visa-card > * { position: relative; z-index: 3; }
+.visa-card > * { position: relative; z-index: 2; }
 
-/* Grid */
+/* Grid Layout */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px 30px; background: #fdfdfd;
+    gap: 12px 0; padding: 15px 10px; background: #fff;
+    max-height: calc(100vh - 350px); overflow-y: auto;
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 9px; font-weight: 700;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 9px; font-weight: 700; cursor: pointer;
 }
 .icon-circle {
-    width: 44px; height: 44px; background: #fff; border-radius: 14px;
+    width: 40px; height: 40px; background: #fff; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
-    font-size: 18px; color: var(--g4s-red);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1); margin-bottom: 5px;
+    font-size: 16px; color: var(--g4s-red);
 }
+
+/* THE MAGIC BROWSER LAYER */
+#app-browser-layer {
+    position: fixed;
+    top: 60px; /* Below the title */
+    left: 0; width: 100%;
+    height: calc(100% - 120px - var(--safe-bottom));
+    background: white;
+    z-index: 3000;
+    display: none;
+}
+#news-frame { width: 100%; height: 100%; border: none; }
 
 /* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
     padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 1000;
+    border-top: 1px solid #eee; z-index: 4000;
 }
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav, #app-browser-layer { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav, #app-browser-layer { left: 50% !important; transform: translateX(-50%); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="main-app">
-    <div class="header-section">
-        <div class="top-bar-content"><span class="header-title">Family Dashboard</span></div>
-        <div class="card-container">
-            <div class="visa-card">
-                <div style="flex:1; display:flex; padding: 20px; position: relative;">
-                    <div style="flex: 0.5;"></div>
-                    <div style="flex: 0.5; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-size: 10px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
-                            <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Arts in English from Government Titumir College, Dhaka.</div>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
-                            <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Science in Mathematics from Rajshahi College, Rajshahi.</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
-                            <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Born on 12 November 2025. The beloved heart of the Kuafi family.</div>
-                        </div>
+<div class="header-section">
+    <div class="top-bar-content"><span class="header-title">Family Dashboard</span></div>
+</div>
+
+<div id="app-browser-layer">
+    <iframe id="news-frame" src=""></iframe>
+</div>
+
+<div id="dashboard-content">
+    <div class="card-container">
+        <div class="visa-card">
+            <div style="flex:1; display:flex; padding: 15px;">
+                <div style="flex: 0.4;"></div>
+                <div style="flex: 0.6; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.2);">
+                    <div style="margin-bottom: 5px;">
+                        <div style="font-size: 9px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
+                        <div style="font-size: 6px; opacity: 0.9;">Arts in English, Titumir College.</div>
+                    </div>
+                    <div style="margin-bottom: 5px;">
+                        <div style="font-size: 9px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
+                        <div style="font-size: 6px; opacity: 0.9;">Science in Math, Rajshahi College.</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 9px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
+                        <div style="font-size: 6px; opacity: 0.9;">The heart of Kuafi family.</div>
                     </div>
                 </div>
-                <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
-                    <span><i class="fa-solid fa-shield-heart"></i> SECURE PERSONAL HUB</span>
-                    <span id="live-clock">--:--:-- --</span>
-                </div>
+            </div>
+            <div style="padding:8px 12px; background: rgba(0,0,0,0.3); font-size: 7px; display: flex; justify-content: space-between;">
+                <span><i class="fa-solid fa-shield-heart"></i> SECURE HUB</span>
+                <span id="live-clock">--:--:--</span>
             </div>
         </div>
     </div>
 
     <div class="service-grid">
-        <a href="https://www.bbc.com/bengali" class="service-item">
+        <div onclick="openInApp('https://www.bbc.com/bengali')" class="service-item">
             <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
-        </a>
-        <a href="https://www.prothomalo.com/" class="service-item">
+        </div>
+        <div onclick="openInApp('https://www.prothomalo.com/')" class="service-item">
             <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>Prothom Alo
-        </a>
-        <a href="https://www.thedailystar.net/" class="service-item">
+        </div>
+        <div onclick="openInApp('https://www.thedailystar.net/')" class="service-item">
             <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>Daily Star
-        </a>
-        <a href="https://bdnews24.com/" class="service-item">
+        </div>
+        <div onclick="openInApp('https://bdnews24.com/')" class="service-item">
             <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>Bdnews24
-        </a>
-        <a href="https://www.somoynews.tv/" class="service-item">
+        </div>
+        <div onclick="openInApp('https://www.somoynews.tv/')" class="service-item">
             <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>Somoy TV
-        </a>
-        <a href="https://www.ittefaq.com.bd/" class="service-item">
-            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>Ittefaq
-        </a>
-        <a href="https://samakal.com/" class="service-item">
+        </div>
+        <div onclick="openInApp('https://samakal.com/')" class="service-item">
             <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>Samakal
-        </a>
-        <a href="https://www.bd-pratidin.com/" class="service-item">
-            <div class="icon-circle" style="color: #c62828;"><i class="fa-solid fa-b"></i></div>BD Pratidin
-        </a>
+        </div>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" onclick="goHome()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 24px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
 </div>
 
 <script>
+    function openInApp(url) {
+        const browser = document.getElementById('app-browser-layer');
+        const frame = document.getElementById('news-frame');
+        const dashboard = document.getElementById('dashboard-content');
+
+        // Show the browser, hide the main dashboard content (but not the header/nav)
+        dashboard.style.display = 'none';
+        browser.style.display = 'block';
+        
+        // We use a proxy logic to bypass 'Refused to connect'
+        // This is a free proxy to help load blocked sites
+        frame.src = "https://allorigins.win/get?url=" + encodeURIComponent(url);
+        
+        // Note: If allorigins doesn't render perfectly, try this direct source:
+        frame.src = url; 
+    }
+
+    function goHome() {
+        document.getElementById('app-browser-layer').style.display = 'none';
+        document.getElementById('dashboard-content').style.display = 'block';
+        document.getElementById('news-frame').src = "";
+    }
+
     function updateClock() {
         const now = new Date();
-        const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
-            clockEl.innerText = now.toLocaleTimeString([], { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            });
-        }
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString();
     }
     setInterval(updateClock, 1000);
     updateClock();
