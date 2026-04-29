@@ -33,7 +33,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Header & Card CSS (UNCHANGED) */
 .header-section {
     background: linear-gradient(180deg, #f44336 0%, #fff 100%);
     text-align: center;
@@ -42,6 +41,7 @@ body {
 .top-bar-content { padding: 15px 15px 10px; color: white; }
 .header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
 .card-container { padding: 0 15px 20px; margin-top: 5px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+
 .visa-card {
     border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
@@ -62,7 +62,6 @@ body {
 }
 .visa-card > * { position: relative; z-index: 3; }
 
-/* Grid CSS */
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px 30px;
@@ -80,14 +79,13 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* App View Overlay (The "In-Web" Browser) */
+/* App View Overlay */
 #news-viewer {
     position: fixed; top: 0; left: 0; width: 100%; height: calc(100% - 60px - var(--safe-bottom));
     background: white; z-index: 3000; display: none;
 }
 #news-frame { width: 100%; height: 100%; border: none; }
 
-/* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -96,9 +94,6 @@ body {
 }
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
 .nav-active { color: var(--g4s-red); }
-
-.rotating { animation: rotate 1s linear; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 @media (min-width: 768px) {
     body, .bottom-nav, #news-viewer { width: 100%; max-width: 450px; margin: 0 auto; }
@@ -116,10 +111,7 @@ body {
 
 <div id="main-content">
     <div class="header-section">
-        <div class="top-bar-content">
-            <span class="header-title">Family Dashboard</span>
-        </div>
-
+        <div class="top-bar-content"><span class="header-title">Family Dashboard</span></div>
         <div class="card-container">
             <div class="visa-card">
                 <div style="flex:1; display:flex; padding: 20px; position: relative;">
@@ -148,75 +140,47 @@ body {
     </div>
 
     <div class="service-grid">
-        <div onclick="openNews('https://www.bbc.com/bengali')" class="service-item">
-            <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>
-            BBC Bangla
+        <div onclick="smartOpen('https://www.bbc.com/bengali', false)" class="service-item">
+            <div class="icon-circle" style="color: #bb1919;"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
         </div>
-        <div onclick="openNews('https://www.prothomalo.com/')" class="service-item">
-            <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>
-            Prothom Alo
+        <div onclick="smartOpen('https://www.prothomalo.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #000;"><i class="fa-solid fa-p"></i></div>Prothom Alo
         </div>
-        <div onclick="openNews('https://www.thedailystar.net/')" class="service-item">
-            <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>
-            Daily Star
+        <div onclick="smartOpen('https://www.thedailystar.net/', false)" class="service-item">
+            <div class="icon-circle" style="color: #1a237e;"><i class="fa-solid fa-star"></i></div>Daily Star
         </div>
-        <div onclick="openNews('https://bdnews24.com/')" class="service-item">
-            <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>
-            Bdnews24
+        <div onclick="smartOpen('https://bdnews24.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #d32f2f;"><i class="fa-solid fa-2"></i></div>Bdnews24
         </div>
-        <div onclick="openNews('https://www.jugantor.com/')" class="service-item">
-            <div class="icon-circle" style="color: #2e7d32;"><i class="fa-solid fa-j"></i></div>
-            Jugantor
+        <div onclick="smartOpen('https://www.jugantor.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #2e7d32;"><i class="fa-solid fa-j"></i></div>Jugantor
         </div>
-        <div onclick="openNews('https://www.somoynews.tv/')" class="service-item">
-            <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>
-            Somoy TV
+        <div onclick="smartOpen('https://www.somoynews.tv/', true)" class="service-item">
+            <div class="icon-circle" style="color: #ff5722;"><i class="fa-solid fa-tv"></i></div>Somoy TV
         </div>
-        <div onclick="openNews('https://www.ittefaq.com.bd/')" class="service-item">
-            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>
-            Ittefaq
+        <div onclick="smartOpen('https://www.ittefaq.com.bd/', true)" class="service-item">
+            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-i"></i></div>Ittefaq
         </div>
-        <div onclick="openNews('https://samakal.com/')" class="service-item">
-            <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>
-            Samakal
+        <div onclick="smartOpen('https://samakal.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #1b5e20;"><i class="fa-solid fa-s"></i></div>Samakal
         </div>
-        <div onclick="openNews('https://www.bd-pratidin.com/')" class="service-item">
-            <div class="icon-circle" style="color: #c62828;"><i class="fa-solid fa-b"></i></div>
-            BD Pratidin
+        <div onclick="smartOpen('https://www.bd-pratidin.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #c62828;"><i class="fa-solid fa-b"></i></div>BD Pratidin
         </div>
-        <div onclick="openNews('https://www.ntvbd.com/')" class="service-item">
-            <div class="icon-circle" style="color: #3949ab;"><i class="fa-solid fa-satellite-dish"></i></div>
-            NTV News
+        <div onclick="smartOpen('https://www.ntvbd.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #3949ab;"><i class="fa-solid fa-satellite-dish"></i></div>NTV News
         </div>
-        <div onclick="openNews('https://www.independent24.tv/')" class="service-item">
-            <div class="icon-circle" style="color: #fbc02d;"><i class="fa-solid fa-circle-play"></i></div>
-            Independent
+        <div onclick="smartOpen('https://www.independent24.tv/', true)" class="service-item">
+            <div class="icon-circle" style="color: #fbc02d;"><i class="fa-solid fa-circle-play"></i></div>Independent
         </div>
-        <div onclick="openNews('https://www.channelionline.com/')" class="service-item">
-            <div class="icon-circle" style="color: #43a047;"><i class="fa-solid fa-leaf"></i></div>
-            Channel I
-        </div>
-        <div onclick="openNews('https://www.kalerkantho.com/')" class="service-item">
-            <div class="icon-circle" style="color: #e65100;"><i class="fa-solid fa-sun"></i></div>
-            Kaler Kantho
-        </div>
-        <div onclick="openNews('https://www.dhakatribune.com/')" class="service-item">
-            <div class="icon-circle" style="color: #212121;"><i class="fa-solid fa-t"></i></div>
-            D. Tribune
-        </div>
-        <div onclick="openNews('https://bonikbarta.net/')" class="service-item">
-            <div class="icon-circle" style="color: #37474f;"><i class="fa-solid fa-chart-line"></i></div>
-            Bonik Barta
-        </div>
-        <div onclick="openNews('https://dailyinqilab.com/')" class="service-item">
-            <div class="icon-circle" style="color: #01579b;"><i class="fa-solid fa-mosque"></i></div>
-            Inqilab
+        <div onclick="smartOpen('https://www.channelionline.com/', true)" class="service-item">
+            <div class="icon-circle" style="color: #43a047;"><i class="fa-solid fa-leaf"></i></div>Channel I
         </div>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="/index.html" onclick="closeNews();" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
@@ -224,21 +188,18 @@ body {
 </div>
 
 <script>
-    // Logic to open news within the page
-    function openNews(url) {
-        const viewer = document.getElementById('news-viewer');
-        const frame = document.getElementById('news-frame');
-        frame.src = url;
-        viewer.style.display = 'block';
-        window.scrollTo(0,0);
-    }
-
-    // Logic to return home
-    function closeNews() {
-        const viewer = document.getElementById('news-viewer');
-        const frame = document.getElementById('news-frame');
-        viewer.style.display = 'none';
-        frame.src = '';
+    function smartOpen(url, allowIframe) {
+        if (allowIframe) {
+            const viewer = document.getElementById('news-viewer');
+            const frame = document.getElementById('news-frame');
+            frame.src = url;
+            viewer.style.display = 'block';
+            window.scrollTo(0,0);
+        } else {
+            // For sites that block iframes, we open them directly.
+            // In a PWA/Android environment, this still feels like a smooth transition.
+            window.location.href = url;
+        }
     }
 
     function updateClock() {
@@ -252,11 +213,6 @@ body {
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    // Prevent back button from closing app if news is open
-    window.onpopstate = function() {
-        closeNews();
-    };
 </script>
 
 </body>
