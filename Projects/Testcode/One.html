@@ -21,25 +21,15 @@ body {
     font-family: -apple-system, system-ui, sans-serif;
     background: #f8f9fa;
     height: 100vh;
-    overflow: hidden;
 }
 
-/* Header */
-.app-header {
-    background: var(--g4s-red);
-    padding: calc(var(--safe-top) + 12px) 15px 12px;
-    color: white; text-align: center;
-    position: fixed; top: 0; width: 100%; z-index: 5000;
+/* Original Card & Header Design */
+.header-section {
+    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    text-align: center;
+    padding-top: var(--safe-top);
 }
-.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
-
-/* Main Content */
-#main-container {
-    padding-top: 80px;
-    height: 100vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
+.header-title { font-size: 19px; font-weight: 800; color: white; padding: 15px; display: block; text-transform: uppercase; }
 
 .card-container { padding: 0 15px 20px; }
 .visa-card {
@@ -59,10 +49,10 @@ body {
 .service-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 15px 0; padding: 20px 10px; background: #fff;
-    border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+    border-radius: 25px 25px 0 0;
 }
 .service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700; cursor: pointer;
+    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700;
 }
 .icon-circle {
     width: 45px; height: 45px; background: #fff; border-radius: 14px;
@@ -71,29 +61,25 @@ body {
     font-size: 18px; color: var(--g4s-red);
 }
 
-/* THE MOBILE BROWSER OVERLAY */
-#web-view-container {
+/* THE FLOATING HOME BUTTON (Real App Feel) */
+#floating-home {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: white;
-    z-index: 6000; /* Above everything */
-    display: none;
-}
-#web-view-frame { width: 100%; height: calc(100% - 60px); border: none; }
-
-/* Fixed Control Bar (The Back to App button) */
-.control-bar {
-    height: 60px; width: 100%; background: #f4f4f4;
-    display: flex; justify-content: center; align-items: center;
-    border-top: 1px solid #ddd;
-}
-.btn-exit {
-    background: var(--g4s-red); color: white; border: none;
-    padding: 10px 25px; border-radius: 20px; font-weight: bold;
-    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--g4s-red);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    display: none; /* Only shows when news is open */
+    text-decoration: none;
+    border: 2px solid white;
 }
 
-/* Nav */
+/* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
@@ -104,67 +90,60 @@ body {
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, .app-header, #web-view-container { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav, .app-header, #web-view-container { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav, .header-section { width: 100%; max-width: 450px; margin: 0 auto; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app-header">
-    <div class="header-title">Family Dashboard</div>
-</div>
-
-<div id="main-container">
-    <div class="card-container">
-        <div class="visa-card">
-            <div style="flex:1; display:flex; padding: 20px;">
-                <div style="flex: 0.4;"></div>
-                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
-                    <div style="margin-bottom: 10px;">
-                        <div style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</div>
-                        <div style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">ZAMILA KHATUN</div>
-                        <div style="font-size: 7px; opacity: 0.8;">B.Sc & M.Sc (Math)</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
-                        <div style="font-size: 7px; opacity: 0.8;">Born 12 Nov 2025</div>
+<div id="dashboard">
+    <div class="header-section">
+        <span class="header-title">Family Dashboard</span>
+        <div class="card-container">
+            <div class="visa-card">
+                <div style="flex:1; display:flex; padding: 20px;">
+                    <div style="flex: 0.4;"></div>
+                    <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; text-align: left;">
+                        <div style="margin-bottom: 8px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</div>
+                            <div style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">ZAMILA KHATUN</div>
+                            <div style="font-size: 7px; opacity: 0.8;">B.Sc & M.Sc (Math)</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; font-weight: bold; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
+                            <div style="font-size: 7px; opacity: 0.8;">Born 12 Nov 2025</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; display: flex; justify-content: space-between;">
-                <span><i class="fa-solid fa-shield-heart"></i> KUAFI PRIVATE HUB</span>
-                <span id="live-clock">00:00:00</span>
+                <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; display: flex; justify-content: space-between;">
+                    <span><i class="fa-solid fa-shield-heart"></i> KUAFI HUB</span>
+                    <span id="live-clock">00:00:00</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="service-grid">
-        <div onclick="launchSite('https://www.bbc.com/bengali')" class="service-item">
+        <div onclick="openNews('https://www.bbc.com/bengali')" class="service-item">
             <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC Bangla
         </div>
-        <div onclick="launchSite('https://www.prothomalo.com/')" class="service-item">
+        <div onclick="openNews('https://www.prothomalo.com/')" class="service-item">
             <div class="icon-circle" style="color:#000"><i class="fa-solid fa-p"></i></div>Prothom Alo
         </div>
-        <div onclick="launchSite('https://bdnews24.com/')" class="service-item">
+        <div onclick="openNews('https://bdnews24.com/')" class="service-item">
             <div class="icon-circle" style="color:#d32f2f"><i class="fa-solid fa-2"></i></div>Bdnews24
         </div>
-        <div onclick="launchSite('https://www.somoynews.tv/')" class="service-item">
+        <div onclick="openNews('https://www.somoynews.tv/')" class="service-item">
             <div class="icon-circle" style="color:#ff5722"><i class="fa-solid fa-tv"></i></div>Somoy TV
         </div>
     </div>
 </div>
 
-<div id="web-view-container">
-    <iframe id="web-view-frame" src=""></iframe>
-    <div class="control-bar">
-        <button class="btn-exit" onclick="closeSite()"><i class="fa-solid fa-house"></i> EXIT TO DASHBOARD</button>
-    </div>
-</div>
+<a href="index.html" id="floating-home"><i class="fa-solid fa-house-user"></i> BACK TO DASHBOARD</a>
 
 <div class="bottom-nav">
     <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
@@ -175,25 +154,14 @@ body {
 </div>
 
 <script>
-    function launchSite(url) {
-        // If it's a "friendly" site like Prothom Alo, load in frame
-        // If it's BBC, we try the Google redirect to force it through
-        const container = document.getElementById('web-view-container');
-        const frame = document.getElementById('web-view-frame');
+    function openNews(url) {
+        // Show the floating button before leaving
+        document.getElementById('floating-home').style.display = 'block';
         
-        container.style.display = 'block';
-        
-        // This logic helps bypass some frame-blocking
-        if(url.includes('bbc.com') || url.includes('thedailystar')) {
-            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(url) + "&btnI=Im+Feeling+Lucky";
-        } else {
-            frame.src = url;
-        }
-    }
-
-    function closeSite() {
-        document.getElementById('web-view-container').style.display = 'none';
-        document.getElementById('web-view-frame').src = "";
+        // Use a small delay so the button renders, then redirect in the SAME window
+        setTimeout(() => {
+            window.location.href = url;
+        }, 100);
     }
 
     function updateClock() {
@@ -201,6 +169,13 @@ body {
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // If the user hits "Back" on their phone, hide the button
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            document.getElementById('floating-home').style.display = 'none';
+        }
+    };
 </script>
 
 </body>
