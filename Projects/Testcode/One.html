@@ -3,19 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Dashboard</title>
+<title>Education Profile | Abdullahil Kuafi</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#8b0000">
+<meta name="theme-color" content="#f44336">
 
-<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
 :root { 
-    --g4s-red: #8b0000; 
+    --g4s-red: #d32f2f; 
+    --glass: rgba(255, 255, 255, 0.96);
     --safe-top: env(safe-area-inset-top, 20px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -24,93 +23,108 @@
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding-bottom: calc(60px + var(--safe-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
-                url('https://www.transparenttextures.com/patterns/floral-paper.png');
-    background-size: auto;
-    background-attachment: fixed;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: var(--safe-top); 
+    padding-bottom: calc(80px + var(--safe-bottom));
+    background-color: #f8f9fa;
+    color: #2d3436;
 }
 
+/* GLOBAL HEADER */
 .header-section {
-    background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
-    height: 60px; 
-    padding-top: var(--safe-top);
+    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
-
-.card-container { 
-    padding: 0 15px 20px; 
-    margin-top: -30px; 
-    position: relative;
-    z-index: 10;
-}
+.top-bar-content { padding: 15px 15px 10px; color: white; }
+.header-title { font-size: 18px; font-weight: 800; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
+.card-container { padding: 0 15px 25px; margin-top: 5px; }
 
 .visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
+    border-radius: 20px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 35px rgba(211, 47, 47, 0.25);
     position: relative; overflow: hidden;
     background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
     background-size: cover;
 }
-
 .visa-card::before {
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
-    width: 100%;
-    background: url('https://g4scumilla.github.io/Files/Img/logo.png');
-    background-size: 35%; 
-    background-repeat: no-repeat;
-    background-position: 15px center; 
-    opacity: 0.85; 
-    z-index: 1;
-    mask-image: linear-gradient(to right, black 30%, transparent 80%);
-    -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
+    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
+    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
+    background-size: cover; opacity: 0.75; z-index: 1;
+    mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
 }
-
 .visa-card::after {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(211, 47, 47, 0.45));
     z-index: 2;
 }
-
 .visa-card > * { position: relative; z-index: 3; }
 
-.service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px 40px;
-    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
-    min-height: 50vh; 
+/* CONTENT STYLING */
+.content-area { padding: 20px 15px; }
+
+.intro-box {
+    background: white; padding: 20px; border-radius: 16px;
+    margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--g4s-red);
+}
+.intro-box h2 { font-size: 16px; margin: 0 0 10px; color: var(--g4s-red); font-weight: 800; }
+.intro-box p { font-size: 12px; line-height: 1.6; color: #4b5563; margin: 0; font-weight: 500; }
+
+.section-label {
+    font-size: 11px; font-weight: 900; color: #9ca3af;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin: 20px 0 15px; display: flex; align-items: center; gap: 8px;
 }
 
-.service-item {
-    text-decoration: none; color: #333;
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 10px; font-weight: 800;
+.edu-card {
+    background: var(--glass); border-radius: 16px; padding: 20px;
+    margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border: 1px solid white; position: relative;
 }
 
-.icon-circle {
-    width: 46px; height: 46px; background: #fff; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
-    font-size: 19px; color: var(--g4s-red);
-    transition: transform 0.2s;
+.edu-title { font-size: 14px; font-weight: 800; color: #111827; margin: 0; }
+.edu-sub { font-size: 11px; color: var(--g4s-red); font-weight: 700; display: block; margin-top: 4px; }
+
+.grade-tag {
+    margin-top: 15px; display: inline-flex; align-items: center; gap: 6px;
+    background: #fef9c3; color: #a16207; font-size: 9px; font-weight: 900;
+    padding: 5px 12px; border-radius: 20px; border: 1px solid #fde047;
 }
 
-.service-item:active .icon-circle { transform: scale(0.9); }
+.action-row { margin-top: 18px; display: flex; gap: 10px; }
+.action-btn {
+    text-decoration: none; cursor: pointer; background: #f3f4f6; color: #374151;
+    padding: 10px; border-radius: 10px; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
+    border: none;
+}
 
-.rotating { animation: rotate 1s linear; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* PDF VIEWER MODAL */
+#pdf-modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+    z-index: 9999; flex-direction: column; padding-top: var(--safe-top);
+}
 
+.modal-header {
+    height: 54px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; color: white; background: #1a1a1a;
+}
+
+.close-btn { font-size: 20px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+
+#pdf-frame { flex: 1; border: none; width: 100%; background: #fff; }
+
+/* BOTTOM NAV */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; background: white;
     display: flex; justify-content: space-around;
     padding: 10px 0 calc(10px + var(--safe-bottom));
     border-top: 1px solid #eee; z-index: 2000;
 }
-
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
+.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
 .nav-active { color: var(--g4s-red); }
 
 @media (min-width: 768px) {
@@ -122,59 +136,97 @@ body {
 
 <body>
 
-<div class="header-section"></div>
+<div id="pdf-modal">
+    <div class="modal-header">
+        <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px;">DOCUMENT VIEWER</span>
+        <div class="close-btn" onclick="closeViewer()"><i class="fa-solid fa-times"></i></div>
+    </div>
+    <iframe id="pdf-frame" src=""></iframe>
+</div>
 
-<div class="card-container">
-    <div class="visa-card">
-        <div style="flex:1; display:flex; padding: 20px; position: relative;">
-            <div style="flex: 0.42;"></div>
-            <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
-                <div style="margin-bottom: 12px;">
-                    <div style="font-family: 'Lobster', cursive; font-size: 20px; color: #fff; letter-spacing: 0.5px; border-bottom: 2px solid var(--g4s-red); display: inline-block; padding-bottom: 2px;">Welcome to G4S</div>
-                    <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
-                </div>
-                <div>
-                    <div style="font-family: 'Lobster', cursive; font-size: 14px; color: #ffeb3b; letter-spacing: 0.5px;">Secure Access</div>
-                    <div style="font-size: 7px; font-weight: 600; opacity: 0.9; line-height: 1.4; margin-top: 2px;">Professional internal resource hub.</div>
+<div class="header-section">
+    <div class="top-bar-content"><span class="header-title">Academic Identity</span></div>
+    <div class="card-container">
+        <div class="visa-card">
+            <div style="flex:1; display:flex; padding: 20px; position: relative;">
+                <div style="flex: 0.5;"></div>
+                <div style="flex: 0.5; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 10px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">BA & MA in English | Govt. Titumir College, Dhaka.</div>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">BSc & MSc in Mathematics | Rajshahi College.</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Born 12 Nov 2025. The heart of the family.</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; font-weight: 800;">
-            <span style="font-family: 'Lobster', cursive; font-size: 11px; text-transform: none; letter-spacing: 0.5px;">
-                <i class="fa-solid fa-code"></i> 
-                <a href="https://g4scumilla.github.io/Projects/mydashboard/index" style="color: inherit; text-decoration: none;">Developed By: Abdullahil Kuafi</a>
-            </span>
-            <span id="live-clock" style="background: rgba(255,255,255,0.15); padding: 3px 12px; border-radius: 5px; font-family: 'Lobster', cursive; font-size: 10px; font-weight: bold; letter-spacing: 0.8px;">--:--:-- --</span>
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fa-solid fa-graduation-cap"></i> HIGHER EDUCATION HUB</span>
+                <span id="live-clock" style="font-family: monospace; font-weight: bold;">--:--:--</span>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="service-grid">
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Mail</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-    <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
-    <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+<div class="content-area">
+    <div class="intro-box">
+        <h2>Academic Summary</h2>
+        <p>A scholar of English Literature and Linguistics with a journey from Palsha Alim Madrasha to Govt. Titumir College, Dhaka. Consistently maintaining academic excellence across all levels.</p>
+    </div>
+
+    <div class="section-label">Certificates & Transcripts</div>
+
+    <div class="edu-card">
+        <h3 class="edu-title">Master of Arts in English</h3>
+        <span class="edu-sub">Govt. Titumir College, Dhaka (2022)</span>
+        <div class="action-row">
+            <button class="action-btn" onclick="openViewer('#')">
+                <i class="fa-solid fa-file-pdf"></i> View Certificate
+            </button>
+        </div>
+    </div>
+
+    <div class="edu-card">
+        <h3 class="edu-title">Bachelor of Arts (Honours)</h3>
+        <span class="edu-sub">Govt. Titumir College, Dhaka (2020)</span>
+        <div class="action-row">
+            <button class="action-btn" onclick="openViewer('https://drive.google.com/file/d/16NeLNkFdTvuuiKQW2vBbFjTikxI8YU5A/preview')">
+                <i class="fa-solid fa-file-pdf"></i> View Certificate
+            </button>
+        </div>
+    </div>
+
+    <div class="edu-card">
+        <h3 class="edu-title">Higher Secondary Certificate</h3>
+        <span class="edu-sub">Balugram Adarsha College (2016)</span>
+        <div class="grade-tag">GPA 5.00 / A+</div>
+        <div class="action-row">
+            <button class="action-btn" onclick="openViewer('#')">
+                <i class="fa-solid fa-eye"></i> View Transcript
+            </button>
+        </div>
+    </div>
+
+    <div class="edu-card">
+        <h3 class="edu-title">Dakhil (Secondary)</h3>
+        <span class="edu-sub">Palsha Alim Madrasha (2014)</span>
+        <div class="grade-tag">GPA 5.00 / A+</div>
+        <div class="action-row">
+            <button class="action-btn" onclick="openViewer('#')">
+                <i class="fa-solid fa-eye"></i> View Marksheet
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="bottom-nav">
-    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-graduation-cap"></i><span>Edu</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
@@ -182,22 +234,26 @@ body {
 
 <script>
     function updateClock() {
-        const now = new Date();
         const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
-            clockEl.innerText = now.toLocaleTimeString([], { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            });
-        }
+        if(clockEl) clockEl.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    function syncData(el) {
-        const icon = document.getElementById('sync-icon');
-        icon.classList.remove('rotating');
-        void icon.offsetWidth; 
-        icon.classList.add('rotating');
+    function openViewer(url) {
+        if(url === '#' || url === '') {
+            alert("This document link has not been added yet.");
+            return;
+        }
+        document.getElementById('pdf-frame').src = url;
+        document.getElementById('pdf-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeViewer() {
+        document.getElementById('pdf-modal').style.display = 'none';
+        document.getElementById('pdf-frame').src = "";
+        document.body.style.overflow = 'auto'; 
     }
 </script>
 
