@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Education - Abdullahil Kuafi</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f44336">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root { 
+    --g4s-red: #d32f2f; 
+    --gold: #ffd700;
+    --safe-top: env(safe-area-inset-top, 20px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: var(--safe-top); 
+    padding-bottom: calc(60px + var(--safe-bottom));
+    background: #f8f9fa;
+}
+
+/* HEADER STYLES (UNCHANGED) */
+.header-section {
+    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
+    text-align: center;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+.top-bar-content { padding: 15px 15px 10px; color: white; }
+.header-title { font-size: 19px; font-weight: 800; display: block; letter-spacing: 1px; text-transform: uppercase; }
+.card-container { padding: 0 15px 20px; margin-top: 5px; }
+.visa-card {
+    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
+    color: white; display: flex; flex-direction: column;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    position: relative; overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+}
+.visa-card::before {
+    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
+    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
+    background-size: cover; opacity: 0.75; z-index: 1;
+    mask-image: linear-gradient(to right, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
+}
+.visa-card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(211, 47, 47, 0.4));
+    z-index: 2;
+}
+.visa-card > * { position: relative; z-index: 3; }
+
+/* EDUCATION CONTENT AREA */
+.edu-container {
+    padding: 20px 15px;
+    background: #f8f9fa;
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edu-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--g4s-red);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.edu-info h3 { margin: 0; font-size: 14px; color: #222; }
+.edu-info p { margin: 4px 0; font-size: 11px; color: #666; font-weight: 500; }
+.edu-info .college { color: var(--g4s-red); font-weight: 700; font-size: 10px; }
+
+.grade-badge {
+    background: #fff9c4;
+    color: #f57f17;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 900;
+    border: 1px solid #ffeb3b;
+}
+
+.btn-doc {
+    background: #f1f3f4;
+    color: #444;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.bottom-nav {
+    position: fixed; bottom: 0; width: 100%; background: white;
+    display: flex; justify-content: space-around;
+    padding: 10px 0 calc(10px + var(--safe-bottom));
+    border-top: 1px solid #eee; z-index: 2000;
+}
+.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
+
+@media (min-width: 768px) {
+    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
+    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header-section">
+    <div class="top-bar-content">
+        <span class="header-title">Education Profile</span>
+    </div>
+
+    <div class="card-container">
+        <div class="visa-card">
+            <div style="flex:1; display:flex; padding: 20px; position: relative;">
+                <div style="flex: 0.5;"></div>
+                <div style="flex: 0.5; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 10px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Arts in English from Government Titumir College, Dhaka.</div>
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Bachelor & Master of Science in Mathematics from Rajshahi College, Rajshahi.</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
+                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Born on 12 November 2025. The beloved heart of the Kuafi family.</div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fa-solid fa-graduation-cap"></i> ACADEMIC RECORDS</span>
+                <span id="live-clock" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">--:--:-- --</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="edu-container">
+    <div class="section-label">
+        <i class="fa-solid fa-clock-rotate-left"></i> Educational Journey
+    </div>
+
+    <div class="edu-card">
+        <div class="edu-info">
+            <h3>Master of Arts in English</h3>
+            <span class="college">Govt. Titumir College, Dhaka</span>
+            <p>Affiliated with University of Dhaka</p>
+            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="btn-doc"><i class="fa-solid fa-file-pdf"></i> View MA Certificate</a>
+        </div>
+    </div>
+
+    <div class="edu-card">
+        <div class="edu-info">
+            <h3>Bachelor of Arts in English</h3>
+            <span class="college">Govt. Titumir College, Dhaka</span>
+            <p>Affiliated with University of Dhaka</p>
+            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="btn-doc"><i class="fa-solid fa-file-pdf"></i> View BA Certificate</a>
+        </div>
+    </div>
+
+    <div class="edu-card">
+        <div class="edu-info">
+            <h3>Higher Secondary Certificate (HSC)</h3>
+            <span class="college">Passing Year: 2016</span>
+            <p>Science/Arts Stream</p>
+            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="btn-doc"><i class="fa-solid fa-file-pdf"></i> HSC Marksheet</a>
+        </div>
+        <div class="grade-badge">GPA 5.00 / A+</div>
+    </div>
+
+    <div class="edu-card">
+        <div class="edu-info">
+            <h3>Secondary School Certificate (SSC)</h3>
+            <span class="college">Passing Year: 2014</span>
+            <p>Academic Excellence</p>
+            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="btn-doc"><i class="fa-solid fa-file-pdf"></i> SSC Marksheet</a>
+        </div>
+        <div class="grade-badge">GPA 5.00 / A+</div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <a href="/index" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const clockEl = document.getElementById('live-clock');
+        if(clockEl) {
+            clockEl.innerText = now.toLocaleTimeString([], { 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+            });
+        }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>
  
