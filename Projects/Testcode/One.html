@@ -31,12 +31,11 @@ body {
 }
 .header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
 
-/* Dashboard Content */
-#dashboard {
-    padding-bottom: 80px;
-}
+/* Dashboard */
+#dashboard { padding-bottom: 80px; }
 
 .card-container { padding: 15px; }
+
 .visa-card {
     border-radius: 18px; aspect-ratio: 1.58 / 1; width: 100%;
     color: white; display: flex; flex-direction: column;
@@ -76,14 +75,26 @@ body {
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
 .nav-active { color: var(--g4s-red); }
 
+/* Iframe Viewer */
+#iframe-view {
+    display: none;
+    height: 100vh;
+}
+iframe {
+    width: 100%;
+    height: calc(100vh - 60px);
+    border: none;
+}
+
 @media (min-width: 768px) {
-    body, .bottom-nav, .app-header { width: 100%; max-width: 450px; margin: 0 auto; }
+    body, .bottom-nav, .app-header { max-width: 450px; margin: auto; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- DASHBOARD -->
 <div id="dashboard">
     <div class="app-header">
         <div class="header-title">Family Dashboard</div>
@@ -94,57 +105,77 @@ body {
             <div style="flex:1; display:flex; padding: 20px;">
                 <div style="flex: 0.4;"></div>
                 <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
-                    <div style="margin-bottom: 8px;">
-                        <p style="font-size: 10px; font-weight: bold; color: #fff;">ABDULLAHIL KUAFI</p>
-                        <p style="font-size: 7px; opacity: 0.8;">B.A & M.A (English)</p>
-                    </div>
-                    <div style="margin-bottom: 8px;">
-                        <p style="font-size: 10px; font-weight: bold; color: #ffeb3b;">ZAMILA KHATUN</p>
-                        <p style="font-size: 7px; opacity: 0.8;">B.Sc & M.Sc (Math)</p>
-                    </div>
-                    <div>
-                        <p style="font-size: 10px; font-weight: bold; color: #ffeb3b;">HABIBULLAH ZAYAAN</p>
-                        <p style="font-size: 7px; opacity: 0.8;">Born 12 Nov 2025</p>
-                    </div>
+                    <p style="font-size: 10px; font-weight: bold;">ABDULLAHIL KUAFI</p>
+                    <p style="font-size: 10px; font-weight: bold; color: yellow;">JAMILAH KHATUN</p>
+                    <p style="font-size: 10px; font-weight: bold; color: yellow;">HABIBULLAH ZAYAAN</p>
                 </div>
             </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.5); font-size: 8px; display: flex; justify-content: space-between;">
-                <span><i class="fa-solid fa-shield-heart"></i> KUAFI PRIVATE HUB</span>
-                <span id="live-clock">00:00:00</span>
+            <div style="padding:10px; background: rgba(0,0,0,0.5); display:flex; justify-content:space-between;">
+                <span>KUAFI HUB</span>
+                <span id="live-clock"></span>
             </div>
         </div>
     </div>
 
+    <!-- SERVICES -->
     <div class="service-grid">
-        <a href="https://www.bbc.com/bengali" target="_blank" class="service-item">
-            <div class="icon-circle" style="color:#bb1919"><i class="fa-solid fa-newspaper"></i></div>BBC
+
+        <a href="#" onclick="openFrame('https://news.google.com/?hl=bn&gl=BD&ceid=BD:bn')" class="service-item">
+            <div class="icon-circle"><i class="fa-solid fa-globe"></i></div>Google News
         </a>
-        <a href="https://www.prothomalo.com/" target="_blank" class="service-item">
-            <div class="icon-circle" style="color:#000"><i class="fa-solid fa-p"></i></div>Prothom Alo
+
+        <a href="#" onclick="openFrame('https://www.dw.com/bn/')" class="service-item">
+            <div class="icon-circle"><i class="fa-solid fa-earth-asia"></i></div>DW
         </a>
-        <a href="https://bdnews24.com/" target="_blank" class="service-item">
-            <div class="icon-circle" style="color:#d32f2f"><i class="fa-solid fa-2"></i></div>Bdnews24
+
+        <a href="#" onclick="openFrame('https://www.bing.com/news')" class="service-item">
+            <div class="icon-circle"><i class="fa-solid fa-newspaper"></i></div>Bing
         </a>
-        <a href="https://www.somoynews.tv/" target="_blank" class="service-item">
-            <div class="icon-circle" style="color:#ff5722"><i class="fa-solid fa-tv"></i></div>Somoy TV
+
+        <a href="#" onclick="openFrame('https://m.dw.com/en/top-stories/s-9097')" class="service-item">
+            <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Top News
         </a>
+
     </div>
 </div>
 
+<!-- IFRAME VIEW -->
+<div id="iframe-view">
+    <div class="app-header">
+        <span onclick="closeFrame()" style="float:left; cursor:pointer;">← Back</span>
+        <div class="header-title">News Viewer</div>
+    </div>
+    <iframe id="news-frame"></iframe>
+</div>
+
+<!-- NAV -->
 <div class="bottom-nav">
-    <a href="index.html" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-    <div class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 30px; color: var(--g4s-red); margin-top: -5px;"></i></div>
+    <div class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 30px; color: var(--g4s-red);"></i></div>
     <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
     <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
 </div>
 
 <script>
-    function updateClock() {
-        document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+// Clock
+setInterval(() => {
+    document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+}, 1000);
+
+// Open iframe
+function openFrame(url) {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('iframe-view').style.display = 'block';
+    document.getElementById('news-frame').src = url;
+}
+
+// Close iframe
+function closeFrame() {
+    document.getElementById('iframe-view').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('news-frame').src = '';
+}
 </script>
 
 </body>
