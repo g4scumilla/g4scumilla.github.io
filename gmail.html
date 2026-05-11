@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gmail Inbox Mockup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f1f3f4;
+    }
+    .header {
+      background: #fff;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header h1 {
+      font-size: 20px;
+      color: #d93025;
+      margin: 0;
+    }
+    .sidebar {
+      width: 220px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 15px;
+      height: 100vh;
+      float: left;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      padding: 8px 0;
+      color: #202124;
+      cursor: pointer;
+    }
+    .inbox {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    .mail {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+    .mail-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .mail-header .from {
+      font-weight: bold;
+      color: #202124;
+    }
+    .mail-header .time {
+      color: #5f6368;
+      font-size: 12px;
+    }
+    .mail-subject {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #202124;
+    }
+    .mail-body {
+      font-size: 14px;
+      color: #3c4043;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Gmail</h1>
+    <div>User: abdullahil@gmail.com</div>
+  </div>
+
+  <div class="sidebar">
+    <ul>
+      <li><strong>Inbox</strong></li>
+      <li>Starred</li>
+      <li>Sent</li>
+      <li>Drafts</li>
+      <li>Spam</li>
+    </ul>
+  </div>
+
+  <div class="inbox">
+    <div class="mail">
+      <div class="mail-header">
+        <div class="from">cc@gmail.com</div>
+        <div class="time">May 11, 2026</div>
+      </div>
+      <div class="mail-subject">Test Email Subject</div>
+      <div class="mail-body">
+        Hello Abdullahil,<br><br>
+        This is a sample email content sent from <strong>cc@gmail.com</strong>.<br><br>
+        Regards,<br>
+        CC
+      </div>
+    </div>
+  </div>
+</body>
+</html>
