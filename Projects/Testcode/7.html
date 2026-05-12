@@ -131,7 +131,7 @@
         <div id="recent-logs" class="space-y-3"></div>
     </div>
 
-    <!-- STAFF DIRECTORY (Renamed to Individual Transactions) -->
+    <!-- INDIVIDUAL TRANSACTIONS -->
     <div id="users-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
             <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Individual Transactions
@@ -187,11 +187,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="text" id="r-start" placeholder="Select Date" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="text" id="r-end" placeholder="Select Date" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
@@ -217,7 +217,7 @@
                             <th class="border p-2">Date</th>
                             <th class="border p-2">Name</th>
                             <th class="border p-2">Transaction Category</th>
-                            <th class="border p-2 text-center">Imprest/Advance/Vouchers/Return/Others</th>
+                            <th class="border p-2 text-center">Reference</th>
                             <th class="border p-2 text-right">Amount</th>
                             <th class="border p-2 text-right">Balance</th>
                         </tr>
@@ -274,7 +274,7 @@
         </div>
     </div>
 
-    <!-- Other Modals same -->
+    <!-- STAFF MANAGEMENT MODAL -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2">
@@ -294,6 +294,7 @@
         </div>
     </div>
 
+    <!-- TRANSACTION HISTORY MODAL -->
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2">
