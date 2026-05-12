@@ -50,7 +50,7 @@
 
     <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
             <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <div class="relative mb-4">
@@ -406,14 +406,16 @@
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
+        // FIXED DELETE LOGIC: WORKS EVEN IF STAFF IS ALREADY DELETED
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
                 const staff = staffData[sid];
-                if(!staff) return alert("Staff not found");
-                const currentBal = Number(staff.balance || 0);
-                const revAmt = Number(amt);
-                const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
-                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                if(staff) {
+                    const currentBal = Number(staff.balance || 0);
+                    const revAmt = Number(amt);
+                    const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
+                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                }
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
             }
         };
