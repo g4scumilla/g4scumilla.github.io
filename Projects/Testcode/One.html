@@ -1,186 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Kuafi Family App</title>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    // We changed this line below to use "database" instead of "firestore"
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        // ADD THIS LINE BELOW (Get it from your settings)
+        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com", 
+        projectId: "YOUR_PROJECT",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_ID",
+        appId: "YOUR_APP_ID"
+    };
 
-<style>
-:root { 
-    --g4s-red: #d32f2f; 
-    --safe-top: env(safe-area-inset-top, 20px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app); // This is now the Realtime Database
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+    // (The rest of your login logic stays exactly the same!)
+    window.handleLogin = () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
+    };
 
-body {
-    font-family: -apple-system, system-ui, sans-serif;
-    background: #f8f9fa;
-    height: 100vh;
-}
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            showPage('dashboard-page');
+            document.getElementById('main-nav').classList.remove('hidden');
+        } else {
+            showPage('login-page');
+            document.getElementById('main-nav').classList.add('hidden');
+        }
+    });
 
-/* Header */
-.app-header {
-    background: var(--g4s-red);
-    padding: calc(var(--safe-top) + 12px) 15px 12px;
-    color: white; text-align: center;
-    position: sticky; top: 0; z-index: 10;
-}
-.header-title { font-size: 18px; font-weight: 800; text-transform: uppercase; }
-
-/* Dashboard */
-#dashboard { padding-bottom: 80px; }
-
-.card-container { padding: 15px; }
-
-.visa-card {
-    border-radius: 18px; aspect-ratio: 1.58 / 1; width: 100%;
-    color: white; display: flex; flex-direction: column;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    position: relative; overflow: hidden;
-    background: #222 url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80') center/cover;
-}
-.visa-card::after {
-    content: ""; position: absolute; inset: 0; 
-    background: linear-gradient(135deg, rgba(0,0,0,0.88), rgba(211, 47, 47, 0.45)); z-index: 1;
-}
-.visa-card > * { position: relative; z-index: 2; }
-
-/* Grid */
-.service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 20px 0; padding: 25px 10px; background: #fff;
-    border-radius: 30px 30px 0 0;
-}
-.service-item {
-    text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 700;
-}
-.icon-circle {
-    width: 48px; height: 48px; background: #fff; border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 5px 12px rgba(0,0,0,0.12); margin-bottom: 6px;
-    font-size: 20px; color: var(--g4s-red);
-}
-
-/* Bottom Nav */
-.bottom-nav {
-    position: fixed; bottom: 0; width: 100%; background: white;
-    display: flex; justify-content: space-around;
-    padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 5000;
-}
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
-.nav-active { color: var(--g4s-red); }
-
-/* Iframe Viewer */
-#iframe-view {
-    display: none;
-    height: 100vh;
-}
-iframe {
-    width: 100%;
-    height: calc(100vh - 60px);
-    border: none;
-}
-
-@media (min-width: 768px) {
-    body, .bottom-nav, .app-header { max-width: 450px; margin: auto; }
-}
-</style>
-</head>
-
-<body>
-
-<!-- DASHBOARD -->
-<div id="dashboard">
-    <div class="app-header">
-        <div class="header-title">Family Dashboard</div>
-    </div>
-
-    <div class="card-container">
-        <div class="visa-card">
-            <div style="flex:1; display:flex; padding: 20px;">
-                <div style="flex: 0.4;"></div>
-                <div style="flex: 0.6; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
-                    <p style="font-size: 10px; font-weight: bold;">ABDULLAHIL KUAFI</p>
-                    <p style="font-size: 10px; font-weight: bold; color: yellow;">JAMILAH KHATUN</p>
-                    <p style="font-size: 10px; font-weight: bold; color: yellow;">HABIBULLAH ZAYAAN</p>
-                </div>
-            </div>
-            <div style="padding:10px; background: rgba(0,0,0,0.5); display:flex; justify-content:space-between;">
-                <span>KUAFI HUB</span>
-                <span id="live-clock"></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- SERVICES -->
-    <div class="service-grid">
-
-        <!-- Google News (OPEN DIRECTLY) -->
-        <a href="https://news.google.com/?hl=bn&gl=BD&ceid=BD:bn" class="service-item">
-            <div class="icon-circle"><i class="fa-solid fa-globe"></i></div>Google
-        </a>
-
-        <!-- DW (iframe works) -->
-        <a href="#" onclick="openFrame('https://www.dw.com/bn/')" class="service-item">
-            <div class="icon-circle"><i class="fa-solid fa-earth-asia"></i></div>DW
-        </a>
-
-        <!-- Bing News (iframe works) -->
-        <a href="#" onclick="openFrame('https://www.bing.com/news')" class="service-item">
-            <div class="icon-circle"><i class="fa-solid fa-newspaper"></i></div>Bing
-        </a>
-
-        <!-- Another iframe-friendly -->
-        <a href="#" onclick="openFrame('https://m.dw.com/en/top-stories/s-9097')" class="service-item">
-            <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Top News
-        </a>
-
-    </div>
-</div>
-
-<!-- IFRAME VIEW -->
-<div id="iframe-view">
-    <div class="app-header">
-        <span onclick="closeFrame()" style="float:left; cursor:pointer;">← Back</span>
-        <div class="header-title">News Viewer</div>
-    </div>
-    <iframe id="news-frame"></iframe>
-</div>
-
-<!-- NAV -->
-<div class="bottom-nav">
-    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-    <div class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 30px; color: var(--g4s-red);"></i></div>
-    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
-</div>
-
-<script>
-// Clock
-setInterval(() => {
-    document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
-}, 1000);
-
-// Open iframe
-function openFrame(url) {
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('iframe-view').style.display = 'block';
-    document.getElementById('news-frame').src = url;
-}
-
-// Close iframe
-function closeFrame() {
-    document.getElementById('iframe-view').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('news-frame').src = '';
-}
+    window.showPage = (id) => {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    };
 </script>
-
-</body>
-</html>
