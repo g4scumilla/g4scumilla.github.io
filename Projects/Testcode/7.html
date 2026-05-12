@@ -187,11 +187,19 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-start" placeholder="Select Date" 
+                        onfocus="this.type='date'; this.showPicker()" 
+                        onclick="this.showPicker()"
+                        onblur="if(!this.value)this.type='text'" 
+                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-end" placeholder="Select Date" 
+                        onfocus="this.type='date'; this.showPicker()" 
+                        onclick="this.showPicker()"
+                        onblur="if(!this.value)this.type='text'" 
+                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
