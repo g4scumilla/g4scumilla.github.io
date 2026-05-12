@@ -16,6 +16,7 @@
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
         #modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+        .pdf-view { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -50,41 +51,69 @@
             <button onclick="openModal()" class="w-full bg-white/20 py-3 rounded-2xl text-xs font-bold">+ New Entry</button>
         </div>
 
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Current Month Summary</p>
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-green-50">
-                <p class="text-[10px] text-green-500 font-bold uppercase">Total Income</p>
+                <p class="text-[10px] text-green-500 font-bold uppercase">Total Received</p>
                 <h3 id="inc-display" class="font-bold text-slate-700">$0.00</h3>
             </div>
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-red-50">
-                <p class="text-[10px] text-red-500 font-bold uppercase">Total Expense</p>
+                <p class="text-[10px] text-red-500 font-bold uppercase">Total Distributed</p>
                 <h3 id="exp-display" class="font-bold text-slate-700">$0.00</h3>
             </div>
         </div>
 
-        <div class="flex items-center gap-2 mb-4">
-            <input type="date" id="f-start" onchange="refreshData()" class="flex-1 text-[10px] bg-white p-2 rounded-xl shadow-sm outline-none">
-            <input type="date" id="f-end" onchange="refreshData()" class="flex-1 text-[10px] bg-white p-2 rounded-xl shadow-sm outline-none">
-            <button onclick="clearF()" class="bg-white p-2 rounded-xl shadow-sm text-blue-600"><i class="fas fa-sync-alt"></i></button>
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+            <button onclick="showPage('reports-page')" class="text-xs text-blue-600 font-bold">View All</button>
         </div>
-
-        <div id="log-container" class="space-y-3 pb-24"></div>
+        <div id="recent-logs" class="space-y-3 pb-24"></div>
     </div>
 
     <!-- STAFF -->
     <div id="users-page" class="page p-5">
         <h2 class="text-xl font-bold mb-6">Staff Directory</h2>
         <div class="bg-white p-5 rounded-3xl shadow-sm mb-6">
-            <input id="u-name" type="text" placeholder="Name" class="w-full p-3 mb-2 bg-slate-50 rounded-xl outline-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 mb-4 bg-slate-50 rounded-xl outline-none">
+            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 mb-2 bg-slate-50 rounded-xl outline-none">
+            <input id="u-des" type="text" placeholder="Designation (e.g. Sales, Admin)" class="w-full p-3 mb-4 bg-slate-50 rounded-xl outline-none">
+            <input type="hidden" id="u-edit-id">
             <button id="u-btn" onclick="saveUser()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Add Staff</button>
         </div>
         <div id="staff-list" class="space-y-2 pb-24"></div>
+    </div>
+
+    <!-- REPORTS (FILTER) -->
+    <div id="reports-page" class="page p-5">
+        <h2 class="text-xl font-bold mb-6">Advanced Ledger Reports</h2>
+        <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 space-y-3">
+            <div class="grid grid-cols-2 gap-2">
+                <input type="date" id="r-start" class="text-xs bg-slate-50 p-3 rounded-xl outline-none">
+                <input type="date" id="r-end" class="text-xs bg-slate-50 p-3 rounded-xl outline-none">
+            </div>
+            <select id="r-staff" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-xs">
+                <option value="">All Staff Members</option>
+            </select>
+            <button onclick="generateReport()" class="w-full bg-slate-800 text-white p-3 rounded-xl font-bold text-xs">Generate Report</button>
+        </div>
+
+        <div id="report-view" class="pdf-view hidden">
+            <div class="flex justify-between border-b pb-2 mb-4">
+                <h4 class="font-bold text-xs uppercase">Ledger Export</h4>
+                <span id="report-date" class="text-[9px]"></span>
+            </div>
+            <div id="report-content" class="text-[10px] space-y-2"></div>
+            <div class="mt-4 pt-4 border-t space-y-1">
+                <div class="flex justify-between font-bold text-green-600"><span>Total Received:</span><span id="rep-inc"></span></div>
+                <div class="flex justify-between font-bold text-red-600"><span>Total Distributed:</span><span id="rep-exp"></span></div>
+            </div>
+        </div>
     </div>
 
     <!-- NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')"><i class="fas fa-home text-xl text-blue-600"></i></button>
         <button onclick="showPage('users-page')"><i class="fas fa-users text-xl text-slate-300"></i></button>
+        <button onclick="showPage('reports-page')"><i class="fas fa-file-invoice-dollar text-xl text-slate-300"></i></button>
         <button onclick="handleLogout()"><i class="fas fa-sign-out-alt text-xl text-slate-300"></i></button>
     </nav>
 
@@ -101,8 +130,8 @@
             </div>
             <textarea id="m-note" placeholder="Narration..." class="w-full p-4 mb-6 bg-slate-100 rounded-xl outline-none"></textarea>
             <div class="flex gap-2 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400">Income (+)</button>
-                <button onclick="setT('expense')" id="te" class="flex-1 p-3 rounded-xl font-bold bg-red-500 text-white">Expense (-)</button>
+                <button onclick="setT('income')" id="ti" class="flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400">Received (+)</button>
+                <button onclick="setT('expense')" id="te" class="flex-1 p-3 rounded-xl font-bold bg-red-500 text-white">Distributed (-)</button>
             </div>
             <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg">Confirm & Post</button>
             <button onclick="closeModal()" class="w-full mt-4 text-slate-400 text-xs">Close</button>
@@ -158,23 +187,57 @@
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            // Update icons color
+            document.querySelectorAll('nav button i').forEach(i => i.classList.replace('text-blue-600', 'text-slate-300'));
+            const activeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => btn.getAttribute('onclick').includes(id));
+            if(activeBtn) activeBtn.querySelector('i').classList.replace('text-slate-300', 'text-blue-600');
+        };
+
+        window.saveUser = () => {
+            const name = document.getElementById('u-name').value;
+            const des = document.getElementById('u-des').value;
+            const editId = document.getElementById('u-edit-id').value;
+            if(!name || !des) return;
+
+            const path = editId ? `users/${auth.currentUser.uid}/staff/${editId}` : `users/${auth.currentUser.uid}/staff`;
+            if(editId) {
+                update(ref(db, path), { name: name, desig: des });
+            } else {
+                push(ref(db, path), { name: name, desig: des, balance: 0 });
+            }
+            
+            document.getElementById('u-name').value = '';
+            document.getElementById('u-des').value = '';
+            document.getElementById('u-edit-id').value = '';
+            document.getElementById('u-btn').innerText = 'Add Staff';
+        };
+
+        window.editStaff = (id) => {
+            const s = staffData[id];
+            document.getElementById('u-name').value = s.name;
+            document.getElementById('u-des').value = s.desig;
+            document.getElementById('u-edit-id').value = id;
+            document.getElementById('u-btn').innerText = 'Update Staff';
+        };
+
+        window.deleteStaff = (id) => {
+            if(confirm("Delete this staff? This won't delete their past transactions but will remove them from the list.")) {
+                remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
+            }
         };
 
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
             const amtRaw = document.getElementById('m-amt').value;
             const date = document.getElementById('m-date').value;
-            
-            if(!sid || !amtRaw || !date) return alert("Select staff, amount, and date!");
+            if(!sid || !amtRaw || !date) return alert("Missing info");
 
-            const amt = parseFloat(amtRaw); // Force to Number
+            const amt = parseFloat(amtRaw);
             const staff = staffData[sid];
-            const currentStaffBalance = parseFloat(staff.balance || 0);
-            
-            // Calculate new individual staff balance
-            const newStaffBal = currentType === 'income' ? currentStaffBalance + amt : currentStaffBalance - amt;
+            const newStaffBal = currentType === 'income' ? (parseFloat(staff.balance || 0) + amt) : (parseFloat(staff.balance || 0) - amt);
 
             const txnData = {
+                staffId: sid,
                 staffName: staff.name,
                 staffDes: staff.desig,
                 amount: amt,
@@ -182,71 +245,109 @@
                 date: date,
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
-                balAfter: newStaffBal
+                balAfter: newStaffBal,
+                ts: Date.now()
             };
 
             push(ref(db, `users/${auth.currentUser.uid}/logs`), txnData);
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newStaffBal });
-            
             closeModal();
             document.getElementById('m-amt').value = '';
-            document.getElementById('m-note').value = '';
         };
 
         function startSync(uid) {
-            // Staff Sync
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let h = '', opts = '<option value="">Choose Staff</option>';
+                let h = '', opts = '<option value="">Choose Staff</option>', rOpts = '<option value="">All Staff Members</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    opts += `<option value="${id}">${u.name}</option>`;
-                    h += `<div class="bg-white p-4 rounded-2xl flex justify-between shadow-sm">
-                        <div><p class="font-bold text-sm">${u.name}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p></div>
-                        <p class="font-bold text-blue-600">$${parseFloat(u.balance || 0).toFixed(2)}</p>
+                    opts += `<option value="${id}">${u.name} (${u.desig})</option>`;
+                    rOpts += `<option value="${id}">${u.name}</option>`;
+                    h += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                        <div class="flex-1">
+                            <p class="font-bold text-sm">${u.name}</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p>
+                        </div>
+                        <div class="text-right flex items-center gap-4">
+                            <p class="font-bold text-blue-600">$${parseFloat(u.balance || 0).toFixed(2)}</p>
+                            <button onclick="editStaff('${id}')" class="text-slate-300 text-xs"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteStaff('${id}')" class="text-red-200 text-xs"><i class="fas fa-trash"></i></button>
+                        </div>
                     </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = h;
                 document.getElementById('m-staff').innerHTML = opts;
+                document.getElementById('r-staff').innerHTML = rOpts;
             });
 
-            // Logs Sync
             onValue(ref(db, `users/${uid}/logs`), s => {
                 const data = s.val() || {};
-                logsList = Object.keys(data).reverse().map(k => data[k]);
-                refreshData();
+                logsList = Object.keys(data).map(k => data[k]).sort((a,b) => b.ts - a.ts);
+                renderHome();
             });
         }
 
-        window.refreshData = () => {
-            const start = document.getElementById('f-start').value;
-            const end = document.getElementById('f-end').value;
-            let h = '', totalInc = 0, totalExp = 0;
+        function renderHome() {
+            const now = new Date();
+            const curMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            
+            let totalInc = 0, totalExp = 0, overallInc = 0, overallExp = 0;
+            let recentH = '';
 
-            logsList.forEach(l => {
-                const lAmt = parseFloat(l.amount || 0); // Crucial for math
-                if(start && l.date < start) return;
-                if(end && l.date > end) return;
+            logsList.forEach((l, idx) => {
+                const amt = parseFloat(l.amount);
+                // Central Balance math (all time)
+                if(l.type === 'income') overallInc += amt; else overallExp += amt;
 
-                if(l.type === 'income') totalInc += lAmt;
-                else totalExp += lAmt;
+                // Month specific
+                if(l.date.startsWith(curMonth)) {
+                    if(l.type === 'income') totalInc += amt; else totalExp += amt;
+                }
 
-                h += `<div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
-                    <div class="flex justify-between mb-1">
-                        <span class="font-bold text-slate-800 text-sm">${l.staffName}</span>
-                        <span class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${lAmt.toFixed(2)}</span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 italic">${l.note || l.cat}</p>
-                    <div class="flex justify-between text-[9px] font-bold text-slate-400 mt-2 pt-2 border-t border-slate-50">
-                        <span>${l.date}</span><span>STF BAL: $${parseFloat(l.balAfter || 0).toFixed(2)}</span>
-                    </div>
+                // Show only 3 recent
+                if(idx < 3) {
+                    recentH += `<div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
+                        <div class="flex justify-between">
+                            <span class="font-bold text-slate-800 text-sm">${l.staffName}</span>
+                            <span class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${amt.toFixed(2)}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 italic mt-1">${l.note || l.cat}</p>
+                    </div>`;
+                }
+            });
+
+            document.getElementById('cb-display').innerText = `$${(overallInc - overallExp).toFixed(2)}`;
+            document.getElementById('inc-display').innerText = `$${totalInc.toFixed(2)}`;
+            document.getElementById('exp-display').innerText = `$${totalExp.toFixed(2)}`;
+            document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No transactions</p>';
+        }
+
+        window.generateReport = () => {
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
+            const staffId = document.getElementById('r-staff').value;
+            
+            let h = '', ti = 0, te = 0;
+            logsList.filter(l => {
+                let match = true;
+                if(start && l.date < start) match = false;
+                if(end && l.date > end) match = false;
+                if(staffId && l.staffId !== staffId) match = false;
+                return match;
+            }).forEach(l => {
+                const amt = parseFloat(l.amount);
+                if(l.type === 'income') ti += amt; else te += amt;
+                h += `<div class="flex justify-between border-b border-slate-50 py-1">
+                    <span>${l.date} - ${l.staffName} (${l.cat})</span>
+                    <span class="${l.type==='income'?'text-green-600':'text-red-600'}">${l.type==='income'?'+':'-'}${amt.toFixed(2)}</span>
                 </div>`;
             });
 
-            document.getElementById('log-container').innerHTML = h || '<p class="text-center text-slate-300 text-xs py-10">No records found</p>';
-            document.getElementById('inc-display').innerText = `$${totalInc.toFixed(2)}`;
-            document.getElementById('exp-display').innerText = `$${totalExp.toFixed(2)}`;
-            document.getElementById('cb-display').innerText = `$${(totalInc - totalExp).toFixed(2)}`;
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('report-content').innerHTML = h || 'No records match filters';
+            document.getElementById('rep-inc').innerText = `$${ti.toFixed(2)}`;
+            document.getElementById('rep-exp').innerText = `$${te.toFixed(2)}`;
+            document.getElementById('report-date').innerText = new Date().toLocaleString();
         };
 
         window.openModal = () => { document.getElementById('modal').classList.add('active'); document.getElementById('m-date').valueAsDate = new Date(); };
@@ -256,7 +357,6 @@
             document.getElementById('ti').className = t === 'income' ? 'flex-1 p-3 rounded-xl font-bold bg-green-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
             document.getElementById('te').className = t === 'expense' ? 'flex-1 p-3 rounded-xl font-bold bg-red-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
         };
-        window.clearF = () => { document.getElementById('f-start').value = ''; document.getElementById('f-end').value = ''; refreshData(); };
     </script>
 </body>
 </html>
