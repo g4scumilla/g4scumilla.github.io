@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Google Workspace</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .menu-container {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 350px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .app-item {
+            text-decoration: none;
+            color: #3c4043;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .app-item:hover {
+            background-color: #f1f3f4;
+        }
+
+        .app-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .app-item span {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Specific Brand Colors */
+        .fa-firebase { color: #FFCA28; }
+        .fa-hard-drive { color: #34A853; } /* Drive */
+        .fa-file-lines { color: #4285F4; } /* Docs */
+        .fa-table { color: #0F9D58; }      /* Sheets */
+        .fa-code { color: #4285F4; }       /* Apps Script */
+        .fa-envelope { color: #EA4335; }   /* Gmail */
+        .fa-calendar-days { color: #4285F4; }
+    </style>
+</head>
+<body>
+
+<div class="menu-container">
+    <!-- Firebase -->
+    <a href="https://console.firebase.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-fire-flame-curved fa-firebase"></i>
+        <span>Firebase</span>
+    </a>
+
+    <!-- Drive -->
+    <a href="https://drive.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-hard-drive"></i>
+        <span>Drive</span>
+    </a>
+
+    <!-- Sheets -->
+    <a href="https://sheets.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-table"></i>
+        <span>Sheets</span>
+    </a>
+
+    <!-- Docs -->
+    <a href="https://docs.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-file-lines"></i>
+        <span>Docs</span>
+    </a>
+
+    <!-- Apps Script -->
+    <a href="https://script.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-code"></i>
+        <span>Apps Script</span>
+    </a>
+
+    <!-- Gmail -->
+    <a href="https://mail.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-envelope"></i>
+        <span>Gmail</span>
+    </a>
+
+    <!-- Calendar -->
+    <a href="https://calendar.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Calendar</span>
+    </a>
+
+    <!-- Analytics -->
+    <a href="https://analytics.google.com/" class="app-item" target="_blank">
+        <i class="fa-solid fa-chart-line" style="color: #E37400;"></i>
+        <span>Analytics</span>
+    </a>
+
+    <!-- Search -->
+    <a href="https://www.google.com/" class="app-item" target="_blank">
+        <i class="fa-brands fa-google" style="color: #4285F4;"></i>
+        <span>Search</span>
+    </a>
+</div>
+
+</body>
+</html>
