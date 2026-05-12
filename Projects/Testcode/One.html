@@ -1,58 +1,40 @@
-// --- FORCE CALCULATION LOGIC ---
-function renderHome() {
-    const now = new Date();
-    const curMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    
-    // Initialize with 0 to ensure display isn't blank
-    let totalReceivedMonth = 0;
-    let totalDistributedMonth = 0;
-    let overallBalance = 0;
-    let recentH = '';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceFlow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; }
+        .page { display: none !important; min-height: 100vh; }
+        .page.active { display: block !important; }
+        #auth-guard { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; display: flex; justify-content: space-around; padding: 15px; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
+        #modal.active { display: flex; }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+        .pdf-view { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
 
-    // Sort logs by timestamp (newest first)
-    const sortedLogs = [...logsList].sort((a, b) => b.ts - a.ts);
+    <div id="auth-guard">
+        <div class="flex flex-col items-center">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-600 mb-4"></div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Synchronizing Ledger...</p>
+        </div>
+    </div>
 
-    sortedLogs.forEach((l, idx) => {
-        // Force conversion to number to prevent "0 + 500 = 0500" string errors
-        const amt = Number(l.amount) || 0;
-
-        // 1. Calculate Central Balance (All-time history)
-        if (l.type === 'income') {
-            overallBalance += amt;
-        } else {
-            overallBalance -= amt;
-        }
-
-        // 2. Calculate Monthly Summary (Current month cards)
-        if (l.date && l.date.startsWith(curMonth)) {
-            if (l.type === 'income') {
-                totalReceivedMonth += amt;
-            } else {
-                totalDistributedMonth += amt;
-            }
-        }
-
-        // 3. Build Recent Transactions (Top 3)
-        if (idx < 3) {
-            recentH += `
-                <div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type === 'income' ? 'border-green-500' : 'border-red-500'}">
-                    <div class="flex justify-between">
-                        <span class="font-bold text-slate-800 text-sm">${l.staffName}</span>
-                        <span class="font-bold ${l.type === 'income' ? 'text-green-500' : 'text-red-500'}">
-                            ${l.type === 'income' ? '+' : '-'}$${amt.toFixed(2)}
-                        </span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 italic mt-1">${l.note || l.cat}</p>
-                </div>`;
-        }
-    });
-
-    // Update UI with forced decimals
-    document.getElementById('cb-display').innerText = `$${overallBalance.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-    document.getElementById('inc-display').innerText = `$${totalReceivedMonth.toFixed(2)}`;
-    document.getElementById('exp-display').innerText = `$${totalDistributedMonth.toFixed(2)}`;
-    document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No transactions this month</p>';
-}            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Login</button>
+    <!-- LOGIN -->
+    <div id="login-page" class="page flex-col items-center justify-center p-6">
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
+            <h2 class="text-2xl font-bold mb-8">Staff Ledger Login</h2>
+            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
+            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Login</button>
         </div>
     </div>
 
@@ -93,16 +75,16 @@ function renderHome() {
         <h2 class="text-xl font-bold mb-6">Staff Directory</h2>
         <div class="bg-white p-5 rounded-3xl shadow-sm mb-6">
             <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 mb-2 bg-slate-50 rounded-xl outline-none">
-            <input id="u-des" type="text" placeholder="Designation (e.g. Sales, Admin)" class="w-full p-3 mb-4 bg-slate-50 rounded-xl outline-none">
+            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 mb-4 bg-slate-50 rounded-xl outline-none">
             <input type="hidden" id="u-edit-id">
             <button id="u-btn" onclick="saveUser()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Add Staff</button>
         </div>
         <div id="staff-list" class="space-y-2 pb-24"></div>
     </div>
 
-    <!-- REPORTS (FILTER) -->
+    <!-- REPORTS -->
     <div id="reports-page" class="page p-5">
-        <h2 class="text-xl font-bold mb-6">Advanced Ledger Reports</h2>
+        <h2 class="text-xl font-bold mb-6">Ledger Reports</h2>
         <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 space-y-3">
             <div class="grid grid-cols-2 gap-2">
                 <input type="date" id="r-start" class="text-xs bg-slate-50 p-3 rounded-xl outline-none">
@@ -205,7 +187,6 @@ function renderHome() {
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            // Update icons color
             document.querySelectorAll('nav button i').forEach(i => i.classList.replace('text-blue-600', 'text-slate-300'));
             const activeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => btn.getAttribute('onclick').includes(id));
             if(activeBtn) activeBtn.querySelector('i').classList.replace('text-slate-300', 'text-blue-600');
@@ -217,13 +198,11 @@ function renderHome() {
             const editId = document.getElementById('u-edit-id').value;
             if(!name || !des) return;
 
-            const path = editId ? `users/${auth.currentUser.uid}/staff/${editId}` : `users/${auth.currentUser.uid}/staff`;
             if(editId) {
-                update(ref(db, path), { name: name, desig: des });
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${editId}`), { name, desig: des });
             } else {
-                push(ref(db, path), { name: name, desig: des, balance: 0 });
+                push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             }
-            
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
             document.getElementById('u-edit-id').value = '';
@@ -239,35 +218,26 @@ function renderHome() {
         };
 
         window.deleteStaff = (id) => {
-            if(confirm("Delete this staff? This won't delete their past transactions but will remove them from the list.")) {
-                remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
-            }
+            if(confirm("Delete staff?")) remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
         };
 
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
             const amtRaw = document.getElementById('m-amt').value;
             const date = document.getElementById('m-date').value;
-            if(!sid || !amtRaw || !date) return alert("Missing info");
+            if(!sid || !amtRaw || !date) return alert("Fill all fields");
 
-            const amt = parseFloat(amtRaw);
+            const amt = Number(amtRaw);
             const staff = staffData[sid];
-            const newStaffBal = currentType === 'income' ? (parseFloat(staff.balance || 0) + amt) : (parseFloat(staff.balance || 0) - amt);
+            const newStaffBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
 
-            const txnData = {
-                staffId: sid,
-                staffName: staff.name,
-                staffDes: staff.desig,
-                amount: amt,
-                type: currentType,
-                date: date,
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, staffDes: staff.desig,
+                amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
-                balAfter: newStaffBal,
-                ts: Date.now()
-            };
-
-            push(ref(db, `users/${auth.currentUser.uid}/logs`), txnData);
+                balAfter: newStaffBal, ts: Date.now()
+            });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newStaffBal });
             closeModal();
             document.getElementById('m-amt').value = '';
@@ -287,7 +257,7 @@ function renderHome() {
                             <p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p>
                         </div>
                         <div class="text-right flex items-center gap-4">
-                            <p class="font-bold text-blue-600">$${parseFloat(u.balance || 0).toFixed(2)}</p>
+                            <p class="font-bold text-blue-600">$${Number(u.balance || 0).toFixed(2)}</p>
                             <button onclick="editStaff('${id}')" class="text-slate-300 text-xs"><i class="fas fa-edit"></i></button>
                             <button onclick="deleteStaff('${id}')" class="text-red-200 text-xs"><i class="fas fa-trash"></i></button>
                         </div>
@@ -300,7 +270,7 @@ function renderHome() {
 
             onValue(ref(db, `users/${uid}/logs`), s => {
                 const data = s.val() || {};
-                logsList = Object.keys(data).map(k => data[k]).sort((a,b) => b.ts - a.ts);
+                logsList = Object.keys(data).map(k => data[k]);
                 renderHome();
             });
         }
@@ -308,21 +278,22 @@ function renderHome() {
         function renderHome() {
             const now = new Date();
             const curMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            let tIncMonth = 0, tExpMonth = 0, centralBal = 0;
             
-            let totalInc = 0, totalExp = 0, overallInc = 0, overallExp = 0;
+            const sorted = [...logsList].sort((a,b) => b.ts - a.ts);
             let recentH = '';
 
-            logsList.forEach((l, idx) => {
-                const amt = parseFloat(l.amount);
-                // Central Balance math (all time)
-                if(l.type === 'income') overallInc += amt; else overallExp += amt;
+            sorted.forEach((l, idx) => {
+                const amt = Number(l.amount) || 0;
+                // Central Balance (ALL History)
+                if(l.type === 'income') centralBal += amt; else centralBal -= amt;
 
-                // Month specific
-                if(l.date.startsWith(curMonth)) {
-                    if(l.type === 'income') totalInc += amt; else totalExp += amt;
+                // Monthly Summary
+                if(l.date && l.date.startsWith(curMonth)) {
+                    if(l.type === 'income') tIncMonth += amt; else tExpMonth += amt;
                 }
 
-                // Show only 3 recent
+                // Recent 3
                 if(idx < 3) {
                     recentH += `<div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
                         <div class="flex justify-between">
@@ -334,35 +305,35 @@ function renderHome() {
                 }
             });
 
-            document.getElementById('cb-display').innerText = `$${(overallInc - overallExp).toFixed(2)}`;
-            document.getElementById('inc-display').innerText = `$${totalInc.toFixed(2)}`;
-            document.getElementById('exp-display').innerText = `$${totalExp.toFixed(2)}`;
-            document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No transactions</p>';
+            document.getElementById('cb-display').innerText = `$${centralBal.toFixed(2)}`;
+            document.getElementById('inc-display').innerText = `$${tIncMonth.toFixed(2)}`;
+            document.getElementById('exp-display').innerText = `$${tExpMonth.toFixed(2)}`;
+            document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No recent logs</p>';
         }
 
         window.generateReport = () => {
             const start = document.getElementById('r-start').value;
             const end = document.getElementById('r-end').value;
             const staffId = document.getElementById('r-staff').value;
-            
             let h = '', ti = 0, te = 0;
+            
             logsList.filter(l => {
-                let match = true;
-                if(start && l.date < start) match = false;
-                if(end && l.date > end) match = false;
-                if(staffId && l.staffId !== staffId) match = false;
-                return match;
+                let m = true;
+                if(start && l.date < start) m = false;
+                if(end && l.date > end) m = false;
+                if(staffId && l.staffId !== staffId) m = false;
+                return m;
             }).forEach(l => {
-                const amt = parseFloat(l.amount);
-                if(l.type === 'income') ti += amt; else te += amt;
+                const a = Number(l.amount);
+                if(l.type === 'income') ti += a; else te += a;
                 h += `<div class="flex justify-between border-b border-slate-50 py-1">
-                    <span>${l.date} - ${l.staffName} (${l.cat})</span>
-                    <span class="${l.type==='income'?'text-green-600':'text-red-600'}">${l.type==='income'?'+':'-'}${amt.toFixed(2)}</span>
+                    <span>${l.date} - ${l.staffName}</span>
+                    <span class="${l.type==='income'?'text-green-600':'text-red-600'}">${l.type==='income'?'+':'-'}${a.toFixed(2)}</span>
                 </div>`;
             });
 
             document.getElementById('report-view').classList.remove('hidden');
-            document.getElementById('report-content').innerHTML = h || 'No records match filters';
+            document.getElementById('report-content').innerHTML = h || 'No records';
             document.getElementById('rep-inc').innerText = `$${ti.toFixed(2)}`;
             document.getElementById('rep-exp').innerText = `$${te.toFixed(2)}`;
             document.getElementById('report-date').innerText = new Date().toLocaleString();
