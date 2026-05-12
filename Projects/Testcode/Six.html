@@ -83,9 +83,7 @@
         </div>
 
         <div class="debit-card p-8 text-white mb-6 flex flex-col justify-between">
-            <!-- Decorative Icon -->
             <i class="fa-solid fa-shield-halved absolute -right-6 -bottom-6 text-9xl opacity-10 rotate-12"></i>
-            
             <div class="z-10">
                 <div class="flex items-center gap-2 mb-1">
                     <i class="fa-solid fa-vault text-[10px]"></i>
@@ -104,7 +102,6 @@
             </div>
         </div>
 
-        <!-- MONTHLY SUMMARY -->
         <div class="mb-8">
             <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase flex items-center gap-2">
                 <i class="fa-solid fa-calendar-check text-blue-600"></i>
@@ -247,9 +244,10 @@
 
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Imprest</option>
                     <option>Advance</option>
-                    <option>Return</option>
+                    <option>Imprest</option>
+                    <option>Voucher</option>
+                    <option>Others</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
@@ -305,11 +303,11 @@
 
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1">
-            <i class="fas fa-grid-2 text-lg"></i>
+            <i class="fa-solid fa-house text-lg"></i>
             <p class="text-[8px] font-bold">HOME</p>
         </button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1">
-            <i class="fas fa-users-rectangle text-lg"></i>
+            <i class="fa-solid fa-user-group text-lg"></i>
             <p class="text-[8px] font-bold">STAFF</p>
         </button>
         <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1">
@@ -397,7 +395,7 @@
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
-            if(confirm("Reverse this entry?")) {
+            if(confirm("Remove this transaction?")) {
                 const staff = staffData[sid];
                 if(!staff) return alert("Staff not found");
                 const currentBal = Number(staff.balance || 0);
@@ -504,7 +502,7 @@
                     </div>
                     <div class="mb-2">
                         <p class="font-bold text-sm text-slate-800">${l.staffName}</p>
-                        <p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-quote-left text-[8px]"></i> ${l.note || 'No Narration'}</p>
+                        <p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> ${l.cat || 'General'}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50">
                         <div><p class="text-[7px] text-slate-400 uppercase">System Bal</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cb)}</p></div>
@@ -519,8 +517,8 @@
                         <p class="text-[10px] font-bold">${l.staffName}</p>
                         <p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p>
                     </div>
-                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="w-8 h-8 flex items-center justify-center bg-red-100 text-red-600 rounded-lg">
-                        <i class="fa-solid fa-rotate-left text-xs"></i>
+                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">
+                        Remove Transaction
                     </button>
                 </div>`;
             });
