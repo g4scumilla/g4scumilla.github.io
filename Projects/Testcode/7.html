@@ -50,7 +50,7 @@
 
     <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
             <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <div class="relative mb-4">
@@ -442,10 +442,11 @@
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">Select Staff</option>';
+                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    opts += `<option value="${id}">${u.name}</option>`;
+                    const label = `${u.name} (${u.desig || 'N/A'})`;
+                    opts += `<option value="${id}">${label}</option>`;
                     sH += `<div class="staff-card p-6 shadow-lg relative overflow-hidden">
                         <i class="fa-solid fa-id-card absolute -right-4 -bottom-4 text-6xl opacity-10"></i>
                         <h4 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-circle-user text-teal-400 text-sm"></i> ${u.name}</h4>
@@ -461,7 +462,9 @@
                 document.getElementById('staff-list').innerHTML = sH;
                 document.getElementById('mgmt-staff-list').innerHTML = mSH;
                 document.getElementById('m-staff').innerHTML = opts;
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Staff', 'All Staff Members');
+                if(document.getElementById('r-staff')) {
+                    document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+                }
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -554,7 +557,7 @@
         window.exportPDF = () => {
             const user = auth.currentUser.email.split('@')[0];
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
-            const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.replace(/\s+/g, '_');
+            const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
             const fileName = `${user}_${namePart}_Ledger_${new Date().toISOString().slice(0,10)}.pdf`;
             html2pdf().set({ margin: 10, filename: fileName, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(document.getElementById('pdf-content')).save();
         };
