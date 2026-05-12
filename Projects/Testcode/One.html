@@ -1,43 +1,148 @@
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-    // We changed this line below to use "database" instead of "firestore"
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .app-card { border-radius: 28px; }
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
 
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        // ADD THIS LINE BELOW (Get it from your settings)
-        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com", 
-        projectId: "YOUR_PROJECT",
-        storageBucket: "YOUR_PROJECT.appspot.com",
-        messagingSenderId: "YOUR_ID",
-        appId: "YOUR_APP_ID"
-    };
+    <!-- 🔐 LOGIN PAGE -->
+    <div id="login-page" class="page active flex flex-col items-center justify-center p-6">
+        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-xl border border-gray-100">
+            <div class="w-16 h-16 bg-blue-600 rounded-2xl mb-6 flex items-center justify-center shadow-lg shadow-blue-200">
+                <i class="fas fa-wallet text-white text-2xl"></i>
+            </div>
+            <h2 class="text-3xl font-bold mb-2 text-gray-800">Login</h2>
+            <p class="text-slate-500 mb-8">Personal Finance Vault</p>
+            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg active:scale-95 transition">Sign In</button>
+        </div>
+    </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app); // This is now the Realtime Database
+    <!-- 🏠 DASHBOARD PAGE -->
+    <div id="dashboard-page" class="page p-5 pb-24">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase">Personal Account</p>
+                    <p class="text-sm font-bold text-slate-700" id="user-display">Loading...</p>
+                </div>
+            </div>
+            <button onclick="logout()" class="text-slate-300 hover:text-red-500 transition"><i class="fas fa-power-off text-xl"></i></button>
+        </div>
 
-    // (The rest of your login logic stays exactly the same!)
-    window.handleLogin = () => {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
-    };
+        <div class="bg-blue-600 app-card p-8 text-white shadow-xl shadow-blue-200 mb-6 relative overflow-hidden">
+            <div class="relative z-10">
+                <p class="opacity-70 text-xs mb-1 font-bold uppercase tracking-widest">Available Balance</p>
+                <h2 class="text-4xl font-bold mb-6" id="total-balance">$0.00</h2>
+                <button onclick="alert('Step 2: We will add the Add Transaction form next!')" class="bg-white/20 px-6 py-2 rounded-xl text-xs font-bold backdrop-blur-md border border-white/10">+ Add Entry</button>
+            </div>
+            <i class="fas fa-vault absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
+        </div>
 
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            showPage('dashboard-page');
-            document.getElementById('main-nav').classList.remove('hidden');
-        } else {
-            showPage('login-page');
-            document.getElementById('main-nav').classList.add('hidden');
-        }
-    });
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm">
+                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Income</p>
+                <h3 class="text-xl font-bold text-green-600" id="total-income">$0</h3>
+            </div>
+            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm">
+                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Expense</p>
+                <h3 class="text-xl font-bold text-red-600" id="total-expense">$0</h3>
+            </div>
+        </div>
 
-    window.showPage = (id) => {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    };
-</script>
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800">Recent Activity</h3>
+            <button class="text-blue-600 text-xs font-bold uppercase">View All</button>
+        </div>
+        
+        <div id="txn-container" class="space-y-3">
+            <div class="bg-white p-6 rounded-[24px] text-center border-2 border-dashed border-slate-100">
+                <p class="text-slate-400 text-sm italic">No records found yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 BOTTOM NAVIGATION -->
+    <nav id="main-nav" class="bottom-nav hidden flex justify-around p-4">
+        <button onclick="showPage('dashboard-page')" class="text-blue-600 flex flex-col items-center">
+            <i class="fas fa-house text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold tracking-tight">Home</span>
+        </button>
+        <button class="text-slate-300 flex flex-col items-center">
+            <i class="fas fa-book text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold tracking-tight">Dues</span>
+        </button>
+        <button class="text-slate-300 flex flex-col items-center">
+            <i class="fas fa-sliders text-xl"></i>
+            <span class="text-[10px] mt-1 font-bold tracking-tight">Settings</span>
+        </button>
+    </nav>
+
+    <!-- 🧠 FIREBASE LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+        // 🟢 YOUR SECURE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
+            authDomain: "myfinanceapp-e0be3.firebaseapp.com",
+            databaseURL: "https://myfinanceapp-e0be3-default-rtdb.firebaseio.com",
+            projectId: "myfinanceapp-e0be3",
+            storageBucket: "myfinanceapp-e0be3.firebasestorage.app",
+            messagingSenderId: "335278709493",
+            appId: "1:335278709493:web:ec6e0994ce2b07ffd103bc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // --- Auth Functions ---
+        window.handleLogin = () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            if(!email || !pass) return alert("Please enter your details");
+            
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch(err => alert("Login failed: " + err.message));
+        };
+
+        window.logout = () => signOut(auth);
+
+        // --- App State Watcher ---
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                document.getElementById('user-display').innerText = user.email;
+                showPage('dashboard-page');
+                document.getElementById('main-nav').classList.remove('hidden');
+            } else {
+                showPage('login-page');
+                document.getElementById('main-nav').classList.add('hidden');
+            }
+        });
+
+        // --- Navigation ---
+        window.showPage = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        };
+    </script>
+</body>
+</html>
