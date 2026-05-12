@@ -1,40 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceFlow Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; }
-        .page { display: none !important; min-height: 100vh; }
-        .page.active { display: block !important; }
-        #auth-guard { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; display: flex; justify-content: space-around; padding: 15px; }
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
-        #modal.active { display: flex; }
-        .modal-content { background: white; width: 100%; border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 32px; max-height: 90vh; overflow-y: auto; }
-        .pdf-view { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; font-family: monospace; }
-    </style>
-</head>
-<body>
+// --- FORCE CALCULATION LOGIC ---
+function renderHome() {
+    const now = new Date();
+    const curMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    
+    // Initialize with 0 to ensure display isn't blank
+    let totalReceivedMonth = 0;
+    let totalDistributedMonth = 0;
+    let overallBalance = 0;
+    let recentH = '';
 
-    <div id="auth-guard">
-        <div class="flex flex-col items-center">
-            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-600 mb-4"></div>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Synchronizing Ledger...</p>
-        </div>
-    </div>
+    // Sort logs by timestamp (newest first)
+    const sortedLogs = [...logsList].sort((a, b) => b.ts - a.ts);
 
-    <!-- LOGIN -->
-    <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
-            <h2 class="text-2xl font-bold mb-8">Staff Ledger Login</h2>
-            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
-            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Login</button>
+    sortedLogs.forEach((l, idx) => {
+        // Force conversion to number to prevent "0 + 500 = 0500" string errors
+        const amt = Number(l.amount) || 0;
+
+        // 1. Calculate Central Balance (All-time history)
+        if (l.type === 'income') {
+            overallBalance += amt;
+        } else {
+            overallBalance -= amt;
+        }
+
+        // 2. Calculate Monthly Summary (Current month cards)
+        if (l.date && l.date.startsWith(curMonth)) {
+            if (l.type === 'income') {
+                totalReceivedMonth += amt;
+            } else {
+                totalDistributedMonth += amt;
+            }
+        }
+
+        // 3. Build Recent Transactions (Top 3)
+        if (idx < 3) {
+            recentH += `
+                <div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type === 'income' ? 'border-green-500' : 'border-red-500'}">
+                    <div class="flex justify-between">
+                        <span class="font-bold text-slate-800 text-sm">${l.staffName}</span>
+                        <span class="font-bold ${l.type === 'income' ? 'text-green-500' : 'text-red-500'}">
+                            ${l.type === 'income' ? '+' : '-'}$${amt.toFixed(2)}
+                        </span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 italic mt-1">${l.note || l.cat}</p>
+                </div>`;
+        }
+    });
+
+    // Update UI with forced decimals
+    document.getElementById('cb-display').innerText = `$${overallBalance.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    document.getElementById('inc-display').innerText = `$${totalReceivedMonth.toFixed(2)}`;
+    document.getElementById('exp-display').innerText = `$${totalDistributedMonth.toFixed(2)}`;
+    document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No transactions this month</p>';
+}            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Login</button>
         </div>
     </div>
 
