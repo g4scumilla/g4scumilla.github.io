@@ -9,15 +9,9 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; }
-        
-        /* 🛡️ STOPS THE FLICKER: All pages hidden by default */
         .page { display: none !important; min-height: 100vh; }
         .page.active { display: block !important; }
-        
-        #auth-guard { 
-            position: fixed; inset: 0; background: white; z-index: 9999; 
-            display: flex; align-items: center; justify-content: center; 
-        }
+        #auth-guard { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; display: flex; justify-content: space-around; padding: 15px; }
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
         #modal.active { display: flex; }
@@ -26,26 +20,24 @@
 </head>
 <body>
 
-    <!-- ⏳ LOADING OVERLAY -->
     <div id="auth-guard">
         <div class="flex flex-col items-center">
             <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-600 mb-4"></div>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Verifying Session...</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Synchronizing Ledger...</p>
         </div>
     </div>
 
-    <!-- 🔐 LOGIN PAGE -->
+    <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
         <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
-            <div class="w-16 h-16 bg-blue-600 rounded-2xl mb-6 mx-auto flex items-center justify-center shadow-lg"><i class="fas fa-lock text-white text-2xl"></i></div>
-            <h2 class="text-2xl font-bold mb-8 text-slate-800">Staff Ledger Login</h2>
+            <h2 class="text-2xl font-bold mb-8">Staff Ledger Login</h2>
             <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
             <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg">Login</button>
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Login</button>
         </div>
     </div>
 
-    <!-- 🏠 DASHBOARD -->
+    <!-- DASHBOARD -->
     <div id="dashboard-page" class="page p-5">
         <div class="flex justify-between items-center mb-6 mt-2">
             <h1 class="text-xl font-bold text-slate-800">Dashboard</h1>
@@ -58,23 +50,27 @@
             <button onclick="openModal()" class="w-full bg-white/20 py-3 rounded-2xl text-xs font-bold">+ New Entry</button>
         </div>
 
-        <!-- DATE FILTER -->
-        <div class="bg-white p-4 rounded-3xl shadow-sm mb-6 flex items-center gap-3">
-            <input type="date" id="f-start" onchange="refreshData()" class="flex-1 text-xs bg-slate-50 p-2 rounded-xl outline-none">
-            <input type="date" id="f-end" onchange="refreshData()" class="flex-1 text-xs bg-slate-50 p-2 rounded-xl outline-none">
-            <button onclick="clearF()" class="text-blue-600 px-2"><i class="fas fa-sync"></i></button>
-        </div>
-
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-green-50"><p class="text-[10px] text-green-500 font-bold uppercase">Income</p><h3 id="inc-display" class="font-bold">$0</h3></div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-red-50"><p class="text-[10px] text-red-500 font-bold uppercase">Expense</p><h3 id="exp-display" class="font-bold">$0</h3></div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-green-50">
+                <p class="text-[10px] text-green-500 font-bold uppercase">Total Income</p>
+                <h3 id="inc-display" class="font-bold text-slate-700">$0.00</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-red-50">
+                <p class="text-[10px] text-red-500 font-bold uppercase">Total Expense</p>
+                <h3 id="exp-display" class="font-bold text-slate-700">$0.00</h3>
+            </div>
         </div>
 
-        <input id="search" type="text" onkeyup="refreshData()" placeholder="Search staff..." class="w-full p-3 mb-4 bg-white rounded-xl text-xs shadow-sm outline-none">
-        <div id="log-container" class="space-y-3"></div>
+        <div class="flex items-center gap-2 mb-4">
+            <input type="date" id="f-start" onchange="refreshData()" class="flex-1 text-[10px] bg-white p-2 rounded-xl shadow-sm outline-none">
+            <input type="date" id="f-end" onchange="refreshData()" class="flex-1 text-[10px] bg-white p-2 rounded-xl shadow-sm outline-none">
+            <button onclick="clearF()" class="bg-white p-2 rounded-xl shadow-sm text-blue-600"><i class="fas fa-sync-alt"></i></button>
+        </div>
+
+        <div id="log-container" class="space-y-3 pb-24"></div>
     </div>
 
-    <!-- 👥 STAFF PAGE -->
+    <!-- STAFF -->
     <div id="users-page" class="page p-5">
         <h2 class="text-xl font-bold mb-6">Staff Directory</h2>
         <div class="bg-white p-5 rounded-3xl shadow-sm mb-6">
@@ -82,41 +78,41 @@
             <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 mb-4 bg-slate-50 rounded-xl outline-none">
             <button id="u-btn" onclick="saveUser()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Add Staff</button>
         </div>
-        <div id="staff-list" class="space-y-2"></div>
+        <div id="staff-list" class="space-y-2 pb-24"></div>
     </div>
 
-    <!-- 📱 NAVIGATION -->
+    <!-- NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')"><i class="fas fa-home text-xl text-blue-600"></i></button>
         <button onclick="showPage('users-page')"><i class="fas fa-users text-xl text-slate-300"></i></button>
         <button onclick="handleLogout()"><i class="fas fa-sign-out-alt text-xl text-slate-300"></i></button>
     </nav>
 
-    <!-- ➕ ENTRY MODAL -->
+    <!-- ENTRY MODAL -->
     <div id="modal">
         <div class="modal-content">
             <select id="m-staff" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none font-bold"></select>
-            <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center mb-6 outline-none bg-transparent text-blue-600">
+            <input id="m-amt" type="number" step="0.01" placeholder="0.00" class="w-full text-4xl font-bold text-center mb-6 outline-none bg-transparent text-blue-600">
             <div class="grid grid-cols-2 gap-2 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-100 rounded-xl outline-none text-sm">
-                    <option>Imprest</option><option>Voucher</option><option>Advance</option><option>Return</option><option>Other</option>
+                    <option>Imprest</option><option>Voucher</option><option>Advance</option><option>Return</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-100 rounded-xl outline-none text-sm">
             </div>
             <textarea id="m-note" placeholder="Narration..." class="w-full p-4 mb-6 bg-slate-100 rounded-xl outline-none"></textarea>
             <div class="flex gap-2 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400">Income</button>
-                <button onclick="setT('expense')" id="te" class="flex-1 p-3 rounded-xl font-bold bg-red-500 text-white">Expense</button>
+                <button onclick="setT('income')" id="ti" class="flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400">Income (+)</button>
+                <button onclick="setT('expense')" id="te" class="flex-1 p-3 rounded-xl font-bold bg-red-500 text-white">Expense (-)</button>
             </div>
-            <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Post Transaction</button>
-            <button onclick="closeModal()" class="w-full mt-2 text-slate-400 text-xs py-2">Cancel</button>
+            <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg">Confirm & Post</button>
+            <button onclick="closeModal()" class="w-full mt-4 text-slate-400 text-xs">Close</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, set, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
@@ -132,146 +128,135 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
         
-        let type = 'expense';
+        let currentType = 'expense';
         let staffData = {};
-        let logs = [];
-        let editId = null;
+        let logsList = [];
 
-        // --- AUTH LOGIC (The Fix) ---
         onAuthStateChanged(auth, (user) => {
-            document.getElementById('auth-guard').style.display = 'none'; // Remove loading
-            
-            // Hide everything first
-            document.getElementById('login-page').classList.remove('active');
-            document.getElementById('dashboard-page').classList.remove('active');
-            document.getElementById('users-page').classList.remove('active');
-            document.getElementById('navbar').classList.add('hidden');
-
+            document.getElementById('auth-guard').style.display = 'none';
             if (user) {
-                document.getElementById('dashboard-page').classList.add('active');
+                showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email;
-                startListeners(user.uid);
+                startSync(user.uid);
             } else {
-                document.getElementById('login-page').classList.add('active');
+                showPage('login-page');
+                document.getElementById('navbar').classList.add('hidden');
             }
         });
 
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            // Force persistence before login
             setPersistence(auth, browserSessionPersistence).then(() => {
                 return signInWithEmailAndPassword(auth, e, p);
-            }).catch(err => alert(err.message));
+            }).catch(err => alert("Login Failed: " + err.message));
         };
 
         window.handleLogout = () => signOut(auth);
 
-        // --- STAFF & TXN LOGIC ---
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
 
-        window.saveUser = () => {
-            const n = document.getElementById('u-name').value;
-            const d = document.getElementById('u-des').value;
-            if(!n || !d) return;
-            if(editId) {
-                update(ref(db, `users/${auth.currentUser.uid}/staff/${editId}`), { name: n, desig: d });
-                editId = null;
-                document.getElementById('u-btn').innerText = "Add Staff";
-            } else {
-                push(ref(db, `users/${auth.currentUser.uid}/staff`), { name: n, desig: d, balance: 0 });
-            }
-            document.getElementById('u-name').value = ''; document.getElementById('u-des').value = '';
-        };
-
-        window.openModal = () => { document.getElementById('modal').classList.add('active'); document.getElementById('m-date').valueAsDate = new Date(); };
-        window.closeModal = () => document.getElementById('modal').classList.remove('active');
-        window.setT = (t) => {
-            type = t;
-            document.getElementById('ti').className = t === 'income' ? 'flex-1 p-3 rounded-xl font-bold bg-green-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
-            document.getElementById('te').className = t === 'expense' ? 'flex-1 p-3 rounded-xl font-bold bg-red-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
-        };
-
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
-            const amt = parseFloat(document.getElementById('m-amt').value);
-            if(!sid || !amt) return;
-            const s = staffData[sid];
-            const newBal = type === 'income' ? s.balance + amt : s.balance - amt;
+            const amtRaw = document.getElementById('m-amt').value;
+            const date = document.getElementById('m-date').value;
+            
+            if(!sid || !amtRaw || !date) return alert("Select staff, amount, and date!");
 
-            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffName: s.name, staffDes: s.desig, amount: amt, 
-                type: type, date: document.getElementById('m-date').value,
-                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value,
-                balAfter: newBal
-            });
-            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+            const amt = parseFloat(amtRaw); // Force to Number
+            const staff = staffData[sid];
+            const currentStaffBalance = parseFloat(staff.balance || 0);
+            
+            // Calculate new individual staff balance
+            const newStaffBal = currentType === 'income' ? currentStaffBalance + amt : currentStaffBalance - amt;
+
+            const txnData = {
+                staffName: staff.name,
+                staffDes: staff.desig,
+                amount: amt,
+                type: currentType,
+                date: date,
+                cat: document.getElementById('m-cat').value,
+                note: document.getElementById('m-note').value,
+                balAfter: newStaffBal
+            };
+
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), txnData);
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newStaffBal });
+            
             closeModal();
+            document.getElementById('m-amt').value = '';
+            document.getElementById('m-note').value = '';
         };
 
-        function startListeners(uid) {
+        function startSync(uid) {
+            // Staff Sync
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let h = '', opts = '';
+                let h = '', opts = '<option value="">Choose Staff</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     opts += `<option value="${id}">${u.name}</option>`;
-                    h += `<div class="bg-white p-4 rounded-2xl flex justify-between shadow-sm border border-slate-50">
-                        <div><p class="font-bold text-sm">${u.name}</p><p class="text-[9px] text-slate-400">${u.desig}</p></div>
-                        <div class="flex items-center gap-3">
-                            <p class="font-bold text-blue-600 text-sm">$${u.balance.toFixed(2)}</p>
-                            <button onclick="editU('${id}','${u.name}','${u.desig}')"><i class="fas fa-edit text-slate-300"></i></button>
-                            <button onclick="delU('${id}')"><i class="fas fa-trash text-red-200"></i></button>
-                        </div>
+                    h += `<div class="bg-white p-4 rounded-2xl flex justify-between shadow-sm">
+                        <div><p class="font-bold text-sm">${u.name}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p></div>
+                        <p class="font-bold text-blue-600">$${parseFloat(u.balance || 0).toFixed(2)}</p>
                     </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = h;
                 document.getElementById('m-staff').innerHTML = opts;
             });
 
+            // Logs Sync
             onValue(ref(db, `users/${uid}/logs`), s => {
                 const data = s.val() || {};
-                logs = Object.keys(data).reverse().map(k => data[k]);
+                logsList = Object.keys(data).reverse().map(k => data[k]);
                 refreshData();
             });
         }
 
-        window.editU = (id, n, d) => { editId = id; document.getElementById('u-name').value = n; document.getElementById('u-des').value = d; document.getElementById('u-btn').innerText = "Update"; };
-        window.delU = (id) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
-        window.clearF = () => { document.getElementById('f-start').value = ''; document.getElementById('f-end').value = ''; refreshData(); };
-
         window.refreshData = () => {
             const start = document.getElementById('f-start').value;
             const end = document.getElementById('f-end').value;
-            const q = document.getElementById('search').value.toLowerCase();
-            let h = '', iTotal = 0, eTotal = 0;
+            let h = '', totalInc = 0, totalExp = 0;
 
-            logs.forEach(l => {
+            logsList.forEach(l => {
+                const lAmt = parseFloat(l.amount || 0); // Crucial for math
                 if(start && l.date < start) return;
                 if(end && l.date > end) return;
-                if(q && !l.staffName.toLowerCase().includes(q)) return;
 
-                l.type === 'income' ? iTotal += l.amount : eTotal += l.amount;
+                if(l.type === 'income') totalInc += lAmt;
+                else totalExp += lAmt;
+
                 h += `<div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
-                    <div class="flex justify-between">
-                        <p class="font-bold text-slate-800 text-sm">${l.staffName}</p>
-                        <p class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${l.amount.toFixed(2)}</p>
+                    <div class="flex justify-between mb-1">
+                        <span class="font-bold text-slate-800 text-sm">${l.staffName}</span>
+                        <span class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${lAmt.toFixed(2)}</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 mb-2">${l.note || l.cat}</p>
-                    <div class="flex justify-between text-[9px] font-bold text-slate-400 uppercase pt-2 border-t border-slate-50">
-                        <span>${l.date}</span><span>Bal: $${l.balAfter.toFixed(2)}</span>
+                    <p class="text-[10px] text-slate-400 italic">${l.note || l.cat}</p>
+                    <div class="flex justify-between text-[9px] font-bold text-slate-400 mt-2 pt-2 border-t border-slate-50">
+                        <span>${l.date}</span><span>STF BAL: $${parseFloat(l.balAfter || 0).toFixed(2)}</span>
                     </div>
                 </div>`;
             });
-            document.getElementById('log-container').innerHTML = h;
-            document.getElementById('cb-display').innerText = `$${(iTotal - eTotal).toFixed(2)}`;
-            document.getElementById('inc-display').innerText = `$${iTotal.toFixed(2)}`;
-            document.getElementById('exp-display').innerText = `$${eTotal.toFixed(2)}`;
+
+            document.getElementById('log-container').innerHTML = h || '<p class="text-center text-slate-300 text-xs py-10">No records found</p>';
+            document.getElementById('inc-display').innerText = `$${totalInc.toFixed(2)}`;
+            document.getElementById('exp-display').innerText = `$${totalExp.toFixed(2)}`;
+            document.getElementById('cb-display').innerText = `$${(totalInc - totalExp).toFixed(2)}`;
         };
+
+        window.openModal = () => { document.getElementById('modal').classList.add('active'); document.getElementById('m-date').valueAsDate = new Date(); };
+        window.closeModal = () => document.getElementById('modal').classList.remove('active');
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 p-3 rounded-xl font-bold bg-green-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 p-3 rounded-xl font-bold bg-red-500 text-white' : 'flex-1 p-3 rounded-xl font-bold bg-slate-100 text-slate-400';
+        };
+        window.clearF = () => { document.getElementById('f-start').value = ''; document.getElementById('f-end').value = ''; refreshData(); };
     </script>
 </body>
 </html>
