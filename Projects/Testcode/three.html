@@ -14,19 +14,20 @@
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* DEBIT CARD STYLE */
+        /* DEBIT CARD STYLE - FIXED TRANSPARENCY/VISIBILITY */
         .debit-card {
             aspect-ratio: 1.58 / 1;
             width: 100%;
             max-width: 380px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            /* Darker, more solid gradient for better contrast */
+            background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
             border-radius: 24px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            /* Transparent Flower Pattern */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12S53.4 0 60 0zM12 48c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zm96 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zM60 96c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12z' fill='%23ffffff' fill-opacity='0.08'/%3E%3C/svg%3E");
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            /* Reduced pattern opacity to ensure text is clear */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12S53.4 0 60 0zM12 48c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zm96 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zM60 96c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12z' fill='%23ffffff' fill-opacity='0.04'/%3E%3C/svg%3E");
         }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.05); }
@@ -67,11 +68,11 @@
             <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl shadow-lg flex items-center justify-center text-white"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- ENLARGED DEBIT CARD -->
-        <div class="debit-card p-8 text-white mb-8 flex flex-col justify-between">
+        <!-- BALANCE CARD -->
+        <div class="debit-card p-8 text-white mb-6 flex flex-col justify-between">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="opacity-70 text-[10px] font-bold uppercase tracking-wider mb-1">Central Balance Ledger</p>
+                    <p class="opacity-80 text-[10px] font-bold uppercase tracking-wider mb-1">Central Balance Ledger</p>
                     <h2 class="text-3xl font-bold tracking-tight" id="cb-display">...</h2>
                 </div>
                 <i class="fas fa-microchip text-3xl opacity-40"></i>
@@ -84,6 +85,32 @@
                 <div class="text-right">
                     <p class="text-[8px] opacity-60 uppercase">Currency</p>
                     <p class="text-xs font-bold" id="card-curr-label">BDT</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: MONTHLY SUMMARY SECTION -->
+        <div class="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm mb-8">
+            <h3 id="current-month-header" class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-50 pb-2">...</h3>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 text-[10px]">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div>
+                        <p class="text-[7px] text-slate-400 font-bold uppercase">Total Received</p>
+                        <p id="month-received" class="text-xs font-bold text-teal-600">--</p>
+                    </div>
+                </div>
+                <div class="h-8 w-[1px] bg-slate-100"></div>
+                <div class="flex items-center gap-3 text-right flex-row-reverse">
+                    <div class="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 text-[10px]">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div>
+                        <p class="text-[7px] text-slate-400 font-bold uppercase">Total Advanced</p>
+                        <p id="month-advanced" class="text-xs font-bold text-orange-600">--</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,7 +211,7 @@
         <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><span class="text-[8px] font-bold">SETTINGS</span></button>
     </nav>
 
-    <!-- MODALS (ENTRY, STAFF, TXN) SAME AS PREVIOUS CODE WITH MINOR TWEAKS -->
+    <!-- MODALS -->
     <div id="entry-modal" class="modal"><div class="modal-content"><div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div><select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold text-slate-700"></select><div class="relative mb-6 text-center"><input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 outline-none bg-transparent text-teal-600"></div><div class="grid grid-cols-2 gap-3 mb-4"><select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold"><option>Imprest</option><option>Advance</option><option>Return</option></select><input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs"></div><textarea id="m-note" placeholder="Narration" class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs"></textarea><div class="flex gap-3 mb-6"><button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Receive (+)</button><button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white">Advance (-)</button></div><button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold">Post Entry</button><button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button></div></div>
     
     <div id="staff-mgmt-modal" class="modal"><div class="modal-content"><h3 class="font-bold mb-4">Staff Settings</h3><input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2"><input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4"><button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6">Add Staff</button><div id="mgmt-staff-list" class="space-y-2"></div><button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button></div></div>
@@ -334,18 +361,37 @@
 
         function renderHome() {
             let rCB = 0; let rSB = {};
+            let mRec = 0; let mAdv = 0;
+            
+            // Get current month info for header and filter
+            const now = new Date();
+            const currentMonthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+            const currentMonthKey = now.toISOString().slice(0, 7); // "YYYY-MM"
+            
+            document.getElementById('current-month-header').innerText = currentMonthName;
+
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount);
                 if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } 
-                else { rCB -= a; rSB[l.staffId] -= a; }
+                
+                if(l.type === 'income') { 
+                    rCB += a; 
+                    rSB[l.staffId] += a; 
+                    if(l.date.startsWith(currentMonthKey)) mRec += a;
+                } else { 
+                    rCB -= a; 
+                    rSB[l.staffId] -= a; 
+                    if(l.date.startsWith(currentMonthKey)) mAdv += a;
+                }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
             document.getElementById('cb-display').innerText = fmt(rCB);
+            document.getElementById('month-received').innerText = fmt(mRec);
+            document.getElementById('month-advanced').innerText = fmt(mAdv);
             
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 5).forEach(l => { // LIMIT TO 5
+            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 logH += `
                 <div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm">
                     <div class="flex justify-between mb-2">
