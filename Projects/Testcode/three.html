@@ -1,256 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Education Profile | Abdullahil Kuafi</title>
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#f44336">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<style>
-:root { 
-    --g4s-red: #d32f2f; 
-    --glass: rgba(255, 255, 255, 0.96);
-    --safe-top: env(safe-area-inset-top, 20px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
-
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding-top: var(--safe-top); 
-    padding-bottom: calc(80px + var(--safe-bottom));
-    background-color: #f8f9fa;
-    color: #2d3436;
-}
-
-/* GLOBAL HEADER */
-.header-section {
-    background: linear-gradient(180deg, #f44336 0%, #fff 100%);
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-.top-bar-content { padding: 15px 15px 10px; color: white; }
-.header-title { font-size: 18px; font-weight: 800; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
-.card-container { padding: 0 15px 25px; margin-top: 5px; }
-
-.visa-card {
-    border-radius: 20px; aspect-ratio: 1.58 / 1; width: 100%;
-    color: white; display: flex; flex-direction: column;
-    box-shadow: 0 15px 35px rgba(211, 47, 47, 0.25);
-    position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
-    background-size: cover;
-}
-.visa-card::before {
-    content: ""; position: absolute; inset: 0; left: -25%; width: 85%;
-    background: url('https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png');
-    background-size: cover; opacity: 0.75; z-index: 1;
-    mask-image: linear-gradient(to right, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
-}
-.visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(211, 47, 47, 0.45));
-    z-index: 2;
-}
-.visa-card > * { position: relative; z-index: 3; }
-
-/* CONTENT STYLING */
-.content-area { padding: 20px 15px; }
-
-.intro-box {
-    background: white; padding: 20px; border-radius: 16px;
-    margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border-left: 5px solid var(--g4s-red);
-}
-.intro-box h2 { font-size: 16px; margin: 0 0 10px; color: var(--g4s-red); font-weight: 800; }
-.intro-box p { font-size: 12px; line-height: 1.6; color: #4b5563; margin: 0; font-weight: 500; }
-
-.section-label {
-    font-size: 11px; font-weight: 900; color: #9ca3af;
-    text-transform: uppercase; letter-spacing: 1.5px;
-    margin: 20px 0 15px; display: flex; align-items: center; gap: 8px;
-}
-
-.edu-card {
-    background: var(--glass); border-radius: 16px; padding: 20px;
-    margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    border: 1px solid white; position: relative;
-    overflow: hidden;
-}
-
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.edu-title { font-size: 14px; font-weight: 800; color: #111827; margin: 0; }
-.edu-sub { font-size: 11px; color: var(--g4s-red); font-weight: 700; display: block; margin-top: 4px; }
-
-.details-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 15px; }
-.detail-item { font-size: 10px; font-weight: 600; color: #6b7280; display: flex; align-items: center; gap: 8px; }
-.detail-item i { color: var(--g4s-red); width: 12px; }
-
-.grade-tag {
-    margin-top: 15px; display: inline-flex; align-items: center; gap: 6px;
-    background: #fef9c3; color: #a16207; font-size: 9px; font-weight: 900;
-    padding: 5px 12px; border-radius: 20px; border: 1px solid #fde047;
-}
-
-.action-row { margin-top: 18px; display: flex; gap: 10px; }
-.action-btn {
-    text-decoration: none; background: #f3f4f6; color: #374151;
-    padding: 9px; border-radius: 10px; font-size: 10px; font-weight: 700;
-    display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
-}
-
-/* BOTTOM NAV */
-.bottom-nav {
-    position: fixed; bottom: 0; width: 100%; background: white;
-    display: flex; justify-content: space-around;
-    padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 2000;
-}
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; }
-.nav-active { color: var(--g4s-red); }
-
-@media (min-width: 768px) {
-    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceFlow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F1F5F9; color: #1E293B; }
+        .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
+        .page.active { display: block !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.4); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.05); }
+        
+        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
+        #modal.active { display: flex; }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+        
+        .staff-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #2563EB); display: flex; align-items: center; justify-content: center; border-radius: 12px; color: white; font-weight: bold; }
+    </style>
 </head>
-
 <body>
 
-<div class="header-section">
-    <div class="top-bar-content"><span class="header-title">Academic Identity</span></div>
-    <div class="card-container">
-        <div class="visa-card">
-            <div style="flex:1; display:flex; padding: 20px; position: relative;">
-                <div style="flex: 0.5;"></div>
-                <div style="flex: 0.5; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 12px; border-left: 1px solid rgba(255,255,255,0.2);">
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #fff;">ABDULLAHIL KUAFI</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">BA & MA in English | Govt. Titumir College, Dhaka.</div>
+    <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-page" class="page flex-col items-center justify-center p-6">
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
+                <i class="fas fa-vault"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">FinanceFlow Pro</h2>
+            <p class="text-slate-400 text-xs mb-8">Management & Staff Ledger</p>
+            <input id="email" type="email" placeholder="Admin Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 ring-blue-500 transition-all">
+            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none focus:ring-2 ring-blue-500 transition-all">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-blue-200">Sign In</button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-page" class="page p-5 pb-24">
+        <div class="flex justify-between items-center mb-8 mt-2">
+            <div>
+                <p class="text-xs text-slate-400 font-medium">Welcome back,</p>
+                <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
+            </div>
+            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600">
+                <i class="fas fa-bell"></i>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[32px] p-8 text-white shadow-xl shadow-blue-200 mb-8 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+            <p class="opacity-70 text-[10px] font-bold uppercase tracking-wider mb-1">Central Ledger Balance</p>
+            <h2 class="text-4xl font-bold mb-6 tracking-tight" id="cb-display">$0.00</h2>
+            <button onclick="openModal()" class="w-full bg-white text-blue-600 py-3.5 rounded-2xl text-xs font-bold shadow-lg flex items-center justify-center gap-2">
+                <i class="fas fa-plus-circle"></i> Quick Entry
+            </button>
+        </div>
+
+        <div class="mb-2">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Month Summary: <span id="month-name"></span></p>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="w-8 h-8 bg-green-50 text-green-500 rounded-lg flex items-center justify-center mb-3 text-xs">
+                        <i class="fas fa-arrow-down"></i>
                     </div>
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">ZAMILA KHATUN</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">BSc & MSc in Mathematics | Rajshahi College.</div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase">Total Received</p>
+                    <h3 id="inc-display" class="font-bold text-lg text-slate-700">$0.00</h3>
+                </div>
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="w-8 h-8 bg-orange-50 text-orange-500 rounded-lg flex items-center justify-center mb-3 text-xs">
+                        <i class="fas fa-arrow-up"></i>
                     </div>
-                    <div>
-                        <div style="font-size: 10px; font-weight: 800; color: #ffeb3b;">HABIBULLAH ZAYAAN</div>
-                        <div style="font-size: 7px; opacity: 0.9; line-height: 1.3;">Born 12 Nov 2025. The heart of the family.</div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase">Total Advanced</p>
+                    <h3 id="exp-display" class="font-bold text-lg text-slate-700">$0.00</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800 tracking-tight">Recent Transactions</h3>
+            <button onclick="showPage('settings-page')" class="text-xs text-blue-600 font-bold">See All</button>
+        </div>
+        <div id="recent-logs" class="space-y-4"></div>
+    </div>
+
+    <!-- STAFF DIRECTORY -->
+    <div id="users-page" class="page p-5 pb-24">
+        <h2 class="text-2xl font-bold mb-2">Staff Directory</h2>
+        <p class="text-xs text-slate-400 mb-6">Manage roles and individual balances</p>
+        
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-8">
+            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-100">
+            <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-100">
+            <input type="hidden" id="u-edit-id">
+            <button id="u-btn" onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">Add New Staff</button>
+        </div>
+
+        <div id="staff-list" class="space-y-4"></div>
+    </div>
+
+    <!-- SETTINGS PAGE (New) -->
+    <div id="settings-page" class="page p-5 pb-24">
+        <h2 class="text-2xl font-bold mb-2">Settings & Tools</h2>
+        <p class="text-xs text-slate-400 mb-6">System configuration and report generation</p>
+
+        <div class="space-y-4">
+            <!-- Collapsible Report Menu -->
+            <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 overflow-hidden">
+                <button onclick="toggleMenu('report-menu-content')" class="w-full p-6 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-bold text-sm text-slate-800">Ledger Reports</p>
+                            <p class="text-[10px] text-slate-400">Filter, View and Export PDF</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+                </button>
+
+                <!-- Nested Report Content (Moved here) -->
+                <div id="report-menu-content" class="hidden p-5 bg-slate-50/50 border-t border-slate-50">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Start Date</label>
+                                <input type="date" id="r-start" class="w-full text-xs bg-white p-3 rounded-xl outline-none border border-slate-100">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">End Date</label>
+                                <input type="date" id="r-end" class="w-full text-xs bg-white p-3 rounded-xl outline-none border border-slate-100">
+                            </div>
+                        </div>
+                        <select id="r-staff" class="w-full p-4 bg-white rounded-xl outline-none text-xs border border-slate-100">
+                            <option value="">All Staff Members</option>
+                        </select>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs">Filter Data</button>
+                            <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs"><i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                    </div>
+
+                    <div id="report-view" class="hidden mt-6">
+                        <div id="pdf-content" class="bg-white p-6 rounded-2xl border border-slate-200">
+                            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                                <div>
+                                    <h4 class="font-bold text-sm text-blue-600 uppercase">FinanceFlow Ledger</h4>
+                                    <p id="report-date" class="text-[8px] text-slate-400"></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[8px] font-bold uppercase text-slate-400">Statement</p>
+                                </div>
+                            </div>
+                            <div id="report-content" class="text-[10px] space-y-3"></div>
+                            <div class="mt-6 pt-4 border-t-2 border-dashed border-slate-100 space-y-2">
+                                <div class="flex justify-between font-bold text-green-600"><span>Total Received</span><span id="rep-inc"></span></div>
+                                <div class="flex justify-between font-bold text-red-600"><span>Total Advanced</span><span id="rep-exp"></span></div>
+                                <div class="flex justify-between font-black text-slate-800 border-t pt-2 mt-2"><span>Net Flow</span><span id="rep-net"></span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div style="padding:10px 15px; background: rgba(0,0,0,0.3); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fa-solid fa-graduation-cap"></i> HIGHER EDUCATION HUB</span>
-                <span id="live-clock" style="font-family: monospace; font-weight: bold;">--:--:--</span>
+
+            <!-- Other Setting Item Placeholder -->
+            <button onclick="handleLogout()" class="w-full bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 flex justify-between items-center text-red-500">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-power-off"></i>
+                    </div>
+                    <p class="font-bold text-sm">Sign Out Session</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar" class="bottom-nav hidden">
+        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1">
+            <i class="fas fa-grid-2 text-lg text-blue-600"></i>
+            <span class="text-[8px] font-bold">Home</span>
+        </button>
+        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1 text-slate-300">
+            <i class="fas fa-users-gear text-lg"></i>
+            <span class="text-[8px] font-bold">Staff</span>
+        </button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1 text-slate-300">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-[8px] font-bold">Settings</span>
+        </button>
+    </nav>
+
+    <!-- ENTRY MODAL -->
+    <div id="modal">
+        <div class="modal-content">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
+            <select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-700"></select>
+            <div class="relative mb-6">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">$</span>
+                <input id="m-amt" type="number" step="0.01" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 outline-none bg-transparent text-blue-600">
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="content-area">
-    <div class="intro-box">
-        <h2>Academic Summary</h2>
-        <p>A scholar of English Literature and Linguistics, I have consistently maintained a high standard of academic performance. My journey took me from the roots of Madrasah education in Chapainawabganj to the historic Balugram Adarsha College, eventually leading to advanced postgraduate studies at Govt. Titumir College, Dhaka.</p>
-    </div>
-
-    <div class="section-label">Academic Milestones</div>
-
-    <div class="edu-card">
-        <div class="card-top">
-            <div>
-                <h3 class="edu-title">Master of Arts in English</h3>
-                <span class="edu-sub">Govt. Titumir College, Dhaka</span>
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <select id="m-cat" class="p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-xs font-bold text-slate-500">
+                    <option>Imprest</option><option>Voucher</option><option>Advance</option><option>Return</option>
+                </select>
+                <input id="m-date" type="date" class="p-4 bg-slate-50 border border-slate-100 rounded-xl outline-none text-xs">
             </div>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item"><i class="fa-solid fa-building-columns"></i> University of Dhaka Affiliated</div>
-            <div class="detail-item"><i class="fa-solid fa-calendar-check"></i> Session Completion: 2022</div>
-        </div>
-        <div class="action-row">
-            <a href="#" class="action-btn"><i class="fa-solid fa-file-pdf"></i> MA Certificate</a>
-        </div>
-    </div>
-
-    <div class="edu-card">
-        <div class="card-top">
-            <div>
-                <h3 class="edu-title">Bachelor of Arts (Honours)</h3>
-                <span class="edu-sub">Govt. Titumir College, Dhaka</span>
+            <textarea id="m-note" placeholder="What is this for? (Narration)" class="w-full p-4 mb-6 bg-slate-50 border border-slate-100 rounded-xl outline-none h-24 text-xs"></textarea>
+            <div class="flex gap-3 mb-6">
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 transition-all">Received (+)</button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white transition-all">Advanced (-)</button>
             </div>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item"><i class="fa-solid fa-book-open"></i> Department of English</div>
-            <div class="detail-item"><i class="fa-solid fa-calendar-check"></i> Session Completion: 2020</div>
-        </div>
-        <div class="action-row">
-            <a href="#" class="action-btn"><i class="fa-solid fa-file-pdf"></i> BA Certificate</a>
+            <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-xl shadow-blue-100">Confirm Transaction</button>
+            <button onclick="closeModal()" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase tracking-widest">Cancel</button>
         </div>
     </div>
 
-    <div class="edu-card">
-        <div class="card-top">
-            <div>
-                <h3 class="edu-title">Higher Secondary Certificate</h3>
-                <span class="edu-sub">Balugram Adarsha College, Chapainawabganj</span>
-            </div>
-            <div class="grade-tag"><i class="fa-solid fa-trophy"></i> GPA 5.00 / A+</div>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item"><i class="fa-solid fa-map-location-dot"></i> Rajshahi Education Board</div>
-            <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2016</div>
-        </div>
-        <div class="action-row">
-            <a href="#" class="action-btn"><i class="fa-solid fa-eye"></i> View Transcript</a>
-        </div>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-    <div class="edu-card">
-        <div class="card-top">
-            <div>
-                <h3 class="edu-title">Dakhil (Secondary)</h3>
-                <span class="edu-sub">Palsha Alim Madrasha</span>
-            </div>
-            <div class="grade-tag"><i class="fa-solid fa-trophy"></i> GPA 5.00 / A+</div>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item"><i class="fa-solid fa-mosque"></i> Bangladesh Madrasah Education Board</div>
-            <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Passing Year: 2014</div>
-        </div>
-        <div class="action-row">
-            <a href="#" class="action-btn"><i class="fa-solid fa-eye"></i> View Marksheet</a>
-        </div>
-    </div>
-</div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
+            authDomain: "myfinanceapp-e0be3.firebaseapp.com",
+            databaseURL: "https://myfinanceapp-e0be3-default-rtdb.firebaseio.com",
+            projectId: "myfinanceapp-e0be3",
+            storageBucket: "myfinanceapp-e0be3.firebasestorage.app",
+            messagingSenderId: "335278709493",
+            appId: "1:335278709493:web:ec6e0994ce2b07ffd103bc"
+        };
 
-<div class="bottom-nav">
-    <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item nav-active"><i class="fa-solid fa-graduation-cap"></i><span>Edu</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
-</div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        
+        let currentType = 'expense';
+        let staffData = {};
+        let logsList = [];
 
-<script>
-    function updateClock() {
-        const now = new Date();
-        const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
-            clockEl.innerText = now.toLocaleTimeString([], { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+        // Helper for Settings Menu
+        window.toggleMenu = (id) => {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            document.getElementById('auth-guard').style.display = 'none';
+            if (user) {
+                showPage('dashboard-page');
+                document.getElementById('navbar').classList.remove('hidden');
+                document.getElementById('user-display').innerText = user.email.split('@')[0];
+                startSync(user.uid);
+            } else {
+                showPage('login-page');
+                document.getElementById('navbar').classList.add('hidden');
+            }
+        });
+
+        window.handleLogin = () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            setPersistence(auth, browserSessionPersistence).then(() => {
+                return signInWithEmailAndPassword(auth, e, p);
+            }).catch(err => alert("Access Denied"));
+        };
+
+        window.handleLogout = () => signOut(auth);
+
+        window.showPage = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.add('text-slate-300'));
+            const activeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => btn.getAttribute('onclick').includes(id));
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-300');
+                activeBtn.querySelector('i').style.color = '#2563EB';
+            }
+        };
+
+        window.saveUser = () => {
+            const name = document.getElementById('u-name').value;
+            const des = document.getElementById('u-des').value;
+            const editId = document.getElementById('u-edit-id').value;
+            if(!name || !des) return;
+
+            if(editId) {
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${editId}`), { name, desig: des });
+            } else {
+                push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
+            }
+            document.getElementById('u-name').value = '';
+            document.getElementById('u-des').value = '';
+            document.getElementById('u-edit-id').value = '';
+            document.getElementById('u-btn').innerText = 'Add New Staff';
+        };
+
+        window.editStaff = (id) => {
+            const s = staffData[id];
+            document.getElementById('u-name').value = s.name;
+            document.getElementById('u-des').value = s.desig;
+            document.getElementById('u-edit-id').value = id;
+            document.getElementById('u-btn').innerText = 'Update Details';
+        };
+
+        window.deleteStaff = (id) => {
+            if(confirm("Permanently remove staff record?")) remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
+        };
+
+        window.postTxn = () => {
+            const sid = document.getElementById('m-staff').value;
+            const amtRaw = document.getElementById('m-amt').value;
+            const date = document.getElementById('m-date').value;
+            if(!sid || !amtRaw || !date) return alert("All fields required");
+
+            const amt = Number(amtRaw);
+            const staff = staffData[sid];
+            const newStaffBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, staffDes: staff.desig,
+                amount: amt, type: currentType, date,
+                cat: document.getElementById('m-cat').value,
+                note: document.getElementById('m-note').value,
+                balAfter: newStaffBal, ts: Date.now()
+            });
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newStaffBal });
+            closeModal();
+        };
+
+        function startSync(uid) {
+            onValue(ref(db, `users/${uid}/staff`), s => {
+                staffData = s.val() || {};
+                let h = '', opts = '<option value="">Choose Recipient</option>', rOpts = '<option value="">All Staff Members</option>';
+                Object.keys(staffData).forEach(id => {
+                    const u = staffData[id];
+                    opts += `<option value="${id}">${u.name} (${u.desig})</option>`;
+                    rOpts += `<option value="${id}">${u.name}</option>`;
+                    h += `
+                    <div class="bg-white p-5 rounded-3xl flex justify-between items-center shadow-sm border border-slate-50">
+                        <div class="flex items-center gap-4">
+                            <div class="staff-avatar">${u.name.charAt(0)}</div>
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">${u.name}</p>
+                                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">${u.desig}</p>
+                            </div>
+                        </div>
+                        <div class="text-right flex items-center gap-5">
+                            <div>
+                                <p class="text-[8px] text-slate-400 font-bold uppercase">Balance</p>
+                                <p class="font-bold text-blue-600">$${Number(u.balance || 0).toFixed(2)}</p>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="editStaff('${id}')" class="text-slate-200 hover:text-blue-500 transition-colors"><i class="fas fa-pen text-[10px]"></i></button>
+                                <button onclick="deleteStaff('${id}')" class="text-slate-200 hover:text-red-500 transition-colors"><i class="fas fa-trash text-[10px]"></i></button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('staff-list').innerHTML = h || '<p class="text-center text-slate-300 text-xs py-10">No staff records found</p>';
+                document.getElementById('m-staff').innerHTML = opts;
+                document.getElementById('r-staff').innerHTML = rOpts;
+            });
+
+            onValue(ref(db, `users/${uid}/logs`), s => {
+                const data = s.val() || {};
+                logsList = Object.keys(data).map(k => ({...data[k], key: k}));
+                renderHome();
             });
         }
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-</script>
 
+        function renderHome() {
+            const now = new Date();
+            const curMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            document.getElementById('month-name').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+            
+            let tIncMonth = 0, tExpMonth = 0, centralBal = 0;
+            const sorted = [...logsList].sort((a,b) => b.ts - a.ts); 
+            let recentH = '';
+
+            sorted.forEach((l, idx) => {
+                const amt = Number(l.amount) || 0;
+                if(l.type === 'income') centralBal += amt; else centralBal -= amt;
+
+                if(l.date && l.date.startsWith(curMonth)) {
+                    if(l.type === 'income') tIncMonth += amt; else tExpMonth += amt;
+                }
+
+                if(idx < 5) {
+                    recentH += `
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-50 flex justify-between items-center relative overflow-hidden">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xs ${l.type==='income'?'bg-green-50 text-green-600':'bg-orange-50 text-orange-600'}">
+                                <i class="fas ${l.type==='income'?'fa-arrow-down-left':'fa-arrow-up-right'}"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-xs text-slate-800">${l.staffName}</p>
+                                <p class="text-[9px] text-slate-400">${l.note || l.cat}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-sm ${l.type==='income'?'text-green-600':'text-orange-600'}">
+                                ${l.type==='income'?'+':'-'}$${amt.toFixed(2)}
+                            </p>
+                            <p class="text-[8px] text-slate-300 font-bold">${l.date}</p>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            document.getElementById('cb-display').innerText = `$${centralBal.toFixed(2)}`;
+            document.getElementById('inc-display').innerText = `$${tIncMonth.toFixed(2)}`;
+            document.getElementById('exp-display').innerText = `$${tExpMonth.toFixed(2)}`;
+            document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 text-xs py-5">No transaction history</p>';
+        }
+
+        window.generateReport = () => {
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
+            const staffId = document.getElementById('r-staff').value;
+            let h = '', ti = 0, te = 0;
+            
+            const filtered = logsList.filter(l => {
+                let m = true;
+                if(start && l.date < start) m = false;
+                if(end && l.date > end) m = false;
+                if(staffId && l.staffId !== staffId) m = false;
+                return m;
+            }).sort((a,b) => b.ts - a.ts);
+
+            filtered.forEach(l => {
+                const a = Number(l.amount);
+                if(l.type === 'income') ti += a; else te += a;
+                h += `
+                <div class="flex justify-between items-start py-2 border-b border-slate-50">
+                    <div>
+                        <p class="font-bold uppercase text-[9px]">${l.staffName}</p>
+                        <p class="text-[8px] text-slate-400">${l.date} | ${l.cat}</p>
+                    </div>
+                    <span class="font-bold ${l.type==='income'?'text-green-600':'text-red-600'}">
+                        ${l.type==='income'?'+':'-'}${a.toFixed(2)}
+                    </span>
+                </div>`;
+            });
+
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('pdf-btn').classList.remove('hidden');
+            document.getElementById('report-content').innerHTML = h || '<p class="text-center py-4">No matching data</p>';
+            document.getElementById('rep-inc').innerText = `$${ti.toFixed(2)}`;
+            document.getElementById('rep-exp').innerText = `$${te.toFixed(2)}`;
+            document.getElementById('rep-net').innerText = `$${(ti - te).toFixed(2)}`;
+            document.getElementById('report-date').innerText = `Generated: ${new Date().toLocaleString()}`;
+        };
+
+        window.exportPDF = () => {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin: 10,
+                filename: 'Ledger_Report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        };
+
+        window.openModal = () => { document.getElementById('modal').classList.add('active'); document.getElementById('m-date').valueAsDate = new Date(); };
+        window.closeModal = () => document.getElementById('modal').classList.remove('active');
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-green-500 text-white shadow-lg' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
+        };
+    </script>
 </body>
 </html>
