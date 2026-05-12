@@ -3,38 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceFlow</title>
+    <title>FinanceFlow Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .app-card { border-radius: 28px; }
-        
-        /* 🛑 Start EVERYTHING hidden */
-        .page { 
-            display: none; 
-            min-height: 100vh; 
-            width: 100%;
-        }
-
-        /* Use Flex only when active */
-        .page.active { 
-            display: flex !important; 
-            flex-direction: column;
-            animation: fadeIn 0.3s ease; 
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
+        .app-card { border-radius: 28px; transition: all 0.3s ease; }
+        .page { display: none; min-height: 100vh; width: 100%; }
+        .page.active { display: flex !important; flex-direction: column; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; }
-
-        #txn-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 100;
-            align-items: flex-end;
-        }
+        #txn-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: flex-end; }
         #txn-modal.active { display: flex; }
         .modal-content { animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -44,14 +22,14 @@
 
     <!-- 🔐 LOGIN PAGE -->
     <div id="login-page" class="page items-center justify-center p-6">
-        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-600 rounded-2xl mb-6 mx-auto flex items-center justify-center shadow-lg shadow-blue-200">
-                <i class="fas fa-wallet text-white text-2xl"></i>
+                <i class="fas fa-vault text-white text-2xl"></i>
             </div>
-            <h2 class="text-3xl font-bold mb-2">Login</h2>
-            <p class="text-slate-500 mb-8">Personal Finance Vault</p>
-            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+            <h2 class="text-3xl font-bold mb-2">Welcome</h2>
+            <p class="text-slate-400 mb-8 font-medium">Secure Finance Vault</p>
+            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 border-none">
+            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 border-none">
             <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg active:scale-95 transition">Sign In</button>
         </div>
     </div>
@@ -60,75 +38,81 @@
     <div id="dashboard-page" class="page p-5 pb-24">
         <div class="flex justify-between items-center mb-8 pt-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                    <i class="fas fa-user"></i>
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-md">
+                    <i class="fas fa-user-astronaut"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">Account</p>
-                    <p class="text-sm font-bold text-slate-700" id="user-display">User</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Active User</p>
+                    <p class="text-sm font-bold text-slate-700" id="user-display">...</p>
                 </div>
             </div>
-            <button onclick="logout()" class="text-slate-300 p-2"><i class="fas fa-power-off text-xl"></i></button>
+            <button onclick="logout()" class="text-slate-300 p-2 hover:text-red-500 transition"><i class="fas fa-power-off text-xl"></i></button>
         </div>
 
-        <div class="bg-blue-600 app-card p-8 text-white shadow-xl shadow-blue-200 mb-6 relative overflow-hidden">
+        <div id="balance-card" class="bg-blue-600 app-card p-8 text-white shadow-xl shadow-blue-100 mb-6 relative overflow-hidden">
             <div class="relative z-10 text-center">
-                <p class="opacity-70 text-xs mb-1 font-bold uppercase tracking-widest">Total Balance</p>
-                <h2 class="text-4xl font-bold mb-6" id="total-balance">$0.00</h2>
-                <button onclick="toggleModal(true)" class="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg active:scale-95 transition">+ Add Entry</button>
+                <p class="opacity-70 text-[10px] mb-1 font-bold uppercase tracking-[0.2em]">Net Balance</p>
+                <h2 class="text-4xl font-bold mb-6 tracking-tight" id="total-balance">$0.00</h2>
+                <button onclick="toggleModal(true)" class="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg active:scale-95 transition flex items-center gap-2 mx-auto">
+                    <i class="fas fa-plus-circle"></i> Add Transaction
+                </button>
             </div>
+            <i class="fas fa-chart-line absolute -right-4 -bottom-4 text-9xl opacity-10"></i>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm text-center">
+            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm">
                 <p class="text-[10px] text-green-500 font-bold uppercase mb-1">Income</p>
-                <h3 class="text-xl font-bold" id="total-income">$0</h3>
+                <h3 class="text-xl font-bold text-slate-700" id="total-income">$0</h3>
             </div>
-            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm text-center">
+            <div class="bg-white p-5 app-card border border-slate-100 shadow-sm">
                 <p class="text-[10px] text-red-500 font-bold uppercase mb-1">Expense</p>
-                <h3 class="text-xl font-bold" id="total-expense">$0</h3>
+                <h3 class="text-xl font-bold text-slate-700" id="total-expense">$0</h3>
             </div>
         </div>
 
-        <h3 class="font-bold mb-4 text-slate-700 px-1">Recent Activity</h3>
+        <div class="flex justify-between items-center mb-4 px-1">
+            <h3 class="font-bold text-slate-800">History</h3>
+            <span class="text-[10px] bg-slate-200 text-slate-500 px-2 py-1 rounded-full font-bold uppercase" id="txn-count">0 Items</span>
+        </div>
+
         <div id="txn-container" class="space-y-3">
-            <!-- Transactions load here -->
+            <!-- List loads here -->
         </div>
     </div>
 
     <!-- ➕ MODAL -->
     <div id="txn-modal" onclick="if(event.target == this) toggleModal(false)">
-        <div class="bg-white w-full rounded-t-[40px] p-8 modal-content">
+        <div class="bg-white w-full rounded-t-[40px] p-8 modal-content shadow-2xl">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-bold mb-8 text-center">Add Entry</h3>
             
             <div class="mb-8">
-                <p class="text-center text-slate-400 text-xs font-bold uppercase mb-2">Amount</p>
                 <input id="amount" type="number" placeholder="0.00" class="w-full text-5xl font-bold text-center outline-none text-blue-600 bg-transparent">
+                <p class="text-center text-slate-400 text-[10px] font-bold uppercase mt-2">Enter Amount</p>
             </div>
             
-            <input id="narration" type="text" placeholder="What was this for?" class="w-full p-5 mb-4 bg-slate-100 rounded-[24px] outline-none border-2 border-transparent focus:border-blue-500">
+            <input id="narration" type="text" placeholder="Note (e.g. Salary, Coffee)" class="w-full p-5 mb-4 bg-slate-50 rounded-[24px] outline-none border-2 border-transparent focus:border-blue-500 transition-all">
             
             <div class="flex gap-2 mb-8">
-                <button onclick="setType('income')" id="btn-inc" class="flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400 border-2 border-transparent">Income</button>
-                <button onclick="setType('expense')" id="btn-exp" class="flex-1 p-4 rounded-2xl font-bold bg-blue-600 text-white border-2 border-transparent">Expense</button>
+                <button onclick="setType('income')" id="btn-inc" class="flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400 transition-all">Income</button>
+                <button onclick="setType('expense')" id="btn-exp" class="flex-1 p-4 rounded-2xl font-bold bg-red-500 text-white transition-all">Expense</button>
             </div>
 
-            <button onclick="saveTransaction()" class="w-full bg-blue-600 text-white p-5 rounded-[24px] font-bold shadow-xl shadow-blue-100 mb-4">Save Transaction</button>
+            <button onclick="saveTransaction()" class="w-full bg-blue-600 text-white p-5 rounded-[24px] font-bold shadow-xl shadow-blue-100 mb-2 active:scale-95 transition">Confirm Transaction</button>
         </div>
     </div>
 
-    <!-- 📱 NAV -->
-    <nav id="main-nav" class="bottom-nav hidden flex justify-around p-5 shadow-2xl">
-        <button class="text-blue-600"><i class="fas fa-house text-2xl"></i></button>
-        <button class="text-slate-300"><i class="fas fa-book text-2xl"></i></button>
-        <button class="text-slate-300"><i class="fas fa-cog text-2xl"></i></button>
+    <!-- 📱 NAVIGATION -->
+    <nav id="main-nav" class="bottom-nav hidden flex justify-around items-center p-4">
+        <button class="text-blue-600 p-2"><i class="fas fa-grid-2 text-2xl"></i></button>
+        <button class="text-slate-300 p-2"><i class="fas fa-file-invoice-dollar text-2xl"></i></button>
+        <button class="text-slate-300 p-2"><i class="fas fa-user-gear text-2xl"></i></button>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
@@ -148,22 +132,21 @@
 
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const p = document.getElementById(id);
-            if(p) p.classList.add('active');
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active');
         };
 
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
+            signInWithEmailAndPassword(auth, e, p).catch(err => alert("Login Error: " + err.message));
         };
 
         window.logout = () => signOut(auth).then(() => location.reload());
 
-        // --- THE FIX: Wait for Firebase to tell us what to do ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                document.getElementById('user-display').innerText = user.email;
+                document.getElementById('user-display').innerText = user.email.split('@')[0];
                 showPage('dashboard-page');
                 document.getElementById('main-nav').classList.remove('hidden');
                 loadData(user.uid);
@@ -173,7 +156,10 @@
             }
         });
 
-        window.toggleModal = (s) => document.getElementById('txn-modal').classList.toggle('active', s);
+        window.toggleModal = (s) => {
+            document.getElementById('txn-modal').classList.toggle('active', s);
+            if(s) document.getElementById('amount').focus();
+        };
         
         window.setType = (t) => {
             currentType = t;
@@ -184,7 +170,7 @@
         window.saveTransaction = () => {
             const amt = parseFloat(document.getElementById('amount').value);
             const msg = document.getElementById('narration').value;
-            if(!amt || !msg) return alert("Fill all fields");
+            if(!amt || !msg) return alert("Please enter amount and description");
 
             push(ref(db, `users/${auth.currentUser.uid}/transactions`), {
                 amount: amt, narration: msg, type: currentType, timestamp: serverTimestamp()
@@ -195,26 +181,63 @@
             });
         };
 
+        // --- NEW: DELETE FUNCTION ---
+        window.deleteTxn = (id) => {
+            if(confirm("Delete this transaction?")) {
+                remove(ref(db, `users/${auth.currentUser.uid}/transactions/${id}`));
+            }
+        };
+
         function loadData(uid) {
             onValue(ref(db, `users/${uid}/transactions`), (s) => {
                 const data = s.val();
-                let h = '', ti = 0, te = 0;
+                let h = '', ti = 0, te = 0, count = 0;
+                
                 if(data) {
-                    Object.values(data).reverse().forEach(t => {
+                    const keys = Object.keys(data).reverse();
+                    count = keys.length;
+                    keys.forEach(key => {
+                        const t = data[key];
                         const isI = t.type === 'income';
+                        const date = t.timestamp ? new Date(t.timestamp).toLocaleDateString('en-US', {month:'short', day:'numeric'}) : 'Just now';
+                        
                         isI ? ti += t.amount : te += t.amount;
-                        h += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-slate-50">
-                            <div><p class="font-bold text-slate-700">${t.narration}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${t.type}</p></div>
-                            <p class="font-bold ${isI ? 'text-green-500' : 'text-red-500'}">${isI?'+':'-'}$${t.amount.toFixed(2)}</p>
+                        
+                        h += `
+                        <div class="bg-white p-4 rounded-[24px] flex justify-between items-center shadow-sm border border-slate-100 group transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl ${isI ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'} flex items-center justify-center text-xs">
+                                    <i class="fas ${isI ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-700 text-sm">${t.narration}</p>
+                                    <p class="text-[9px] text-slate-400 font-bold uppercase">${date}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <p class="font-bold ${isI ? 'text-green-500' : 'text-red-500'}">${isI?'+':'-'}$${t.amount.toFixed(2)}</p>
+                                <button onclick="deleteTxn('${key}')" class="text-slate-200 hover:text-red-400 transition"><i class="fas fa-trash-alt text-xs"></i></button>
+                            </div>
                         </div>`;
                     });
                     document.getElementById('txn-container').innerHTML = h;
                 } else {
-                    document.getElementById('txn-container').innerHTML = '<p class="text-center text-slate-300 italic py-10">Empty</p>';
+                    document.getElementById('txn-container').innerHTML = '<div class="text-center py-10"><i class="fas fa-receipt text-slate-200 text-4xl mb-3"></i><p class="text-slate-300 text-sm">No activity yet</p></div>';
                 }
-                document.getElementById('total-balance').innerText = `$${(ti - te).toFixed(2)}`;
+
+                const balance = ti - te;
+                document.getElementById('total-balance').innerText = `$${balance.toFixed(2)}`;
                 document.getElementById('total-income').innerText = `$${ti.toFixed(2)}`;
                 document.getElementById('total-expense').innerText = `$${te.toFixed(2)}`;
+                document.getElementById('txn-count').innerText = `${count} Items`;
+                
+                // Color change logic for negative balance
+                const card = document.getElementById('balance-card');
+                if(balance < 0) {
+                    card.classList.replace('bg-blue-600', 'bg-slate-800');
+                } else {
+                    card.classList.replace('bg-slate-800', 'bg-blue-600');
+                }
             });
         }
     </script>
