@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet | Abdullahil Kuafi</title>
+    <title>FinanceFlow Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -52,7 +52,7 @@
     <div id="login-page" class="page flex-col items-center justify-center p-6">
         <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
-            <h2 class="text-2xl font-bold mb-8">Welcome Back Kuafi!</h2>
+            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <div class="relative mb-4">
                 <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
@@ -406,14 +406,16 @@
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
+        // FIXED DELETE LOGIC: WORKS EVEN IF STAFF IS ALREADY DELETED
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
                 const staff = staffData[sid];
-                if(!staff) return alert("Staff not found");
-                const currentBal = Number(staff.balance || 0);
-                const revAmt = Number(amt);
-                const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
-                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                if(staff) {
+                    const currentBal = Number(staff.balance || 0);
+                    const revAmt = Number(amt);
+                    const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
+                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                }
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
             }
         };
@@ -442,10 +444,11 @@
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">Select Staff</option>';
+                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    opts += `<option value="${id}">${u.name}</option>`;
+                    const label = `${u.name} (${u.desig || 'N/A'})`;
+                    opts += `<option value="${id}">${label}</option>`;
                     sH += `<div class="staff-card p-6 shadow-lg relative overflow-hidden">
                         <i class="fa-solid fa-id-card absolute -right-4 -bottom-4 text-6xl opacity-10"></i>
                         <h4 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-circle-user text-teal-400 text-sm"></i> ${u.name}</h4>
@@ -461,7 +464,9 @@
                 document.getElementById('staff-list').innerHTML = sH;
                 document.getElementById('mgmt-staff-list').innerHTML = mSH;
                 document.getElementById('m-staff').innerHTML = opts;
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Staff', 'All Staff Members');
+                if(document.getElementById('r-staff')) {
+                    document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+                }
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -554,7 +559,7 @@
         window.exportPDF = () => {
             const user = auth.currentUser.email.split('@')[0];
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
-            const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.replace(/\s+/g, '_');
+            const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
             const fileName = `${user}_${namePart}_Ledger_${new Date().toISOString().slice(0,10)}.pdf`;
             html2pdf().set({ margin: 10, filename: fileName, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(document.getElementById('pdf-content')).save();
         };
