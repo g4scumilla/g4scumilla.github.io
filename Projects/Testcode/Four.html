@@ -29,22 +29,14 @@
             border-radius: 24px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
-        .debit-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12S53.4 0 60 0zM12 48c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zm96 0c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12zM60 96c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.05); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
-        .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; position: relative; overflow: hidden; color: white; }
+        .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; color: white; }
     </style>
 </head>
 <body>
@@ -58,10 +50,8 @@
 
     <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl"><i class="fas fa-vault"></i></div>
-            <h2 class="text-2xl font-bold mb-2">FinanceFlow Pro</h2>
-            <p class="text-slate-400 text-xs mb-8">Management Ledger System</p>
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
             <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
             <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Sign In</button>
@@ -75,49 +65,36 @@
                 <p class="text-[10px] text-slate-400 font-bold uppercase">System Operator</p>
                 <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
             </div>
-            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl shadow-lg flex items-center justify-center text-white"><i class="fas fa-plus"></i></button>
+            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- BALANCE CARD -->
         <div class="debit-card p-8 text-white mb-6 flex flex-col justify-between">
-            <div class="flex justify-between items-start z-10">
-                <div>
-                    <p class="text-[10px] font-bold uppercase tracking-wider mb-1 text-white/90">Central Balance Ledger</p>
-                    <h2 class="text-3xl font-bold tracking-tight text-white" id="cb-display">...</h2>
-                </div>
-                <i class="fas fa-microchip text-3xl text-white/50"></i>
+            <div class="z-10">
+                <p class="text-[10px] font-bold uppercase mb-1">Central Balance Ledger</p>
+                <h2 class="text-3xl font-bold" id="cb-display">0.00</h2>
             </div>
             <div class="flex justify-between items-end z-10">
-                <div>
-                    <p class="text-[8px] uppercase text-white/70">Account Status</p>
-                    <p class="text-xs font-bold tracking-widest text-white">ACTIVE SESSION</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-[8px] uppercase text-white/70">Currency</p>
-                    <p class="text-xs font-bold text-white" id="card-curr-label">BDT</p>
-                </div>
+                <p class="text-xs font-bold tracking-widest">ACTIVE SESSION</p>
+                <p class="text-xs font-bold" id="card-curr-label">BDT</p>
             </div>
         </div>
 
-        <!-- MONTHLY SUMMARY (NEW SECTION) -->
+        <!-- MONTHLY SUMMARY -->
         <div class="mb-8">
-            <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase" id="month-label">...</h3>
+            <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase" id="month-label">May 2026</h3>
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                     <p class="text-[8px] font-bold text-teal-600 uppercase mb-1">Total Received</p>
-                    <p class="text-sm font-bold text-slate-800" id="month-received">...</p>
+                    <p class="text-sm font-bold text-slate-800" id="month-received">0.00</p>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                     <p class="text-[8px] font-bold text-orange-600 uppercase mb-1">Total Advanced</p>
-                    <p class="text-sm font-bold text-slate-800" id="month-advanced">...</p>
+                    <p class="text-sm font-bold text-slate-800" id="month-advanced">0.00</p>
                 </div>
             </div>
         </div>
 
-        <h3 class="font-bold text-slate-800 tracking-tight mb-4 flex justify-between items-center px-1">
-            Recent Activity
-            <span class="text-[10px] bg-teal-100 text-teal-700 px-2 py-1 rounded-full uppercase font-bold">Latest 5</span>
-        </h3>
+        <h3 class="font-bold text-slate-800 mb-4 px-1">Recent Activity</h3>
         <div id="recent-logs" class="space-y-3"></div>
     </div>
 
@@ -127,99 +104,40 @@
         <div id="staff-list" class="grid gap-6"></div>
     </div>
 
-    <!-- SETTINGS PAGE -->
+    <!-- SETTINGS -->
     <div id="settings-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6">Settings</h2>
         <div class="space-y-4">
-            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 ml-2">Display & Currency</p>
-                <div class="flex flex-col gap-2 p-2">
-                    <label class="text-xs font-bold text-slate-500">Currency Format</label>
-                    <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-100">
-                        <option value="text">BDT (Text)</option>
-                        <option value="sign">৳ (Sign)</option>
-                        <option value="usd">USD ($)</option>
-                    </select>
-                </div>
+            <div class="bg-white rounded-[24px] p-4 shadow-sm">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3">Currency</p>
+                <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold">
+                    <option value="text">BDT (Text)</option>
+                    <option value="sign">৳ (Sign)</option>
+                    <option value="usd">USD ($)</option>
+                </select>
             </div>
-
-            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 ml-2">Tools</p>
-                <button onclick="showPage('reports-page')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 rounded-xl transition-all">
-                    <div class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i><span class="font-semibold text-sm">Ledger Reports</span></div>
-                    <i class="fas fa-chevron-right text-slate-300"></i>
-                </button>
-                <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 rounded-xl transition-all">
-                    <div class="flex items-center gap-3"><i class="fas fa-user-plus text-purple-600"></i><span class="font-semibold text-sm">Staff Management</span></div>
-                    <i class="fas fa-chevron-right text-slate-300"></i>
-                </button>
-                <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 rounded-xl transition-all">
-                    <div class="flex items-center gap-3"><i class="fas fa-history text-orange-600"></i><span class="font-semibold text-sm">Transaction Logs</span></div>
-                    <i class="fas fa-chevron-right text-slate-300"></i>
-                </button>
-            </div>
-            
-            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-3">
-                <i class="fas fa-power-off"></i> Sign Out
-            </button>
+            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between">Staff Management <i class="fas fa-chevron-right text-slate-300"></i></button>
+            <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between">Transaction History <i class="fas fa-chevron-right text-slate-300"></i></button>
+            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px]">Sign Out</button>
         </div>
     </div>
-
-    <!-- REPORTS PAGE -->
-    <div id="reports-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-6">
-            <button onclick="showPage('settings-page')" class="text-slate-400"><i class="fas fa-arrow-left"></i></button>
-            <h2 class="text-2xl font-bold">Ledger Reports</h2>
-        </div>
-        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl">
-                <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl">
-            </div>
-            <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border"></select>
-            <div class="flex gap-2">
-                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs">Filter Data</button>
-                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs"><i class="fas fa-file-pdf"></i> PDF</button>
-            </div>
-        </div>
-        <div id="report-view" class="hidden">
-            <div id="pdf-content" class="bg-white p-6 rounded-lg text-[10px]">
-                <h2 class="text-center font-bold text-lg mb-4 text-blue-800 uppercase tracking-tighter">FinanceFlow Management Statement</h2>
-                <table class="w-full border-collapse border border-slate-200">
-                    <thead>
-                        <tr class="bg-slate-100 text-[8px]">
-                            <th class="border p-2">SL</th>
-                            <th class="border p-2">Date</th>
-                            <th class="border p-2">Name</th>
-                            <th class="border p-2 text-center">Note/Narration</th>
-                            <th class="border p-2 text-right">Amount</th>
-                            <th class="border p-2 text-right">Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="report-body"></tbody>
-                </table>
-                <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- NAVIGATION -->
-    <nav id="navbar" class="bottom-nav hidden">
-        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fas fa-home text-lg"></i><span class="text-[8px] font-bold">HOME</span></button>
-        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fas fa-address-card text-lg"></i><span class="text-[8px] font-bold">STAFF</span></button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><span class="text-[8px] font-bold">SETTINGS</span></button>
-    </nav>
 
     <!-- MODALS -->
-    <div id="entry-modal" class="modal"><div class="modal-content"><div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div><select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold text-slate-700"></select><div class="relative mb-6 text-center"><input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 outline-none bg-transparent text-teal-600"></div><div class="grid grid-cols-2 gap-3 mb-4"><select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold"><option>Imprest</option><option>Advance</option><option>Return</option></select><input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs"></div><textarea id="m-note" placeholder="Narration" class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs"></textarea><div class="flex gap-3 mb-6"><button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Receive (+)</button><button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white">Advance (-)</button></div><button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold">Post Entry</button><button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button></div></div>
+    <div id="entry-modal" class="modal"><div class="modal-content"><select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold"></select><input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none"><div class="grid grid-cols-2 gap-3 mb-4"><select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold"><option>Imprest</option><option>Advance</option><option>Return</option></select><input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs"></div><textarea id="m-note" placeholder="Narration" class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs"></textarea><div class="flex gap-3 mb-6"><button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Receive (+)</button><button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white">Advance (-)</button></div><button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold">Post Entry</button><button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button></div></div>
     
     <div id="staff-mgmt-modal" class="modal"><div class="modal-content"><h3 class="font-bold mb-4">Staff Settings</h3><input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2"><input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4"><button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6">Add Staff</button><div id="mgmt-staff-list" class="space-y-2"></div><button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button></div></div>
 
-    <div id="txn-mgmt-modal" class="modal"><div class="modal-content"><h3 class="font-bold mb-4">Transaction History</h3><div id="mgmt-txn-list" class="space-y-3"></div><button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button></div></div>
+    <div id="txn-mgmt-modal" class="modal"><div class="modal-content"><h3 class="font-bold mb-4">All Transaction History</h3><div id="mgmt-txn-list" class="space-y-3"></div><button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button></div></div>
+
+    <nav id="navbar" class="bottom-nav hidden">
+        <button onclick="showPage('dashboard-page')"><i class="fas fa-home"></i><p class="text-[8px] font-bold">HOME</p></button>
+        <button onclick="showPage('users-page')"><i class="fas fa-users"></i><p class="text-[8px] font-bold">STAFF</p></button>
+        <button onclick="showPage('settings-page')"><i class="fas fa-cog"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
+    </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
         import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
         const firebaseConfig = {
@@ -242,7 +160,7 @@
         let currFormat = 'text';
 
         const fmt = (num) => {
-            const val = Math.abs(num).toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
             if(currFormat === 'sign') return num < 0 ? `(৳${val})` : `৳${val}`;
             if(currFormat === 'usd') return num < 0 ? `($${val})` : `$${val}`;
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
@@ -270,7 +188,7 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Access Denied"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -287,19 +205,23 @@
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
             const des = document.getElementById('u-des').value;
-            if(!name || !des) return;
+            if(!name) return;
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
         };
 
-        window.delUser = (sid) => confirm("Delete this staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
         
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Reverse this entry?")) {
                 const staff = staffData[sid];
-                const rev = type === 'income' ? (staff.balance - amt) : (staff.balance + amt);
-                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: rev });
+                if(!staff) return alert("Staff not found");
+                const currentBal = Number(staff.balance || 0);
+                const revAmt = Number(amt);
+                const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
+                
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
             }
         };
@@ -311,7 +233,8 @@
             if(!sid || !amt || !date) return alert("Fill all fields");
 
             const staff = staffData[sid];
-            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+            const currentBal = Number(staff.balance || 0);
+            const newBal = currentType === 'income' ? (currentBal + amt) : (currentBal - amt);
 
             push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name,
@@ -322,6 +245,8 @@
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
             closeModal('entry-modal');
+            document.getElementById('m-amt').value = '';
+            document.getElementById('m-note').value = '';
         };
 
         function startSync(uid) {
@@ -331,25 +256,22 @@
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     opts += `<option value="${id}">${u.name}</option>`;
-                    sH += `
-                    <div class="staff-card p-6 shadow-xl">
-                        <div class="flex justify-between items-start mb-6">
-                            <div><h4 class="text-xl font-bold">${u.name}</h4><p class="text-[9px] opacity-60 font-bold uppercase">${u.desig}</p></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-4">
-                            <div><p class="text-[8px] opacity-50 uppercase">Balance</p><p class="text-sm font-bold text-teal-300">${fmt(u.balance)}</p></div>
-                        </div>
+                    sH += `<div class="staff-card p-6 shadow-lg">
+                        <h4 class="text-xl font-bold">${u.name}</h4>
+                        <p class="text-[10px] opacity-60 mb-4">${u.desig}</p>
+                        <p class="text-[8px] uppercase opacity-50">Current Balance</p>
+                        <p class="text-lg font-bold">${fmt(u.balance)}</p>
                     </div>`;
-                    mSH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl"><span class="text-xs font-bold">${u.name}</span><button onclick="delUser('${id}')" class="text-red-500 text-[10px] font-bold uppercase">Delete</button></div>`;
+                    mSH += `<div class="flex justify-between p-3 bg-slate-50 rounded-xl mb-2"><span class="font-bold">${u.name}</span><button onclick="delUser('${id}')" class="text-red-500 font-bold text-xs">DEL</button></div>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH;
                 document.getElementById('mgmt-staff-list').innerHTML = mSH;
                 document.getElementById('m-staff').innerHTML = opts;
-                document.getElementById('r-staff').innerHTML = opts.replace('Select', 'All');
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
-                logsList = Object.keys(s.val() || {}).map(k => ({...s.val()[k], key: k})).sort((a,b) => a.ts - b.ts);
+                const data = s.val() || {};
+                logsList = Object.keys(data).map(k => ({...data[k], key: k})).sort((a,b) => a.ts - b.ts);
                 renderHome();
             });
         }
@@ -358,28 +280,19 @@
             const now = new Date();
             const monthName = now.toLocaleString('default', { month: 'long' });
             const year = now.getFullYear();
-            const currentMonthKey = now.toISOString().slice(0, 7); // Format: YYYY-MM
+            const monthKey = now.toISOString().slice(0, 7); 
             
             document.getElementById('month-label').innerText = `${monthName} ${year}`;
 
-            let rCB = 0; let rSB = {};
-            let monthlyRec = 0; let monthlyAdv = 0;
+            let rCB = 0; let monthlyRec = 0; let monthlyAdv = 0;
+            
+            logsList.forEach(l => {
+                const a = Number(l.amount || 0);
+                if(l.type === 'income') rCB += a; else rCB -= a;
 
-            const logsWithBal = logsList.map(l => {
-                const a = Number(l.amount);
-                if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                
-                // Central Logic
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } 
-                else { rCB -= a; rSB[l.staffId] -= a; }
-
-                // Monthly Summary Logic
-                if(l.date.startsWith(currentMonthKey)) {
-                    if(l.type === 'income') monthlyRec += a;
-                    else monthlyAdv += a;
+                if(l.date && l.date.startsWith(monthKey)) {
+                    if(l.type === 'income') monthlyRec += a; else monthlyAdv += a;
                 }
-
-                return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
             document.getElementById('cb-display').innerText = fmt(rCB);
@@ -387,53 +300,26 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
             
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                logH += `
-                <div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-[9px] font-bold text-slate-400">${l.date}</span>
-                        <span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}">${l.type==='income'?'+':'-'} ${fmt(l.amount)}</span>
-                    </div>
-                    <div class="mb-2"><p class="font-bold text-sm text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 italic">${l.note || 'No Narration'}</p></div>
+            // Recent Activity (Top 5)
+            [...logsList].reverse().slice(0, 5).forEach(l => {
+                logH += `<div class="bg-white p-4 rounded-2xl border border-slate-100">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1"><span>${l.date}</span><span class="${l.type==='income'?'text-teal-600':'text-orange-600'}">${l.type==='income'?'+':'-'} ${fmt(l.amount)}</span></div>
+                    <p class="font-bold text-slate-800">${l.staffName}</p>
+                    <p class="text-[10px] text-slate-400">${l.note || ''}</p>
                 </div>`;
             });
-            [...logsWithBal].reverse().slice(0,10).forEach(l => {
-                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | ${fmt(l.amount)}</p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 text-[10px] font-bold">Reverse</button></div>`;
+
+            // Management List (Full History for Deletion)
+            [...logsList].reverse().forEach(l => {
+                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2">
+                    <div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | ${fmt(l.amount)}</p></div>
+                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[10px]">REVERSE</button>
+                </div>`;
             });
-            document.getElementById('recent-logs').innerHTML = logH;
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH;
+
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions yet</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs found</p>';
         }
-
-        window.generateReport = () => {
-            const start = document.getElementById('r-start').value;
-            const end = document.getElementById('r-end').value;
-            const sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, rBal = 0;
-
-            logsList.forEach(l => {
-                const a = Number(l.amount);
-                if(l.type === 'income') rBal += a; else rBal -= a;
-                let m = true;
-                if(start && l.date < start) m = false;
-                if(end && l.date > end) m = false;
-                if(sid && l.staffId !== sid) m = false;
-
-                if(m) {
-                    if(l.type === 'income') tRec += a; else tAdv += a;
-                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2 text-center text-slate-500">${l.note || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(rBal)}</td></tr>`;
-                }
-            });
-            document.getElementById('report-view').classList.remove('hidden');
-            document.getElementById('pdf-btn').classList.remove('hidden');
-            document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Ledger: ${fmt(tRec - tAdv)}</p>`;
-        };
-
-        window.exportPDF = () => {
-            const user = auth.currentUser.email.split('@')[0];
-            const fileName = `${user}_Ledger_${new Date().toISOString().slice(0,10)}.pdf`;
-            html2pdf().set({ margin: 10, filename: fileName, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(document.getElementById('pdf-content')).save();
-        };
 
         window.setT = (t) => {
             currentType = t;
