@@ -9,8 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        /* 🛡️ THE FIX: Default all pages to hidden to prevent "flicker" */
         .page { display: none; min-height: 100vh; padding-bottom: 100px; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        .page.active { display: block !important; animation: fadeIn 0.3s ease; }
+        
+        #auth-loading { position: fixed; inset: 0; background: white; z-index: 999; display: flex; align-items: center; justify-content: center; }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; display: flex; justify-content: space-around; padding: 15px; }
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
@@ -21,13 +26,18 @@
 </head>
 <body class="bg-[#F8FAFC]">
 
+    <!-- ⏳ LOADING SHIELD (Prevents Login Page Flicker) -->
+    <div id="auth-loading">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+    </div>
+
     <!-- 🔐 LOGIN PAGE -->
     <div id="login-page" class="page flex items-center justify-center p-6">
         <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
             <div class="w-16 h-16 bg-blue-600 rounded-2xl mb-6 mx-auto flex items-center justify-center shadow-lg"><i class="fas fa-vault text-white text-2xl"></i></div>
             <h2 class="text-3xl font-bold mb-8 text-slate-800">Secure Access</h2>
-            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
-            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
+            <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none border-2 border-transparent focus:border-blue-200 transition">
+            <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none border-2 border-transparent focus:border-blue-200 transition">
             <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg active:scale-95 transition">Sign In</button>
         </div>
     </div>
@@ -46,7 +56,7 @@
         <div class="bg-gradient-to-br from-blue-700 to-blue-500 rounded-[32px] p-8 text-white shadow-xl mb-6 relative overflow-hidden">
             <p class="opacity-70 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Central Balance</p>
             <h2 class="text-4xl font-bold tracking-tight mb-4" id="cb-display">$0.00</h2>
-            <button onclick="openModal('txn')" class="w-full bg-white/20 backdrop-blur-md py-3 rounded-2xl text-xs font-bold border border-white/10">+ New Entry</button>
+            <button onclick="openModal('txn')" class="w-full bg-white/20 backdrop-blur-md py-3 rounded-2xl text-xs font-bold border border-white/10 active:scale-95 transition">+ New Entry</button>
         </div>
 
         <!-- Date Filter Section -->
@@ -59,7 +69,7 @@
                 <p class="text-[9px] font-bold text-slate-400 uppercase mb-1 ml-1">To</p>
                 <input type="date" id="filter-end" onchange="refreshDashboard()" class="w-full text-xs font-bold text-slate-600 bg-slate-50 p-2 rounded-xl border-none outline-none">
             </div>
-            <button onclick="clearFilter()" class="mt-4 p-2 text-blue-600"><i class="fas fa-rotate-right"></i></button>
+            <button onclick="clearFilter()" class="mt-4 p-2 text-blue-600 active:rotate-180 transition-all duration-300"><i class="fas fa-rotate-right"></i></button>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-8">
@@ -73,7 +83,13 @@
             </div>
         </div>
 
-        <h3 class="font-bold text-slate-800 mb-4">Latest Activity</h3>
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800">Latest Activity</h3>
+            <div class="relative w-1/2">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[10px]"></i>
+                <input id="history-search" type="text" onkeyup="filterHistory()" placeholder="Search staff..." class="w-full pl-8 pr-3 py-2 bg-white rounded-xl text-[10px] border-none shadow-sm outline-none">
+            </div>
+        </div>
         <div id="recent-container" class="space-y-4"></div>
     </div>
 
@@ -145,10 +161,16 @@
         let currentTxnType = 'expense';
         let usersData = {};
         let editingUserId = null;
+        let globalLogs = [];
 
-        // --- Auth & Initial State ---
-        onAuthStateChanged(auth, user => {
+        // --- Auth Persistence Logic ---
+        onAuthStateChanged(auth, (user) => {
+            // Hide loading shield after Firebase responds
+            document.getElementById('auth-loading').style.display = 'none';
+            
+            // Clean slate: hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
             if (user) {
                 document.getElementById('dashboard-page').classList.add('active');
                 document.getElementById('main-nav').classList.remove('hidden');
@@ -163,19 +185,28 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(err => alert("Login Failed: " + err.message));
+            if(!e || !p) return alert("Email and Password required");
+            signInWithEmailAndPassword(auth, e, p).catch(err => alert("Login Error: " + err.message));
         };
-        window.logout = () => signOut(auth);
+
+        window.logout = () => {
+            if(confirm("Sign out of the system?")) signOut(auth);
+        };
 
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            // Update Nav colors
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('text-blue-600', 'text-slate-300'));
-            event.currentTarget.classList.replace('text-slate-300', 'text-blue-600');
+            
+            // Update UI feedback for active tab
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.replace('text-blue-600', 'text-slate-300'));
+            
+            // Determine active button based on ID
+            if(id === 'dashboard-page') buttons[0].classList.replace('text-slate-300', 'text-blue-600');
+            if(id === 'users-page') buttons[1].classList.replace('text-slate-300', 'text-blue-600');
         };
 
-        // --- Staff Logic ---
+        // --- Staff CRUD ---
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
             const desig = document.getElementById('u-designation').value;
@@ -201,17 +232,18 @@
         };
 
         window.deleteUser = (id) => {
-            if(confirm("Delete this staff member? This will not delete their transaction history.")) {
+            if(confirm("Confirm deletion? Transaction history will remain but the user will be removed from directory.")) {
                 remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
             }
         };
 
-        // --- Transaction Logic ---
+        // --- Transaction Processing ---
         window.openModal = () => {
             document.getElementById('modal').classList.add('active');
             document.getElementById('m-date').valueAsDate = new Date();
         };
         window.closeModal = () => document.getElementById('modal').classList.remove('active');
+        
         window.setTxnType = (t) => {
             currentTxnType = t;
             document.getElementById('btn-inc').className = t === 'income' ? 'flex-1 p-4 rounded-2xl font-bold bg-green-500 text-white' : 'flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
@@ -225,10 +257,10 @@
             const cat = document.getElementById('m-category').value;
             const date = document.getElementById('m-date').value;
 
-            if(!sid || !amt || !date) return alert("Staff, Amount, and Date required");
+            if(!sid || !amt || !date) return alert("Select Staff, enter amount, and date");
 
             const staff = usersData[sid];
-            const newBal = currentTxnType === 'income' ? staff.balance + amt : staff.balance - amt;
+            const newBal = currentTxnType === 'income' ? (staff.balance + amt) : (staff.balance - amt);
 
             push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, staffDesig: staff.desig,
@@ -242,16 +274,55 @@
             document.getElementById('m-note').value = '';
         };
 
-        // --- Data Handling ---
+        // --- Reporting & Rendering ---
         window.clearFilter = () => {
             document.getElementById('filter-start').value = '';
             document.getElementById('filter-end').value = '';
-            refreshDashboard();
+            renderAllLogs();
         };
 
-        window.refreshDashboard = () => initData(auth.currentUser.uid);
+        window.refreshDashboard = () => renderAllLogs();
+
+        window.filterHistory = () => {
+            const query = document.getElementById('history-search').value.toLowerCase();
+            renderAllLogs(query);
+        };
+
+        function renderAllLogs(query = "") {
+            const start = document.getElementById('filter-start').value;
+            const end = document.getElementById('filter-end').value;
+            
+            let html = '', inc = 0, exp = 0;
+            
+            globalLogs.forEach(l => {
+                if(start && l.date < start) return;
+                if(end && l.date > end) return;
+                if(query && !l.staffName.toLowerCase().includes(query)) return;
+
+                l.type === 'income' ? inc += l.amount : exp += l.amount;
+
+                html += `
+                <div class="bg-white p-5 rounded-[24px] shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
+                    <div class="flex justify-between items-start">
+                        <div><p class="font-bold text-slate-800">${l.staffName}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${l.staffDesig}</p></div>
+                        <p class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${l.amount.toFixed(2)}</p>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-2 italic">${l.note || l.category}</p>
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-50">
+                        <p class="text-[10px] text-slate-400 font-bold">${l.date}</p>
+                        <p class="text-[10px] font-bold text-slate-700">BAL: $${l.balanceAfter.toFixed(2)}</p>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('recent-container').innerHTML = html || '<p class="text-center py-10 text-slate-300">No logs found</p>';
+            document.getElementById('cb-display').innerText = `$${(inc - exp).toFixed(2)}`;
+            document.getElementById('income-display').innerText = `$${inc.toFixed(2)}`;
+            document.getElementById('expense-display').innerText = `$${exp.toFixed(2)}`;
+        }
 
         function initData(uid) {
+            // Live Staff Sync
             onValue(ref(db, `users/${uid}/staff`), (s) => {
                 usersData = s.val() || {};
                 let html = '', selectHtml = '<option value="">Select Staff</option>';
@@ -259,12 +330,14 @@
                     const u = usersData[id];
                     selectHtml += `<option value="${id}">${u.name}</option>`;
                     html += `
-                    <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm">
+                    <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-slate-50">
                         <div><p class="font-bold text-slate-700">${u.name}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p></div>
                         <div class="flex items-center gap-4">
-                            <p class="font-bold text-blue-600">$${u.balance.toFixed(2)}</p>
-                            <button onclick="editUser('${id}', '${u.name}', '${u.desig}')" class="text-slate-300"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteUser('${id}')" class="text-red-200"><i class="fas fa-trash"></i></button>
+                            <p class="font-bold text-blue-600 text-sm">$${u.balance.toFixed(2)}</p>
+                            <div class="flex gap-2">
+                                <button onclick="editUser('${id}', '${u.name}', '${u.desig}')" class="w-8 h-8 rounded-full bg-slate-50 text-slate-400"><i class="fas fa-edit text-[10px]"></i></button>
+                                <button onclick="deleteUser('${id}')" class="w-8 h-8 rounded-full bg-red-50 text-red-300"><i class="fas fa-trash text-[10px]"></i></button>
+                            </div>
                         </div>
                     </div>`;
                 });
@@ -272,39 +345,11 @@
                 document.getElementById('m-user').innerHTML = selectHtml;
             });
 
+            // Live Transaction Sync
             onValue(ref(db, `users/${uid}/logs`), (s) => {
                 const logs = s.val() || {};
-                const start = document.getElementById('filter-start').value;
-                const end = document.getElementById('filter-end').value;
-                
-                let html = '', inc = 0, exp = 0;
-                Object.keys(logs).reverse().forEach(key => {
-                    const l = logs[key];
-                    const lDate = l.date; // YYYY-MM-DD
-
-                    if(start && lDate < start) return;
-                    if(end && lDate > end) return;
-
-                    l.type === 'income' ? inc += l.amount : exp += l.amount;
-
-                    html += `
-                    <div class="bg-white p-5 rounded-[24px] shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
-                        <div class="flex justify-between items-start">
-                            <div><p class="font-bold text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 font-bold uppercase">${l.staffDesig}</p></div>
-                            <p class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${l.amount}</p>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-1">${l.note || l.category}</p>
-                        <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-50">
-                            <p class="text-[10px] text-slate-400 font-bold">${l.date}</p>
-                            <p class="text-[10px] font-bold text-slate-700">BAL: $${l.balanceAfter.toFixed(2)}</p>
-                        </div>
-                    </div>`;
-                });
-
-                document.getElementById('recent-container').innerHTML = html || '<p class="text-center py-10 text-slate-300">No transactions in range</p>';
-                document.getElementById('cb-display').innerText = `$${(inc - exp).toFixed(2)}`;
-                document.getElementById('income-display').innerText = `$${inc.toFixed(2)}`;
-                document.getElementById('expense-display').innerText = `$${exp.toFixed(2)}`;
+                globalLogs = Object.keys(logs).reverse().map(k => logs[k]);
+                renderAllLogs();
             });
         }
     </script>
