@@ -9,14 +9,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F1F5F9; color: #1E293B; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; color: #1E293B; }
         .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.05); }
-        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
-        #modal.active { display: flex; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
+        .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+        .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; position: relative; overflow: hidden; color: white; transition: transform 0.2s; }
+        .staff-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -42,79 +44,85 @@
 
     <!-- DASHBOARD -->
     <div id="dashboard-page" class="page p-5 pb-24">
-        <div class="flex justify-between items-center mb-8 mt-2">
+        <div class="flex justify-between items-center mb-6 mt-2">
             <div>
-                <p class="text-xs text-slate-400 font-medium">Account Overview</p>
+                <p class="text-[10px] text-slate-400 font-bold uppercase">Central Ledger</p>
                 <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
             </div>
-            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600"><i class="fas fa-bell"></i></div>
+            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl shadow-lg flex items-center justify-center text-white"><i class="fas fa-plus"></i></button>
         </div>
 
-        <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[32px] p-8 text-white shadow-xl mb-8 relative overflow-hidden">
-            <p class="opacity-70 text-[10px] font-bold uppercase tracking-wider mb-1">Central Balance</p>
-            <h2 class="text-4xl font-bold mb-6 tracking-tight" id="cb-display">৳0.00</h2>
-            <button onclick="openModal()" class="w-full bg-white text-blue-600 py-3.5 rounded-2xl text-xs font-bold shadow-lg flex items-center justify-center gap-2">
-                <i class="fas fa-plus-circle"></i> Quick Entry
-            </button>
+        <div class="bg-slate-900 rounded-[32px] p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+            <p class="opacity-70 text-[10px] font-bold uppercase tracking-wider mb-1">Current Central Balance</p>
+            <h2 class="text-4xl font-bold mb-0 tracking-tight" id="cb-display">BDT 0.00</h2>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Total Received</p>
-                <h3 id="inc-display" class="font-bold text-lg text-green-600">৳0.00</h3>
-            </div>
-            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Total Advanced</p>
-                <h3 id="exp-display" class="font-bold text-lg text-orange-600">৳0.00</h3>
-            </div>
-        </div>
-
-        <h3 class="font-bold text-slate-800 tracking-tight mb-4">Last 3 Transactions</h3>
-        <div id="recent-logs" class="space-y-4"></div>
+        <h3 class="font-bold text-slate-800 tracking-tight mb-4 flex justify-between items-center">
+            Recent Transactions
+            <span class="text-[10px] bg-slate-200 px-2 py-1 rounded-full uppercase">Last 10</span>
+        </h3>
+        <div id="recent-logs" class="space-y-3"></div>
     </div>
 
     <!-- STAFF DIRECTORY -->
     <div id="users-page" class="page p-5 pb-24">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Staff</h2>
-            <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold">+ Add Staff</button>
-        </div>
-        
-        <div id="add-staff-form" class="hidden bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-8">
-            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none">
-            <input type="hidden" id="u-edit-id">
-            <button id="u-btn" onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">Save Staff Record</button>
-        </div>
-
-        <div id="staff-list" class="space-y-4"></div>
+        <h2 class="text-2xl font-bold mb-6">Staff Directory</h2>
+        <div id="staff-list" class="grid gap-6"></div>
     </div>
 
     <!-- SETTINGS PAGE -->
     <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6">Settings</h2>
-        <div class="bg-white rounded-[32px] overflow-hidden border border-slate-100">
-            <!-- REPORT MENU TRIGGER -->
-            <button onclick="showPage('reports-page')" class="w-full p-6 border-b border-slate-50 text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-file-invoice text-blue-600"></i>
-                    <span class="font-medium">Generate Ledger Reports</span>
-                </div>
-                <i class="fas fa-chevron-right text-slate-300 group-hover:text-blue-600 transition-colors"></i>
-            </button>
-
-            <div class="p-6 border-b border-slate-50 flex items-center justify-between text-slate-600">
-                <span>Currency Display</span>
-                <span class="font-bold text-blue-600">BDT (৳)</span>
+        <h2 class="text-2xl font-bold mb-6">Settings & Tools</h2>
+        
+        <div class="space-y-4">
+            <!-- Reports Section -->
+            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 ml-2">Reports</p>
+                <button onclick="showPage('reports-page')" class="w-full p-4 flex items-center justify-between group hover:bg-slate-50 rounded-xl transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-file-invoice text-xs"></i></div>
+                        <span class="font-semibold text-sm text-slate-700">Ledger Statements</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-300"></i>
+                </button>
             </div>
-            
-            <button onclick="handleLogout()" class="w-full p-6 text-left text-red-500 font-bold flex items-center gap-3">
-                <i class="fas fa-power-off"></i> Sign Out
-            </button>
+
+            <!-- Management Section -->
+            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 ml-2">Management</p>
+                <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 flex items-center justify-between group hover:bg-slate-50 rounded-xl transition-all mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center"><i class="fas fa-user-plus text-xs"></i></div>
+                        <span class="font-semibold text-sm text-slate-700">Add/Manage Staff</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-300"></i>
+                </button>
+                <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 flex items-center justify-between group hover:bg-slate-50 rounded-xl transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center"><i class="fas fa-history text-xs"></i></div>
+                        <span class="font-semibold text-sm text-slate-700">Edit/Delete Transactions</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-300"></i>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
+                <div class="p-4 flex items-center justify-between text-slate-600">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-slate-50 text-slate-400 rounded-lg flex items-center justify-center"><i class="fas fa-coins text-xs"></i></div>
+                        <span class="font-semibold text-sm">Currency Display</span>
+                    </div>
+                    <span class="font-bold text-blue-600 text-xs">BDT</span>
+                </div>
+                <button onclick="handleLogout()" class="w-full p-4 text-left text-red-500 font-bold flex items-center gap-3 hover:bg-red-50 rounded-xl transition-all mt-2">
+                    <div class="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center"><i class="fas fa-power-off text-xs"></i></div>
+                    <span class="text-sm">Sign Out System</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- REPORTS PAGE (Accessible via Settings) -->
+    <!-- REPORTS PAGE -->
     <div id="reports-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-6">
             <button onclick="showPage('settings-page')" class="text-slate-400"><i class="fas fa-arrow-left"></i></button>
@@ -123,41 +131,33 @@
         
         <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
             <div class="grid grid-cols-2 gap-3">
-                <div class="space-y-1">
-                    <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Start Date</label>
-                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl outline-none">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">End Date</label>
-                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl outline-none">
-                </div>
+                <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl outline-none">
+                <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl outline-none">
             </div>
-            <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs border border-slate-100">
-                <option value="">All Staff Members</option>
-            </select>
+            <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs border border-slate-100"></select>
             <div class="flex gap-2">
-                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs">Filter Data</button>
+                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs">Generate</button>
                 <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs"><i class="fas fa-file-pdf"></i> PDF</button>
             </div>
         </div>
 
         <div id="report-view" class="hidden">
-            <div id="pdf-content" class="bg-white p-6 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center border-b pb-4 mb-4">
-                    <div>
-                        <h4 class="font-bold text-sm text-blue-600 uppercase">FinanceFlow Ledger</h4>
-                        <p id="report-date" class="text-[8px] text-slate-400"></p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[8px] font-bold uppercase text-slate-400">Statement</p>
-                    </div>
-                </div>
-                <div id="report-content" class="text-[10px] space-y-3"></div>
-                <div class="mt-6 pt-4 border-t-2 border-dashed border-slate-100 space-y-2">
-                    <div class="flex justify-between font-bold text-green-600"><span>Total Received</span><span id="rep-inc"></span></div>
-                    <div class="flex justify-between font-bold text-orange-600"><span>Total Advanced</span><span id="rep-exp"></span></div>
-                    <div class="flex justify-between font-black text-slate-800 border-t pt-2 mt-2"><span>Net Flow</span><span id="rep-net"></span></div>
-                </div>
+            <div id="pdf-content" class="bg-white p-6 rounded-lg text-[10px]">
+                <h2 class="text-center font-bold text-lg mb-4 text-blue-800">FINANCEFLOW LEDGER REPORT</h2>
+                <table class="w-full text-left border-collapse border border-slate-200">
+                    <thead>
+                        <tr class="bg-slate-100 uppercase text-[8px]">
+                            <th class="border p-2">SL</th>
+                            <th class="border p-2">Date</th>
+                            <th class="border p-2">Name</th>
+                            <th class="border p-2 text-center">Note/Narration</th>
+                            <th class="border p-2 text-right">Amount</th>
+                            <th class="border p-2 text-right">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-body"></tbody>
+                </table>
+                <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right pr-2" id="report-summary"></div>
             </div>
         </div>
     </div>
@@ -166,26 +166,26 @@
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1">
             <i class="fas fa-home text-lg"></i>
-            <span class="text-[8px] font-bold">Home</span>
+            <span class="text-[8px] font-bold uppercase">Home</span>
         </button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1">
-            <i class="fas fa-users text-lg"></i>
-            <span class="text-[8px] font-bold">Staff</span>
+            <i class="fas fa-address-card text-lg"></i>
+            <span class="text-[8px] font-bold uppercase">Staff</span>
         </button>
         <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1">
-            <i class="fas fa-cog text-lg"></i>
-            <span class="text-[8px] font-bold">Settings</span>
+            <i class="fas fa-sliders text-lg"></i>
+            <span class="text-[8px] font-bold uppercase">Settings</span>
         </button>
     </nav>
 
     <!-- ENTRY MODAL -->
-    <div id="modal">
+    <div id="entry-modal" class="modal">
         <div class="modal-content">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
             <select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold text-slate-700"></select>
-            <div class="relative mb-6">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">৳</span>
+            <div class="relative mb-6 text-center">
                 <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 outline-none bg-transparent text-blue-600">
+                <p class="text-[10px] font-bold text-slate-300">CURRENCY: BDT</p>
             </div>
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold"><option>Imprest</option><option>Advance</option><option>Return</option></select>
@@ -193,11 +193,35 @@
             </div>
             <textarea id="m-note" placeholder="Narration" class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs"></textarea>
             <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Received (+)</button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white">Advanced (-)</button>
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Receive (+)</button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white">Advance (-)</button>
             </div>
-            <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Confirm</button>
-            <button onclick="closeModal()" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
+            <button onclick="postTxn()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Post Transaction</button>
+            <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
+        </div>
+    </div>
+
+    <!-- STAFF MGMT MODAL -->
+    <div id="staff-mgmt-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="font-bold mb-4">Add New Staff</h3>
+            <div class="space-y-3 mb-6">
+                <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <input id="u-des" type="text" placeholder="Designation (e.g. Project Manager)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">Save Staff</button>
+            </div>
+            <h3 class="font-bold mb-4 text-xs uppercase text-slate-400">Existing Staff (Edit/Delete)</h3>
+            <div id="mgmt-staff-list" class="space-y-2"></div>
+            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
+        </div>
+    </div>
+
+    <!-- TXN MGMT MODAL -->
+    <div id="txn-mgmt-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="font-bold mb-4">Manage Recent Transactions</h3>
+            <div id="mgmt-txn-list" class="space-y-3"></div>
+            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
 
@@ -224,10 +248,9 @@
         let staffData = {};
         let logsList = [];
 
-        // Formatting Helpers
         const fmt = (num) => {
-            const val = Number(Math.abs(num)).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            return num < 0 ? `(৳${val})` : `৳${val}`;
+            const val = Math.abs(num).toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -256,23 +279,13 @@
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('text-blue-600');
-                btn.classList.add('text-slate-300');
-            });
-            
-            const activeBtn = Array.from(document.querySelectorAll('nav button')).find(btn => btn.getAttribute('onclick').includes(id));
-            if(activeBtn) {
-                activeBtn.classList.remove('text-slate-300');
-                activeBtn.classList.add('text-blue-600');
-            }
         };
 
-        window.toggleAddStaff = () => {
-            const el = document.getElementById('add-staff-form');
-            el.classList.toggle('hidden');
+        window.openModal = (id) => {
+            document.getElementById(id).classList.add('active');
+            if(id === 'entry-modal') document.getElementById('m-date').valueAsDate = new Date();
         };
+        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
@@ -281,16 +294,29 @@
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
-            toggleAddStaff();
+        };
+
+        window.delUser = (sid) => {
+            if(confirm("Delete staff and all history?")) {
+                remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+            }
+        };
+
+        window.delTxn = (tid, sid, amt, type) => {
+            if(confirm("Reverse this transaction?")) {
+                const staff = staffData[sid];
+                const reverseAmt = type === 'income' ? (staff.balance - amt) : (staff.balance + amt);
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: reverseAmt });
+                remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
+            }
         };
 
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
-            const amtRaw = document.getElementById('m-amt').value;
+            const amt = Number(document.getElementById('m-amt').value);
             const date = document.getElementById('m-date').value;
-            if(!sid || !amtRaw || !date) return alert("Fill all fields");
+            if(!sid || !amt || !date) return alert("Missing Info");
 
-            const amt = Number(amtRaw);
             const staff = staffData[sid];
             const newStaffBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
 
@@ -302,135 +328,156 @@
                 ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newStaffBal });
-            closeModal();
+            closeModal('entry-modal');
         };
 
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let h = '', opts = '<option value="">Select Staff</option>', rOpts = '<option value="">All Staff Members</option>';
+                let staffHtml = '', mgmtStaffHtml = '', opts = '<option value="">Select Staff</option>';
+                
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     const bal = Number(u.balance || 0);
-                    const balLabel = bal >= 0 ? "Receivable" : "Payable";
-                    
                     opts += `<option value="${id}">${u.name}</option>`;
-                    rOpts += `<option value="${id}">${u.name}</option>`;
-                    h += `
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-50 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-sm">${u.name}</p>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p>
+                    
+                    // Visiting Card Style
+                    staffHtml += `
+                    <div class="staff-card p-6 shadow-2xl">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h4 class="text-xl font-bold tracking-tight">${u.name}</h4>
+                                <p class="text-[10px] opacity-60 font-bold uppercase tracking-widest">${u.desig}</p>
+                            </div>
+                            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                                <i class="fas fa-user text-xs"></i>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[8px] text-slate-400 font-bold uppercase">${balLabel}</p>
-                            <p class="font-bold ${bal >= 0 ? 'text-blue-600' : 'text-orange-600'}">${fmt(bal)}</p>
+                        <div class="grid grid-cols-3 gap-2 border-t border-white/10 pt-4">
+                            <div><p class="text-[8px] opacity-50 uppercase">Receivable</p><p class="text-[10px] font-bold">${bal > 0 ? fmt(bal) : '0.00'}</p></div>
+                            <div><p class="text-[8px] opacity-50 uppercase">Payable</p><p class="text-[10px] font-bold">${bal < 0 ? fmt(bal) : '0.00'}</p></div>
+                            <div class="text-right"><p class="text-[8px] opacity-50 uppercase">Net Balance</p><p class="text-[10px] font-bold text-blue-300">${fmt(bal)}</p></div>
                         </div>
                     </div>`;
+
+                    mgmtStaffHtml += `
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+                        <span class="text-xs font-bold">${u.name}</span>
+                        <button onclick="delUser('${id}')" class="text-red-500 text-[10px] font-bold uppercase">Remove</button>
+                    </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = h || '<p class="text-center text-slate-300 py-10">No Staff</p>';
+                document.getElementById('staff-list').innerHTML = staffHtml;
+                document.getElementById('mgmt-staff-list').innerHTML = mgmtStaffHtml;
                 document.getElementById('m-staff').innerHTML = opts;
-                document.getElementById('r-staff').innerHTML = rOpts;
+                document.getElementById('r-staff').innerHTML = opts.replace('Select', 'All');
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
                 const data = s.val() || {};
-                logsList = Object.keys(data).map(k => ({...data[k], key: k}));
+                logsList = Object.keys(data).map(k => ({...data[k], key: k})).sort((a,b) => a.ts - b.ts);
                 renderHome();
             });
         }
 
         function renderHome() {
-            let tInc = 0, tExp = 0, cb = 0;
-            const sorted = [...logsList].sort((a, b) => (Number(b.ts || 0)) - (Number(a.ts || 0)));
+            let runningCB = 0;
+            let runningStaffBal = {};
             
-            logsList.forEach(l => {
+            // Calculate running totals chronologically
+            const calculatedLogs = logsList.map(l => {
                 const a = Number(l.amount);
-                if(l.type === 'income') { cb += a; tInc += a; } 
-                else { cb -= a; tExp += a; }
+                const sId = l.staffId;
+                if(!runningStaffBal[sId]) runningStaffBal[sId] = 0;
+
+                if(l.type === 'income') {
+                    runningCB += a;
+                    runningStaffBal[sId] += a;
+                } else {
+                    runningCB -= a;
+                    runningStaffBal[sId] -= a;
+                }
+                return { ...l, cbAtTime: runningCB, staffBalAtTime: runningStaffBal[sId] };
             });
 
-            document.getElementById('cb-display').innerText = fmt(cb);
-            document.getElementById('inc-display').innerText = fmt(tInc);
-            document.getElementById('exp-display').innerText = fmt(tExp);
+            const displayLogs = [...calculatedLogs].reverse();
+            document.getElementById('cb-display').innerText = fmt(runningCB);
 
-            let recentH = '';
-            sorted.slice(0, 3).forEach(l => {
-                const isInc = l.type === 'income';
-                recentH += `
-                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-50 flex justify-between items-center">
-                    <div>
-                        <p class="font-bold text-xs">${l.staffName}</p>
-                        <p class="text-[9px] text-slate-400">${l.note || l.cat}</p>
+            let logH = '', mgmtLogH = '';
+            displayLogs.slice(0, 10).forEach(l => {
+                logH += `
+                <div class="bg-white p-4 rounded-[24px] shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">${l.date}</span>
+                        <span class="font-bold text-xs ${l.type==='income'?'text-green-600':'text-orange-600'}">
+                            ${l.type==='income'?'+':'-'} ${fmt(l.amount)}
+                        </span>
                     </div>
-                    <div class="text-right">
-                        <p class="font-bold text-sm ${isInc ? 'text-green-600' : 'text-orange-600'}">
-                            ${isInc ? '+' : '-'}${fmt(l.amount)}
-                        </p>
-                        <p class="text-[8px] text-slate-300 font-bold">${l.date}</p>
+                    <div class="mb-3">
+                        <p class="font-bold text-sm text-slate-800">${l.staffName}</p>
+                        <p class="text-[10px] text-slate-400 italic">${l.note || 'No narration'}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50">
+                        <div><p class="text-[8px] text-slate-400 uppercase">Central Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cbAtTime)}</p></div>
+                        <div class="text-right"><p class="text-[8px] text-slate-400 uppercase">Indiv. Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.staffBalAtTime)}</p></div>
                     </div>
                 </div>`;
+                
+                mgmtLogH += `
+                <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
+                    <div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | ${fmt(l.amount)}</p></div>
+                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 text-[10px] font-bold uppercase">Delete</button>
+                </div>`;
             });
-            document.getElementById('recent-logs').innerHTML = recentH || '<p class="text-center text-slate-300 py-5">No Transactions</p>';
+            document.getElementById('recent-logs').innerHTML = logH;
+            document.getElementById('mgmt-txn-list').innerHTML = mgmtLogH;
         }
 
         window.generateReport = () => {
             const start = document.getElementById('r-start').value;
             const end = document.getElementById('r-end').value;
-            const staffId = document.getElementById('r-staff').value;
-            let h = '', ti = 0, te = 0;
+            const sid = document.getElementById('r-staff').value;
             
-            const filtered = logsList.filter(l => {
-                let m = true;
-                if(start && l.date < start) m = false;
-                if(end && l.date > end) m = false;
-                if(staffId && l.staffId !== staffId) m = false;
-                return m;
-            }).sort((a,b) => b.ts - a.ts);
+            let html = '', sl = 1, tAdv = 0, tRec = 0;
+            let runningBal = 0;
 
-            filtered.forEach(l => {
+            logsList.forEach(l => {
                 const a = Number(l.amount);
-                if(l.type === 'income') ti += a; else te += a;
-                h += `
-                <div class="flex justify-between items-start py-2 border-b border-slate-50">
-                    <div>
-                        <p class="font-bold uppercase text-[9px]">${l.staffName}</p>
-                        <p class="text-[8px] text-slate-400">${l.date} | ${l.cat}</p>
-                    </div>
-                    <span class="font-bold ${l.type==='income'?'text-green-600':'text-red-600'}">
-                        ${l.type==='income'?'+':'-'}${fmt(a)}
-                    </span>
-                </div>`;
+                let match = true;
+                if(start && l.date < start) match = false;
+                if(end && l.date > end) match = false;
+                if(sid && l.staffId !== sid) match = false;
+
+                if(l.type === 'income') runningBal += a; else runningBal -= a;
+
+                if(match) {
+                    if(l.type === 'income') tRec += a; else tAdv += a;
+                    html += `
+                    <tr>
+                        <td class="border p-2 text-center">${sl++}</td>
+                        <td class="border p-2">${l.date}</td>
+                        <td class="border p-2 font-bold">${l.staffName}</td>
+                        <td class="border p-2 text-center text-slate-500">${l.note || '-'}</td>
+                        <td class="border p-2 text-right ${l.type==='income'?'text-green-600':'text-red-600'}">${l.type==='income'?'+':'-'}${a.toFixed(2)}</td>
+                        <td class="border p-2 text-right font-bold">${runningBal.toFixed(2)}</td>
+                    </tr>`;
+                }
             });
 
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
-            document.getElementById('report-content').innerHTML = h || '<p class="text-center py-4">No matching data</p>';
-            document.getElementById('rep-inc').innerText = fmt(ti);
-            document.getElementById('rep-exp').innerText = fmt(te);
-            document.getElementById('rep-net').innerText = fmt(ti - te);
-            document.getElementById('report-date').innerText = `Generated: ${new Date().toLocaleString()}`;
+            document.getElementById('report-body').innerHTML = html;
+            document.getElementById('report-summary').innerHTML = `
+                <p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p>
+                <p class="text-green-600">Total Received: ${fmt(tRec)}</p>
+                <p class="text-slate-900 border-t pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>
+            `;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            const opt = {
-                margin: 10,
-                filename: 'Ledger_Report.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set({ margin: 10, filename: 'Ledger.pdf', html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(element).save();
         };
 
-        window.openModal = () => { 
-            document.getElementById('modal').classList.add('active'); 
-            document.getElementById('m-date').valueAsDate = new Date(); 
-            document.getElementById('m-amt').value = '';
-            document.getElementById('m-note').value = '';
-        };
-        window.closeModal = () => document.getElementById('modal').classList.remove('active');
         window.setT = (t) => {
             currentType = t;
             document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-green-500 text-white shadow-lg' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
