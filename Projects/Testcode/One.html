@@ -3,102 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceFlow Pro</title>
+    <title>FinanceFlow Staff Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .app-card { border-radius: 28px; transition: all 0.3s ease; }
-        .page { display: none; min-height: 100vh; width: 100%; padding-bottom: 100px; }
-        .page.active { display: flex !important; flex-direction: column; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .page { display: none; min-height: 100vh; padding-bottom: 100px; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #f1f5f9; z-index: 50; display: flex; justify-content: space-around; padding: 15px; }
-        .nav-btn { color: #cbd5e1; transition: all 0.2s; flex: 1; text-align: center; }
-        .nav-btn.active { color: #2563eb; }
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: flex-end; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
         #modal.active { display: flex; }
-        .modal-content { animation: slideUp 0.3s ease-out; background: white; w-full; rounded-t-[40px]; p-8; }
+        .modal-content { animation: slideUp 0.3s ease; background: white; width: 100%; border-top-left-radius: 40px; border-top-right-radius: 40px; padding: 32px; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-[#F8FAFC]">
 
-    <!-- 🔐 LOGIN PAGE -->
-    <div id="login-page" class="page items-center justify-center p-6">
+    <!-- 🔐 FIREBASE LOGIN PAGE -->
+    <div id="login-page" class="page flex items-center justify-center p-6">
         <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-xl text-center">
             <div class="w-16 h-16 bg-blue-600 rounded-2xl mb-6 mx-auto flex items-center justify-center shadow-lg"><i class="fas fa-vault text-white text-2xl"></i></div>
-            <h2 class="text-3xl font-bold mb-8">Secure Login</h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-800">Secure Access</h2>
             <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
             <input id="password" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-100 rounded-2xl outline-none">
             <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Sign In</button>
         </div>
     </div>
 
-    <!-- 🏠 DASHBOARD PAGE -->
+    <!-- 🏠 DASHBOARD -->
     <div id="dashboard-page" class="page p-5">
-        <div class="flex justify-between items-center mb-8 pt-4">
-            <h1 class="font-bold text-xl text-blue-600">FinanceFlow</h1>
-            <button onclick="logout()" class="text-slate-300"><i class="fas fa-power-off text-xl"></i></button>
+        <div class="flex justify-between items-center mb-8 mt-2">
+            <div>
+                <h1 class="text-xl font-bold text-slate-800">Central Ledger</h1>
+                <p id="user-email-display" class="text-[10px] font-bold text-blue-500 uppercase"></p>
+            </div>
+            <select id="month-filter" onchange="refreshDashboard()" class="bg-white border-none text-xs font-bold text-blue-600 rounded-xl px-3 py-2 shadow-sm outline-none">
+                <option value="lifetime">Lifetime</option>
+                <option value="current">Current Month</option>
+            </select>
         </div>
 
-        <div id="balance-card" class="bg-blue-600 app-card p-8 text-white shadow-xl mb-6 text-center">
-            <p class="opacity-70 text-[10px] font-bold uppercase tracking-widest mb-1">Total Balance</p>
-            <h2 class="text-4xl font-bold mb-6" id="total-balance">$0.00</h2>
-            <button onclick="openModal('txn')" class="bg-white text-blue-600 px-6 py-2 rounded-xl font-bold text-sm">+ Add Entry</button>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-8 text-center">
-            <div class="bg-white p-4 app-card border border-slate-100"><p class="text-[10px] text-green-500 font-bold uppercase">Income</p><h3 id="total-income" class="font-bold">$0</h3></div>
-            <div class="bg-white p-4 app-card border border-slate-100"><p class="text-[10px] text-red-500 font-bold uppercase">Expense</p><h3 id="total-expense" class="font-bold">$0</h3></div>
-        </div>
-
-        <h3 class="font-bold mb-4 text-slate-700">Recent Activity</h3>
-        <div id="txn-container" class="space-y-3"></div>
-    </div>
-
-    <!-- 📚 DUES PAGE -->
-    <div id="dues-page" class="page p-5">
-        <h2 class="text-2xl font-bold mb-6 pt-4">Dues & Debts</h2>
-        
-        <div class="bg-slate-800 app-card p-6 text-white mb-6 flex justify-between items-center">
-            <div><p class="opacity-60 text-[10px] font-bold uppercase">Net Debt</p><h2 id="net-due" class="text-2xl font-bold">$0.00</h2></div>
-            <button onclick="openModal('due')" class="bg-blue-600 px-4 py-2 rounded-xl text-xs font-bold">+ New Due</button>
+        <div class="bg-gradient-to-br from-blue-700 to-blue-500 rounded-[32px] p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+            <p class="opacity-70 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Central Balance</p>
+            <h2 class="text-4xl font-bold mb-8 tracking-tight" id="cb-display">$0.00</h2>
+            <div class="flex gap-4">
+                <button onclick="openModal('txn')" class="flex-1 bg-white/20 backdrop-blur-md py-3 rounded-2xl text-xs font-bold border border-white/10">+ Entry</button>
+                <button onclick="showPage('users-page')" class="flex-1 bg-white text-blue-600 py-3 rounded-2xl text-xs font-bold shadow-sm">Staff</button>
+            </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white p-4 app-card border border-slate-100"><p class="text-[10px] text-blue-500 font-bold uppercase">To Receive</p><h3 id="total-receive" class="font-bold text-lg text-slate-700">$0</h3></div>
-            <div class="bg-white p-4 app-card border border-slate-100"><p class="text-[10px] text-orange-500 font-bold uppercase">To Pay</p><h3 id="total-pay" class="font-bold text-lg text-slate-700">$0</h3></div>
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-50">
+                <p class="text-[10px] text-green-500 font-bold uppercase mb-1">Income</p>
+                <h3 class="text-lg font-bold text-slate-700" id="income-display">$0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-50">
+                <p class="text-[10px] text-red-500 font-bold uppercase mb-1">Expense</p>
+                <h3 class="text-lg font-bold text-slate-700" id="expense-display">$0</h3>
+            </div>
         </div>
 
-        <div id="due-container" class="space-y-3"></div>
+        <h3 class="font-bold text-slate-800 mb-4">Latest 3 Activities</h3>
+        <div id="recent-container" class="space-y-4"></div>
     </div>
 
-    <!-- ➕ GLOBAL MODAL -->
+    <!-- 👥 STAFF MANAGEMENT -->
+    <div id="users-page" class="page p-5">
+        <h2 class="text-2xl font-bold mb-6 pt-4">Staff Directory</h2>
+        <div class="bg-white p-6 rounded-3xl shadow-sm mb-6">
+            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none">
+            <input id="u-designation" type="text" placeholder="Designation (e.g. Executive-MS)" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none">
+            <button onclick="saveUser()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg">+ Add New Staff</button>
+        </div>
+        <div id="users-list" class="space-y-3"></div>
+    </div>
+
+    <!-- ➕ ENTRY MODAL -->
     <div id="modal" onclick="if(event.target == this) closeModal()">
-        <div class="modal-content w-full">
-            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-8"></div>
-            <h3 id="modal-title" class="text-xl font-bold mb-6 text-center">Add Item</h3>
-            <input id="m-amount" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center outline-none text-blue-600 mb-6">
-            <input id="m-note" type="text" placeholder="Description / Person Name" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
-            
-            <div id="m-type-container" class="flex gap-2 mb-8">
-                <button onclick="setMType('primary')" id="m-btn-1" class="flex-1 p-4 rounded-2xl font-bold bg-blue-600 text-white">Type 1</button>
-                <button onclick="setMType('secondary')" id="m-btn-2" class="flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Type 2</button>
+        <div class="modal-content">
+            <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-8"></div>
+            <select id="m-user" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none font-bold text-slate-700"></select>
+            <input id="m-amount" type="number" placeholder="0.00" class="w-full text-5xl font-bold text-center outline-none text-blue-600 mb-8 bg-transparent">
+            <select id="m-category" onchange="checkOther()" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none font-bold text-slate-700">
+                <option value="Imprest">Imprests</option>
+                <option value="Voucher">Vouchers</option>
+                <option value="Advance">Advance</option>
+                <option value="Return">Return</option>
+                <option value="Other">Other</option>
+            </select>
+            <input id="m-other" type="text" placeholder="Note / Narration" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
+            <div class="flex gap-2 mb-8">
+                <button onclick="setTxnType('income')" id="btn-inc" class="flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400">Income (+)</button>
+                <button onclick="setTxnType('expense')" id="btn-exp" class="flex-1 p-4 rounded-2xl font-bold bg-red-500 text-white">Expense (-)</button>
             </div>
-            <button onclick="saveItem()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg">Confirm</button>
+            <button onclick="processTransaction()" class="w-full bg-blue-600 text-white p-5 rounded-3xl font-bold">Post Transaction</button>
         </div>
     </div>
 
     <!-- 📱 NAV -->
     <nav id="main-nav" class="bottom-nav hidden">
-        <button onclick="showPage('dashboard-page')" class="nav-btn active" id="nav-home"><i class="fas fa-house text-xl"></i></button>
-        <button onclick="showPage('dues-page')" class="nav-btn" id="nav-dues"><i class="fas fa-address-book text-xl"></i></button>
-        <button onclick="logout()" class="nav-btn"><i class="fas fa-right-from-bracket text-xl"></i></button>
+        <button onclick="showPage('dashboard-page')" class="text-blue-600"><i class="fas fa-home-alt text-xl"></i></button>
+        <button onclick="showPage('users-page')" class="text-slate-300"><i class="fas fa-users text-xl"></i></button>
+        <button onclick="logout()" class="text-slate-300"><i class="fas fa-power-off text-xl"></i></button>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, serverTimestamp, set, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
@@ -113,112 +127,128 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
+        
+        let currentTxnType = 'expense';
+        let usersData = {};
 
-        let activeMode = 'txn'; // 'txn' or 'due'
-        let selectedType = 'expense'; // expense/income OR receive/pay
-
-        // --- Auth & Nav ---
-        window.showPage = (id) => {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            if(id === 'dashboard-page') document.getElementById('nav-home').classList.add('active');
-            if(id === 'dues-page') document.getElementById('nav-dues').classList.add('active');
-        };
-
+        // --- Auth & Navigation ---
         window.handleLogin = () => {
-            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
         };
-        window.logout = () => signOut(auth).then(() => location.reload());
+        window.logout = () => signOut(auth);
 
         onAuthStateChanged(auth, user => {
             if (user) {
                 showPage('dashboard-page');
                 document.getElementById('main-nav').classList.remove('hidden');
-                loadData(user.uid, 'transactions', 'txn-container');
-                loadData(user.uid, 'dues', 'due-container');
+                document.getElementById('user-email-display').innerText = user.email;
+                initData(user.uid);
             } else {
                 showPage('login-page');
                 document.getElementById('main-nav').classList.add('hidden');
             }
         });
 
-        // --- Modal Logic ---
-        window.openModal = (mode) => {
-            activeMode = mode;
-            document.getElementById('modal').classList.add('active');
-            document.getElementById('modal-title').innerText = mode === 'txn' ? 'Add Transaction' : 'Add Due/Debt';
-            
-            if(mode === 'txn') {
-                updateMButtons('Income', 'Expense', 'income', 'expense');
-            } else {
-                updateMButtons('To Receive', 'To Pay', 'receive', 'pay');
-            }
+        window.showPage = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         };
 
+        // --- Staff Logic ---
+        window.saveUser = () => {
+            const name = document.getElementById('u-name').value;
+            const desig = document.getElementById('u-designation').value;
+            if(!name || !desig) return alert("Fill staff info");
+            push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig, balance: 0 });
+            document.getElementById('u-name').value = '';
+            document.getElementById('u-designation').value = '';
+        };
+
+        // --- Transaction Logic ---
+        window.openModal = () => document.getElementById('modal').classList.add('active');
         window.closeModal = () => document.getElementById('modal').classList.remove('active');
+        window.setTxnType = (t) => {
+            currentTxnType = t;
+            document.getElementById('btn-inc').className = t === 'income' ? 'flex-1 p-4 rounded-2xl font-bold bg-green-500 text-white' : 'flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
+            document.getElementById('btn-exp').className = t === 'expense' ? 'flex-1 p-4 rounded-2xl font-bold bg-red-500 text-white' : 'flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
+        };
 
-        function updateMButtons(t1, t2, v1, v2) {
-            const b1 = document.getElementById('m-btn-1'), b2 = document.getElementById('m-btn-2');
-            b1.innerText = t1; b2.innerText = t2;
-            window.setMType = (type) => {
-                selectedType = type === 'primary' ? v1 : v2;
-                b1.className = type === 'primary' ? 'flex-1 p-4 rounded-2xl font-bold bg-blue-600 text-white' : 'flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
-                b2.className = type === 'secondary' ? 'flex-1 p-4 rounded-2xl font-bold bg-blue-600 text-white' : 'flex-1 p-4 rounded-2xl font-bold bg-slate-100 text-slate-400';
-            };
-            setMType('secondary'); // Default to Expense or Pay
-        }
-
-        window.saveItem = () => {
+        window.processTransaction = () => {
+            const sid = document.getElementById('m-user').value;
             const amt = parseFloat(document.getElementById('m-amount').value);
-            const note = document.getElementById('m-note').value;
-            if(!amt || !note) return alert("Fill all fields");
+            const note = document.getElementById('m-other').value;
+            const cat = document.getElementById('m-category').value;
 
-            const path = activeMode === 'txn' ? 'transactions' : 'dues';
-            push(ref(db, `users/${auth.currentUser.uid}/${path}`), {
-                amount: amt, narration: note, type: selectedType, timestamp: serverTimestamp()
-            }).then(() => {
-                closeModal();
-                document.getElementById('m-amount').value = '';
-                document.getElementById('m-note').value = '';
+            if(!sid || !amt) return alert("Selection and Amount required");
+
+            const staff = usersData[sid];
+            const newBal = currentTxnType === 'income' ? staff.balance + amt : staff.balance - amt;
+
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, staffDesig: staff.desig,
+                amount: amt, category: cat, note: note, type: currentTxnType,
+                timestamp: serverTimestamp(), balanceAfter: newBal
             });
+
+            set(ref(db, `users/${auth.currentUser.uid}/staff/${sid}/balance`), newBal);
+            closeModal();
+            document.getElementById('m-amount').value = '';
+            document.getElementById('m-other').value = '';
         };
 
-        window.deleteItem = (id, path) => {
-            if(confirm("Delete this item?")) remove(ref(db, `users/${auth.currentUser.uid}/${path}/${id}`));
-        };
+        function initData(uid) {
+            // Load Staff
+            onValue(ref(db, `users/${uid}/staff`), (s) => {
+                usersData = s.val() || {};
+                let html = '', selectHtml = '<option value="">Select Staff</option>';
+                Object.keys(usersData).forEach(id => {
+                    const u = usersData[id];
+                    selectHtml += `<option value="${id}">${u.name} (${u.desig})</option>`;
+                    html += `<div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-slate-50">
+                        <div><p class="font-bold text-slate-700">${u.name}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${u.desig}</p></div>
+                        <p class="font-bold text-blue-600">$${u.balance.toFixed(2)}</p>
+                    </div>`;
+                });
+                document.getElementById('users-list').innerHTML = html || '<p class="text-center py-10 text-slate-300">No staff found</p>';
+                document.getElementById('m-user').innerHTML = selectHtml;
+            });
 
-        function loadData(uid, path, containerId) {
-            onValue(ref(db, `users/${uid}/${path}`), (s) => {
-                const data = s.val();
-                let html = '', totalA = 0, totalB = 0;
-                if(data) {
-                    Object.keys(data).reverse().forEach(key => {
-                        const item = data[key];
-                        const isPos = item.type === 'income' || item.type === 'receive';
-                        isPos ? totalA += item.amount : totalB += item.amount;
-                        
+            // Load Logs & Dashboard
+            onValue(ref(db, `users/${uid}/logs`), (s) => {
+                const logs = s.val() || {};
+                const filter = document.getElementById('month-filter').value;
+                const now = new Date();
+                let html = '', inc = 0, exp = 0, count = 0;
+
+                Object.keys(logs).reverse().forEach(key => {
+                    const l = logs[key];
+                    const date = new Date(l.timestamp);
+                    if(filter === 'current' && (date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear())) return;
+
+                    l.type === 'income' ? inc += l.amount : exp += l.amount;
+
+                    if(count < 3) {
                         html += `
-                        <div class="bg-white p-4 rounded-2xl flex justify-between items-center shadow-sm border border-slate-50">
-                            <div><p class="font-bold text-sm text-slate-700">${item.narration}</p><p class="text-[9px] font-bold uppercase text-slate-400">${item.type}</p></div>
-                            <div class="flex items-center gap-3">
-                                <p class="font-bold ${isPos ? 'text-green-500' : 'text-red-500'}">${isPos?'+':'-'}$${item.amount}</p>
-                                <button onclick="deleteItem('${key}', '${path}')" class="text-slate-200"><i class="fas fa-trash-alt text-xs"></i></button>
+                        <div class="bg-white p-5 rounded-[24px] shadow-sm border-l-4 ${l.type==='income'?'border-green-500':'border-red-500'}">
+                            <div class="flex justify-between items-start">
+                                <div><p class="font-bold text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 font-bold uppercase">${l.staffDesig}</p></div>
+                                <p class="font-bold ${l.type==='income'?'text-green-500':'text-red-500'}">${l.type==='income'?'+':'-'}$${l.amount}</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-50">
+                                <p class="text-[10px] text-slate-400">${date.toLocaleDateString()}</p>
+                                <p class="text-[10px] font-bold text-slate-700">${l.category}: $${l.balanceAfter.toFixed(2)}</p>
                             </div>
                         </div>`;
-                    });
-                }
-                document.getElementById(containerId).innerHTML = html || '<p class="text-center text-slate-300 py-10">No records</p>';
-                
-                if(path === 'transactions') {
-                    document.getElementById('total-balance').innerText = `$${(totalA - totalB).toFixed(2)}`;
-                    document.getElementById('total-income').innerText = `$${totalA}`;
-                    document.getElementById('total-expense').innerText = `$${totalB}`;
-                } else {
-                    document.getElementById('net-due').innerText = `$${(totalA - totalB).toFixed(2)}`;
-                    document.getElementById('total-receive').innerText = `$${totalA}`;
-                    document.getElementById('total-pay').innerText = `$${totalB}`;
-                }
+                        count++;
+                    }
+                });
+
+                document.getElementById('recent-container').innerHTML = html || '<p class="text-center py-10 text-slate-300 italic">No activity</p>';
+                document.getElementById('cb-display').innerText = `$${(inc - exp).toFixed(2)}`;
+                document.getElementById('income-display').innerText = `$${inc.toFixed(2)}`;
+                document.getElementById('expense-display').innerText = `$${exp.toFixed(2)}`;
             });
         }
     </script>
