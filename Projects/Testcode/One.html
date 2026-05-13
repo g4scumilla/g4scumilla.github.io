@@ -37,6 +37,10 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
         .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; color: white; }
+
+        /* PDF Printing Fixes */
+        #pdf-content tr { page-break-inside: avoid !important; }
+        #pdf-content { background: white !important; color: black !important; width: 790px; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -537,16 +541,12 @@
             const sid = document.getElementById('r-staff').value;
             
             let html = '', sl = 1, tAdv = 0, tRec = 0;
-            let centralRunningBal = 0; // Tracks Central Balance
-            let individualRunningBal = 0; // Tracks Individual Balance
+            let centralRunningBal = 0; 
+            let individualRunningBal = 0; 
 
             logsList.forEach(l => {
                 const a = Number(l.amount);
-                
-                // Always update central running balance for ledger integrity
                 if(l.type === 'income') centralRunningBal += a; else centralRunningBal -= a;
-
-                // Update individual running balance only if this log belongs to selected staff
                 if(sid && l.staffId === sid) {
                     if(l.type === 'income') individualRunningBal += a; else individualRunningBal -= a;
                 }
@@ -559,8 +559,6 @@
                 if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
                     const catLabel = l.type === 'income' ? 'Received' : 'Advanced';
-                    
-                    // IF sid is present (Individual mode), use Individual balance. ELSE use Central balance.
                     const displayBal = sid ? individualRunningBal : centralRunningBal;
 
                     html += `<tr>
@@ -585,11 +583,34 @@
         };
 
         window.exportPDF = () => {
+            const element = document.getElementById('pdf-content');
             const user = auth.currentUser.email.split('@')[0];
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
             const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
             const fileName = `${user}_${namePart}_Ledger_${new Date().toISOString().slice(0,10)}.pdf`;
-            html2pdf().set({ margin: 10, filename: fileName, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(document.getElementById('pdf-content')).save();
+
+            // Fix for cutting off content: scroll to top before capture
+            window.scrollTo(0,0);
+
+            const opt = {
+                margin: 10,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    letterRendering: true,
+                    scrollX: 0,
+                    scrollY: 0
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // Added a small delay to ensure the DOM is painted before conversion
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save();
+            }, 250);
         };
 
         window.setT = (t) => {
