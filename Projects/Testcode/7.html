@@ -105,7 +105,7 @@
         <div class="mb-8">
             <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase flex items-center gap-2">
                 <i class="fa-solid fa-calendar-check text-blue-600"></i>
-                <span id="month-label">--</span>
+                <span id="month-label">May 2026</span>
             </h3>
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
@@ -187,11 +187,19 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-start" placeholder="Select Date" 
+                        onfocus="this.type='date'; this.showPicker()" 
+                        onclick="this.showPicker()"
+                        onblur="if(!this.value)this.type='text'" 
+                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-end" placeholder="Select Date" 
+                        onfocus="this.type='date'; this.showPicker()" 
+                        onclick="this.showPicker()"
+                        onblur="if(!this.value)this.type='text'" 
+                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
@@ -471,40 +479,23 @@
             const now = new Date();
             const monthName = now.toLocaleString('default', { month: 'long' });
             const year = now.getFullYear();
-            const localMonth = String(now.getMonth() + 1).padStart(2, '0');
-            const monthKey = `${year}-${localMonth}`; 
-
+            const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${monthName} ${year}`;
-            
-            let rCB = 0; 
-            let monthlyRec = 0; 
-            let monthlyAdv = 0;
+            let rCB = 0; let monthlyRec = 0; let monthlyAdv = 0;
             let rSB = {};
-
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
                 if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-
-                // LIFETIME Calculation for Central Balance and Staff Balance
-                if(l.type === 'income') { 
-                    rCB += a; 
-                    rSB[l.staffId] += a; 
-                } else { 
-                    rCB -= a; 
-                    rSB[l.staffId] -= a; 
-                }
-
-                // MONTHLY Calculation for Dashboard Boxes
+                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } 
+                else { rCB -= a; rSB[l.staffId] -= a; }
                 if(l.date && l.date.startsWith(monthKey)) {
                     if(l.type === 'income') monthlyRec += a; else monthlyAdv += a;
                 }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
-
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
-            
             let logH = '', mLogH = '';
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 logH += `
@@ -544,24 +535,53 @@
             const start = document.getElementById('r-start').value;
             const end = document.getElementById('r-end').value;
             const sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, rBal = 0;
+            
+            let html = '', sl = 1, tAdv = 0, tRec = 0;
+            let centralRunningBal = 0; // Tracks Central Balance
+            let individualRunningBal = 0; // Tracks Individual Balance
+
             logsList.forEach(l => {
                 const a = Number(l.amount);
-                if(l.type === 'income') rBal += a; else rBal -= a;
+                
+                // Always update central running balance for ledger integrity
+                if(l.type === 'income') centralRunningBal += a; else centralRunningBal -= a;
+
+                // Update individual running balance only if this log belongs to selected staff
+                if(sid && l.staffId === sid) {
+                    if(l.type === 'income') individualRunningBal += a; else individualRunningBal -= a;
+                }
+
                 let m = true;
                 if(start && l.date < start) m = false;
                 if(end && l.date > end) m = false;
                 if(sid && l.staffId !== sid) m = false;
+
                 if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
                     const catLabel = l.type === 'income' ? 'Received' : 'Advanced';
-                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${catLabel}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(rBal)}</td></tr>`;
+                    
+                    // IF sid is present (Individual mode), use Individual balance. ELSE use Central balance.
+                    const displayBal = sid ? individualRunningBal : centralRunningBal;
+
+                    html += `<tr>
+                        <td class="border p-2 text-center">${sl++}</td>
+                        <td class="border p-2">${l.date}</td>
+                        <td class="border p-2 font-bold">${l.staffName}</td>
+                        <td class="border p-2">${catLabel}</td>
+                        <td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td>
+                        <td class="border p-2 text-right">${fmt(a)}</td>
+                        <td class="border p-2 text-right font-bold">${fmt(displayBal)}</td>
+                    </tr>`;
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Ledger: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `
+                <p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p>
+                <p class="text-teal-600">Total Received: ${fmt(tRec)}</p>
+                <p class="text-slate-900 border-t-2 mt-1">Closing Ledger: ${fmt(tRec - tAdv)}</p>
+            `;
         };
 
         window.exportPDF = () => {
