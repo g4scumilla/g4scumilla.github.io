@@ -31,7 +31,15 @@
 
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-        #pdf-content table { page-break-inside: auto; width: 100%; }
+        /* Updated Rounded Statement Border */
+        #pdf-content { 
+            border: 1px solid #E2E8F0; 
+            border-radius: 16px; 
+            overflow: hidden;
+            page-break-inside: auto; 
+            width: 100%; 
+        }
+        #pdf-content table { width: 100%; border-collapse: collapse; }
         #pdf-content tr { page-break-inside: avoid; page-break-after: auto; }
         #pdf-content thead { display: table-header-group; }
         #report-summary { page-break-inside: avoid; }
@@ -203,8 +211,11 @@
         </div>
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
-                <div id="pdf-content" class="bg-white p-6 rounded-lg text-[10px] min-w-[650px]">
-                    <h2 class="text-center font-bold text-lg mb-4 text-blue-800 uppercase tracking-tighter">FinanceFlow Management Statement</h2>
+                <!-- Updated Report Header & Duration Line -->
+                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
+                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement - Abdullahil Kuafi</h2>
+                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+                    
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
                             <tr class="bg-slate-100 text-[8px]">
@@ -219,7 +230,7 @@
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- MODALS (Remains Unchanged) -->
     <div id="entry-modal" class="modal">
         <div class="modal-content">
             <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
@@ -244,7 +255,6 @@
         </div>
     </div>
 
-    <!-- STAFF MANAGEMENT MODAL -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
@@ -257,7 +267,6 @@
         </div>
     </div>
 
-    <!-- TRANSACTION HISTORY MODAL -->
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Full History</h3>
@@ -329,33 +338,23 @@
         };
 
         window.handleLogout = () => signOut(auth);
-        
-        // CHANGE 1: Automatically sets report dates to current month range when visiting reports page
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'reports-page') {
-                const d = new Date();
-                document.getElementById('r-start').value = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
-                document.getElementById('r-end').value = new Date(d.getFullYear(), d.getMonth() + 1, 0).toISOString().split('T')[0];
-            }
         };
-
         window.openModal = (id) => {
             document.getElementById(id).classList.add('active');
             if(id === 'entry-modal') document.getElementById('m-date').valueAsDate = new Date();
         };
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
-        // CHANGE 2: Closes modal automatically after registration
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
             const des = document.getElementById('u-des').value;
             if(!name) return;
-            push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 })
-            .then(() => closeModal('staff-mgmt-modal'));
+            push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             document.getElementById('u-name').value = '';
-            document.getElementById('u-des').value = '';
+            document.getElementById('u-desig').value = '';
         };
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
@@ -373,12 +372,11 @@
             }
         };
 
-        // CHANGE 3: Added validation for zero or negative amounts
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
             const amt = Number(document.getElementById('m-amt').value);
             const date = document.getElementById('m-date').value;
-            if(!sid || amt <= 0 || !date) return alert("Please enter a valid amount and date");
+            if(!sid || !amt || !date) return alert("Fill all fields");
             const staff = staffData[sid];
             const currentBal = Number(staff.balance || 0);
             const newBal = currentType === 'income' ? (currentBal + amt) : (currentBal - amt);
@@ -452,36 +450,51 @@
             [...logsList].reverse().forEach(l => {
                 mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button></div>`;
             });
-            
-            // CHANGE 4: Improved empty state visuals for Recent Transactions
-            document.getElementById('recent-logs').innerHTML = logH || '<div class="py-10 text-center opacity-30"><i class="fa-solid fa-layer-group text-3xl mb-2"></i><p class="text-[10px] font-bold uppercase tracking-widest">No transactions found</p></div>';
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions</p>';
             document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs</p>';
         }
 
+        // Updated generateReport: Fixes Staff Balance tracking and adds Duration Info
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, rBal = 0;
+            const start = document.getElementById('r-start').value, 
+                  end = document.getElementById('r-end').value, 
+                  sid = document.getElementById('r-staff').value;
+            
+            let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
+
+            // Duration Info Update
+            const dateRangeText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
+            document.getElementById('report-duration').innerText = dateRangeText;
+
             logsList.forEach(l => {
-                const a = Number(l.amount); if(l.type === 'income') rBal += a; else rBal -= a;
-                let m = true; if(start && l.date < start) m = false; if(end && l.date > end) m = false; if(sid && l.staffId !== sid) m = false;
+                const a = Number(l.amount);
+                
+                // Staff Balance Fix: If a staff is selected, track only their balance across history
+                if (!sid) {
+                    if (l.type === 'income') runningBal += a; else runningBal -= a;
+                } else if (l.staffId === sid) {
+                    if (l.type === 'income') runningBal += a; else runningBal -= a;
+                }
+
+                let m = true; 
+                if(start && l.date < start) m = false; 
+                if(end && l.date > end) m = false; 
+                if(sid && l.staffId !== sid) m = false;
+                
                 if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
-                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(rBal)}</td></tr>`;
+                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                 }
             });
+
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
             document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
-        // CHANGE 5: Added loading state to PDF button
+        // Updated exportPDF: HD Scale 4 and Page Numbering script
         window.exportPDF = () => {
-            const btn = document.getElementById('pdf-btn');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Generating...';
-            
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
             const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
             const now = new Date();
@@ -490,21 +503,28 @@
             const fileName = `${namePart}_${dateStr}_${timeStr}.pdf`;
 
             const element = document.getElementById('pdf-content');
-            element.style.minWidth = "100%";
+            element.style.minWidth = "100%"; 
 
             const opt = {
-                margin: [10, 10, 15, 10], 
+                margin: [10, 10, 20, 10], 
                 filename: fileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, scrollY: 0, letterRendering: true },
+                html2canvas: { scale: 4, useCORS: true, scrollY: 0, letterRendering: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.minWidth = "650px";
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
+            const worker = html2pdf().from(element).set(opt).toPdf().get('pdf').then(function (pdf) {
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(8);
+                    pdf.setTextColor(150);
+                    // Page Numbering Script (Bottom Right)
+                    pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 25, pdf.internal.pageSize.getHeight() - 10);
+                }
+            }).save().then(() => {
+                element.style.minWidth = "650px"; 
             });
         };
 
