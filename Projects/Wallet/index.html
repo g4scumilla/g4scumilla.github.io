@@ -15,20 +15,11 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .debit-card {
-            aspect-ratio: 1.58 / 1;
-            width: 100%;
-            max-width: 380px;
-            margin: 0 auto;
+            aspect-ratio: 1.58 / 1; width: 100%; max-width: 380px; margin: 0 auto;
             background: linear-gradient(135deg, rgba(13, 148, 136, 0.85) 0%, rgba(15, 118, 110, 0.9) 100%), 
                         url('https://www.everypixel.com/image-298449078311892583');
-            background-size: cover;
-            background-position: center;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
+            background-size: cover; background-position: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 24px; position: relative; overflow: hidden;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
@@ -37,6 +28,15 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
         .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; color: white; }
+
+        /* Report Preview Controls */
+        .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        /* PDF Export Bulletproofing */
+        #pdf-content table { page-break-inside: auto; width: 100%; }
+        #pdf-content tr { page-break-inside: avoid; page-break-after: auto; }
+        #pdf-content thead { display: table-header-group; }
+        #report-summary { page-break-inside: avoid; }
     </style>
 </head>
 <body>
@@ -50,7 +50,7 @@
 
     <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
             <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <div class="relative mb-4">
@@ -187,19 +187,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="text" id="r-start" placeholder="Select Date" 
-                        onfocus="this.type='date'; this.showPicker()" 
-                        onclick="this.showPicker()"
-                        onblur="if(!this.value)this.type='text'" 
-                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="text" id="r-end" placeholder="Select Date" 
-                        onfocus="this.type='date'; this.showPicker()" 
-                        onclick="this.showPicker()"
-                        onblur="if(!this.value)this.type='text'" 
-                        class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
@@ -207,32 +199,24 @@
                 <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
             </div>
             <div class="flex gap-2">
-                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-magnifying-glass"></i> Filter Data
-                </button>
-                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2">
-                    <i class="fas fa-file-pdf"></i> PDF
-                </button>
+                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
+                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
             </div>
         </div>
         <div id="report-view" class="hidden">
-            <div id="pdf-content" class="bg-white p-6 rounded-lg text-[10px]">
-                <h2 class="text-center font-bold text-lg mb-4 text-blue-800 uppercase tracking-tighter">FinanceFlow Management Statement</h2>
-                <table class="w-full border-collapse border border-slate-200">
-                    <thead>
-                        <tr class="bg-slate-100 text-[8px]">
-                            <th class="border p-2">SL</th>
-                            <th class="border p-2">Date</th>
-                            <th class="border p-2">Name</th>
-                            <th class="border p-2">Trxn Category</th>
-                            <th class="border p-2 text-center">Reference</th>
-                            <th class="border p-2 text-right">Amount</th>
-                            <th class="border p-2 text-right">Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="report-body"></tbody>
-                </table>
-                <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+            <div class="report-scroll-container">
+                <div id="pdf-content" class="bg-white p-6 rounded-lg text-[10px] min-w-[650px]">
+                    <h2 class="text-center font-bold text-lg mb-4 text-blue-800 uppercase tracking-tighter">FinanceFlow Management Statement</h2>
+                    <table class="w-full border-collapse border border-slate-200">
+                        <thead>
+                            <tr class="bg-slate-100 text-[8px]">
+                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-body"></tbody>
+                    </table>
+                    <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -240,44 +224,24 @@
     <!-- MODALS -->
     <div id="entry-modal" class="modal">
         <div class="modal-content">
-            <div class="flex items-center gap-2 mb-4 text-slate-400">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <p class="text-[10px] font-bold uppercase">New Ledger Entry</p>
-            </div>
+            <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
             <select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold border-none"></select>
-
             <div class="relative mb-4">
                 <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
                 <p class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-300 uppercase">Amount</p>
             </div>
-
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option>
-                    <option>Imprest</option>
-                    <option>Voucher</option>
-                    <option>Return</option>
-                    <option>Others</option>
+                    <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
                 </select>
                 <input id="m-date" type="date" onclick="this.showPicker()" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
-
             <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
-
             <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1">
-                    <i class="fa-solid fa-plus-circle"></i>
-                    <span class="text-[10px]">Receive</span>
-                </button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100">
-                    <i class="fa-solid fa-minus-circle"></i>
-                    <span class="text-[10px]">Advance</span>
-                </button>
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
             </div>
-
-            <button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Post Entry
-            </button>
+            <button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Post Entry</button>
             <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
         </div>
     </div>
@@ -285,18 +249,11 @@
     <!-- STAFF MANAGEMENT MODAL -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
-            <h3 class="font-bold mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff
-            </h3>
+            <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
             <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2 border-none">
             <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4 border-none">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-check"></i> Register Staff
-            </button>
-            <div class="flex items-center gap-2 mb-3 text-slate-400">
-                <i class="fa-solid fa-list-ul"></i>
-                <p class="text-[10px] font-bold uppercase">Current Roster</p>
-            </div>
+            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2"><i class="fa-solid fa-check"></i> Register Staff</button>
+            <div class="flex items-center gap-2 mb-3 text-slate-400"><i class="fa-solid fa-list-ul"></i><p class="text-[10px] font-bold uppercase">Current Roster</p></div>
             <div id="mgmt-staff-list" class="space-y-2"></div>
             <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
@@ -305,27 +262,16 @@
     <!-- TRANSACTION HISTORY MODAL -->
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
-            <h3 class="font-bold mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left"></i> Full History
-            </h3>
+            <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Full History</h3>
             <div id="mgmt-txn-list" class="space-y-3"></div>
             <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
 
     <nav id="navbar" class="bottom-nav hidden">
-        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-house text-lg"></i>
-            <p class="text-[8px] font-bold">HOME</p>
-        </button>
-        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-user-group text-lg"></i>
-            <p class="text-[8px] font-bold">STAFF</p>
-        </button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1">
-            <i class="fas fa-sliders text-lg"></i>
-            <p class="text-[8px] font-bold">SETTINGS</p>
-        </button>
+        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
+        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
     </nav>
 
     <script type="module">
@@ -406,7 +352,6 @@
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
-        // FIXED DELETE LOGIC: WORKS EVEN IF STAFF IS ALREADY DELETED
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
                 const staff = staffData[sid];
@@ -464,9 +409,7 @@
                 document.getElementById('staff-list').innerHTML = sH;
                 document.getElementById('mgmt-staff-list').innerHTML = mSH;
                 document.getElementById('m-staff').innerHTML = opts;
-                if(document.getElementById('r-staff')) {
-                    document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
-                }
+                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -479,19 +422,15 @@
         function renderHome() {
             const now = new Date();
             const monthName = now.toLocaleString('default', { month: 'long' });
-            const year = now.getFullYear();
             const monthKey = now.toISOString().slice(0, 7); 
-            document.getElementById('month-label').innerText = `${monthName} ${year}`;
-            let rCB = 0; let monthlyRec = 0; let monthlyAdv = 0;
-            let rSB = {};
+            document.getElementById('month-label').innerText = `${monthName} ${now.getFullYear()}`;
+            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
                 if(!rSB[l.staffId]) rSB[l.staffId] = 0;
                 if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } 
                 else { rCB -= a; rSB[l.staffId] -= a; }
-                if(l.date && l.date.startsWith(monthKey)) {
-                    if(l.type === 'income') monthlyRec += a; else monthlyAdv += a;
-                }
+                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
             document.getElementById('cb-display').innerText = fmt(rCB);
@@ -499,69 +438,55 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
             let logH = '', mLogH = '';
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                logH += `
-                <div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-[9px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-calendar text-[8px]"></i> ${l.date}</span>
-                        <span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}">
-                            <i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px]"></i> ${fmt(l.amount)}
-                        </span>
-                    </div>
-                    <div class="mb-2">
-                        <p class="font-bold text-sm text-slate-800">${l.staffName}</p>
-                        <p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> ${l.cat || 'General'}</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50">
-                        <div><p class="text-[7px] text-slate-400 uppercase">System Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cb)}</p></div>
-                        <div class="text-right"><p class="text-[7px] text-slate-400 uppercase">Individual Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.sb)}</p></div>
-                    </div>
-                </div>`;
+                logH += `<div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-calendar text-[8px]"></i> ${l.date}</span><span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}"><i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px]"></i> ${fmt(l.amount)}</span></div><div class="mb-2"><p class="font-bold text-sm text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> ${l.cat || 'General'}</p></div><div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50"><div><p class="text-[7px] text-slate-400 uppercase">System Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cb)}</p></div><div class="text-right"><p class="text-[7px] text-slate-400 uppercase">Individual Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.sb)}</p></div></div></div>`;
             });
             [...logsList].reverse().forEach(l => {
-                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2">
-                    <div>
-                        <p class="text-[10px] font-bold">${l.staffName}</p>
-                        <p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p>
-                    </div>
-                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">
-                        Remove Transaction
-                    </button>
-                </div>`;
+                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button></div>`;
             });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions yet</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs found</p>';
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs</p>';
         }
 
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value;
-            const end = document.getElementById('r-end').value;
-            const sid = document.getElementById('r-staff').value;
+            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, rBal = 0;
             logsList.forEach(l => {
-                const a = Number(l.amount);
-                if(l.type === 'income') rBal += a; else rBal -= a;
-                let m = true;
-                if(start && l.date < start) m = false;
-                if(end && l.date > end) m = false;
-                if(sid && l.staffId !== sid) m = false;
+                const a = Number(l.amount); if(l.type === 'income') rBal += a; else rBal -= a;
+                let m = true; if(start && l.date < start) m = false; if(end && l.date > end) m = false; if(sid && l.staffId !== sid) m = false;
                 if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
-                    const catLabel = l.type === 'income' ? 'Received' : 'Advanced';
-                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${catLabel}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(rBal)}</td></tr>`;
+                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(rBal)}</td></tr>`;
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Ledger: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
-            const user = auth.currentUser.email.split('@')[0];
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
             const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
-            const fileName = `${user}_${namePart}_Ledger_${new Date().toISOString().slice(0,10)}.pdf`;
-            html2pdf().set({ margin: 10, filename: fileName, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }}).from(document.getElementById('pdf-content')).save();
+            const now = new Date();
+            const dateStr = now.toLocaleDateString().replace(/\//g, '-');
+            const timeStr = now.toLocaleTimeString().replace(/:/g, '-').replace(/\s/g, '');
+            const fileName = `${namePart}_${dateStr}_${timeStr}.pdf`;
+
+            const element = document.getElementById('pdf-content');
+            element.style.minWidth = "100%"; // Standardize for A4 capture
+
+            const opt = {
+                margin: [10, 10, 15, 10], 
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.minWidth = "650px"; // Restore preview scale
+            });
         };
 
         window.setT = (t) => {
