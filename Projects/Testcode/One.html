@@ -535,14 +535,14 @@
             const start = document.getElementById('r-start').value;
             const end = document.getElementById('r-end').value;
             const sid = document.getElementById('r-staff').value;
-
+            
             let html = '', sl = 1, tAdv = 0, tRec = 0;
             let centralRunningBal = 0; // Tracks Central Balance
             let individualRunningBal = 0; // Tracks Individual Balance
 
             logsList.forEach(l => {
                 const a = Number(l.amount);
-
+                
                 // Always update central running balance for ledger integrity
                 if(l.type === 'income') centralRunningBal += a; else centralRunningBal -= a;
 
@@ -559,7 +559,7 @@
                 if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
                     const catLabel = l.type === 'income' ? 'Received' : 'Advanced';
-
+                    
                     // IF sid is present (Individual mode), use Individual balance. ELSE use Central balance.
                     const displayBal = sid ? individualRunningBal : centralRunningBal;
 
