@@ -16,9 +16,8 @@
 
         .debit-card {
             aspect-ratio: 1.58 / 1; width: 100%; max-width: 380px; margin: 0 auto;
-            background: linear-gradient(135deg, rgba(13, 148, 136, 0.85) 0%, rgba(15, 118, 110, 0.9) 100%), 
-                        url('https://www.everypixel.com/image-298449078311892583');
-            background-size: cover; background-position: center; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 24px; position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            border-radius: 24px; position: relative; overflow: hidden;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
@@ -27,31 +26,20 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
         
-        /* Attractive Staff Card UI */
-        .staff-card-ui { 
-            background: white; 
-            border: 2px solid #F1F5F9; 
-            border-radius: 24px; 
-            transition: all 0.3s ease;
-        }
-        .staff-card-ui:hover { border-color: #3B82F6; transform: translateY(-2px); }
-
-        .report-scroll-container { width: 100%; overflow-x: auto; }
-        #pdf-content { border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; width: 100%; }
+        .staff-card-ui { background: white; border: 2px solid #F1F5F9; border-radius: 24px; transition: all 0.3s ease; }
+        .report-table th { background: #F8FAFC; padding: 12px; font-size: 10px; text-transform: uppercase; border-bottom: 2px solid #E2E8F0; }
+        .report-table td { padding: 12px; border-bottom: 1px solid #F1F5F9; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
-        <div class="flex flex-col items-center">
-            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
-        </div>
+        <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+        <div class="w-full max-w-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
             <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
             <input id="email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-slate-100 rounded-2xl outline-none">
@@ -64,133 +52,120 @@
     <div id="dashboard-page" class="page p-5 pb-24">
         <div class="flex justify-between items-center mb-6 mt-2">
             <div class="flex items-center gap-3 cursor-pointer" onclick="openModal('profile-modal')">
-                <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                    <i class="fa-solid fa-user-tie text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase">System Operator</p>
-                    <h1 class="text-lg font-bold text-slate-800" id="user-display">themadkafi</h1>
-                </div>
+                <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white"><i class="fa-solid fa-user-tie text-xl"></i></div>
+                <div><p class="text-[10px] text-slate-400 font-bold uppercase" id="lang-op-label">System Operator</p><h1 class="text-lg font-bold text-slate-800" id="user-display">themadkafi</h1></div>
             </div>
-            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg"><i class="fas fa-plus"></i></button>
+            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl text-white shadow-lg"><i class="fas fa-plus"></i></button>
         </div>
 
         <div class="debit-card p-8 text-white mb-6">
-            <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Central Balance Ledger</p>
+            <p class="text-[10px] font-bold uppercase opacity-80 mb-1" id="lang-balance-label">Balance Ledger</p>
             <h2 class="text-3xl font-bold" id="cb-display">0.00</h2>
             <div class="mt-8 flex justify-between items-end">
                 <p class="text-[10px] font-bold tracking-widest uppercase">Active Session</p>
-                <p class="text-xs font-bold px-3 py-1 bg-white/20 rounded-lg backdrop-blur-md" id="card-curr-label">BDT</p>
+                <p class="text-xs font-bold px-3 py-1 bg-white/20 rounded-lg" id="card-curr-label">BDT</p>
             </div>
         </div>
 
-        <!-- Month Switcher Section -->
+        <!-- Month Switcher -->
         <div class="mb-8">
             <div class="flex items-center justify-center gap-4 mb-4">
-                <button onclick="changeMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-full text-slate-400 hover:text-blue-600">
-                    <i class="fa-solid fa-chevron-left text-xs"></i>
-                </button>
-                <h3 class="font-extrabold text-slate-800 tracking-tight text-sm uppercase flex items-center gap-2 min-w-[120px] justify-center">
-                    <span id="month-label">May 2026</span>
-                </h3>
-                <button onclick="changeMonth(1)" class="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-full text-slate-400 hover:text-blue-600">
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
+                <button onclick="changeMonth(-1)" class="w-8 h-8 bg-white border rounded-full"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                <h3 class="font-extrabold text-slate-800 text-sm uppercase" id="month-label">May 2026</h3>
+                <button onclick="changeMonth(1)" class="w-8 h-8 bg-white border rounded-full"><i class="fa-solid fa-chevron-right text-xs"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white p-5 rounded-3xl border-2 border-teal-50 shadow-sm">
-                    <p class="text-[9px] font-bold text-teal-600 uppercase mb-1">Total Received</p>
-                    <p class="text-lg font-bold text-slate-800" id="month-received">0.00</p>
-                </div>
-                <div class="bg-white p-5 rounded-3xl border-2 border-orange-50 shadow-sm">
-                    <p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Total Advanced</p>
-                    <p class="text-lg font-bold text-slate-800" id="month-advanced">0.00</p>
-                </div>
+                <div class="bg-white p-5 rounded-3xl border-2 border-teal-50"><p class="text-[9px] font-bold text-teal-600 uppercase mb-1">Total Received</p><p class="text-lg font-bold text-slate-800" id="month-received">0.00</p></div>
+                <div class="bg-white p-5 rounded-3xl border-2 border-orange-50"><p class="text-[9px] font-bold text-orange-600 uppercase mb-1">Total Advanced</p><p class="text-lg font-bold text-slate-800" id="month-advanced">0.00</p></div>
             </div>
         </div>
 
-        <h3 class="font-bold text-slate-800 mb-4 px-1 flex items-center gap-2 uppercase text-[10px] tracking-widest">
-            <i class="fa-solid fa-clock-rotate-left text-slate-300"></i> Recent Transactions
-        </h3>
+        <h3 class="font-bold text-slate-800 mb-4 uppercase text-[10px] tracking-widest"><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</h3>
         <div id="recent-logs" class="space-y-3"></div>
     </div>
 
     <!-- STAFF MENU -->
     <div id="users-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Staff Roster
-        </h2>
+        <h2 class="text-2xl font-bold mb-6">Staff Roster</h2>
         <div id="staff-list" class="grid gap-4"></div>
     </div>
 
     <!-- SETTINGS -->
     <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6">Settings & Tools</h2>
+        <h2 class="text-2xl font-bold mb-6">Settings</h2>
         <div class="space-y-3">
-            <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 mb-2">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3">Currency Configuration</p>
-                <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none font-bold">
-                    <option value="text">BDT (Text)</option>
-                    <option value="sign">৳ (Sign)</option>
-                    <option value="usd">USD ($)</option>
+            <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Language</p>
+                <select id="lang-select" onchange="toggleLanguage(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none font-bold">
+                    <option value="en">English</option>
+                    <option value="bn">Bengali (বাংলা)</option>
                 </select>
             </div>
-
-            <!-- Existing Menus -->
-            <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-            </button>
-            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Add Staff Personnel</span>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-            </button>
-
-            <!-- 5 New Placeholder Menus -->
-            <button class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50 opacity-60">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-language text-slate-400"></i> Language Settings</span>
-                <i class="fas fa-lock text-slate-200 text-[10px]"></i>
-            </button>
-            <button class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50 opacity-60">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-palette text-slate-400"></i> Theme Appearance</span>
-                <i class="fas fa-lock text-slate-200 text-[10px]"></i>
-            </button>
-            <button class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50 opacity-60">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-shield-virus text-slate-400"></i> Security & Privacy</span>
-                <i class="fas fa-lock text-slate-200 text-[10px]"></i>
-            </button>
-            <button class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50 opacity-60">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-bell text-slate-400"></i> Notifications</span>
-                <i class="fas fa-lock text-slate-200 text-[10px]"></i>
-            </button>
-            <button class="w-full p-4 bg-white rounded-2xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50 opacity-60">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-cloud-arrow-down text-slate-400"></i> Backup & Sync</span>
-                <i class="fas fa-lock text-slate-200 text-[10px]"></i>
-            </button>
-
-            <button onclick="handleLogout()" class="w-full p-4 bg-red-50 text-red-600 font-bold rounded-2xl mt-4">Sign Out System</button>
+            <button onclick="showPage('reports-page'); generateFullReport();" class="w-full p-4 bg-white rounded-2xl text-left font-semibold shadow-sm border border-slate-50"><i class="fas fa-file-invoice text-blue-600 mr-3"></i> Ledger Reports</button>
+            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-2xl text-left font-semibold shadow-sm border border-slate-50"><i class="fas fa-user-plus text-blue-600 mr-3"></i> Staff Control</button>
+            <button onclick="handleLogout()" class="w-full p-4 bg-red-50 text-red-600 font-bold rounded-2xl mt-4">Sign Out</button>
         </div>
     </div>
 
-    <!-- MODALS -->
-    
-    <!-- User Profile Modal (themadkafi) -->
-    <div id="profile-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="font-bold text-lg mb-6">Operator Profile</h3>
-            <div class="space-y-4">
-                <input id="p-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-xl outline-none">
-                <input id="p-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-xl outline-none">
-                <input id="p-comp" type="text" placeholder="Company Name" class="w-full p-4 bg-slate-50 rounded-xl outline-none">
-                <input id="p-mail" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-50 rounded-xl outline-none">
-                <input id="p-phone" type="text" placeholder="Phone Number" class="w-full p-4 bg-slate-50 rounded-xl outline-none">
+    <!-- REPORTS PAGE -->
+    <div id="reports-page" class="page p-5 pb-24">
+        <div class="flex justify-between items-center mb-6">
+            <button onclick="showPage('settings-page')" class="text-slate-400"><i class="fa-solid fa-arrow-left"></i></button>
+            <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Download PDF</button>
+        </div>
+        <div id="pdf-content" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+            <div class="text-center mb-6 border-b pb-4">
+                <h2 class="text-xl font-bold" id="rep-comp-name">Company Name</h2>
+                <p class="text-[10px] text-slate-400">Monthly Transaction Ledger Report</p>
             </div>
-            <button onclick="saveOperatorProfile()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold mt-6">Save Details</button>
-            <button onclick="closeModal('profile-modal')" class="w-full mt-4 text-slate-400 text-xs font-bold uppercase">Cancel</button>
+            <table class="report-table w-full text-left">
+                <thead><tr><th>Date</th><th>Staff</th><th>Type</th><th>Amount</th></tr></thead>
+                <tbody id="report-body"></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Other modals (Entry, Staff Mgmt, etc.) remain as in previous version... -->
+    <!-- ALL MODALS -->
+    
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal"><div class="modal-content">
+        <h3 class="font-bold text-lg mb-4">Edit Profile</h3>
+        <input id="p-name" placeholder="Name" class="w-full p-4 bg-slate-50 rounded-xl mb-3">
+        <input id="p-des" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-xl mb-3">
+        <input id="p-comp" placeholder="Company" class="w-full p-4 bg-slate-50 rounded-xl mb-3">
+        <button onclick="saveOperatorProfile()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Save</button>
+        <button onclick="closeModal('profile-modal')" class="w-full p-4 text-slate-400">Cancel</button>
+    </div></div>
+
+    <!-- Entry Modal -->
+    <div id="entry-modal" class="modal"><div class="modal-content">
+        <h3 class="font-bold text-lg mb-4">Add Transaction</h3>
+        <select id="entry-staff" class="w-full p-4 bg-slate-50 rounded-xl mb-3"></select>
+        <select id="entry-type" class="w-full p-4 bg-slate-50 rounded-xl mb-3">
+            <option value="income">Received (Income)</option>
+            <option value="expense">Advanced (Expense)</option>
+        </select>
+        <input id="entry-amount" type="number" placeholder="Amount" class="w-full p-4 bg-slate-50 rounded-xl mb-4">
+        <button onclick="submitTransaction()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold">Submit Entry</button>
+        <button onclick="closeModal('entry-modal')" class="w-full p-4 text-slate-400">Cancel</button>
+    </div></div>
+
+    <!-- Staff Management Modal -->
+    <div id="staff-mgmt-modal" class="modal"><div class="modal-content">
+        <h3 class="font-bold text-lg mb-4">Staff Control</h3>
+        <input id="new-staff-name" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-xl mb-3">
+        <input id="new-staff-des" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-xl mb-4">
+        <button onclick="addStaffMember()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold mb-4">Add Personnel</button>
+        <hr class="mb-4">
+        <div id="mgmt-staff-list" class="space-y-2"></div>
+        <button onclick="closeModal('staff-mgmt-modal')" class="w-full p-4 text-slate-400">Close</button>
+    </div></div>
+
+    <!-- History & Full Profile Modal -->
+    <div id="staff-detail-modal" class="modal"><div class="modal-content">
+        <div id="staff-detail-view"></div>
+        <button onclick="closeModal('staff-detail-modal')" class="w-full p-4 text-slate-400">Close</button>
+    </div></div>
 
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')"><i class="fa-solid fa-house"></i></button>
@@ -201,9 +176,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, update, remove, set } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, update, remove, set, increment } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-        // ... (Config remains the same) ...
         const firebaseConfig = {
             apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
             authDomain: "myfinanceapp-e0be3.firebaseapp.com",
@@ -220,123 +194,171 @@
 
         let staffData = {};
         let logsList = [];
-        let currFormat = 'text';
-        let currentMonth = new Date(); // To track the switcher state
+        let currentMonth = new Date();
 
-        const fmt = (num) => {
-            const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
-            return currFormat === 'sign' ? (num < 0 ? `(৳${val})` : `৳${val}`) : (num < 0 ? `(BDT ${val})` : `BDT ${val}`);
-        };
+        const fmt = (num) => `BDT ${Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2})}`;
 
-        window.changeMonth = (offset) => {
-            currentMonth.setMonth(currentMonth.getMonth() + offset);
-            renderHome();
-        };
+        // TRANSACTION SYSTEM
+        window.submitTransaction = () => {
+            const sid = document.getElementById('entry-staff').value;
+            const type = document.getElementById('entry-type').value;
+            const amt = Number(document.getElementById('entry-amount').value);
+            if (!sid || amt <= 0) return alert('Fill details correctly');
 
-        window.saveOperatorProfile = () => {
-            const data = {
-                name: document.getElementById('p-name').value,
-                des: document.getElementById('p-des').value,
-                comp: document.getElementById('p-comp').value,
-                mail: document.getElementById('p-mail').value,
-                phone: document.getElementById('p-phone').value
+            const logRef = push(ref(db, `users/${auth.currentUser.uid}/logs`));
+            const logData = {
+                staffId: sid,
+                staffName: staffData[sid].name,
+                type: type,
+                amount: amt,
+                ts: Date.now(),
+                date: new Date().toISOString().slice(0, 10)
             };
-            set(ref(db, `users/${auth.currentUser.uid}/profile`), data).then(() => closeModal('profile-modal'));
+
+            set(logRef, logData).then(() => {
+                const balChange = type === 'income' ? amt : -amt;
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), {
+                    balance: increment(balChange)
+                });
+                closeModal('entry-modal');
+                document.getElementById('entry-amount').value = '';
+            });
         };
 
+        // STAFF SYSTEM
+        window.addStaffMember = () => {
+            const name = document.getElementById('new-staff-name').value;
+            const des = document.getElementById('new-staff-des').value;
+            if(!name) return;
+            push(ref(db, `users/${auth.currentUser.uid}/staff`), { name: name, desig: des, balance: 0 });
+            document.getElementById('new-staff-name').value = '';
+        };
+
+        window.deleteStaff = (id) => { if(confirm('Delete this staff?')) remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`)); };
+
+        window.showHistory = (sid) => {
+            const u = staffData[sid];
+            const filtered = logsList.filter(l => l.staffId === sid).reverse();
+            let h = `<h3 class="font-bold text-lg mb-4">Transaction History: ${u.name}</h3><div class="space-y-2 max-h-80 overflow-y-auto">`;
+            filtered.forEach(l => {
+                h += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between"><span>${l.date}</span><span class="font-bold ${l.type==='income'?'text-teal-600':'text-red-600'}">${fmt(l.amount)}</span></div>`;
+            });
+            h += `</div>`;
+            document.getElementById('staff-detail-view').innerHTML = h;
+            openModal('staff-detail-modal');
+        };
+
+        window.showFullProfile = (sid) => {
+            const u = staffData[sid];
+            let h = `<h3 class="font-bold text-lg mb-4">Staff Profile</h3>
+            <div class="space-y-3">
+                <p class="text-xs text-slate-400 font-bold uppercase">Name</p><p class="font-bold border-b pb-2">${u.name}</p>
+                <p class="text-xs text-slate-400 font-bold uppercase">Designation</p><p class="font-bold border-b pb-2">${u.desig || 'N/A'}</p>
+                <p class="text-xs text-slate-400 font-bold uppercase">Current Balance</p><p class="font-bold text-blue-600">${fmt(u.balance)}</p>
+            </div>`;
+            document.getElementById('staff-detail-view').innerHTML = h;
+            openModal('staff-detail-modal');
+        };
+
+        // REPORTS
+        window.generateFullReport = () => {
+            let h = '';
+            logsList.forEach(l => {
+                h += `<tr><td>${l.date}</td><td>${l.staffName}</td><td class="uppercase font-bold text-[10px]">${l.type}</td><td>${fmt(l.amount)}</td></tr>`;
+            });
+            document.getElementById('report-body').innerHTML = h;
+        };
+
+        window.downloadPDF = () => {
+            const element = document.getElementById('pdf-content');
+            html2pdf().from(element).save(`Report_${new Date().toLocaleDateString()}.pdf`);
+        };
+
+        // SYNC LOGIC
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/profile`), s => {
                 const p = s.val() || {};
                 document.getElementById('user-display').innerText = p.name || 'themadkafi';
-                document.getElementById('p-name').value = p.name || '';
-                document.getElementById('p-des').value = p.des || '';
-                document.getElementById('p-comp').value = p.comp || '';
-                document.getElementById('p-mail').value = p.mail || '';
-                document.getElementById('p-phone').value = p.phone || '';
+                document.getElementById('rep-comp-name').innerText = p.comp || 'FinanceFlow Pro';
             });
 
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '';
+                let sH = '', mH = '', optH = '<option value="">Select Staff</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    sH += `
-                    <div class="staff-card-ui p-6 shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="text-lg font-bold text-slate-800">${u.name}</h4>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase">${u.desig || 'Personnel'}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[8px] text-slate-400 uppercase font-bold">Balance</p>
-                                <p class="font-bold text-blue-600">${fmt(u.balance)}</p>
-                            </div>
+                    sH += `<div class="staff-card-ui p-6">
+                        <div class="flex justify-between mb-4">
+                            <div><h4 class="text-lg font-bold">${u.name}</h4><p class="text-[10px] text-slate-400 font-bold uppercase">${u.desig || 'Personnel'}</p></div>
+                            <div class="text-right"><p class="text-[8px] text-slate-400 uppercase">Balance</p><p class="font-bold text-blue-600">${fmt(u.balance)}</p></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-50">
-                            <button onclick="alert('Viewing History for ${u.name}')" class="text-[10px] font-bold bg-slate-50 p-2 rounded-xl text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-all">
-                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> History
-                            </button>
-                            <button onclick="alert('Editing Full Profile for ${u.name}')" class="text-[10px] font-bold bg-slate-50 p-2 rounded-xl text-slate-600 hover:bg-teal-50 hover:text-teal-600 transition-all">
-                                <i class="fa-solid fa-user-pen mr-1"></i> Full Profile
-                            </button>
+                        <div class="grid grid-cols-2 gap-2 pt-4 border-t">
+                            <button onclick="showHistory('${id}')" class="text-[10px] font-bold bg-slate-50 p-2 rounded-xl">History</button>
+                            <button onclick="showFullProfile('${id}')" class="text-[10px] font-bold bg-slate-50 p-2 rounded-xl">Full Profile</button>
                         </div>
                     </div>`;
+                    mH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl"><span>${u.name}</span><button onclick="deleteStaff('${id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div>`;
+                    optH += `<option value="${id}">${u.name}</option>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH;
+                document.getElementById('mgmt-staff-list').innerHTML = mH;
+                document.getElementById('entry-staff').innerHTML = optH;
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
-                const data = s.val() || {};
-                logsList = Object.keys(data).map(k => ({...data[k], key: k})).sort((a,b) => a.ts - b.ts);
+                const d = s.val() || {};
+                logsList = Object.keys(d).map(k => ({...d[k], key: k})).sort((a,b) => a.ts - b.ts);
                 renderHome();
             });
         }
 
         function renderHome() {
-            const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
-            const monthKey = currentMonth.toISOString().slice(0, 7); 
-            document.getElementById('month-label').innerText = monthName;
-
-            let rCB = 0, monthlyRec = 0, monthlyAdv = 0;
+            const mKey = currentMonth.toISOString().slice(0, 7);
+            document.getElementById('month-label').innerText = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+            let rCB = 0, mRec = 0, mAdv = 0;
             logsList.forEach(l => {
-                const a = Number(l.amount || 0);
-                if(l.type === 'income') rCB += a; else rCB -= a;
-                
-                // Filter specifically for the selected month in the switcher
-                if(l.date && l.date.startsWith(monthKey)) {
-                    if(l.type === 'income') monthlyRec += a; else monthlyAdv += a;
-                }
+                const a = Number(l.amount);
+                l.type === 'income' ? rCB += a : rCB -= a;
+                if(l.date.startsWith(mKey)) { l.type === 'income' ? mRec += a : mAdv += a; }
             });
-
             document.getElementById('cb-display').innerText = fmt(rCB);
-            document.getElementById('month-received').innerText = fmt(monthlyRec);
-            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+            document.getElementById('month-received').innerText = fmt(mRec);
+            document.getElementById('month-advanced').innerText = fmt(mAdv);
             
-            // Recent Transactions remain global (as requested)
-            let logH = '';
+            let lH = '';
             [...logsList].reverse().slice(0, 5).forEach(l => {
-                logH += `<div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex justify-between items-center">
-                    <div>
-                        <p class="font-bold text-sm">${l.staffName}</p>
-                        <p class="text-[9px] text-slate-400">${l.date}</p>
-                    </div>
+                lH += `<div class="bg-white p-4 rounded-3xl border flex justify-between items-center">
+                    <div><p class="font-bold text-sm">${l.staffName}</p><p class="text-[9px] text-slate-400">${l.date}</p></div>
                     <p class="font-bold text-sm ${l.type==='income'?'text-teal-600':'text-orange-600'}">${fmt(l.amount)}</p>
                 </div>`;
             });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-300 py-4">No transactions.</p>';
+            document.getElementById('recent-logs').innerHTML = lH;
         }
 
-        // Standard helpers
+        window.toggleLanguage = (val) => {
+            const bn = val === 'bn';
+            document.getElementById('lang-op-label').innerText = bn ? 'সিস্টেম অপারেটর' : 'System Operator';
+            document.getElementById('lang-balance-label').innerText = bn ? 'ব্যালেন্স লেজার' : 'Balance Ledger';
+            // Add more as needed
+        };
+
+        window.saveOperatorProfile = () => {
+            const d = { name: document.getElementById('p-name').value, des: document.getElementById('p-des').value, comp: document.getElementById('p-comp').value };
+            set(ref(db, `users/${auth.currentUser.uid}/profile`), d).then(() => closeModal('profile-modal'));
+        };
+
+        window.changeMonth = (o) => { currentMonth.setMonth(currentMonth.getMonth() + o); renderHome(); };
+        window.openModal = (i) => document.getElementById(i).classList.add('active');
+        window.closeModal = (i) => document.getElementById(i).classList.remove('active');
+        window.showPage = (i) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(i).classList.add('active'); };
+        window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+        window.handleLogout = () => signOut(auth);
+
         onAuthStateChanged(auth, u => {
             document.getElementById('auth-guard').style.display = 'none';
             if (u) { showPage('dashboard-page'); document.getElementById('navbar').classList.remove('hidden'); startSync(u.uid); }
             else { showPage('login-page'); document.getElementById('navbar').classList.add('hidden'); }
         });
-        window.handleLogin = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
-        window.handleLogout = () => signOut(auth);
-        window.showPage = (id) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-        window.openModal = (id) => document.getElementById(id).classList.add('active');
-        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
     </script>
 </body>
 </html>
