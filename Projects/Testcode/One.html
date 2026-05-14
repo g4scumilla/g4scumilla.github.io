@@ -470,10 +470,12 @@
                         <span class="nexus-header-val">${l.date}</span>
                     </div>
                     <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                     <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div>
                 </div>`;
