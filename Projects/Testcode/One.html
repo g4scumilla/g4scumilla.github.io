@@ -18,61 +18,22 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; position: relative; }
+        
+        /* Sticky Header for Transaction History */
+        .sticky-header { position: sticky; top: -24px; background: white; padding: 10px 0; z-index: 20; border-bottom: 1px solid #f1f5f9; margin-bottom: 20px; }
 
-        /* NEXUSPAY STYLE CARD */
-        .nexus-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-        .nexus-header {
-            background-color: #fff1f2; 
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #fecdd3;
-        }
-        .nexus-header-label {
-            font-size: 10px;
-            font-weight: 800;
-            color: #be123c; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .nexus-header-val {
-            font-size: 10px;
-            font-weight: 700;
-            color: #334155;
-        }
+        .nexus-card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 16px; }
+        .nexus-header { background-color: #fff1f2; padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #fecdd3; }
+        .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
         .nexus-body { padding: 12px; }
         .nexus-row { display: flex; font-size: 11px; margin-bottom: 6px; align-items: flex-start; }
         .nexus-key { width: 105px; color: #64748b; font-weight: 600; flex-shrink: 0; }
         .nexus-val { flex: 1; color: #1e293b; font-weight: 700; }
-        .nexus-footer {
-            text-align: center;
-            padding: 8px;
-            border-top: 1px solid #f1f5f9;
-        }
-        .nexus-link {
-            color: #e11d48;
-            font-size: 11px;
-            font-weight: 700;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
+        .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
+        .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-        #pdf-content { 
-            border: 1px solid #E2E8F0; 
-            border-radius: 16px; 
-            overflow: hidden;
-            page-break-inside: auto; 
-            width: 100%; 
-        }
+        #pdf-content { border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; page-break-inside: auto; width: 100%; }
         #pdf-content table { width: 100%; border-collapse: collapse; }
         #pdf-content tr { page-break-inside: avoid; page-break-after: auto; }
         #pdf-content thead { display: table-header-group; }
@@ -168,7 +129,7 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS -->
+    <!-- STAFF LIST -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
@@ -230,11 +191,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
@@ -290,7 +251,7 @@
         </div>
     </div>
 
-    <!-- STAFF MANAGEMENT MODAL -->
+    <!-- STAFF MODAL -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
@@ -303,10 +264,10 @@
         </div>
     </div>
 
-    <!-- FULL TRANSACTION HISTORY MODAL (WITH TOP CLOSE BUTTON) -->
+    <!-- TRANSACTION HISTORY MODAL (WITH STATIC TOP CLOSE) -->
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
+            <div class="sticky-header flex justify-between items-center">
                 <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Full History</h3>
                 <button onclick="closeModal('txn-mgmt-modal')" class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 shadow-sm">
                     <i class="fa-solid fa-xmark"></i>
@@ -367,6 +328,14 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
+                
+                // Default Dates for Reports
+                const today = new Date();
+                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+                const lastDay = today.toISOString().split('T')[0];
+                document.getElementById('r-start').value = firstDay;
+                document.getElementById('r-end').value = lastDay;
+
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -440,12 +409,11 @@
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
                 let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
-                
                 const staffKeys = Object.keys(staffData).sort();
                 
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    const g4sUserId = `G4S_XXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
 
                     sH += `
@@ -489,7 +457,7 @@
             document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
 
             const staffKeys = Object.keys(staffData).sort();
-            const getG4SId = (sid) => `G4S_XXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
+            const getG4SId = (sid) => `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
 
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
@@ -506,18 +474,22 @@
 
             let logH = '';
             let mLogH = '';
+            
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
+                const catNote = `${l.cat}${l.note ? ` (${l.note})` : ''}`;
                 logH += `
                 <div class="nexus-card">
                     <div class="nexus-header">
                         <span class="nexus-header-label">TXN ID</span>
-                        <span class="nexus-header-val">: TXN_G4S_${l.key.slice(-6).toUpperCase()}</span>
+                        <span class="nexus-header-val">: TXNG4S${l.key.slice(-6).toUpperCase()}</span>
                     </div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat || 'General'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${catNote}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Posting Date</span><span class="nexus-val">: ${l.date}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                 </div>`;
             });
@@ -526,14 +498,13 @@
                 mLogH += `
                 <div class="nexus-card">
                     <div class="nexus-header !bg-slate-50 !border-slate-200">
-                        <span class="nexus-header-label !text-slate-600">ID: TXN_G4S_${l.key.slice(-6).toUpperCase()}</span>
+                        <span class="nexus-header-label !text-slate-600">ID: TXNG4S${l.key.slice(-6).toUpperCase()}</span>
                         <span class="nexus-header-val">${l.date}</span>
                     </div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Staff Name</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat || 'General'}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val font-normal italic text-slate-500">: ${l.note || 'No note'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="my-2 border-t border-dashed border-slate-200"></div>
                         <div class="nexus-row">
                             <span class="nexus-key">Amount</span>
@@ -563,14 +534,11 @@
             
             logsList.forEach(l => {
                 const a = Number(l.amount);
-                // Calculate balance ONLY for the selected staff (if selected) or for global
                 if (!sid || l.staffId === sid) {
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
-                    
                     let match = true; 
                     if(start && l.date < start) match = false; 
                     if(end && l.date > end) match = false; 
-                    
                     if(match) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
                         html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
