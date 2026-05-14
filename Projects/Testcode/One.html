@@ -9,34 +9,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; color: #1E293B; }
-        
-        /* PAGE BORDER WRAPPER */
-        .app-container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #F8FAFC;
-            min-height: 100vh;
-            border-left: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
-            box-shadow: 0 0 50px rgba(0,0,0,0.05);
-            position: relative;
-        }
-
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; color: #1E293B; }
         .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
-        .modal-content { background: white; width: 100%; max-width: 500px; margin: 0 auto; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
         
         /* NEXUSPAY STYLE CARD */
         .nexus-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid #e2e8f0;
             overflow: hidden;
             margin-bottom: 16px;
@@ -93,202 +80,189 @@
 </head>
 <body>
 
-    <div class="app-container">
-        <div id="auth-guard" class="absolute inset-0 bg-white z-[9999] flex items-center justify-center">
-            <div class="flex flex-col items-center">
-                <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
-            </div>
+    <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
         </div>
-
-        <!-- LOGIN -->
-        <div id="login-page" class="page flex-col items-center justify-center p-6">
-            <div class="w-full bg-white p-8 rounded-[32px] shadow-2xl text-center">
-                <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
-                <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
-                <div class="relative mb-4">
-                    <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-                </div>
-                <div class="relative mb-8">
-                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input id="password" type="password" placeholder="Password" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-                </div>
-                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-right-to-bracket"></i> Sign In
-                </button>
-            </div>
-        </div>
-
-        <!-- DASHBOARD -->
-        <div id="dashboard-page" class="page p-5 pb-24">
-            <div class="flex justify-between items-center mb-6 mt-2">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                        <i class="fa-solid fa-user-gear"></i>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">System Operator</p>
-                        <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
-                    </div>
-                </div>
-                <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
-            </div>
-
-            <div class="flex justify-center mb-8">
-                <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
-                    <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
-                        <span class="nexus-header-label !text-white tracking-widest text-[9px]">Main Cash Account</span>
-                        <span class="nexus-header-val !text-white/80 text-[8px]">Active</span>
-                    </div>
-                    <div class="nexus-body !py-5 flex flex-col items-center text-center">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available Balance</p>
-                        <h2 class="text-2xl font-black text-slate-800 tracking-tight" id="cb-display">0.00</h2>
-                        <div class="mt-3 px-3 py-1 bg-slate-50 rounded-md border border-slate-100">
-                            <p class="text-[8px] font-bold text-slate-500 uppercase">Primary Currency: <span id="card-curr-label" class="text-[#be123c]">BDT</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-8">
-                <h3 class="font-black text-slate-800 tracking-widest mb-4 px-1 text-[10px] uppercase flex items-center gap-2 justify-center">
-                    <i class="fa-solid fa-calendar-day text-blue-600"></i>
-                    <span id="month-label">May 2026</span>
-                </h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="nexus-card !mb-0 text-center shadow-sm">
-                        <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
-                            <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
-                        </div>
-                        <div class="nexus-body !p-3">
-                            <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
-                        </div>
-                    </div>
-                    <div class="nexus-card !mb-0 text-center shadow-sm">
-                        <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
-                            <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
-                        </div>
-                        <div class="nexus-body !p-3">
-                            <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 class="font-bold text-slate-800 mb-4 px-1 flex items-center gap-2 uppercase text-xs tracking-wide">
-                <i class="fa-solid fa-clock-rotate-left text-slate-400"></i> Recent Transactions
-            </h3>
-            <div id="recent-logs" class="space-y-4"></div>
-        </div>
-
-        <!-- INDIVIDUAL STAFF ACCOUNTS -->
-        <div id="users-page" class="page p-5 pb-24">
-            <!-- BOLD CARD-LIKE HEADER -->
-            <div class="bg-blue-600 p-5 rounded-2xl mb-8 shadow-lg shadow-blue-100 flex items-center gap-4">
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white text-xl">
-                    <i class="fa-solid fa-address-book"></i>
-                </div>
-                <div>
-                    <h2 class="text-white font-black text-lg uppercase tracking-tight">Staff Roster</h2>
-                    <p class="text-blue-100 text-[10px] font-bold uppercase tracking-widest">Digital Ledger Index</p>
-                </div>
-            </div>
-            <div id="staff-list" class="space-y-4"></div>
-        </div>
-
-        <!-- SETTINGS -->
-        <div id="settings-page" class="page p-5 pb-24">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <i class="fa-solid fa-gears text-blue-600"></i> Settings
-            </h2>
-            <div class="space-y-4">
-                <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-coins"></i> Local Currency
-                    </p>
-                    <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border-none">
-                        <option value="text">BDT (Text)</option>
-                        <option value="sign">৳ (Sign)</option>
-                        <option value="usd">USD ($)</option>
-                    </select>
-                </div>
-
-                <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                    <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
-                    <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-                </button>
-                <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                    <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
-                    <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-                </button>
-                <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                    <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
-                    <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-                </button>
-
-                <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4">
-                    <i class="fa-solid fa-power-off"></i> Sign Out System
-                </button>
-            </div>
-        </div>
-
-        <!-- REPORTS PAGE -->
-        <div id="reports-page" class="page p-5 pb-24">
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2 class="text-2xl font-bold">Ledger Reports</h2>
-            </div>
-            <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                        <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                        <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
-                    </div>
-                </div>
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Select Personnel</p>
-                    <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
-                    <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
-                </div>
-            </div>
-            <div id="report-view" class="hidden">
-                <div class="report-scroll-container">
-                    <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
-                        <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
-                        <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
-
-                        <table class="w-full border-collapse border border-slate-200">
-                            <thead>
-                                <tr class="bg-slate-100 text-[8px]">
-                                    <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody id="report-body"></tbody>
-                        </table>
-                        <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <nav id="navbar" class="bottom-nav hidden">
-            <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
-            <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
-            <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
-        </nav>
     </div>
 
-    <!-- MODALS OUTSIDE WRAPPER BUT STYLED -->
+    <!-- LOGIN -->
+    <div id="login-page" class="page flex-col items-center justify-center p-6">
+        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+            <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
+            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
+            <div class="relative mb-4">
+                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
+            </div>
+            <div class="relative mb-8">
+                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="password" type="password" placeholder="Password" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
+            </div>
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-page" class="page p-5 pb-24">
+        <div class="flex justify-between items-center mb-6 mt-2">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase">System Operator</p>
+                    <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
+                </div>
+            </div>
+            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <!-- SMALLER (80%) CENTRAL BALANCE CARD WITH NEXUS VIBE -->
+        <div class="flex justify-center mb-8">
+            <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
+                <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
+                    <span class="nexus-header-label !text-white tracking-widest text-[9px]">Main Cash Account</span>
+                    <span class="nexus-header-val !text-white/80 text-[8px]">Active</span>
+                </div>
+                <div class="nexus-body !py-5 flex flex-col items-center text-center">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available Balance</p>
+                    <h2 class="text-2xl font-black text-slate-800 tracking-tight" id="cb-display">0.00</h2>
+                    <div class="mt-3 px-3 py-1 bg-slate-50 rounded-md border border-slate-100">
+                        <p class="text-[8px] font-bold text-slate-500 uppercase">Primary Currency: <span id="card-curr-label" class="text-[#be123c]">BDT</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h3 class="font-black text-slate-800 tracking-widest mb-4 px-1 text-[10px] uppercase flex items-center gap-2 justify-center">
+                <i class="fa-solid fa-calendar-day text-blue-600"></i>
+                <span id="month-label">May 2026</span>
+            </h3>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- MERGED LINE MONTHLY CARDS -->
+                <div class="nexus-card !mb-0 text-center shadow-sm">
+                    <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
+                        <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
+                    </div>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
+                    </div>
+                </div>
+                <div class="nexus-card !mb-0 text-center shadow-sm">
+                    <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
+                        <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
+                    </div>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="font-bold text-slate-800 mb-4 px-1 flex items-center gap-2 uppercase text-xs tracking-wide">
+            <i class="fa-solid fa-clock-rotate-left text-slate-400"></i> Recent Transactions
+        </h3>
+        <div id="recent-logs" class="space-y-4"></div>
+    </div>
+
+    <!-- INDIVIDUAL STAFF ACCOUNTS -->
+    <div id="users-page" class="page p-5 pb-24">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Staff Accounts
+        </h2>
+        <div id="staff-list" class="space-y-4"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="settings-page" class="page p-5 pb-24">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+            <i class="fa-solid fa-gears text-blue-600"></i> Settings
+        </h2>
+        <div class="space-y-4">
+            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-coins"></i> Local Currency
+                </p>
+                <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border-none">
+                    <option value="text">BDT (Text)</option>
+                    <option value="sign">৳ (Sign)</option>
+                    <option value="usd">USD ($)</option>
+                </select>
+            </div>
+
+            <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
+                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
+                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
+                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+
+            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4">
+                <i class="fa-solid fa-power-off"></i> Sign Out System
+            </button>
+        </div>
+    </div>
+
+    <!-- REPORTS PAGE -->
+    <div id="reports-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-6">
+            <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold">Ledger Reports</h2>
+        </div>
+        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
+                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
+                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Select Personnel</p>
+                <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
+                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
+            </div>
+        </div>
+        <div id="report-view" class="hidden">
+            <div class="report-scroll-container">
+                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
+                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
+                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+
+                    <table class="w-full border-collapse border border-slate-200">
+                        <thead>
+                            <tr class="bg-slate-100 text-[8px]">
+                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-body"></tbody>
+                    </table>
+                    <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENTRY MODAL -->
     <div id="entry-modal" class="modal">
         <div class="modal-content">
             <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
@@ -313,12 +287,14 @@
         </div>
     </div>
 
+    <!-- MANAGEMENT MODALS -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
             <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2 border-none">
             <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4 border-none">
             <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2"><i class="fa-solid fa-check"></i> Register Staff</button>
+            <div class="flex items-center gap-2 mb-3 text-slate-400"><i class="fa-solid fa-list-ul"></i><p class="text-[10px] font-bold uppercase">Current Roster</p></div>
             <div id="mgmt-staff-list" class="space-y-2"></div>
             <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
@@ -331,6 +307,12 @@
             <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
+
+    <nav id="navbar" class="bottom-nav hidden">
+        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
+        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
+    </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
@@ -461,6 +443,7 @@
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Product</span><span class="nexus-val">: ${u.desig || 'Personnel'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Account Type</span><span class="nexus-val">: Staff Ledger</span></div>
                             <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
                         </div>
                         <div class="nexus-footer">
@@ -515,6 +498,8 @@
                     </div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat || 'General'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Posting Date</span><span class="nexus-val">: ${l.date}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">New Balance</span><span class="nexus-val">: ${fmt(l.sb)}</span></div>
                     </div>
