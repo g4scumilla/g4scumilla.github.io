@@ -18,7 +18,7 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
-        
+
         /* NEXUSPAY STYLE CARD */
         .nexus-card {
             background: white;
@@ -172,9 +172,15 @@
 
     <!-- INDIVIDUAL STAFF ACCOUNTS -->
     <div id="users-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Staff Accounts
-        </h2>
+        <div class="flex items-center gap-3 mb-8 mt-2">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
+                <i class="fa-solid fa-users-viewfinder"></i>
+            </div>
+            <div>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Management</p>
+                <h2 class="text-lg font-bold text-slate-800">Staff Accounts</h2>
+            </div>
+        </div>
         <div id="staff-list" class="space-y-4"></div>
     </div>
 
@@ -433,7 +439,7 @@
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     opts += `<option value="${id}">${u.name} (${u.desig || 'N/A'})</option>`;
-                    
+
                     sH += `
                     <div class="nexus-card">
                         <div class="nexus-header">
@@ -473,7 +479,7 @@
             const now = new Date();
             const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-            
+
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
@@ -507,11 +513,27 @@
             });
 
             [...logsList].reverse().forEach(l => {
-                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button></div>`;
+                mLogH += `
+                <div class="nexus-card">
+                    <div class="nexus-header">
+                        <span class="nexus-header-label">Record ID</span>
+                        <span class="nexus-header-val">: TXN-${l.key.slice(-6).toUpperCase()}</span>
+                    </div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Staff Name</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Received':'Advanced'} (${fmt(l.amount)})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Date</span><span class="nexus-val">: ${l.date}</span></div>
+                    </div>
+                    <div class="nexus-footer">
+                        <span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Remove Entry
+                        </span>
+                    </div>
+                </div>`;
             });
 
             document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent activity</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">No history available</p>';
         }
 
         window.generateReport = () => {
