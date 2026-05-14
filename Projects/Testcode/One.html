@@ -17,7 +17,7 @@
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
-        .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; position: relative; }
 
         /* NEXUSPAY STYLE CARD */
         .nexus-card {
@@ -308,9 +308,12 @@
 
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
-            <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Full History</h3>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Full History</h3>
+                <button onclick="closeModal('txn-mgmt-modal')" class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 shadow-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <div id="mgmt-txn-list" class="space-y-3"></div>
-            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
+            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close Panel</button>
         </div>
     </div>
 
@@ -542,20 +545,21 @@
                   sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
             document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
+            
             logsList.forEach(l => {
                 const a = Number(l.amount);
+                // Fix: Only process running balance for the specific staff member selected
                 if (!sid || l.staffId === sid) {
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
+                    
                     let m = true; 
                     if(start && l.date < start) m = false; 
                     if(end && l.date > end) m = false; 
-                    if(sid && l.staffId !== sid) m = false;
+                    
                     if(m) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
                         html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                     }
-                } else {
-                    if (l.type === 'income') runningBal += a; else runningBal -= a;
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
