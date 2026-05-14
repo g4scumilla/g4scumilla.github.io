@@ -71,9 +71,10 @@
                     <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
                 </div>
             </div>
-            <button onclick="goToEntry()" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
+            <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
+        <!-- MAIN CARD -->
         <div class="flex justify-center mb-8">
             <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
                 <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
@@ -90,6 +91,7 @@
             </div>
         </div>
 
+        <!-- MONTHLY SUMMARY -->
         <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white/50">
             <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-calendar-day text-blue-600"></i>
@@ -121,71 +123,68 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- LEDGER ENTRY PAGE (Separate Page) -->
-    <div id="ledger-page" class="page p-5 pb-24">
+    <!-- NEW TRANSACTION PAGE (SEPARATE) -->
+    <div id="entry-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-6 mt-2">
             <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h2 class="text-2xl font-bold text-slate-800">New Ledger Entry</h2>
+            <h2 class="text-2xl font-bold">New Entry</h2>
         </div>
 
-        <div class="bg-white p-4 rounded-[28px] shadow-sm border border-slate-100 mb-6">
-            <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 px-1">1. Select Personnel</p>
-            <div class="relative mb-3">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="staff-search" type="text" placeholder="Search by Name, Phone, or Designation..." 
-                       class="w-full p-4 pl-10 bg-slate-50 rounded-2xl text-xs outline-none border border-transparent focus:border-blue-400 transition-all"
-                       oninput="filterStaffSearch()">
-            </div>
-            
-            <div id="selected-staff-pill" class="hidden flex items-center justify-between bg-blue-50 p-4 rounded-2xl border border-blue-100 mb-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xs shadow-lg shadow-blue-100"><i class="fas fa-user-check"></i></div>
-                    <div>
-                        <p id="sel-name" class="text-sm font-bold text-blue-900"></p>
-                        <p id="sel-info" class="text-[10px] text-blue-600 font-medium"></p>
-                    </div>
+        <div class="bg-white p-5 rounded-[32px] border border-slate-100 shadow-sm space-y-4">
+            <!-- Searchable Name Selection -->
+            <div class="relative">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 px-1">Personnel Selection</p>
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                    <input id="staff-search" type="text" placeholder="Search name or details..." 
+                           class="w-full p-4 pl-11 bg-slate-50 rounded-2xl outline-none text-sm font-bold border-none"
+                           oninput="window.filterStaffSearch()">
                 </div>
-                <button onclick="clearStaffSelection()" class="text-blue-300 hover:text-red-500"><i class="fas fa-times-circle text-lg"></i></button>
+                <!-- Search Results -->
+                <div id="search-results" class="hidden absolute left-0 right-0 top-[110%] bg-white border border-slate-100 rounded-2xl shadow-2xl z-[60] max-h-60 overflow-y-auto p-2 space-y-1"></div>
             </div>
 
-            <div id="search-results-box" class="max-h-60 overflow-y-auto space-y-2 hidden"></div>
-            <input type="hidden" id="m-staff-id">
-        </div>
-
-        <div class="bg-white p-5 rounded-[28px] shadow-sm border border-slate-100">
-            <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 px-1">2. Transaction Info</p>
-            
-            <div class="relative mb-6">
-                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-5xl font-bold text-center py-6 bg-transparent text-teal-600 outline-none">
-                <p class="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-300 uppercase">Amount</p>
+            <!-- Selected Display -->
+            <div id="selection-pill" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p id="sel-name" class="text-xs font-black text-blue-700"></p>
+                    <p id="sel-id" class="text-[9px] font-bold text-blue-400 uppercase"></p>
+                </div>
+                <input type="hidden" id="m-staff-id">
+                <button onclick="window.clearSelection()" class="text-blue-300"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Category</p>
+            <div class="relative">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 px-1">Transaction Value</p>
+                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 px-1">Category</p>
                     <select id="m-cat" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
                         <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
                     </select>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Date (Dhaka)</p>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 px-1">Date</p>
                     <input id="m-date" type="date" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
                 </div>
             </div>
 
-            <p class="text-[8px] font-bold text-slate-400 uppercase px-1 mb-1">Narration</p>
-            <textarea id="m-note" placeholder="Write specific notes here..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-24 text-xs border-none"></textarea>
-            
-            <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1 transition-all"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg transition-all"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
+            <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 px-1">Remarks</p>
+                <textarea id="m-note" placeholder="Add details..." class="w-full p-4 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
             </div>
 
-            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Submit Ledger Entry
-            </button>
+            <div class="flex gap-3 pt-2">
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
+            </div>
+
+            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 mt-2"><i class="fa-solid fa-cloud-arrow-up"></i> Post Entry</button>
         </div>
     </div>
 
@@ -244,7 +243,6 @@
                 <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">+ Add New</button>
             </div>
         </div>
-
         <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
             <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Registration Form</p>
             <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
@@ -253,7 +251,6 @@
             <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
             <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-xs uppercase mt-2">Register Staff</button>
         </div>
-
         <div id="mgmt-staff-list" class="space-y-4"></div>
     </div>
 
@@ -317,32 +314,16 @@
         </div>
     </div>
 
-    <!-- EDIT STAFF MODAL (Keep as modal for quick edits) -->
+    <!-- MODAL FOR STAFF EDIT -->
     <div id="edit-staff-modal" class="modal">
         <div class="modal-content">
-            <div class="flex items-center gap-2 mb-6 text-slate-400"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Edit Staff Profile</p></div>
-            <div class="space-y-4">
-                <div>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Full Name</p>
-                    <input id="edit-u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                </div>
-                <div>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Designation</p>
-                    <input id="edit-u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Phone</p>
-                        <input id="edit-u-phone" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                    </div>
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Email</p>
-                        <input id="edit-u-email" type="email" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                    </div>
-                </div>
-            </div>
-            <button onclick="updateStaff()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 mt-8 shadow-lg shadow-blue-100"><i class="fa-solid fa-check-circle"></i> Save Changes</button>
-            <button onclick="closeModal('edit-staff-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
+            <h2 class="text-xl font-bold mb-4">Edit Staff</h2>
+            <input id="edit-u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4" placeholder="Name">
+            <input id="edit-u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4" placeholder="Designation">
+            <input id="edit-u-phone" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4" placeholder="Phone">
+            <input id="edit-u-email" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-8" placeholder="Email">
+            <button onclick="updateStaff()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold mb-4">Save Changes</button>
+            <button onclick="closeModal('edit-staff-modal')" class="w-full text-slate-400 font-bold">Cancel</button>
         </div>
     </div>
 
@@ -384,13 +365,10 @@
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
-        window.saveCurrencySettings = () => {
-            const val = document.getElementById('curr-select').value;
-            currFormat = val;
-            document.getElementById('card-curr-label').innerText = val.toUpperCase();
-            renderHome();
-            alert("Settings saved.");
-        };
+        // Date Defaults as requested
+        const DEFAULT_START = "2026-04-30";
+        const DEFAULT_END = "2026-05-14";
+        const DEFAULT_NEW_ENTRY = "2026-05-14";
 
         onAuthStateChanged(auth, (user) => {
             document.getElementById('auth-guard').style.display = 'none';
@@ -398,9 +376,12 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
-                const today = new Date();
-                document.getElementById('r-start').value = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                document.getElementById('r-end').value = today.toISOString().split('T')[0];
+                
+                // Initialize Dates
+                document.getElementById('r-start').value = DEFAULT_START;
+                document.getElementById('r-end').value = DEFAULT_END;
+                document.getElementById('m-date').value = DEFAULT_NEW_ENTRY;
+
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -408,121 +389,97 @@
             }
         });
 
+        // SEARCH ENGINE - CRITICAL FIX
+        window.filterStaffSearch = () => {
+            const query = document.getElementById('staff-search').value.toLowerCase();
+            const resultsDiv = document.getElementById('search-results');
+            
+            if (!query) {
+                resultsDiv.classList.add('hidden');
+                return;
+            }
+
+            const staffKeys = Object.keys(staffData).sort();
+            let matches = '';
+
+            staffKeys.forEach((id, index) => {
+                const u = staffData[id];
+                const gid = `G4SXXXX${(index + 1).toString().padStart(2, '0')}`;
+                
+                // Match logic: Name, ID, or Designation
+                if (u.name.toLowerCase().includes(query) || gid.toLowerCase().includes(query) || (u.desig && u.desig.toLowerCase().includes(query))) {
+                    matches += `
+                        <div onclick="window.selectStaff('${id}', '${u.name}', '${gid}')" 
+                             class="p-4 hover:bg-slate-50 active:bg-blue-50 border-b border-slate-50 last:border-0 cursor-pointer">
+                            <p class="text-xs font-bold text-slate-800 uppercase">${u.name}</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase">${gid} | ${u.desig || 'Personnel'}</p>
+                        </div>
+                    `;
+                }
+            });
+
+            if (matches) {
+                resultsDiv.innerHTML = matches;
+                resultsDiv.classList.remove('hidden');
+            } else {
+                resultsDiv.innerHTML = '<p class="p-4 text-center text-[10px] text-slate-400 font-bold">No results found</p>';
+                resultsDiv.classList.remove('hidden');
+            }
+        };
+
+        window.selectStaff = (id, name, gid) => {
+            document.getElementById('m-staff-id').value = id;
+            document.getElementById('sel-name').innerText = name;
+            document.getElementById('sel-id').innerText = gid;
+            document.getElementById('selection-pill').classList.remove('hidden');
+            document.getElementById('search-results').classList.add('hidden');
+            document.getElementById('staff-search').value = '';
+        };
+
+        window.clearSelection = () => {
+            document.getElementById('m-staff-id').value = '';
+            document.getElementById('selection-pill').classList.add('hidden');
+        };
+
+        // CORE ACTIONS
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Auth Failed"));
         };
-
         window.handleLogout = () => signOut(auth);
+        
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            if (id === 'entry-page') {
+                window.clearSelection();
+                document.getElementById('m-date').value = DEFAULT_NEW_ENTRY;
+            }
         };
 
         window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
-        // NEW LEDGER ENTRY PAGE LOGIC
-        window.goToEntry = () => {
-            showPage('ledger-page');
-            // Strict Dhaka Timezone (+6)
-            const now = new Date();
-            const dhakaOffset = 6 * 60; // Dhaka is GMT+6
-            const localOffset = now.getTimezoneOffset(); // in minutes
-            const dhakaDate = new Date(now.getTime() + (dhakaOffset + localOffset) * 60000);
-            
-            document.getElementById('m-date').value = dhakaDate.toISOString().split('T')[0];
-            clearStaffSelection();
+        window.saveCurrencySettings = () => {
+            currFormat = document.getElementById('curr-select').value;
+            document.getElementById('card-curr-label').innerText = currFormat.toUpperCase();
+            renderHome();
+            alert("Settings updated");
         };
-
-        window.filterStaffSearch = () => {
-            const query = document.getElementById('staff-search').value.toLowerCase();
-            const resultsBox = document.getElementById('search-results-box');
-            
-            if (query.length < 1) {
-                resultsBox.classList.add('hidden');
-                return;
-            }
-
-            let html = '';
-            Object.keys(staffData).forEach(id => {
-                const u = staffData[id];
-                if (u.name.toLowerCase().includes(query) || 
-                    u.desig.toLowerCase().includes(query) || 
-                    u.phone.toLowerCase().includes(query) || 
-                    u.email.toLowerCase().includes(query)) {
-                    
-                    html += `
-                    <div onclick="selectStaffForEntry('${id}')" class="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center gap-3 active:bg-blue-50 transition-colors">
-                        <div class="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 text-[10px] font-bold">${u.name.charAt(0)}</div>
-                        <div class="flex-1">
-                            <p class="text-xs font-bold text-slate-800">${u.name}</p>
-                            <p class="text-[9px] text-slate-500 font-semibold uppercase">${u.desig} • ${u.phone}</p>
-                        </div>
-                        <i class="fas fa-chevron-right text-slate-300 text-[10px]"></i>
-                    </div>`;
-                }
-            });
-
-            resultsBox.innerHTML = html || '<p class="text-[10px] p-4 text-center text-slate-400 font-bold">No results found</p>';
-            resultsBox.classList.remove('hidden');
-        };
-
-        window.selectStaffForEntry = (id) => {
-            const u = staffData[id];
-            document.getElementById('m-staff-id').value = id;
-            document.getElementById('sel-name').innerText = u.name;
-            document.getElementById('sel-info').innerText = `${u.desig} | ${u.phone}`;
-            
-            document.getElementById('selected-staff-pill').classList.remove('hidden');
-            document.getElementById('search-results-box').classList.add('hidden');
-            document.getElementById('staff-search').classList.add('hidden');
-        };
-
-        window.clearStaffSelection = () => {
-            document.getElementById('m-staff-id').value = '';
-            document.getElementById('selected-staff-pill').classList.add('hidden');
-            document.getElementById('staff-search').classList.remove('hidden');
-            document.getElementById('staff-search').value = '';
-            document.getElementById('search-results-box').classList.add('hidden');
-        };
-
-        window.postTxn = () => {
-            const sid = document.getElementById('m-staff-id').value;
-            const amt = Number(document.getElementById('m-amt').value);
-            const date = document.getElementById('m-date').value;
-            if(!sid) return alert("Select staff member first");
-            if(!amt || !date) return alert("Fill all fields");
-            
-            const staff = staffData[sid];
-            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
-            
-            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
-                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
-            });
-            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-            
-            alert("Entry Saved");
-            showPage('dashboard-page');
-            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
-            clearStaffSelection();
-        };
-
-        window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
 
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
-            const des = document.getElementById('u-des').value;
-            const phone = document.getElementById('u-phone').value;
-            const email = document.getElementById('u-email').value;
-            if(!name) return alert("Name is required");
+            if(!name) return;
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
-                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A', balance: 0 
+                name, 
+                desig: document.getElementById('u-des').value || 'Personnel', 
+                phone: document.getElementById('u-phone').value || 'N/A', 
+                email: document.getElementById('u-email').value || 'N/A', 
+                balance: 0 
             });
             document.getElementById('add-staff-form').classList.add('hidden');
-            ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(id => document.getElementById(id).value = '');
+            ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(i => document.getElementById(i).value = '');
         };
 
         window.editUser = (id) => {
@@ -536,27 +493,41 @@
         };
 
         window.updateStaff = () => {
-            if(!editingStaffId) return;
-            const name = document.getElementById('edit-u-name').value;
-            const des = document.getElementById('edit-u-des').value;
-            const phone = document.getElementById('edit-u-phone').value;
-            const email = document.getElementById('edit-u-email').value;
             update(ref(db, `users/${auth.currentUser.uid}/staff/${editingStaffId}`), {
-                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A'
-            }).then(() => {
-                closeModal('edit-staff-modal');
-                editingStaffId = null;
-            });
+                name: document.getElementById('edit-u-name').value,
+                desig: document.getElementById('edit-u-des').value,
+                phone: document.getElementById('edit-u-phone').value,
+                email: document.getElementById('edit-u-email').value
+            }).then(() => closeModal('edit-staff-modal'));
         };
 
-        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.delUser = (id) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${id}`));
+
+        window.postTxn = () => {
+            const sid = document.getElementById('m-staff-id').value;
+            const amt = Number(document.getElementById('m-amt').value);
+            const date = document.getElementById('m-date').value;
+            if(!sid || !amt || !date) return alert("Select Personnel and enter amount");
+
+            const staff = staffData[sid];
+            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
+                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
+            });
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+            
+            ['m-amt', 'm-note'].forEach(i => document.getElementById(i).value = '');
+            showPage('dashboard-page');
+        };
 
         window.delTxn = (tid, sid, amt, type) => {
-            if(confirm("Remove this transaction?")) {
+            if(confirm("Delete log?")) {
                 const staff = staffData[sid];
                 if(staff) {
-                    const newBal = type === 'income' ? (Number(staff.balance || 0) - Number(amt)) : (Number(staff.balance || 0) + Number(amt));
-                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                    const adj = type === 'income' ? (Number(staff.balance) - Number(amt)) : (Number(staff.balance) + Number(amt));
+                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: adj });
                 }
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
             }
@@ -565,43 +536,40 @@
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">All Staff Members</option>';
-                const staffKeys = Object.keys(staffData).sort();
+                let sH = '', mSH = '', opts = '<option value="">All Personnel</option>';
+                const keys = Object.keys(staffData).sort();
 
-                Object.keys(staffData).forEach(id => {
+                keys.forEach((id, index) => {
                     const u = staffData[id];
-                    const g4sUserId = `G4S${(staffKeys.indexOf(id) + 1).toString().padStart(4, '0')}`;
-                    opts += `<option value="${id}">${u.name}</option>`;
+                    const gid = `G4SXXXX${(index + 1).toString().padStart(2, '0')}`;
+                    opts += `<option value="${id}">${u.name} (${gid})</option>`;
 
                     sH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Ledger Statement</span></div>
-                    </div>`;
-
+                        <div class="nexus-card">
+                            <div class="nexus-header"><span class="nexus-header-label">G4S ID</span><span class="nexus-header-val">${gid}</span></div>
+                            <div class="nexus-body">
+                                <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">${u.name}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Position</span><span class="nexus-val">${u.desig}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val text-blue-600">${fmt(u.balance)}</span></div>
+                            </div>
+                        </div>`;
+                    
                     mSH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">ID: ${g4sUserId}</span><span class="nexus-header-val">Active</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer flex justify-around items-center">
-                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
-                            <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
-                        </div>
-                    </div>`;
+                        <div class="nexus-card">
+                            <div class="nexus-header"><span class="nexus-header-label">${gid}</span><span class="nexus-header-val">MANAGE</span></div>
+                            <div class="nexus-body">
+                                <p class="text-xs font-bold mb-1">${u.name}</p>
+                                <p class="text-[10px] text-slate-400 mb-2">${u.desig}</p>
+                                <div class="flex gap-4 border-t pt-2 mt-2">
+                                    <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold"><i class="fas fa-edit mr-1"></i>EDIT</button>
+                                    <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold"><i class="fas fa-trash mr-1"></i>DELETE</button>
+                                </div>
+                            </div>
+                        </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records</p>';
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts;
+                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 opacity-30">Empty</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '';
+                document.getElementById('r-staff').innerHTML = opts;
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -611,80 +579,70 @@
         }
 
         function renderHome() {
-            const now = new Date();
-            const monthKey = now.toISOString().slice(0, 7); 
-            document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-
-            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
-            const logsWithBal = logsList.map(l => {
-                const a = Number(l.amount || 0);
-                if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
-                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
-                return { ...l, cb: rCB, sb: rSB[l.staffId] };
+            document.getElementById('month-label').innerText = "May 2026";
+            let cb = 0, mRec = 0, mAdv = 0, sBal = {};
+            
+            const logs = logsList.map(l => {
+                const a = Number(l.amount);
+                if(!sBal[l.staffId]) sBal[l.staffId] = 0;
+                if(l.type === 'income') { cb += a; sBal[l.staffId] += a; } else { cb -= a; sBal[l.staffId] -= a; }
+                if(l.date && l.date.includes("2026-05")) {
+                    if(l.type === 'income') mRec += a; else mAdv += a;
+                }
+                return { ...l, cb, sb: sBal[l.staffId] };
             });
 
-            document.getElementById('cb-display').innerText = fmt(rCB);
-            document.getElementById('month-received').innerText = fmt(monthlyRec);
-            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+            document.getElementById('cb-display').innerText = fmt(cb);
+            document.getElementById('month-received').innerText = fmt(mRec);
+            document.getElementById('month-advanced').innerText = fmt(mAdv);
 
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 8).forEach(l => {
-                logH += `
+            [...logs].reverse().forEach((l, i) => {
+                const card = `
                 <div class="nexus-card">
-                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">TXN#${l.key.slice(-6).toUpperCase()}</span></div>
+                    <div class="nexus-header"><span class="nexus-header-label">${l.date}</span><span class="nexus-header-val">TXN#${l.key.slice(-4).toUpperCase()}</span></div>
                     <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Staff</span><span class="nexus-val">${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Account Bal</span><span class="nexus-val font-bold text-slate-900">${fmt(l.sb)}</span></div>
                     </div>
+                    ${id==='history-page' ? `<div class="nexus-footer"><button onclick="delTxn('${l.key}','${l.staffId}',${l.amount},'${l.type}')" class="text-rose-600 text-[10px] font-bold">DELETE</button></div>` : ''}
                 </div>`;
+                if(i < 5) logH += card;
+                mLogH += card.replace('history-page', 'history-page'); // Simple trigger for delete button in history view
             });
 
-            [...logsWithBal].reverse().forEach(l => {
-                mLogH += `
-                <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${l.key.slice(-8).toUpperCase()}</span></div>
-                    <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                    </div>
-                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
-                </div>`;
-            });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent logs</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center py-10 opacity-30 text-xs uppercase font-bold">No History</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '';
         }
 
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
+            const sid = document.getElementById('r-staff').value;
+            let html = '', sl = 1, tAdv = 0, tRec = 0, runB = 0;
+
             logsList.forEach(l => {
-                if (!sid || l.staffId === sid) {
+                if(!sid || l.staffId === sid) {
                     const a = Number(l.amount);
-                    if (l.type === 'income') runningBal += a; else runningBal -= a;
-                    if((!start || l.date >= start) && (!end || l.date <= end)) {
+                    if(l.type === 'income') runB += a; else runB -= a;
+                    if(l.date >= start && l.date <= end) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
-                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
+                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2">${l.staffName}</td><td class="border p-2">${l.cat}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runB)}</td></tr>`;
                     }
                 }
             });
+
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-rose-600">Total Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total In: ${fmt(tRec)}</p><p class="border-t pt-1 mt-1 text-slate-900">Net: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
-            const element = document.getElementById('pdf-content');
-            element.style.minWidth = "100%"; 
-            html2pdf().from(element).set({
-                margin: [10, 10, 20, 10], filename: `G4S_Statement_${Date.now()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 4 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save().then(() => element.style.minWidth = "650px");
+            const el = document.getElementById('pdf-content');
+            el.style.minWidth = "100%";
+            html2pdf().from(el).set({ margin: 10, filename: 'G4S_Statement.pdf', html2canvas: { scale: 3 } }).save().then(() => el.style.minWidth = "650px");
         };
 
         window.setT = (t) => {
@@ -692,6 +650,9 @@
             document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1';
             document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-400 flex flex-col items-center gap-1';
         };
+
+        window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
+
     </script>
 </body>
 </html>
