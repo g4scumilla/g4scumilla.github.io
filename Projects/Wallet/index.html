@@ -19,9 +19,6 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; position: relative; }
 
-        /* Sticky Header for Transaction History */
-        .sticky-header { position: sticky; top: -24px; background: white; padding: 10px 0; z-index: 20; border-bottom: 1px solid #f1f5f9; margin-bottom: 20px; }
-
         .nexus-card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 16px; }
         .nexus-header { background-color: #fff1f2; padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #fecdd3; }
         .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -33,10 +30,6 @@
         .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        #pdf-content { border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; page-break-inside: auto; width: 100%; }
-        #pdf-content table { width: 100%; border-collapse: collapse; }
-        #pdf-content tr { page-break-inside: avoid; page-break-after: auto; }
-        #pdf-content thead { display: table-header-group; }
     </style>
 </head>
 <body>
@@ -71,9 +64,7 @@
     <div id="dashboard-page" class="page p-5 pb-24">
         <div class="flex justify-between items-center mb-6 mt-2">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa-solid fa-user-gear"></i></div>
                 <div>
                     <p class="text-[10px] text-slate-400 font-bold uppercase">System Operator</p>
                     <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
@@ -98,8 +89,9 @@
             </div>
         </div>
 
-        <div class="mb-8">
-            <h3 class="font-black text-slate-800 tracking-widest mb-4 px-1 text-[10px] uppercase flex items-center gap-2 justify-center">
+        <!-- BORDERED MONTHLY SUMMARY SECTION -->
+        <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white/50">
+            <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-calendar-day text-blue-600"></i>
                 <span id="month-label">May 2026</span>
             </h3>
@@ -129,12 +121,10 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF LIST -->
+    <!-- STAFF ACCOUNTS PAGE -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
-                <i class="fa-solid fa-users-viewfinder"></i>
-            </div>
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
             <div>
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Management</p>
                 <h2 class="text-lg font-bold text-slate-800">Staff Accounts</h2>
@@ -143,23 +133,18 @@
         <div id="staff-list" class="space-y-4"></div>
     </div>
 
-    <!-- SETTINGS -->
+    <!-- SETTINGS PAGE -->
     <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-gears text-blue-600"></i> Settings
-        </h2>
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
         <div class="space-y-4">
             <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-coins"></i> Local Currency
-                </p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-coins"></i> Local Currency</p>
                 <select id="curr-select" onchange="updateCurrencyFormat(this.value)" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border-none">
                     <option value="text">BDT (Text)</option>
                     <option value="sign">৳ (Sign)</option>
                     <option value="usd">USD ($)</option>
                 </select>
             </div>
-
             <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
@@ -168,18 +153,27 @@
                 <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-            <button onclick="openModal('txn-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+            <!-- INDEPENDENT PAGE LINK -->
+            <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-
-            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4">
-                <i class="fa-solid fa-power-off"></i> Sign Out System
-            </button>
+            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
         </div>
     </div>
 
-    <!-- REPORTS -->
+    <!-- INDEPENDENT TRANSACTION HISTORY PAGE -->
+    <div id="history-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-6">
+            <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold">History</h2>
+        </div>
+        <div id="mgmt-txn-list" class="space-y-4"></div>
+    </div>
+
+    <!-- REPORTS PAGE -->
     <div id="reports-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-6">
             <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
@@ -251,7 +245,7 @@
         </div>
     </div>
 
-    <!-- STAFF MODAL -->
+    <!-- STAFF MANAGEMENT MODAL -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
@@ -264,21 +258,7 @@
         </div>
     </div>
 
-    <!-- TRANSACTION HISTORY MODAL (WITH STATIC TOP CLOSE) -->
-    <div id="txn-mgmt-modal" class="modal">
-        <div class="modal-content">
-            <div class="sticky-header flex justify-between items-center">
-                <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Full History</h3>
-                <button onclick="closeModal('txn-mgmt-modal')" class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 shadow-sm">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="mgmt-txn-list" class="space-y-3"></div>
-            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close Panel</button>
-        </div>
-    </div>
-
-    <!-- NAV BAR -->
+    <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
@@ -329,12 +309,10 @@
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
 
-                // Default Dates for Reports
                 const today = new Date();
                 const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                const lastDay = today.toISOString().split('T')[0];
                 document.getElementById('r-start').value = firstDay;
-                document.getElementById('r-end').value = lastDay;
+                document.getElementById('r-end').value = today.toISOString().split('T')[0];
 
                 startSync(user.uid);
             } else {
@@ -376,8 +354,7 @@
                 const staff = staffData[sid];
                 if(staff) {
                     const currentBal = Number(staff.balance || 0);
-                    const revAmt = Number(amt);
-                    const newBal = type === 'income' ? (currentBal - revAmt) : (currentBal + revAmt);
+                    const newBal = type === 'income' ? (currentBal - Number(amt)) : (currentBal + Number(amt));
                     update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
                 }
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
@@ -390,8 +367,7 @@
             const date = document.getElementById('m-date').value;
             if(!sid || !amt || !date) return alert("Fill all fields");
             const staff = staffData[sid];
-            const currentBal = Number(staff.balance || 0);
-            const newBal = currentType === 'income' ? (currentBal + amt) : (currentBal - amt);
+            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
             push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name,
                 amount: amt, type: currentType, date,
@@ -418,23 +394,17 @@
 
                     sH += `
                     <div class="nexus-card">
-                        <div class="nexus-header">
-                            <span class="nexus-header-label">User ID</span>
-                            <span class="nexus-header-val">: ${g4sUserId}</span>
-                        </div>
+                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Product</span><span class="nexus-val">: ${u.desig || 'Personnel'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Account Type</span><span class="nexus-val">: Staff Ledger</span></div>
                             <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
                         </div>
-                        <div class="nexus-footer">
-                            <span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span>
-                        </div>
+                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span></div>
                     </div>`;
 
                     mSH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl mb-2">
-                        <span class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-user text-[10px] text-slate-300"></i> ${u.name} (${g4sUserId})</span>
+                        <span class="font-bold text-sm"> ${u.name} (${g4sUserId})</span>
                         <button onclick="delUser('${id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </div>`;
                 });
@@ -472,21 +442,18 @@
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
-            let logH = '';
-            let mLogH = '';
+            let logH = '', mLogH = '';
 
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
+                // Alphanumeric Format Logic
+                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
                 const catNote = `${l.cat}${l.note ? ` (${l.note})` : ''}`;
                 logH += `
                 <div class="nexus-card">
-                    <div class="nexus-header">
-                        <span class="nexus-header-label">TXN ID</span>
-                        <span class="nexus-header-val">: TXNG4S${l.key.slice(-6).toUpperCase()}</span>
-                    </div>
+                    <div class="nexus-header"><span class="nexus-header-label">TXN ID</span><span class="nexus-header-val">: TXNG4S${alphanumericID}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${catNote}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Posting Date</span><span class="nexus-val">: ${l.date}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -495,29 +462,20 @@
             });
 
             [...logsWithBal].reverse().forEach(l => {
+                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
                 mLogH += `
                 <div class="nexus-card">
                     <div class="nexus-header !bg-slate-50 !border-slate-200">
-                        <span class="nexus-header-label !text-slate-600">ID: TXNG4S${l.key.slice(-6).toUpperCase()}</span>
+                        <span class="nexus-header-label !text-slate-600">ID: TXNG4S${alphanumericID}</span>
                         <span class="nexus-header-val">${l.date}</span>
                     </div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Staff Name</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
-                        <div class="my-2 border-t border-dashed border-slate-200"></div>
-                        <div class="nexus-row">
-                            <span class="nexus-key">Amount</span>
-                            <span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'(+)':'(-)'} ${fmt(l.amount)}</span>
-                        </div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Global Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
-                    <div class="nexus-footer">
-                        <span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline">
-                            <i class="fa-solid fa-trash-can mr-1"></i> Delete
-                        </span>
-                    </div>
+                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div>
                 </div>`;
             });
 
@@ -533,13 +491,10 @@
             document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
 
             logsList.forEach(l => {
-                const a = Number(l.amount);
                 if (!sid || l.staffId === sid) {
+                    const a = Number(l.amount);
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
-                    let match = true; 
-                    if(start && l.date < start) match = false; 
-                    if(end && l.date > end) match = false; 
-                    if(match) {
+                    if((!start || l.date >= start) && (!end || l.date <= end)) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
                         html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                     }
@@ -554,14 +509,11 @@
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
             element.style.minWidth = "100%"; 
-            const opt = {
-                margin: [10, 10, 20, 10], 
-                filename: `G4S_Statement_${Date.now()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 4, useCORS: true, letterRendering: true },
+            html2pdf().from(element).set({
+                margin: [10, 10, 20, 10], filename: `G4S_Statement_${Date.now()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 4 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save().then(() => element.style.minWidth = "650px");
+            }).save().then(() => element.style.minWidth = "650px");
         };
 
         window.setT = (t) => {
