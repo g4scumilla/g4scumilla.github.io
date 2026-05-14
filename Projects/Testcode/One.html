@@ -24,7 +24,8 @@
         .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
         .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
         .nexus-body { padding: 12px; }
-        .nexus-row { display: flex; font-size: 11px; margin-bottom: 6px; align-items: flex-start; }
+        .nexus-row { display: flex; font-size: 11px; padding: 6px 0; align-items: flex-start; border-bottom: 1px solid #f1f5f9; }
+        .nexus-row:last-child { border-bottom: none; }
         .nexus-key { width: 105px; color: #64748b; font-weight: 600; flex-shrink: 0; }
         .nexus-val { flex: 1; color: #1e293b; font-weight: 700; }
         .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
@@ -120,12 +121,12 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE (Menu View) -->
+    <!-- STAFF ACCOUNTS PAGE (Menu View - Read Only) -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
             <div>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Management</p>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Directory</p>
                 <h2 class="text-lg font-bold text-slate-800">Staff Accounts</h2>
             </div>
         </div>
@@ -162,7 +163,7 @@
         </div>
     </div>
 
-    <!-- STAFF MANAGEMENT PAGE (Dedicated Separate Page) -->
+    <!-- STAFF MANAGEMENT PAGE (Separate Page with Full Control) -->
     <div id="staff-mgmt-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
             <div class="flex items-center justify-between">
@@ -176,7 +177,6 @@
             </div>
         </div>
 
-        <!-- Add Form -->
         <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
             <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Registration Form</p>
             <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
@@ -189,7 +189,7 @@
         <div id="mgmt-staff-list" class="space-y-4"></div>
     </div>
 
-    <!-- INDEPENDENT TRANSACTION HISTORY PAGE -->
+    <!-- TRANSACTION HISTORY PAGE -->
     <div id="history-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
             <div class="flex items-center gap-3">
@@ -325,12 +325,9 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
-
                 const today = new Date();
-                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                document.getElementById('r-start').value = firstDay;
+                document.getElementById('r-start').value = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
                 document.getElementById('r-end').value = today.toISOString().split('T')[0];
-
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -364,24 +361,31 @@
             const email = document.getElementById('u-email').value;
             if(!name) return alert("Name is required");
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
-                name, 
-                desig: des || 'Personnel', 
-                phone: phone || 'N/A', 
-                email: email || 'N/A', 
-                balance: 0 
+                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A', balance: 0 
             });
             document.getElementById('add-staff-form').classList.add('hidden');
             ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(id => document.getElementById(id).value = '');
         };
 
-        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.editUser = (id) => {
+            const u = staffData[id];
+            const nName = prompt("Update Name:", u.name);
+            if(!nName) return;
+            const nDes = prompt("Update Designation:", u.desig);
+            const nPhone = prompt("Update Phone:", u.phone);
+            const nEmail = prompt("Update Email:", u.email);
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${id}`), {
+                name: nName, desig: nDes || u.desig, phone: nPhone || u.phone, email: nEmail || u.email
+            });
+        };
+
+        window.delUser = (sid) => confirm("Delete staff member? All transaction links will remain but user record will be gone.") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
                 const staff = staffData[sid];
                 if(staff) {
-                    const currentBal = Number(staff.balance || 0);
-                    const newBal = type === 'income' ? (currentBal - Number(amt)) : (currentBal + Number(amt));
+                    const newBal = type === 'income' ? (Number(staff.balance || 0) - Number(amt)) : (Number(staff.balance || 0) + Number(amt));
                     update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
                 }
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
@@ -396,16 +400,12 @@
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
             push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffId: sid, staffName: staff.name,
-                amount: amt, type: currentType, date,
-                cat: document.getElementById('m-cat').value,
-                note: document.getElementById('m-note').value,
-                ts: Date.now()
+                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
+                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
             closeModal('entry-modal');
-            document.getElementById('m-amt').value = '';
-            document.getElementById('m-note').value = '';
+            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
         };
 
         function startSync(uid) {
@@ -419,35 +419,43 @@
                     const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
 
-                    const cardHTML = `
+                    // Staff Menu Card (Read Only)
+                    sH += `
                     <div class="nexus-card">
                         <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone || 'N/A'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email || 'N/A'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
                         </div>
+                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Ledger Statement</span></div>
                     </div>`;
 
-                    sH += cardHTML + `<div class="nexus-footer flex justify-center gap-4 -mt-4 mb-4">
-                            <span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">Statement</span>
-                            <a href="mailto:${u.email}" class="nexus-link">Send Email</a>
-                        </div>`;
-
-                    mSH += cardHTML + `<div class="nexus-footer flex justify-center gap-4 -mt-4 mb-4">
-                            <span onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Remove Account</span>
-                        </div>`;
+                    // Management Card (With Edit/Delete/Email)
+                    mSH += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">G4S ID: ${g4sUserId}</span><span class="nexus-header-val">Manage</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Current Bal</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer flex justify-around items-center">
+                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
+                            <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
+                        </div>
+                    </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center text-slate-400 text-xs py-10">No accounts to manage</p>';
+                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
                 document.getElementById('m-staff').innerHTML = opts;
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
-                const data = s.val() || {};
-                logsList = Object.keys(data).map(k => ({...data[k], key: k})).sort((a,b) => a.ts - b.ts);
+                logsList = Object.keys(s.val() || {}).map(k => ({...s.val()[k], key: k})).sort((a,b) => a.ts - b.ts);
                 renderHome();
             });
         }
@@ -456,9 +464,6 @@
             const now = new Date();
             const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-
-            const staffKeys = Object.keys(staffData).sort();
-            const getG4SId = (sid) => `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
 
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
@@ -474,15 +479,10 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
             let logH = '', mLogH = '';
-
-            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
+            [...logsWithBal].reverse().slice(0, 8).forEach(l => {
                 logH += `
                 <div class="nexus-card">
-                    <div class="nexus-header">
-                        <span class="nexus-header-label !text-slate-600">${l.date}</span>
-                        <span class="nexus-header-label">TXNG4S${alphanumericID}</span>
-                    </div>
+                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">TXN#${l.key.slice(-6).toUpperCase()}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
@@ -493,36 +493,25 @@
             });
 
             [...logsWithBal].reverse().forEach(l => {
-                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
                 mLogH += `
                 <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200">
-                        <span class="nexus-header-label !text-slate-600">${l.date}</span>
-                        <span class="nexus-header-val">TXNG4S${alphanumericID}</span>
-                    </div>
+                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${l.key.slice(-8).toUpperCase()}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
-                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div>
+                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
                 </div>`;
             });
-
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent activity</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">No history available</p>';
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent logs</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
         }
 
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value, 
-                  end = document.getElementById('r-end').value, 
-                  sid = document.getElementById('r-staff').value;
+            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
-            document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
-
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
                     const a = Number(l.amount);
