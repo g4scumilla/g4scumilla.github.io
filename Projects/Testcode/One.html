@@ -28,7 +28,7 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
         
-        /* NEXUSPAY STYLE STAFF CARD (Based on 225542.jpg) */
+        /* NEXUSPAY STYLE CARD (Based on 225542.jpg) */
         .nexus-card {
             background: white;
             border-radius: 8px;
@@ -47,7 +47,7 @@
         .nexus-header-label {
             font-size: 10px;
             font-weight: 800;
-            color: #be123c; /* Nexus red/pink */
+            color: #be123c; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -151,7 +151,7 @@
         </div>
 
         <div class="mb-8">
-            <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase flex items-center gap-2">
+            <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-xs uppercase flex items-center gap-2">
                 <i class="fa-solid fa-calendar-check text-blue-600"></i>
                 <span id="month-label">May 2026</span>
             </h3>
@@ -176,13 +176,14 @@
         <h3 class="font-bold text-slate-800 mb-4 px-1 flex items-center gap-2 uppercase text-xs tracking-wide">
             <i class="fa-solid fa-clock-rotate-left text-slate-400"></i> Recent Transactions
         </h3>
-        <div id="recent-logs" class="space-y-3"></div>
+        <!-- TRANSACTION LOGS CONTAINER (NEXUSPAY UI) -->
+        <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- INDIVIDUAL TRANSACTIONS (NEXUSPAY UI) -->
+    <!-- INDIVIDUAL STAFF ACCOUNTS (NEXUSPAY UI) -->
     <div id="users-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Individual Accounts
+            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Staff Accounts
         </h2>
         <div id="staff-list" class="space-y-4"></div>
     </div>
@@ -271,7 +272,7 @@
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- ENTRY MODAL -->
     <div id="entry-modal" class="modal">
         <div class="modal-content">
             <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
@@ -296,6 +297,7 @@
         </div>
     </div>
 
+    <!-- MANAGEMENT MODALS -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
@@ -440,10 +442,8 @@
                 let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    const label = `${u.name} (${u.desig || 'N/A'})`;
-                    opts += `<option value="${id}">${label}</option>`;
+                    opts += `<option value="${id}">${u.name} (${u.desig || 'N/A'})</option>`;
                     
-                    // REFINED NEXUSPAY CARD TEMPLATE
                     sH += `
                     <div class="nexus-card">
                         <div class="nexus-header">
@@ -481,29 +481,46 @@
 
         function renderHome() {
             const now = new Date();
-            const monthName = now.toLocaleString('default', { month: 'long' });
             const monthKey = now.toISOString().slice(0, 7); 
-            document.getElementById('month-label').innerText = `${monthName} ${now.getFullYear()}`;
+            document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
+            
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
                 if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } 
-                else { rCB -= a; rSB[l.staffId] -= a; }
+                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
                 if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
+
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+
             let logH = '', mLogH = '';
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                logH += `<div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-calendar text-[8px]"></i> ${l.date}</span><span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}"><i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px]"></i> ${fmt(l.amount)}</span></div><div class="mb-2"><p class="font-bold text-sm text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> ${l.cat || 'General'}</p></div><div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50"><div><p class="text-[7px] text-slate-400 uppercase">System Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cb)}</p></div><div class="text-right"><p class="text-[7px] text-slate-400 uppercase">Individual Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.sb)}</p></div></div></div>`;
+                // APPLYING NEXUSPAY CARD STYLE TO RECENT TRANSACTIONS
+                logH += `
+                <div class="nexus-card">
+                    <div class="nexus-header">
+                        <span class="nexus-header-label">Transaction ID</span>
+                        <span class="nexus-header-val">: TXN-${l.key.slice(-6).toUpperCase()}</span>
+                    </div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat || 'General'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Posting Date</span><span class="nexus-val">: ${l.date}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">New Balance</span><span class="nexus-val">: ${fmt(l.sb)}</span></div>
+                    </div>
+                </div>`;
             });
+
             [...logsList].reverse().forEach(l => {
                 mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button></div>`;
             });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions</p>';
+
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent activity</p>';
             document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs</p>';
         }
 
@@ -511,32 +528,24 @@
             const start = document.getElementById('r-start').value, 
                   end = document.getElementById('r-end').value, 
                   sid = document.getElementById('r-staff').value;
-
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
-
-            const dateRangeText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
-            document.getElementById('report-duration').innerText = dateRangeText;
-
+            document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
             logsList.forEach(l => {
                 const a = Number(l.amount);
-
-                if (!sid) {
+                if (!sid || l.staffId === sid) {
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
-                } else if (l.staffId === sid) {
+                    let m = true; 
+                    if(start && l.date < start) m = false; 
+                    if(end && l.date > end) m = false; 
+                    if(sid && l.staffId !== sid) m = false;
+                    if(m) {
+                        if(l.type === 'income') tRec += a; else tAdv += a;
+                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
+                    }
+                } else {
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
-                }
-
-                let m = true; 
-                if(start && l.date < start) m = false; 
-                if(end && l.date > end) m = false; 
-                if(sid && l.staffId !== sid) m = false;
-
-                if(m) {
-                    if(l.type === 'income') tRec += a; else tAdv += a;
-                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                 }
             });
-
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
@@ -544,36 +553,16 @@
         };
 
         window.exportPDF = () => {
-            const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
-            const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
-            const now = new Date();
-            const dateStr = now.toLocaleDateString().replace(/\//g, '-');
-            const timeStr = now.toLocaleTimeString().replace(/:/g, '-').replace(/\s/g, '');
-            const fileName = `${namePart}_${dateStr}_${timeStr}.pdf`;
-
             const element = document.getElementById('pdf-content');
             element.style.minWidth = "100%"; 
-
             const opt = {
                 margin: [10, 10, 20, 10], 
-                filename: fileName,
+                filename: `Statement_${Date.now()}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 4, useCORS: true, scrollY: 0, letterRendering: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                html2canvas: { scale: 4, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-
-            const worker = html2pdf().from(element).set(opt).toPdf().get('pdf').then(function (pdf) {
-                const totalPages = pdf.internal.getNumberOfPages();
-                for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i);
-                    pdf.setFontSize(8);
-                    pdf.setTextColor(150);
-                    pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 25, pdf.internal.pageSize.getHeight() - 10);
-                }
-            }).save().then(() => {
-                element.style.minWidth = "650px"; 
-            });
+            html2pdf().from(element).set(opt).save().then(() => element.style.minWidth = "650px");
         };
 
         window.setT = (t) => {
