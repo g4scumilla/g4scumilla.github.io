@@ -121,7 +121,7 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE -->
+    <!-- STAFF ACCOUNTS PAGE (VIEW ONLY) -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
@@ -149,7 +149,7 @@
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
@@ -172,6 +172,31 @@
             </div>
         </div>
         <div id="mgmt-txn-list" class="space-y-4"></div>
+    </div>
+
+    <!-- STAFF MANAGEMENT PAGE (NEW SEPARATE PAGE) -->
+    <div id="staff-mgmt-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold">Staff Management</h2>
+            </div>
+        </div>
+        
+        <!-- ADD NEW STAFF SECTION -->
+        <div class="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm mb-8">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest"><i class="fa-solid fa-plus-circle text-blue-600 mr-1"></i> Register New Personnel</p>
+            <div class="space-y-3">
+                <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm">
+                <input id="u-des" type="text" placeholder="Designation (e.g. Area Manager)" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm">
+                <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 text-sm"><i class="fa-solid fa-check"></i> Save Staff Member</button>
+            </div>
+        </div>
+
+        <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 px-1 tracking-widest"><i class="fa-solid fa-users-cog text-slate-400 mr-1"></i> Existing Staff Roster</p>
+        <div id="mgmt-staff-list" class="space-y-4"></div>
     </div>
 
     <!-- REPORTS PAGE -->
@@ -243,19 +268,6 @@
             </div>
             <button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Post Entry</button>
             <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
-        </div>
-    </div>
-
-    <!-- STAFF MANAGEMENT MODAL -->
-    <div id="staff-mgmt-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
-            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2 border-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4 border-none">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2"><i class="fa-solid fa-check"></i> Register Staff</button>
-            <div class="flex items-center gap-2 mb-3 text-slate-400"><i class="fa-solid fa-list-ul"></i><p class="text-[10px] font-bold uppercase">Current Roster</p></div>
-            <div id="mgmt-staff-list" class="space-y-2"></div>
-            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
 
@@ -348,7 +360,16 @@
             document.getElementById('u-des').value = '';
         };
 
-        window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.editUser = (sid) => {
+            const u = staffData[sid];
+            const newName = prompt("Edit Staff Name:", u.name);
+            const newDes = prompt("Edit Designation:", u.desig || "");
+            if(newName) {
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { name: newName, desig: newDes });
+            }
+        };
+
+        window.delUser = (sid) => confirm("Are you sure you want to delete this staff record? This cannot be undone.") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
@@ -393,6 +414,7 @@
                     const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
 
+                    // For the "Users" view-only page
                     sH += `
                     <div class="nexus-card">
                         <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
@@ -404,13 +426,26 @@
                         <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span></div>
                     </div>`;
 
-                    mSH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl mb-2">
-                        <span class="font-bold text-sm"> ${u.name} (${g4sUserId})</span>
-                        <button onclick="delUser('${id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    // For the "Staff Management" control page
+                    mSH += `
+                    <div class="nexus-card !border-slate-200">
+                        <div class="nexus-header !bg-slate-50 !border-slate-100">
+                            <span class="nexus-header-label !text-slate-500">${g4sUserId}</span>
+                            <span class="nexus-header-val">Manage</span>
+                        </div>
+                        <div class="nexus-body !pb-2">
+                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig || 'Not Set'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer flex justify-between px-4 py-3">
+                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase flex items-center gap-1"><i class="fa-solid fa-user-pen"></i> Edit</button>
+                            <button onclick="delUser('${id}')" class="text-rose-500 text-[10px] font-bold uppercase flex items-center gap-1"><i class="fa-solid fa-trash"></i> Remove</button>
+                        </div>
                     </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH;
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
                 document.getElementById('m-staff').innerHTML = opts;
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
