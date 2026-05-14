@@ -30,6 +30,10 @@
         .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        
+        /* New User Form Animation */
+        #new-user-form { display: none; transition: all 0.3s ease; }
+        #new-user-form.active { display: block; }
     </style>
 </head>
 <body>
@@ -89,7 +93,6 @@
             </div>
         </div>
 
-        <!-- BORDERED MONTHLY SUMMARY SECTION -->
         <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white/50">
             <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-calendar-day text-blue-600"></i>
@@ -121,12 +124,12 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE -->
+    <!-- STAFF ACCOUNTS (READ ONLY LIST) -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
             <div>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Management</p>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Account Overview</p>
                 <h2 class="text-lg font-bold text-slate-800">Staff Accounts</h2>
             </div>
         </div>
@@ -149,8 +152,8 @@
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
+            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-user-gear text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
             <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
@@ -161,7 +164,37 @@
         </div>
     </div>
 
-    <!-- INDEPENDENT TRANSACTION HISTORY PAGE -->
+    <!-- NEW STAFF MANAGEMENT PAGE -->
+    <div id="staff-mgmt-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold">Staff Management</h2>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <button onclick="toggleNewUserForm()" class="w-full p-4 bg-[#be123c] text-white rounded-2xl font-bold flex items-center justify-between shadow-lg shadow-red-100">
+                <span class="flex items-center gap-3"><i class="fa-solid fa-user-plus"></i> Open New User</span>
+                <i id="form-chevron" class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+            
+            <div id="new-user-form" class="mt-4 bg-white p-5 rounded-[24px] border border-slate-200 shadow-sm">
+                <div class="space-y-3">
+                    <input id="u-name" type="text" placeholder="Account Title / Full Name" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-sm border-none font-semibold">
+                    <input id="u-des" type="text" placeholder="Designation / Product" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-sm border-none font-semibold">
+                    <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-sm">Register Personnel</button>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="font-bold text-[10px] text-slate-400 uppercase tracking-widest mb-4 px-1">Registered Roster</h3>
+        <div id="mgmt-staff-list" class="space-y-3"></div>
+    </div>
+
+    <!-- TRANSACTION HISTORY PAGE -->
     <div id="history-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
             <div class="flex items-center gap-3">
@@ -246,19 +279,6 @@
         </div>
     </div>
 
-    <!-- STAFF MANAGEMENT MODAL -->
-    <div id="staff-mgmt-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
-            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-2 border-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-4 border-none">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2"><i class="fa-solid fa-check"></i> Register Staff</button>
-            <div class="flex items-center gap-2 mb-3 text-slate-400"><i class="fa-solid fa-list-ul"></i><p class="text-[10px] font-bold uppercase">Current Roster</p></div>
-            <div id="mgmt-staff-list" class="space-y-2"></div>
-            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
-        </div>
-    </div>
-
     <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
@@ -301,6 +321,19 @@
             currFormat = val;
             document.getElementById('card-curr-label').innerText = val.toUpperCase();
             renderHome();
+        };
+
+        // NEW USER FORM TOGGLE
+        window.toggleNewUserForm = () => {
+            const form = document.getElementById('new-user-form');
+            const chev = document.getElementById('form-chevron');
+            if(form.classList.contains('active')){
+                form.classList.remove('active');
+                chev.style.transform = 'rotate(0deg)';
+            } else {
+                form.classList.add('active');
+                chev.style.transform = 'rotate(180deg)';
+            }
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -346,6 +379,7 @@
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
+            toggleNewUserForm();
         };
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
@@ -404,13 +438,19 @@
                         <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span></div>
                     </div>`;
 
-                    mSH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl mb-2">
-                        <span class="font-bold text-sm"> ${u.name} (${g4sUserId})</span>
-                        <button onclick="delUser('${id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    mSH += `<div class="nexus-card !mb-3">
+                        <div class="p-4 flex justify-between items-center bg-white">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">${g4sUserId}</p>
+                                <h4 class="font-bold text-slate-800">${u.name}</h4>
+                                <p class="text-[10px] text-slate-500 font-semibold">${u.desig || '-'}</p>
+                            </div>
+                            <button onclick="delUser('${id}')" class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        </div>
                     </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH;
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center text-slate-400 text-xs py-10">No personnel listed</p>';
                 document.getElementById('m-staff').innerHTML = opts;
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
@@ -426,7 +466,6 @@
             const now = new Date();
             const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-
             const staffKeys = Object.keys(staffData).sort();
             const getG4SId = (sid) => `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
 
@@ -444,18 +483,13 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
             let logH = '', mLogH = '';
-
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
-                const catNote = `${l.cat}${l.note ? ` (${l.note})` : ''}`;
-                logH += `
-                <div class="nexus-card">
+                logH += `<div class="nexus-card">
                     <div class="nexus-header"><span class="nexus-header-label">TXN ID</span><span class="nexus-header-val">: TXNG4S${alphanumericID}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${catNote}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                 </div>`;
@@ -463,8 +497,7 @@
 
             [...logsWithBal].reverse().forEach(l => {
                 const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
-                mLogH += `
-                <div class="nexus-card">
+                mLogH += `<div class="nexus-card">
                     <div class="nexus-header !bg-slate-50 !border-slate-200">
                         <span class="nexus-header-label !text-slate-600">ID: TXNG4S${alphanumericID}</span>
                         <span class="nexus-header-val">${l.date}</span>
@@ -472,17 +505,15 @@
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                     <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div>
                 </div>`;
             });
 
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent activity</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">No history available</p>';
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No activity</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">No history</p>';
         }
 
         window.generateReport = () => {
@@ -491,7 +522,6 @@
                   sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
             document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
-
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
                     const a = Number(l.amount);
