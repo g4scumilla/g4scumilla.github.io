@@ -121,19 +121,19 @@
             <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- BOLDER CENTRAL BALANCE CARD -->
-        <div class="nexus-card mb-8 shadow-2xl border-2 border-blue-600/20 ring-4 ring-blue-50/50">
-            <div class="nexus-header !bg-blue-600 !border-blue-700 !py-2.5">
-                <span class="nexus-header-label !text-white !font-black tracking-widest">Main Financial Ledger</span>
-                <span class="nexus-header-val !text-blue-100 flex items-center gap-1.5 font-bold">
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> ACTIVE
-                </span>
-            </div>
-            <div class="nexus-body !py-8 flex flex-col items-center justify-center text-center">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Total Net Balance</p>
-                <h2 class="text-4xl font-black text-blue-700 tracking-tight" id="cb-display">0.00</h2>
-                <div class="mt-5 px-5 py-1.5 bg-slate-100 rounded-full border border-slate-200">
-                    <p class="text-[9px] font-extrabold text-slate-500 uppercase">System Currency: <span id="card-curr-label" class="text-blue-600">BDT</span></p>
+        <!-- SMALLER (80%) CENTRAL BALANCE CARD WITH NEXUS VIBE -->
+        <div class="flex justify-center mb-8">
+            <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
+                <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
+                    <span class="nexus-header-label !text-white tracking-widest text-[9px]">Main Cash Account</span>
+                    <span class="nexus-header-val !text-white/80 text-[8px]">Active</span>
+                </div>
+                <div class="nexus-body !py-5 flex flex-col items-center text-center">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available Balance</p>
+                    <h2 class="text-2xl font-black text-slate-800 tracking-tight" id="cb-display">0.00</h2>
+                    <div class="mt-3 px-3 py-1 bg-slate-50 rounded-md border border-slate-100">
+                        <p class="text-[8px] font-bold text-slate-500 uppercase">Primary Currency: <span id="card-curr-label" class="text-[#be123c]">BDT</span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,24 +144,21 @@
                 <span id="month-label">May 2026</span>
             </h3>
             <div class="grid grid-cols-2 gap-4">
-                <!-- CENTERED RECEIVED CARD -->
-                <div class="nexus-card !mb-0 text-center shadow-md">
+                <!-- MERGED LINE MONTHLY CARDS -->
+                <div class="nexus-card !mb-0 text-center shadow-sm">
                     <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
-                        <span class="nexus-header-label !text-teal-700 !font-black">Monthly In</span>
+                        <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
                     </div>
-                    <div class="nexus-body !p-5 flex flex-col items-center">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase mb-1.5">Total Received</p>
-                        <p class="text-lg font-black text-teal-600" id="month-received">0.00</p>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
                     </div>
                 </div>
-                <!-- CENTERED ADVANCED CARD -->
-                <div class="nexus-card !mb-0 text-center shadow-md">
+                <div class="nexus-card !mb-0 text-center shadow-sm">
                     <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
-                        <span class="nexus-header-label !text-orange-700 !font-black">Monthly Out</span>
+                        <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
                     </div>
-                    <div class="nexus-body !p-5 flex flex-col items-center">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase mb-1.5">Total Advanced</p>
-                        <p class="text-lg font-black text-orange-600" id="month-advanced">0.00</p>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
                     </div>
                 </div>
             </div>
