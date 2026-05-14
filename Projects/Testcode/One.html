@@ -30,6 +30,9 @@
         .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        
+        .hidden-form { display: none; }
+        .hidden-form.show { display: block; animation: fadeIn 0.3s ease-out; }
     </style>
 </head>
 <body>
@@ -89,7 +92,6 @@
             </div>
         </div>
 
-        <!-- BORDERED MONTHLY SUMMARY SECTION -->
         <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white/50">
             <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-calendar-day text-blue-600"></i>
@@ -121,7 +123,7 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE -->
+    <!-- STAFF ACCOUNTS PAGE (VIEW ONLY) -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
@@ -161,58 +163,7 @@
         </div>
     </div>
 
-    <!-- STAFF MGMT PAGE -->
-    <div id="staff-mgmt-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold">Staff Management</h2>
-                </div>
-                <button onclick="openStaffModal()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">
-                    <i class="fas fa-plus mr-1"></i> Register New
-                </button>
-            </div>
-        </div>
-        <div id="mgmt-staff-list" class="space-y-4"></div>
-    </div>
-
-    <!-- STAFF FORM MODAL (CREATE & EDIT) -->
-    <div id="staff-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex items-center gap-2 mb-6 text-slate-900">
-                <i class="fa-solid fa-id-card-clip"></i>
-                <p id="staff-modal-title" class="text-[10px] font-bold uppercase">Register New Personnel</p>
-            </div>
-            <input type="hidden" id="edit-sid">
-            <div class="space-y-4">
-                <div class="relative">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Full Name</p>
-                    <input id="u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm font-semibold">
-                </div>
-                <div class="relative">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Designation</p>
-                    <input id="u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm font-semibold">
-                </div>
-                <div class="relative">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Mobile Number</p>
-                    <input id="u-mob" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm font-semibold">
-                </div>
-                <div class="relative">
-                    <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 px-1">Email Address</p>
-                    <input id="u-email" type="email" class="w-full p-4 bg-slate-50 rounded-2xl outline-none border-none text-sm font-semibold">
-                </div>
-            </div>
-            <button onclick="saveUser()" class="w-full mt-8 bg-slate-900 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> Save Personnel Profile
-            </button>
-            <button onclick="closeModal('staff-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase tracking-widest">Discard Changes</button>
-        </div>
-    </div>
-
-    <!-- TRANSACTION HISTORY PAGE -->
+    <!-- TRANSACTION HISTORY -->
     <div id="history-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
             <div class="flex items-center gap-3">
@@ -223,6 +174,37 @@
             </div>
         </div>
         <div id="mgmt-txn-list" class="space-y-4"></div>
+    </div>
+
+    <!-- STAFF MANAGEMENT PAGE -->
+    <div id="staff-mgmt-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold">Staff Management</h2>
+            </div>
+        </div>
+        
+        <!-- CREATE NEW USER TOGGLE -->
+        <button onclick="document.getElementById('new-user-form').classList.toggle('show')" class="w-full p-4 bg-blue-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 mb-6 shadow-lg shadow-blue-100">
+            <i class="fa-solid fa-user-plus"></i> Create New User
+        </button>
+
+        <div id="new-user-form" class="hidden-form bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm mb-8">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">Register New Personnel</p>
+            <div class="space-y-3">
+                <input id="u-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <input id="u-des" type="text" placeholder="Designation" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <input id="u-mob" type="tel" placeholder="Mobile Number" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <input id="u-mail" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-50 rounded-2xl outline-none text-sm">
+                <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 text-sm">Save Staff Member</button>
+            </div>
+        </div>
+
+        <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 px-1 tracking-widest"><i class="fa-solid fa-users-cog text-slate-400 mr-1"></i> Existing Staff Roster</p>
+        <div id="mgmt-staff-list" class="space-y-4"></div>
     </div>
 
     <!-- REPORTS PAGE -->
@@ -297,6 +279,22 @@
         </div>
     </div>
 
+    <!-- EDIT STAFF MODAL -->
+    <div id="edit-staff-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex items-center gap-2 mb-6 text-blue-600"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Update Profile</p></div>
+            <input type="hidden" id="edit-sid">
+            <div class="space-y-4 mb-8">
+                <div class="relative"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Full Name</p><input id="edit-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none"></div>
+                <div class="relative"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Designation</p><input id="edit-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none"></div>
+                <div class="relative"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Mobile</p><input id="edit-mob" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none"></div>
+                <div class="relative"><p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Email</p><input id="edit-mail" type="email" class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none"></div>
+            </div>
+            <button onclick="updateUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold">Save All Changes</button>
+            <button onclick="closeModal('edit-staff-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
+        </div>
+    </div>
+
     <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
@@ -347,10 +345,6 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
-                const today = new Date();
-                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-                document.getElementById('r-start').value = firstDay;
-                document.getElementById('r-end').value = today.toISOString().split('T')[0];
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -369,66 +363,50 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
-        window.openModal = (id) => {
-            document.getElementById(id).classList.add('active');
-            if(id === 'entry-modal') document.getElementById('m-date').valueAsDate = new Date();
-        };
+        window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
-
-        window.openStaffModal = (sid = null) => {
-            const modal = document.getElementById('staff-modal');
-            const title = document.getElementById('staff-modal-title');
-            const editId = document.getElementById('edit-sid');
-            
-            if(sid) {
-                const u = staffData[sid];
-                title.innerText = "Update Personnel Profile";
-                editId.value = sid;
-                document.getElementById('u-name').value = u.name || '';
-                document.getElementById('u-des').value = u.desig || '';
-                document.getElementById('u-mob').value = u.mobile || '';
-                document.getElementById('u-email').value = u.email || '';
-            } else {
-                title.innerText = "Register New Personnel";
-                editId.value = '';
-                document.getElementById('u-name').value = '';
-                document.getElementById('u-des').value = '';
-                document.getElementById('u-mob').value = '';
-                document.getElementById('u-email').value = '';
-            }
-            modal.classList.add('active');
-        };
 
         window.saveUser = () => {
             const name = document.getElementById('u-name').value;
             const des = document.getElementById('u-des').value;
             const mob = document.getElementById('u-mob').value;
-            const email = document.getElementById('u-email').value;
-            const sid = document.getElementById('edit-sid').value;
-            
-            if(!name) return alert("Name is required");
-
-            const payload = { name, desig: des, mobile: mob, email: email };
-
-            if(sid) {
-                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), payload);
-            } else {
-                payload.balance = 0;
-                push(ref(db, `users/${auth.currentUser.uid}/staff`), payload);
-            }
-            closeModal('staff-modal');
+            const mail = document.getElementById('u-mail').value;
+            if(!name) return;
+            push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
+                name, desig: des, mobile: mob, email: mail, balance: 0 
+            });
+            ['u-name', 'u-des', 'u-mob', 'u-mail'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('new-user-form').classList.remove('show');
         };
 
-        window.delUser = (sid) => confirm("Delete staff record?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.editUser = (sid) => {
+            const u = staffData[sid];
+            document.getElementById('edit-sid').value = sid;
+            document.getElementById('edit-name').value = u.name || '';
+            document.getElementById('edit-des').value = u.desig || '';
+            document.getElementById('edit-mob').value = u.mobile || '';
+            document.getElementById('edit-mail').value = u.email || '';
+            openModal('edit-staff-modal');
+        };
+
+        window.updateUser = () => {
+            const sid = document.getElementById('edit-sid').value;
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), {
+                name: document.getElementById('edit-name').value,
+                desig: document.getElementById('edit-des').value,
+                mobile: document.getElementById('edit-mob').value,
+                email: document.getElementById('edit-mail').value
+            });
+            closeModal('edit-staff-modal');
+        };
+
+        window.delUser = (sid) => confirm("Remove staff record?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
-            if(confirm("Remove this transaction?")) {
-                const staff = staffData[sid];
-                if(staff) {
-                    const currentBal = Number(staff.balance || 0);
-                    const newBal = type === 'income' ? (currentBal - Number(amt)) : (currentBal + Number(amt));
-                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-                }
+            if(confirm("Remove transaction?")) {
+                const currentBal = Number(staffData[sid].balance || 0);
+                const newBal = type === 'income' ? (currentBal - Number(amt)) : (currentBal + Number(amt));
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
                 remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
             }
         };
@@ -437,11 +415,10 @@
             const sid = document.getElementById('m-staff').value;
             const amt = Number(document.getElementById('m-amt').value);
             const date = document.getElementById('m-date').value;
-            if(!sid || !amt || !date) return alert("Fill all fields");
-            const staff = staffData[sid];
-            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+            if(!sid || !amt || !date) return alert("Missing info");
+            const newBal = currentType === 'income' ? (Number(staffData[sid].balance || 0) + amt) : (Number(staffData[sid].balance || 0) - amt);
             push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffId: sid, staffName: staff.name,
+                staffId: sid, staffName: staffData[sid].name,
                 amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
@@ -450,7 +427,6 @@
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
             closeModal('entry-modal');
             document.getElementById('m-amt').value = '';
-            document.getElementById('m-note').value = '';
         };
 
         function startSync(uid) {
@@ -461,42 +437,42 @@
 
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
+                    const gid = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                    opts += `<option value="${id}">${u.name} (${gid})</option>`;
 
                     sH += `
                     <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
+                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${gid}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Contact</span><span class="nexus-val">: ${u.mobile || 'N/A'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Product</span><span class="nexus-val">: ${u.desig || '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Mobile</span><span class="nexus-val">: ${u.mobile || '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
                         </div>
-                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span></div>
                     </div>`;
 
                     mSH += `
-                    <div class="nexus-card !mb-3">
-                        <div class="nexus-header !bg-slate-50 !border-slate-200">
-                            <span class="nexus-header-label !text-slate-500">${g4sUserId}</span>
-                            <span class="nexus-header-val">Manage Account</span>
+                    <div class="nexus-card !border-slate-200">
+                        <div class="nexus-header !bg-slate-50">
+                            <span class="nexus-header-label !text-slate-500">${gid}</span>
+                            <span class="nexus-header-val">Manage Profile</span>
                         </div>
-                        <div class="nexus-body !pb-1">
+                        <div class="nexus-body !pb-2">
                             <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig || '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Mobile</span><span class="nexus-val">: ${u.mobile || '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val text-[9px] uppercase">: ${u.email || '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email || '-'}</span></div>
                         </div>
-                        <div class="flex border-t border-slate-50">
-                            <button onclick="openStaffModal('${id}')" class="flex-1 py-3 text-blue-600 text-[9px] font-bold uppercase border-r border-slate-50"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit Profile</button>
-                            <button onclick="delUser('${id}')" class="flex-1 py-3 text-rose-500 text-[9px] font-bold uppercase"><i class="fa-solid fa-trash mr-1"></i> Remove</button>
+                        <div class="nexus-footer flex justify-between px-4 py-3">
+                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
+                            <button onclick="delUser('${id}')" class="text-rose-500 text-[10px] font-bold uppercase"><i class="fa-solid fa-trash"></i> Delete</button>
                         </div>
                     </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center text-slate-400 text-xs py-10">Empty Roster</p>';
+                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10">No accounts</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10">No accounts</p>';
                 document.getElementById('m-staff').innerHTML = opts;
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff');
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -510,34 +486,45 @@
             const now = new Date();
             const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
-            const staffKeys = Object.keys(staffData).sort();
-            const getG4SId = (sid) => `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
-            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
+            
+            let rCB = 0, mRec = 0, mAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
                 if(!rSB[l.staffId]) rSB[l.staffId] = 0;
                 if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
-                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
+                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') mRec += a; else mAdv += a; }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
+
             document.getElementById('cb-display').innerText = fmt(rCB);
-            document.getElementById('month-received').innerText = fmt(monthlyRec);
-            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+            document.getElementById('month-received').innerText = fmt(mRec);
+            document.getElementById('month-advanced').innerText = fmt(mAdv);
+
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
-                logH += `<div class="nexus-card"><div class="nexus-header"><span class="nexus-header-label">TXN ID</span><span class="nexus-header-val">: TXNG4S${alphanumericID}</span></div><div class="nexus-body"><div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div><div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div><div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div></div></div>`;
+            [...logsWithBal].reverse().forEach((l, i) => {
+                const id = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
+                const html = `
+                <div class="nexus-card">
+                    <div class="nexus-header"><span class="nexus-header-label">TXN: ${id}</span><span class="nexus-header-val">${l.date}</span></div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                    </div>
+                    ${i < 1000 ? `<div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[9px] font-bold uppercase">Delete Transaction</span></div>` : ''}
+                </div>`;
+                if(i < 5) logH += html;
+                mLogH += html;
             });
-            [...logsWithBal].reverse().forEach(l => {
-                const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
-                mLogH += `<div class="nexus-card"><div class="nexus-header !bg-slate-50"><span class="nexus-header-label">ID: TXNG4S${alphanumericID}</span><span class="nexus-header-val">${l.date}</span></div><div class="nexus-body"><div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div><div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div><div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div></div><div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div></div>`;
-            });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No activity</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">No history</p>';
+
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center py-10">No activity</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center py-10">No history</p>';
         }
 
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
+            const start = document.getElementById('r-start').value, 
+                  end = document.getElementById('r-end').value, 
+                  sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
@@ -545,25 +532,29 @@
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
                     if((!start || l.date >= start) && (!end || l.date <= end)) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
-                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
+                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                     }
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p>Total Advanced: ${fmt(tAdv)}</p><p>Total Received: ${fmt(tRec)}</p><p class="border-t pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            html2pdf().from(element).set({ margin: [10, 10, 20, 10], filename: `G4S_Statement_${Date.now()}.pdf`, html2canvas: { scale: 4 }, jsPDF: { format: 'a4', orientation: 'portrait' } }).save();
+            html2pdf().from(element).set({
+                margin: [10, 10, 20, 10], filename: `G4S_Statement.pdf`,
+                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 4 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
         };
 
         window.setT = (t) => {
             currentType = t;
-            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
-            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
         };
     </script>
 </body>
