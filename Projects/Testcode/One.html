@@ -89,7 +89,6 @@
             </div>
         </div>
 
-        <!-- BORDERED MONTHLY SUMMARY SECTION -->
         <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white/50">
             <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                 <i class="fa-solid fa-calendar-day text-blue-600"></i>
@@ -121,7 +120,7 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE -->
+    <!-- STAFF ACCOUNTS PAGE (Menu View) -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
@@ -151,7 +150,7 @@
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-            <button onclick="openModal('staff-mgmt-modal')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
@@ -161,6 +160,33 @@
             </button>
             <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
         </div>
+    </div>
+
+    <!-- STAFF MANAGEMENT PAGE (Dedicated Separate Page) -->
+    <div id="staff-mgmt-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold">Manage Staff</h2>
+                </div>
+                <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">+ Add New</button>
+            </div>
+        </div>
+
+        <!-- Add Form -->
+        <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Registration Form</p>
+            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-phone" type="tel" placeholder="Phone Number" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-xs uppercase mt-2">Register Staff</button>
+        </div>
+
+        <div id="mgmt-staff-list" class="space-y-4"></div>
     </div>
 
     <!-- INDEPENDENT TRANSACTION HISTORY PAGE -->
@@ -248,28 +274,6 @@
         </div>
     </div>
 
-    <!-- STAFF MANAGEMENT MODAL -->
-    <div id="staff-mgmt-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-user-gear text-slate-900"></i> Staff Management</h3>
-                <button onclick="toggleAddStaff()" class="text-blue-600 text-[10px] font-bold uppercase">+ Add New</button>
-            </div>
-
-            <!-- Toggleable Add Form -->
-            <div id="add-staff-form" class="hidden space-y-2 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-white rounded-xl text-xs outline-none border-none">
-                <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 bg-white rounded-xl text-xs outline-none border-none">
-                <input id="u-phone" type="tel" placeholder="Phone Number" class="w-full p-3 bg-white rounded-xl text-xs outline-none border-none">
-                <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-white rounded-xl text-xs outline-none border-none">
-                <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-3 rounded-xl font-bold text-xs uppercase">Register Staff</button>
-            </div>
-
-            <div id="mgmt-staff-list" class="space-y-4"></div>
-            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
-        </div>
-    </div>
-
     <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
@@ -312,7 +316,7 @@
             currFormat = val;
             document.getElementById('card-curr-label').innerText = val.toUpperCase();
             renderHome();
-            alert("Settings saved successfully.");
+            alert("Settings saved.");
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -370,7 +374,7 @@
             ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(id => document.getElementById(id).value = '');
         };
 
-        window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
@@ -415,7 +419,7 @@
                     const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
 
-                    sH += `
+                    const cardHTML = `
                     <div class="nexus-card">
                         <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
                         <div class="nexus-body">
@@ -424,28 +428,19 @@
                             <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email || 'N/A'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
                         </div>
-                        <div class="nexus-footer flex justify-center gap-4">
-                            <span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">Statement</span>
-                            <a href="mailto:${u.email}" class="nexus-link">Send Email</a>
-                        </div>
                     </div>`;
 
-                    mSH += `
-                    <div class="nexus-card !border-slate-200">
-                        <div class="nexus-header !bg-slate-100 !border-slate-200">
-                            <span class="nexus-header-label !text-slate-500">${g4sUserId}</span>
-                            <div class="flex gap-3">
-                                <button onclick="delUser('${id}')" class="text-rose-500"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
-                            </div>
-                        </div>
-                        <div class="nexus-body">
-                            <p class="font-bold text-xs">${u.name}</p>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tight">${u.desig || 'Personnel'}</p>
-                        </div>
-                    </div>`;
+                    sH += cardHTML + `<div class="nexus-footer flex justify-center gap-4 -mt-4 mb-4">
+                            <span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">Statement</span>
+                            <a href="mailto:${u.email}" class="nexus-link">Send Email</a>
+                        </div>`;
+
+                    mSH += cardHTML + `<div class="nexus-footer flex justify-center gap-4 -mt-4 mb-4">
+                            <span onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Remove Account</span>
+                        </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 text-xs py-10">No accounts registered</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH;
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center text-slate-400 text-xs py-10">No accounts to manage</p>';
                 document.getElementById('m-staff').innerHTML = opts;
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
@@ -482,7 +477,6 @@
 
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 const alphanumericID = l.key.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(-8);
-                const catNote = `${l.cat}${l.note ? ` (${l.note})` : ''}`;
                 logH += `
                 <div class="nexus-card">
                     <div class="nexus-header">
@@ -492,6 +486,7 @@
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                 </div>`;
@@ -510,6 +505,7 @@
                         <div class="nexus-row"><span class="nexus-key">User ID</span><span class="nexus-val">: ${getG4SId(l.staffId)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                     <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer hover:underline"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span></div>
@@ -555,8 +551,8 @@
 
         window.setT = (t) => {
             currentType = t;
-            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
-            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-slate-400 flex flex-col items-center gap-1';
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-400 flex flex-col items-center gap-1';
         };
     </script>
 </body>
