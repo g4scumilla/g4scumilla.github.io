@@ -71,7 +71,7 @@
                     <h1 class="text-lg font-bold text-slate-800" id="user-display">Administrator</h1>
                 </div>
             </div>
-            <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
+            <button onclick="goToEntry()" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
         <div class="flex justify-center mb-8">
@@ -121,7 +121,75 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF ACCOUNTS PAGE (Menu View - Read Only) -->
+    <!-- LEDGER ENTRY PAGE (Separate Page) -->
+    <div id="ledger-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-6 mt-2">
+            <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-slate-800">New Ledger Entry</h2>
+        </div>
+
+        <div class="bg-white p-4 rounded-[28px] shadow-sm border border-slate-100 mb-6">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 px-1">1. Select Personnel</p>
+            <div class="relative mb-3">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input id="staff-search" type="text" placeholder="Search by Name, Phone, or Designation..." 
+                       class="w-full p-4 pl-10 bg-slate-50 rounded-2xl text-xs outline-none border border-transparent focus:border-blue-400 transition-all"
+                       oninput="filterStaffSearch()">
+            </div>
+            
+            <div id="selected-staff-pill" class="hidden flex items-center justify-between bg-blue-50 p-4 rounded-2xl border border-blue-100 mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xs shadow-lg shadow-blue-100"><i class="fas fa-user-check"></i></div>
+                    <div>
+                        <p id="sel-name" class="text-sm font-bold text-blue-900"></p>
+                        <p id="sel-info" class="text-[10px] text-blue-600 font-medium"></p>
+                    </div>
+                </div>
+                <button onclick="clearStaffSelection()" class="text-blue-300 hover:text-red-500"><i class="fas fa-times-circle text-lg"></i></button>
+            </div>
+
+            <div id="search-results-box" class="max-h-60 overflow-y-auto space-y-2 hidden"></div>
+            <input type="hidden" id="m-staff-id">
+        </div>
+
+        <div class="bg-white p-5 rounded-[28px] shadow-sm border border-slate-100">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-4 px-1">2. Transaction Info</p>
+            
+            <div class="relative mb-6">
+                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-5xl font-bold text-center py-6 bg-transparent text-teal-600 outline-none">
+                <p class="absolute -top-1 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-300 uppercase">Amount</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Category</p>
+                    <select id="m-cat" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
+                        <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Date (Dhaka)</p>
+                    <input id="m-date" type="date" class="w-full p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
+                </div>
+            </div>
+
+            <p class="text-[8px] font-bold text-slate-400 uppercase px-1 mb-1">Narration</p>
+            <textarea id="m-note" placeholder="Write specific notes here..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-24 text-xs border-none"></textarea>
+            
+            <div class="flex gap-3 mb-6">
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1 transition-all"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg transition-all"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
+            </div>
+
+            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Submit Ledger Entry
+            </button>
+        </div>
+    </div>
+
+    <!-- STAFF ACCOUNTS PAGE -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
@@ -249,32 +317,7 @@
         </div>
     </div>
 
-    <!-- ENTRY MODAL -->
-    <div id="entry-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
-            <select id="m-staff" class="w-full p-4 mb-4 bg-slate-50 rounded-2xl outline-none font-bold border-none"></select>
-            <div class="relative mb-4">
-                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
-                <p class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-300 uppercase">Amount</p>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
-                </select>
-                <input id="m-date" type="date" onclick="this.showPicker()" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
-            </div>
-            <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
-            <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-teal-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
-            </div>
-            <button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Post Entry</button>
-            <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
-        </div>
-    </div>
-
-    <!-- EDIT STAFF MODAL (NEW) -->
+    <!-- EDIT STAFF MODAL (Keep as modal for quick edits) -->
     <div id="edit-staff-modal" class="modal">
         <div class="modal-content">
             <div class="flex items-center gap-2 mb-6 text-slate-400"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Edit Staff Profile</p></div>
@@ -376,11 +419,96 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
-        window.openModal = (id) => {
-            document.getElementById(id).classList.add('active');
-            if(id === 'entry-modal') document.getElementById('m-date').valueAsDate = new Date();
-        };
+
+        window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
+        // NEW LEDGER ENTRY PAGE LOGIC
+        window.goToEntry = () => {
+            showPage('ledger-page');
+            // Strict Dhaka Timezone (+6)
+            const now = new Date();
+            const dhakaOffset = 6 * 60; // Dhaka is GMT+6
+            const localOffset = now.getTimezoneOffset(); // in minutes
+            const dhakaDate = new Date(now.getTime() + (dhakaOffset + localOffset) * 60000);
+            
+            document.getElementById('m-date').value = dhakaDate.toISOString().split('T')[0];
+            clearStaffSelection();
+        };
+
+        window.filterStaffSearch = () => {
+            const query = document.getElementById('staff-search').value.toLowerCase();
+            const resultsBox = document.getElementById('search-results-box');
+            
+            if (query.length < 1) {
+                resultsBox.classList.add('hidden');
+                return;
+            }
+
+            let html = '';
+            Object.keys(staffData).forEach(id => {
+                const u = staffData[id];
+                if (u.name.toLowerCase().includes(query) || 
+                    u.desig.toLowerCase().includes(query) || 
+                    u.phone.toLowerCase().includes(query) || 
+                    u.email.toLowerCase().includes(query)) {
+                    
+                    html += `
+                    <div onclick="selectStaffForEntry('${id}')" class="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-center gap-3 active:bg-blue-50 transition-colors">
+                        <div class="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center text-slate-500 text-[10px] font-bold">${u.name.charAt(0)}</div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-slate-800">${u.name}</p>
+                            <p class="text-[9px] text-slate-500 font-semibold uppercase">${u.desig} • ${u.phone}</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-slate-300 text-[10px]"></i>
+                    </div>`;
+                }
+            });
+
+            resultsBox.innerHTML = html || '<p class="text-[10px] p-4 text-center text-slate-400 font-bold">No results found</p>';
+            resultsBox.classList.remove('hidden');
+        };
+
+        window.selectStaffForEntry = (id) => {
+            const u = staffData[id];
+            document.getElementById('m-staff-id').value = id;
+            document.getElementById('sel-name').innerText = u.name;
+            document.getElementById('sel-info').innerText = `${u.desig} | ${u.phone}`;
+            
+            document.getElementById('selected-staff-pill').classList.remove('hidden');
+            document.getElementById('search-results-box').classList.add('hidden');
+            document.getElementById('staff-search').classList.add('hidden');
+        };
+
+        window.clearStaffSelection = () => {
+            document.getElementById('m-staff-id').value = '';
+            document.getElementById('selected-staff-pill').classList.add('hidden');
+            document.getElementById('staff-search').classList.remove('hidden');
+            document.getElementById('staff-search').value = '';
+            document.getElementById('search-results-box').classList.add('hidden');
+        };
+
+        window.postTxn = () => {
+            const sid = document.getElementById('m-staff-id').value;
+            const amt = Number(document.getElementById('m-amt').value);
+            const date = document.getElementById('m-date').value;
+            if(!sid) return alert("Select staff member first");
+            if(!amt || !date) return alert("Fill all fields");
+            
+            const staff = staffData[sid];
+            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+            
+            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
+                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
+            });
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+            
+            alert("Entry Saved");
+            showPage('dashboard-page');
+            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
+            clearStaffSelection();
+        };
 
         window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
 
@@ -413,21 +541,15 @@
             const des = document.getElementById('edit-u-des').value;
             const phone = document.getElementById('edit-u-phone').value;
             const email = document.getElementById('edit-u-email').value;
-
-            if(!name) return alert("Name is required");
-
             update(ref(db, `users/${auth.currentUser.uid}/staff/${editingStaffId}`), {
-                name, 
-                desig: des || 'Personnel', 
-                phone: phone || 'N/A', 
-                email: email || 'N/A'
+                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A'
             }).then(() => {
                 closeModal('edit-staff-modal');
                 editingStaffId = null;
             });
         };
 
-        window.delUser = (sid) => confirm("Delete staff member? All transaction links will remain but user record will be gone.") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.delTxn = (tid, sid, amt, type) => {
             if(confirm("Remove this transaction?")) {
@@ -440,32 +562,16 @@
             }
         };
 
-        window.postTxn = () => {
-            const sid = document.getElementById('m-staff').value;
-            const amt = Number(document.getElementById('m-amt').value);
-            const date = document.getElementById('m-date').value;
-            if(!sid || !amt || !date) return alert("Fill all fields");
-            const staff = staffData[sid];
-            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
-            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
-                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
-            });
-            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-            closeModal('entry-modal');
-            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
-        };
-
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
+                let sH = '', mSH = '', opts = '<option value="">All Staff Members</option>';
                 const staffKeys = Object.keys(staffData).sort();
 
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
-                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
+                    const g4sUserId = `G4S${(staffKeys.indexOf(id) + 1).toString().padStart(4, '0')}`;
+                    opts += `<option value="${id}">${u.name}</option>`;
 
                     sH += `
                     <div class="nexus-card">
@@ -480,13 +586,12 @@
 
                     mSH += `
                     <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">G4S ID: ${g4sUserId}</span><span class="nexus-header-val">Manage</span></div>
+                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">ID: ${g4sUserId}</span><span class="nexus-header-val">Active</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Current Bal</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
                         </div>
                         <div class="nexus-footer flex justify-around items-center">
                             <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
@@ -495,9 +600,8 @@
                     </div>`;
                 });
                 document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
-                document.getElementById('m-staff').innerHTML = opts;
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records</p>';
+                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts;
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
@@ -532,7 +636,6 @@
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                 </div>`;
