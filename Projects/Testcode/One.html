@@ -19,7 +19,6 @@
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; position: relative; }
 
-        /* Nexus Style Cards */
         .nexus-card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 16px; }
         .nexus-header { background-color: #fff1f2; padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #fecdd3; }
         .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -121,7 +120,7 @@
         <div id="recent-logs" class="space-y-4"></div>
     </div>
 
-    <!-- STAFF VIEW PAGE (DIRECTORY) -->
+    <!-- STAFF VIEW PAGE -->
     <div id="users-page" class="page p-5 pb-24">
         <div class="flex items-center gap-3 mb-8 mt-2">
             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
@@ -153,10 +152,6 @@
                 <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
-            <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
-                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-            </button>
             <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
         </div>
     </div>
@@ -172,14 +167,14 @@
             </div>
         </div>
 
-        <!-- OPEN NEW USER MENU -->
         <div class="mb-6">
-            <button onclick="document.getElementById('user-form-container').classList.toggle('hidden')" class="w-full p-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center justify-between shadow-lg shadow-slate-200">
-                <span class="flex items-center gap-3"><i class="fa-solid fa-user-plus"></i> Open New User</span>
+            <button id="toggle-user-btn" onclick="toggleUserForm()" class="w-full p-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center justify-between shadow-lg shadow-slate-200">
+                <span class="flex items-center gap-3" id="form-title-text"><i class="fa-solid fa-user-plus"></i> Open New User</span>
                 <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
             
             <div id="user-form-container" class="hidden mt-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-xl space-y-4">
+                <input id="edit-sid" type="hidden">
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-1">
                         <p class="text-[9px] font-bold text-slate-400 uppercase px-1">Name</p>
@@ -200,24 +195,12 @@
                         <input id="u-email" type="email" placeholder="mail@g4s.com" class="w-full p-3 bg-slate-50 rounded-xl outline-none border-none text-xs">
                     </div>
                 </div>
-                <button onclick="saveUser()" class="w-full bg-[#be123c] text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-check-double"></i> Register Staff</button>
+                <button id="save-user-btn" onclick="saveUser()" class="w-full bg-[#be123c] text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-check-double"></i> Register Staff</button>
+                <button id="cancel-edit-btn" onclick="resetUserForm()" class="hidden w-full text-slate-400 text-[10px] font-bold uppercase mt-2">Cancel Edit</button>
             </div>
         </div>
 
         <div id="mgmt-staff-list" class="space-y-4"></div>
-    </div>
-
-    <!-- TRANSACTION HISTORY PAGE -->
-    <div id="history-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
-            <div class="flex items-center gap-3">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2 class="text-2xl font-bold">Transaction History</h2>
-            </div>
-        </div>
-        <div id="mgmt-txn-list" class="space-y-4"></div>
     </div>
 
     <!-- REPORTS PAGE -->
@@ -259,7 +242,6 @@
                         </thead>
                         <tbody id="report-body"></tbody>
                     </table>
-                    <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
                 </div>
             </div>
         </div>
@@ -348,7 +330,7 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Auth Error"));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -362,23 +344,61 @@
         };
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
-        window.saveUser = () => {
-            const name = document.getElementById('u-name').value;
-            const des = document.getElementById('u-des').value;
-            const phone = document.getElementById('u-phone').value;
-            const mail = document.getElementById('u-email').value;
-            if(!name) return alert("Name is required");
-            push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
-                name, desig: des, phone: phone || '-', email: mail || '-', balance: 0 
-            });
+        window.toggleUserForm = () => document.getElementById('user-form-container').classList.toggle('hidden');
+
+        window.resetUserForm = () => {
+            document.getElementById('edit-sid').value = '';
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
             document.getElementById('u-phone').value = '';
             document.getElementById('u-email').value = '';
+            document.getElementById('form-title-text').innerHTML = '<i class="fa-solid fa-user-plus"></i> Open New User';
+            document.getElementById('save-user-btn').innerText = 'Register Staff';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
             document.getElementById('user-form-container').classList.add('hidden');
         };
 
-        window.delUser = (sid) => confirm("Permanently remove this account and its records?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+        window.editUser = (sid) => {
+            const u = staffData[sid];
+            document.getElementById('edit-sid').value = sid;
+            document.getElementById('u-name').value = u.name;
+            document.getElementById('u-des').value = u.desig || '';
+            document.getElementById('u-phone').value = u.phone || '';
+            document.getElementById('u-email').value = u.email || '';
+            
+            document.getElementById('form-title-text').innerHTML = '<i class="fa-solid fa-user-pen"></i> Update User Info';
+            document.getElementById('save-user-btn').innerText = 'Save Changes';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('user-form-container').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.saveUser = () => {
+            const sid = document.getElementById('edit-sid').value;
+            const name = document.getElementById('u-name').value;
+            const des = document.getElementById('u-des').value;
+            const phone = document.getElementById('u-phone').value;
+            const mail = document.getElementById('u-email').value;
+            
+            if(!name) return alert("Name is required");
+
+            const userData = { 
+                name, 
+                desig: des || '-', 
+                phone: phone || '-', 
+                email: mail || '-' 
+            };
+
+            if(sid) {
+                update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), userData)
+                .then(() => { resetUserForm(); alert("Updated successfully"); });
+            } else {
+                push(ref(db, `users/${auth.currentUser.uid}/staff`), { ...userData, balance: 0 });
+                resetUserForm();
+            }
+        };
+
+        window.delUser = (sid) => confirm("Permanently remove this account?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
 
         window.postTxn = () => {
             const sid = document.getElementById('m-staff').value;
@@ -416,15 +436,15 @@
                             <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig || '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Contact</span><span class="nexus-val">: ${u.phone || '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Balance</span><span class="nexus-val text-blue-600 font-bold">: ${fmt(u.balance)}</span></div>
                         </div>
                         ${isMgmt ? `
                         <div class="nexus-footer">
-                            <span class="nexus-link" onclick="alert('Feature coming soon')"><i class="fa-solid fa-user-pen"></i> Edit</span>
+                            <span class="nexus-link" onclick="editUser('${id}')"><i class="fa-solid fa-user-pen"></i> Edit</span>
                             <span class="nexus-link !text-slate-400" onclick="window.open('mailto:${u.email}')"><i class="fa-solid fa-envelope"></i> Email</span>
                             <span class="nexus-link" onclick="delUser('${id}')"><i class="fa-solid fa-trash-can"></i> Delete</span>
                         </div>` : `
-                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}'; generateReport();" class="nexus-link">View Statement</span></div>
+                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Statement</span></div>
                         `}
                     </div>`;
 
@@ -447,7 +467,6 @@
         function renderHome() {
             const now = new Date();
             const monthKey = now.toISOString().slice(0, 7); 
-            document.getElementById('month-label').innerText = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
@@ -468,7 +487,6 @@
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Indiv. Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                     </div>
                 </div>`;
             });
