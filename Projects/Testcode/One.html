@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceFlow Pro | Executive Dashboard</title>
+    <title>FinanceFlow Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -27,8 +27,26 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 100; align-items: flex-end; }
         .modal.active { display: flex; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 32px; border-top-right-radius: 32px; padding: 24px; max-height: 90vh; overflow-y: auto; }
-        .staff-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; color: white; }
+        
+        /* NEW PROFESSIONAL STAFF CARD UI */
+        .staff-card { 
+            background: white; 
+            border: 1px solid #F1F5F9; 
+            border-radius: 24px; 
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+        .staff-card:active { transform: scale(0.98); }
+        .avatar-circle {
+            width: 45px; height: 45px;
+            background: #EFF6FF;
+            color: #2563EB;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 14px; font-weight: bold; font-size: 18px;
+        }
 
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #E2E8F0; z-index: 50; display: flex; justify-content: space-around; padding: 12px 0 25px 0; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
         #pdf-content { 
@@ -41,12 +59,10 @@
         #pdf-content table { width: 100%; border-collapse: collapse; }
         #pdf-content tr { page-break-inside: avoid; page-break-after: auto; }
         #pdf-content thead { display: table-header-group; }
-        #report-summary { page-break-inside: avoid; }
     </style>
 </head>
 <body>
 
-    <!-- LOADING SCREEN -->
     <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
         <div class="flex flex-col items-center">
             <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -54,7 +70,7 @@
         </div>
     </div>
 
-    <!-- LOGIN PAGE -->
+    <!-- LOGIN -->
     <div id="login-page" class="page flex-col items-center justify-center p-6">
         <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
             <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
@@ -73,7 +89,7 @@
         </div>
     </div>
 
-    <!-- DASHBOARD PAGE -->
+    <!-- DASHBOARD -->
     <div id="dashboard-page" class="page p-5 pb-24">
         <div class="flex justify-between items-center mb-6 mt-2">
             <div class="flex items-center gap-3">
@@ -111,7 +127,7 @@
         <div class="mb-8">
             <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-sm uppercase flex items-center gap-2">
                 <i class="fa-solid fa-calendar-check text-blue-600"></i>
-                <span id="month-label">Month Year</span>
+                <span id="month-label">May 2026</span>
             </h3>
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
@@ -137,18 +153,21 @@
         <div id="recent-logs" class="space-y-3"></div>
     </div>
 
-    <!-- INDIVIDUAL TRANSACTIONS PAGE -->
+    <!-- INDIVIDUAL TRANSACTIONS (REFINED) -->
     <div id="users-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-users-viewfinder text-blue-600"></i> Personnel Balances
-        </h2>
-        <div id="staff-list" class="grid gap-6"></div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold flex items-center gap-3">
+                <i class="fa-solid fa-address-book text-blue-600"></i> Personnel Directory
+            </h2>
+            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-wider">Financial Overview per User</p>
+        </div>
+        <div id="staff-list" class="space-y-4"></div>
     </div>
 
-    <!-- SETTINGS PAGE -->
+    <!-- SETTINGS -->
     <div id="settings-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-gears text-blue-600"></i> Admin Settings
+            <i class="fa-solid fa-gears text-blue-600"></i> Settings
         </h2>
         <div class="space-y-4">
             <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
@@ -193,11 +212,11 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">Start Date</p>
-                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-start" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
                 <div class="space-y-1">
                     <p class="text-[8px] font-bold text-slate-400 uppercase px-1">End Date</p>
-                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                    <input type="text" id="r-end" placeholder="Select Date" onfocus="this.type='date'; this.showPicker()" onclick="this.showPicker()" onblur="if(!this.value)this.type='text'" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
                 </div>
             </div>
             <div class="space-y-1">
@@ -206,19 +225,19 @@
             </div>
             <div class="flex gap-2">
                 <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
-                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
             </div>
         </div>
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
-                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
+                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement - Abdullahil Kuafi</h2>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
 
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
                             <tr class="bg-slate-100 text-[8px]">
-                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Category</th><th class="border p-2 text-center">Ref</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
                             </tr>
                         </thead>
                         <tbody id="report-body"></tbody>
@@ -229,7 +248,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ENTRY -->
+    <!-- MODALS -->
     <div id="entry-modal" class="modal">
         <div class="modal-content">
             <div class="flex items-center gap-2 mb-4 text-slate-400"><i class="fa-solid fa-pen-to-square"></i><p class="text-[10px] font-bold uppercase">New Ledger Entry</p></div>
@@ -242,7 +261,7 @@
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
                     <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
                 </select>
-                <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
+                <input id="m-date" type="date" onclick="this.showPicker()" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
             <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
             <div class="flex gap-3 mb-6">
@@ -250,11 +269,10 @@
                 <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
             </div>
             <button onclick="postTxn()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Post Entry</button>
-            <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase text-center">Cancel</button>
+            <button onclick="closeModal('entry-modal')" class="w-full mt-4 text-slate-400 text-[10px] font-bold uppercase">Cancel</button>
         </div>
     </div>
 
-    <!-- MODAL: STAFF MANAGEMENT -->
     <div id="staff-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-user-plus text-slate-900"></i> Add New Staff</h3>
@@ -263,20 +281,18 @@
             <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold mb-6 flex items-center justify-center gap-2"><i class="fa-solid fa-check"></i> Register Staff</button>
             <div class="flex items-center gap-2 mb-3 text-slate-400"><i class="fa-solid fa-list-ul"></i><p class="text-[10px] font-bold uppercase">Current Roster</p></div>
             <div id="mgmt-staff-list" class="space-y-2"></div>
-            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase text-center">Close</button>
+            <button onclick="closeModal('staff-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
 
-    <!-- MODAL: FULL HISTORY -->
     <div id="txn-mgmt-modal" class="modal">
         <div class="modal-content">
             <h3 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Full History</h3>
             <div id="mgmt-txn-list" class="space-y-3"></div>
-            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase text-center">Close</button>
+            <button onclick="closeModal('txn-mgmt-modal')" class="w-full mt-6 text-slate-400 text-[10px] font-bold uppercase">Close</button>
         </div>
     </div>
 
-    <!-- NAVIGATION -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
@@ -336,21 +352,18 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Auth Failed"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
         };
 
         window.handleLogout = () => signOut(auth);
-        
         window.showPage = (id) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
-
         window.openModal = (id) => {
             document.getElementById(id).classList.add('active');
             if(id === 'entry-modal') document.getElementById('m-date').valueAsDate = new Date();
         };
-
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
         window.saveUser = () => {
@@ -360,7 +373,6 @@
             push(ref(db, `users/${auth.currentUser.uid}/staff`), { name, desig: des, balance: 0 });
             document.getElementById('u-name').value = '';
             document.getElementById('u-des').value = '';
-            closeModal('staff-mgmt-modal');
         };
 
         window.delUser = (sid) => confirm("Delete staff?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
@@ -405,21 +417,40 @@
                 let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
+                    const initials = u.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
                     const label = `${u.name} (${u.desig || 'N/A'})`;
                     opts += `<option value="${id}">${label}</option>`;
-                    sH += `<div class="staff-card p-6 shadow-lg relative overflow-hidden">
-                        <i class="fa-solid fa-id-card absolute -right-4 -bottom-4 text-6xl opacity-10"></i>
-                        <h4 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-circle-user text-teal-400 text-sm"></i> ${u.name}</h4>
-                        <p class="text-[10px] opacity-60 mb-4">${u.desig}</p>
-                        <p class="text-[8px] uppercase opacity-50">Current Balance</p>
-                        <p class="text-lg font-bold">${fmt(u.balance)}</p>
+                    
+                    // REFINED STAFF CARD UI GENERATION
+                    sH += `
+                    <div class="staff-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="avatar-circle">${initials}</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">${u.name}</h4>
+                                    <p class="text-[10px] text-slate-400 font-medium">${u.desig || 'Personnel'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="bg-blue-50 text-blue-600 text-[8px] font-bold px-2 py-1 rounded-full uppercase">Staff ID: ${id.slice(-4).toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-4 flex justify-between items-center">
+                            <div>
+                                <p class="text-[8px] font-bold text-slate-400 uppercase mb-1">Available Balance</p>
+                                <p class="text-lg font-extrabold text-slate-900 tracking-tight">${fmt(u.balance)}</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+                        </div>
                     </div>`;
+
                     mSH += `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl mb-2">
                         <span class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-user text-[10px] text-slate-300"></i> ${u.name}</span>
                         <button onclick="delUser('${id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sH;
+                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center text-slate-400 py-10">No personnel found.</p>';
                 document.getElementById('mgmt-staff-list').innerHTML = mSH;
                 document.getElementById('m-staff').innerHTML = opts;
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
@@ -437,7 +468,6 @@
             const monthName = now.toLocaleString('default', { month: 'long' });
             const monthKey = now.toISOString().slice(0, 7); 
             document.getElementById('month-label').innerText = `${monthName} ${now.getFullYear()}`;
-            
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
                 const a = Number(l.amount || 0);
@@ -447,30 +477,15 @@
                 if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
-
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
-            
             let logH = '', mLogH = '';
             [...logsWithBal].reverse().slice(0, 5).forEach(l => {
-                logH += `<div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-[9px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-calendar"></i> ${l.date}</span>
-                        <span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}">${fmt(l.amount)}</span>
-                    </div>
-                    <div class="mb-2">
-                        <p class="font-bold text-sm text-slate-800">${l.staffName}</p>
-                        <p class="text-[10px] text-slate-400 italic">${l.cat || 'General'}</p>
-                    </div>
-                </div>`;
+                logH += `<div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm"><div class="flex justify-between mb-2"><span class="text-[9px] font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-calendar text-[8px]"></i> ${l.date}</span><span class="font-bold text-xs ${l.type==='income'?'text-teal-600':'text-orange-600'}"><i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px]"></i> ${fmt(l.amount)}</span></div><div class="mb-2"><p class="font-bold text-sm text-slate-800">${l.staffName}</p><p class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> ${l.cat || 'General'}</p></div><div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-50"><div><p class="text-[7px] text-slate-400 uppercase">System Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.cb)}</p></div><div class="text-right"><p class="text-[7px] text-slate-400 uppercase">Individual Balance</p><p class="text-[9px] font-bold text-slate-600">${fmt(l.sb)}</p></div></div></div>`;
             });
-
             [...logsList].reverse().forEach(l => {
-                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2">
-                    <div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | ${fmt(l.amount)}</p></div>
-                    <button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button>
-                </div>`;
+                mLogH += `<div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center mb-2"><div><p class="text-[10px] font-bold">${l.staffName}</p><p class="text-[8px] text-slate-400">${l.date} | <span class="${l.type==='income'?'text-teal-600':'text-orange-600'} font-bold">${fmt(l.amount)}</span></p></div><button onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-red-500 font-bold text-[9px] uppercase bg-red-50 px-2 py-1.5 rounded-lg">Remove</button></div>`;
             });
             document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs">No transactions</p>';
             document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs">No logs</p>';
@@ -482,57 +497,57 @@
                   sid = document.getElementById('r-staff').value;
 
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
-            document.getElementById('report-duration').innerText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
+
+            const dateRangeText = `Statement Period: ${start || 'Origin'} — To — ${end || 'Present'}`;
+            document.getElementById('report-duration').innerText = dateRangeText;
 
             logsList.forEach(l => {
                 const a = Number(l.amount);
-                if (!sid || l.staffId === sid) {
+
+                if (!sid) {
+                    if (l.type === 'income') runningBal += a; else runningBal -= a;
+                } else if (l.staffId === sid) {
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
                 }
 
-                let match = true; 
-                if(start && l.date < start) match = false; 
-                if(end && l.date > end) match = false; 
-                if(sid && l.staffId !== sid) match = false;
+                let m = true; 
+                if(start && l.date < start) m = false; 
+                if(end && l.date > end) m = false; 
+                if(sid && l.staffId !== sid) m = false;
 
-                if(match) {
+                if(m) {
                     if(l.type === 'income') tRec += a; else tAdv += a;
-                    html += `<tr>
-                        <td class="border p-2 text-center">${sl++}</td>
-                        <td class="border p-2">${l.date}</td>
-                        <td class="border p-2 font-bold">${l.staffName}</td>
-                        <td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td>
-                        <td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td>
-                        <td class="border p-2 text-right">${fmt(a)}</td>
-                        <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                    </tr>`;
+                    html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
                 }
             });
 
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `
-                <p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p>
-                <p class="text-teal-600">Total Received: ${fmt(tRec)}</p>
-                <p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
             const staffSel = document.getElementById('r-staff').options[document.getElementById('r-staff').selectedIndex].text;
             const namePart = staffSel === "All Staff Members" ? "All_Staff" : staffSel.split('(')[0].trim().replace(/\s+/g, '_');
-            const fileName = `${namePart}_Report.pdf`;
+            const now = new Date();
+            const dateStr = now.toLocaleDateString().replace(/\//g, '-');
+            const timeStr = now.toLocaleTimeString().replace(/:/g, '-').replace(/\s/g, '');
+            const fileName = `${namePart}_${dateStr}_${timeStr}.pdf`;
+
             const element = document.getElementById('pdf-content');
+            element.style.minWidth = "100%"; 
 
             const opt = {
                 margin: [10, 10, 20, 10], 
                 filename: fileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 4, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas: { scale: 4, useCORS: true, scrollY: 0, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            html2pdf().from(element).set(opt).toPdf().get('pdf').then(function (pdf) {
+            const worker = html2pdf().from(element).set(opt).toPdf().get('pdf').then(function (pdf) {
                 const totalPages = pdf.internal.getNumberOfPages();
                 for (let i = 1; i <= totalPages; i++) {
                     pdf.setPage(i);
@@ -540,7 +555,9 @@
                     pdf.setTextColor(150);
                     pdf.text('Page ' + i + ' of ' + totalPages, pdf.internal.pageSize.getWidth() - 25, pdf.internal.pageSize.getHeight() - 10);
                 }
-            }).save();
+            }).save().then(() => {
+                element.style.minWidth = "650px"; 
+            });
         };
 
         window.setT = (t) => {
