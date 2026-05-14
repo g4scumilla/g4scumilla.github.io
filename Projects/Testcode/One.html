@@ -121,54 +121,47 @@
             <button onclick="openModal('entry-modal')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- MAIN BALANCE CARD (UPDATED TO NEXUS STYLE) -->
-        <div class="nexus-card mb-6 shadow-xl">
-            <div class="nexus-header">
-                <span class="nexus-header-label">System Ledger Status</span>
-                <span class="nexus-header-val flex items-center gap-1">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> ONLINE
+        <!-- BOLDER CENTRAL BALANCE CARD -->
+        <div class="nexus-card mb-8 shadow-2xl border-2 border-blue-600/20 ring-4 ring-blue-50/50">
+            <div class="nexus-header !bg-blue-600 !border-blue-700 !py-2.5">
+                <span class="nexus-header-label !text-white !font-black tracking-widest">Main Financial Ledger</span>
+                <span class="nexus-header-val !text-blue-100 flex items-center gap-1.5 font-bold">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> ACTIVE
                 </span>
             </div>
-            <div class="nexus-body">
-                <div class="nexus-row">
-                    <span class="nexus-key">Ledger Title</span>
-                    <span class="nexus-val">: Central Balance Account</span>
-                </div>
-                <div class="nexus-row">
-                    <span class="nexus-key">Currency</span>
-                    <span class="nexus-val">: <span id="card-curr-label">BDT</span></span>
-                </div>
-                <div class="nexus-row mt-2">
-                    <span class="nexus-key text-slate-900">Total Balance</span>
-                    <span class="nexus-val text-xl text-blue-600 font-extrabold" id="cb-display">: 0.00</span>
+            <div class="nexus-body !py-8 flex flex-col items-center justify-center text-center">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Total Net Balance</p>
+                <h2 class="text-4xl font-black text-blue-700 tracking-tight" id="cb-display">0.00</h2>
+                <div class="mt-5 px-5 py-1.5 bg-slate-100 rounded-full border border-slate-200">
+                    <p class="text-[9px] font-extrabold text-slate-500 uppercase">System Currency: <span id="card-curr-label" class="text-blue-600">BDT</span></p>
                 </div>
             </div>
         </div>
 
         <div class="mb-8">
-            <h3 class="font-bold text-slate-800 tracking-tight mb-3 px-1 text-xs uppercase flex items-center gap-2">
-                <i class="fa-solid fa-calendar-check text-blue-600"></i>
+            <h3 class="font-black text-slate-800 tracking-widest mb-4 px-1 text-[10px] uppercase flex items-center gap-2 justify-center">
+                <i class="fa-solid fa-calendar-day text-blue-600"></i>
                 <span id="month-label">May 2026</span>
             </h3>
-            <div class="grid grid-cols-2 gap-3">
-                <!-- RECEIVED CARD (UPDATED TO NEXUS STYLE) -->
-                <div class="nexus-card !mb-0">
-                    <div class="nexus-header !bg-teal-50 !border-teal-100">
-                        <span class="nexus-header-label !text-teal-700">Monthly In</span>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- CENTERED RECEIVED CARD -->
+                <div class="nexus-card !mb-0 text-center shadow-md">
+                    <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
+                        <span class="nexus-header-label !text-teal-700 !font-black">Monthly In</span>
                     </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Received</p>
-                        <p class="text-sm font-bold text-teal-600" id="month-received">0.00</p>
+                    <div class="nexus-body !p-5 flex flex-col items-center">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase mb-1.5">Total Received</p>
+                        <p class="text-lg font-black text-teal-600" id="month-received">0.00</p>
                     </div>
                 </div>
-                <!-- ADVANCED CARD (UPDATED TO NEXUS STYLE) -->
-                <div class="nexus-card !mb-0">
-                    <div class="nexus-header !bg-orange-50 !border-orange-100">
-                        <span class="nexus-header-label !text-orange-700">Monthly Out</span>
+                <!-- CENTERED ADVANCED CARD -->
+                <div class="nexus-card !mb-0 text-center shadow-md">
+                    <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
+                        <span class="nexus-header-label !text-orange-700 !font-black">Monthly Out</span>
                     </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Advanced</p>
-                        <p class="text-sm font-bold text-orange-600" id="month-advanced">0.00</p>
+                    <div class="nexus-body !p-5 flex flex-col items-center">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase mb-1.5">Total Advanced</p>
+                        <p class="text-lg font-black text-orange-600" id="month-advanced">0.00</p>
                     </div>
                 </div>
             </div>
@@ -255,7 +248,7 @@
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
-                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement - Abdullahil Kuafi</h2>
+                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
 
                     <table class="w-full border-collapse border border-slate-200">
@@ -493,7 +486,7 @@
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
-            document.getElementById('cb-display').innerText = `: ${fmt(rCB)}`;
+            document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
