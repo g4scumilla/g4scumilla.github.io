@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuafi Live TV</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    header {
+      text-align: center;
+      padding: 10px;
+      background: #111;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .player-container {
+      position: relative;
+      width: 100%;
+      height: 85vh;
+      background: black;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+
+    /* Watermark */
+    .watermark {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      pointer-events: none;
+    }
+
+    /* Top watermark (optional extra protection) */
+    .top-watermark {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 13px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      background: #111;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>📺 Kuafi Live TV</header>
+
+<div class="player-container">
+
+  <!-- LIVE VIDEO PLAYER -->
+  <video id="liveVideo" controls autoplay muted playsinline>
+    <source src="http://103.59.176.72/" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- WATERMARK -->
+  <div class="watermark">Abdullahil Kuafi</div>
+  <div class="top-watermark">Kuafi Live Stream</div>
+
+</div>
+
+<footer>
+  Powered by Kuafi • Free Live TV Player
+</footer>
+
+<script>
+  // Auto-retry if stream fails
+  const video = document.getElementById("liveVideo");
+
+  video.addEventListener("error", () => {
+    console.log("Stream failed, retrying...");
+    setTimeout(() => {
+      video.load();
+      video.play();
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>
