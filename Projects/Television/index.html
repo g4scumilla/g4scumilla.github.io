@@ -1,122 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Kuafi Live TV</title>
-
   <style>
     body {
       margin: 0;
       background: black;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    header {
-      background: #111;
       color: white;
+      font-family: Arial;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       text-align: center;
-      padding: 10px;
-      font-weight: bold;
     }
 
-    .container {
-      position: relative;
-      width: 100%;
-      height: 92vh;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
+    button {
+      padding: 15px 25px;
+      font-size: 16px;
       border: none;
+      border-radius: 8px;
+      background: #1e90ff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
     }
 
-    /* Watermark */
     .watermark {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      padding: 6px 10px;
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      opacity: 0.6;
       font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid rgba(255,255,255,0.3);
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    /* Top small branding */
-    .top-brand {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-size: 13px;
-      opacity: 0.7;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    /* Simple menu */
-    .menu {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 20;
-    }
-
-    .menu button {
-      background: #222;
-      color: white;
-      border: 1px solid #444;
-      padding: 6px 10px;
-      margin-left: 5px;
-      border-radius: 5px;
-    }
-
-    .menu button:hover {
-      background: #444;
     }
   </style>
 </head>
 
 <body>
 
-<header>📺 Kuafi Live TV</header>
+<h2>📺 Kuafi Live TV</h2>
+<p>Click below to open live TV</p>
 
-<div class="container">
+<button onclick="openTV()">▶ Open TV</button>
 
-  <!-- YOUR LIVE TV WEBSITE -->
-  <iframe id="tvFrame" src="http://103.59.176.72/"></iframe>
-
-  <!-- WATERMARK -->
-  <div class="watermark">Abdullahil Kuafi</div>
-  <div class="top-brand">Kuafi Live Stream</div>
-
-  <!-- MENU -->
-  <div class="menu">
-    <button onclick="reload()">Reload</button>
-    <button onclick="home()">Home</button>
-    <button onclick="about()">About</button>
-  </div>
-
-</div>
+<div class="watermark">Abdullahil Kuafi</div>
 
 <script>
-  function reload() {
-    const frame = document.getElementById("tvFrame");
-    frame.src = frame.src;
-  }
-
-  function home() {
-    document.getElementById("tvFrame").src = "http://103.59.176.72/";
-  }
-
-  function about() {
-    alert("Kuafi Live TV Web App\nPowered by Abdullahil Kuafi");
-  }
+function openTV() {
+  window.location.href = "http://103.59.176.72/";
+}
 </script>
 
 </body>
