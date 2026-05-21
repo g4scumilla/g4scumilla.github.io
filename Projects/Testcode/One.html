@@ -78,18 +78,25 @@
             <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
+        <!-- Lucrative Balanced Card -->
         <div class="flex justify-center mb-8">
-            <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
-                <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
-                    <span class="nexus-header-label !text-white tracking-widest text-[9px]">Main Cash Account</span>
-                    <span class="nexus-header-val !text-white/80 text-[8px]">Active</span>
-                </div>
-                <div class="nexus-body !py-5 flex flex-col items-center text-center">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available Balance</p>
-                    <h2 class="text-2xl font-black text-slate-800 tracking-tight" id="cb-display">0.00</h2>
-                    <div class="mt-3 px-3 py-1 bg-slate-50 rounded-md border border-slate-100">
-                        <p class="text-[8px] font-bold text-slate-500 uppercase">Primary Currency: <span id="card-curr-label" class="text-[#be123c]">BDT</span></p>
+            <div class="w-full max-w-sm bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 rounded-[28px] p-6 shadow-xl relative overflow-hidden text-white border border-slate-700/50">
+                <div class="absolute -right-6 -top-6 w-24 h-24 bg-rose-500/10 rounded-full blur-xl"></div>
+                <div class="absolute -left-6 -bottom-6 w-28 h-28 bg-blue-500/10 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-[9px] font-black tracking-widest text-slate-400 uppercase">Main Cash Account</span>
                     </div>
+                    <span class="text-[8px] font-bold bg-white/10 px-2 py-0.5 rounded-full text-slate-300 border border-white/5 uppercase tracking-wider">Active</span>
+                </div>
+                <div class="my-2 text-center">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
+                    <h2 class="text-3xl font-black tracking-tight text-white" id="cb-display">0.00</h2>
+                </div>
+                <div class="mt-4 flex justify-between items-center pt-3 border-t border-white/10 text-[9px]">
+                    <span class="font-bold text-slate-500 uppercase">Vault Secure</span>
+                    <p class="font-bold text-slate-400">Currency: <span id="card-curr-label" class="text-rose-400 font-black">BDT</span></p>
                 </div>
             </div>
         </div>
@@ -197,18 +204,12 @@
     <div id="settings-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
         <div class="space-y-4">
-            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-coins"></i> Local Currency</p>
-                <div class="flex gap-2">
-                    <select id="curr-select" class="flex-1 p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border-none">
-                        <option value="bdt">BDT</option>
-                        <option value="usd">USD ($)</option>
-                    </select>
-                    <button onclick="saveCurrencySettings()" class="bg-blue-600 text-white px-4 rounded-xl text-[10px] font-bold uppercase">Save</button>
-                </div>
-            </div>
             <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
+                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
+            <button onclick="showPage('trxid-lookup-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-search text-blue-600"></i> TRXID Lookup</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
             <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
@@ -221,6 +222,26 @@
             </button>
             <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
         </div>
+    </div>
+
+    <!-- TRXID LOOKUP PAGE -->
+    <div id="trxid-lookup-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold">TRXID Lookup</h2>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 px-1">Enter Transaction ID</p>
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
+            </div>
+        </div>
+        <div id="lookup-results" class="space-y-4"></div>
     </div>
 
     <!-- STAFF MANAGEMENT PAGE -->
@@ -293,13 +314,19 @@
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
-                    <h1 class="text-center font-black text-xl mb-1 text-slate-800 uppercase tracking-widest">G4S Imprest, Cumilla Branch</h1>
+                    <h1 class="text-center font-black text-xl mb-0.5 text-slate-800 uppercase tracking-widest">G4S Imprest, Cumilla Branch</h1>
+                    <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                    <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">+88 01313209156 (Kuafi)</p>
                     <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+                    
+                    <!-- Dynamic DBBL Bank style Individual Statement Meta Header Container -->
+                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
+
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
-                            <tr class="bg-slate-100 text-[8px]">
-                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                            <tr class="bg-slate-100 text-[8px]" id="report-table-header">
+                                <!-- Generated Dynamically based on scope selection -->
                             </tr>
                         </thead>
                         <tbody id="report-body"></tbody>
@@ -377,35 +404,34 @@
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
+        // Alphanumeric Transaction ID Formatter (G4SXXXXXX)
+        const getTxnId = (key) => {
+            if (!key) return "G4S000000";
+            const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            return `G4S${clean.slice(-6).padStart(6, '0')}`;
+        };
+
         // Dhaka Date Helper Functions
         const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
-        
+
         const getDhakaDate = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         };
-        
+
         const getDhakaFirstOfMonth = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
         };
-        
+
         const getDhakaMonthLabel = () => {
             const d = getDhakaDateObj();
             return d.toLocaleString('default', { month: 'long', year: 'numeric' });
         };
-        
+
         const getDhakaMonthKey = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        };
-
-        window.saveCurrencySettings = () => {
-            const val = document.getElementById('curr-select').value;
-            currFormat = val;
-            document.getElementById('card-curr-label').innerText = val.toUpperCase();
-            renderHome();
-            alert("Settings saved.");
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -448,7 +474,6 @@
 
         window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
 
-        // NEW SEARCH LOGIC
         window.filterStaffSearch = () => {
             const val = document.getElementById('staff-search').value.toLowerCase();
             const res = document.getElementById('search-results');
@@ -557,6 +582,28 @@
             showPage('dashboard-page');
         };
 
+        window.lookupTransaction = () => {
+            const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
+            const container = document.getElementById('lookup-results');
+            if(!val) { container.innerHTML = ''; return; }
+
+            const match = logsList.find(l => getTxnId(l.key) === val);
+            if(match) {
+                container.innerHTML = `
+                <div class="nexus-card">
+                    <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">ID: ${getTxnId(match.key)}</span></div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
+                    </div>
+                </div>`;
+            } else {
+                container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
+            }
+        };
+
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
@@ -625,12 +672,15 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 8).forEach(l => {
+
+            // Limit recent transactions array loop to 5 logs only
+            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 logH += `
                 <div class="nexus-card">
-                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">TXN#${l.key.slice(-6).toUpperCase()}</span></div>
+                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -641,10 +691,10 @@
             [...logsWithBal].reverse().forEach(l => {
                 mLogH += `
                 <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${l.key.slice(-8).toUpperCase()}</span></div>
+                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -664,8 +714,57 @@
         window.generateReport = () => {
             const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
-            
+
             document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
+
+            const metaHeader = document.getElementById('individual-header-meta');
+            const tableHeader = document.getElementById('report-table-header');
+
+            if (sid && staffData[sid]) {
+                const u = staffData[sid];
+                const staffKeys = Object.keys(staffData).sort();
+                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
+
+                // Inject sleek DBBL bank style structural individual description layout block
+                metaHeader.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4 text-[10px]">
+                        <div>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Personnel Title</span><span class="text-xs font-black text-slate-800">${u.name}</span></p>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Designation</span><span class="font-bold">${u.desig}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Account Reference</span><span class="font-bold text-blue-700">${g4sUserId}</span></p>
+                        </div>
+                        <div class="border-l border-slate-200 pl-4">
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Phone Contact</span><span class="font-bold">${u.phone || 'N/A'}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Secure Email</span><span class="font-bold">${u.email || 'N/A'}</span></p>
+                        </div>
+                    </div>
+                `;
+                metaHeader.classList.remove('hidden');
+
+                // Render dynamic header definition excluding the explicit Name row column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            } else {
+                metaHeader.classList.add('hidden');
+                metaHeader.innerHTML = '';
+
+                // Fallback structured dynamic header description including the explicit repeating Name node column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Name</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            }
 
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
@@ -673,7 +772,30 @@
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
                     if((!start || l.date >= start) && (!end || l.date <= end)) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
-                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Cash In':'Cash Out'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
+                        
+                        const trxIdStr = getTxnId(l.key);
+                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
+
+                        if(sid) {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        } else {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-bold">${l.staffName}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        }
                     }
                 }
             });
