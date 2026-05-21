@@ -393,10 +393,11 @@
                 <div id="memo-content-container"></div>
             </div>
             
-            <!-- Sticky Footer -->
-            <div class="flex gap-2 p-5 border-t border-slate-200/60 sticky bottom-0 bg-[#F8FAFC] z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
-                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
-                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
+            <!-- Sticky Footer with newly added Skip Share button -->
+            <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 bg-[#F8FAFC] z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
+                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
+                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
+                <button onclick="closeModal('memo-modal')" class="flex-1 bg-slate-200 text-slate-700 py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-sm hover:bg-slate-300 transition-colors"><i class="fa-solid fa-forward"></i> Skip Share</button>
             </div>
         </div>
     </div>
@@ -729,12 +730,24 @@
         window.shareMemoPDF = () => {
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
+            
+            // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
 
+            // Apply specific A4 sizing (at 96 DPI) and vertical center alignment
             element.style.width = '794px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
+            element.style.minHeight = '1178px';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
 
             const opt = {
                 margin: 15,
@@ -746,10 +759,14 @@
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                // Restore visual styles in DOM
+                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
                 element.style.margin = originalMargin;
-                element.style.maxWidth = '';
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
 
                 const file = new File([blob], opt.filename, { type: "application/pdf" });
                 
@@ -794,7 +811,7 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto" style="text-align: center;">
+                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                         <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
@@ -832,26 +849,40 @@
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
 
-            // Format for A4 width (794px at standard DPI) to guarantee perfect horizontal alignment in the final PDF
+            // Ensure original styling is safely stored
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
+
+            // Apply properties ensuring A4 exact precision and vertical alignment
             element.style.width = '794px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
+            element.style.minHeight = '1178px';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
 
             html2pdf().from(element).set({
                 margin: 15,
                 filename: `Receipt_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                // Changed from 'a5' to 'a4' to fit requested A4 paper
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
             }).save().then(() => {
-                // Restore styling immediately after capturing
+                // Restore styling dynamically after capture completes
                 element.style.width = originalWidth;
                 element.style.margin = originalMargin;
-                element.style.maxWidth = '';
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
             });
         };
 
