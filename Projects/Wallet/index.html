@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Added html2canvas for image generation and sharing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; color: #1E293B; }
@@ -377,6 +379,21 @@
         </div>
     </div>
 
+    <!-- TRANSACTION MEMO MODAL (Added Feature) -->
+    <div id="memo-modal" class="modal">
+        <div class="modal-content !bg-[#F8FAFC]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
+                <button onclick="closeModal('memo-modal')" class="text-slate-400 hover:text-rose-600 text-xl leading-none"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="memo-content-container"></div>
+            <div class="flex gap-2 mt-6">
+                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
+                <button onclick="downloadMemoPDF()" class="flex-1 bg-rose-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> PDF</button>
+            </div>
+        </div>
+    </div>
+
     <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
@@ -408,6 +425,8 @@
         let logsList = [];
         let currFormat = 'bdt';
         let editingStaffId = null;
+
+        window.logsWithBalData = []; // Store globally for sharing latest entries
 
         const fmt = (num) => {
             const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
@@ -582,16 +601,146 @@
             if(!sid || !amt || !date) return alert("Select staff and fill all fields");
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
-            push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+            
+            // Push creates the ref synchronously to give us a unique key instantly
+            const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
 
+            // Generate Memo Data for automated opening
+            const txnDataForMemo = {
+                key: newTxnRef.key,
+                staffId: sid,
+                staffName: staff.name,
+                amount: amt,
+                type: currentType,
+                date: date,
+                cat: document.getElementById('m-cat').value,
+                note: document.getElementById('m-note').value,
+                ts: Date.now(),
+                sb: newBal // Closing / Last balance
+            };
+
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
+
+            // Open auto memo displaying the transaction
+            window.openMemoModal(txnDataForMemo);
         };
+
+        // Added functionality for Auto-Memo and Direct Sharing 
+        window.currentMemoData = null;
+        window.openMemoModal = (data) => {
+            window.currentMemoData = data;
+            const staffKeys = Object.keys(staffData).sort();
+            const u = staffData[data.staffId];
+            const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
+            const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
+            
+            const html = `
+                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
+                    <div class="text-center mb-6 mt-2">
+                        <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                        <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                        <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                        </div>
+                    </div>
+                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">ID: ${getTxnId(data.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
+                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
+                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('memo-content-container').innerHTML = html;
+            openModal('memo-modal');
+        };
+
+        window.shareMemoImage = async () => {
+            const key = window.currentMemoData.key;
+            const element = document.getElementById('memo-pdf-content');
+            const originalWidth = element.style.width;
+            const originalMargin = element.style.margin;
+            
+            // Lock dimensions for standard image sharing export mapping
+            element.style.width = '600px'; 
+            element.style.margin = '0 auto';
+            element.style.maxWidth = 'none';
+
+            const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
+            
+            // Restore visual styles in DOM
+            element.style.width = originalWidth;
+            element.style.margin = originalMargin;
+            element.style.maxWidth = '';
+
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], `Memo_${getTxnId(key)}.png`, { type: "image/png" });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: `Transaction Memo ${getTxnId(key)}`,
+                            text: `Transaction Receipt for ${window.currentMemoData.staffName}`
+                        });
+                    } catch (err) { console.log('Share action cancelled or failed', err); }
+                } else {
+                    // Fallback to downloading if browser doesn't support direct sharing
+                    const link = document.createElement('a');
+                    link.download = `Memo_${getTxnId(key)}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                }
+            }, "image/png");
+        };
+
+        window.downloadMemoPDF = () => {
+            const key = window.currentMemoData.key;
+            const element = document.getElementById('memo-pdf-content');
+            const originalWidth = element.style.width;
+            const originalMargin = element.style.margin;
+            
+            element.style.width = '794px'; 
+            element.style.margin = '0 auto';
+            element.style.maxWidth = 'none';
+
+            html2pdf().from(element).set({
+                margin: 15,
+                filename: `Memo_${getTxnId(key)}.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row'] }
+            }).save().then(() => {
+                element.style.width = originalWidth;
+                element.style.margin = originalMargin;
+                element.style.maxWidth = '';
+            });
+        };
+
+        window.shareTransaction = (key) => {
+            if(!window.logsWithBalData) return;
+            const match = window.logsWithBalData.find(l => l.key === key);
+            if(match) window.openMemoModal(match);
+        };
+        // End Auto-Memo Features
 
         window.lookupTransaction = () => {
             const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
@@ -625,7 +774,7 @@
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Individual Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
@@ -730,6 +879,8 @@
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
+            window.logsWithBalData = logsWithBal; // Store globally for Sharing
+
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
@@ -737,7 +888,13 @@
             let logH = '', mLogH = '';
 
             // Limit recent transactions array loop to 5 logs only
-            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
+            [...logsWithBal].reverse().slice(0, 5).forEach((l, index) => {
+                let shareBtnHTML = '';
+                // Add Share button ONLY to the last 2 recent transactions 
+                if (index < 2) {
+                    shareBtnHTML = `<button onclick="shareTransaction('${l.key}')" class="w-full mt-3 bg-blue-50 hover:bg-blue-100 text-blue-600 p-2.5 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors border border-blue-100"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>`;
+                }
+
                 logH += `
                 <div class="nexus-card">
                     <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
@@ -747,6 +904,7 @@
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                        ${shareBtnHTML}
                     </div>
                 </div>`;
             });
