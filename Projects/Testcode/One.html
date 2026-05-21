@@ -733,40 +733,51 @@
             
             // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
             const originalMaxWidth = element.style.maxWidth;
             const originalMinHeight = element.style.minHeight;
             const originalDisplay = element.style.display;
             const originalFlexDirection = element.style.flexDirection;
             const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
 
-            // Apply specific A4 sizing (at 96 DPI) and vertical center alignment
+            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
             element.style.width = '794px'; 
-            element.style.margin = '0 auto';
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px'; // acts as margin wrapper inside HTML
             element.style.maxWidth = 'none';
-            element.style.minHeight = '1178px';
             element.style.display = 'flex';
             element.style.flexDirection = 'column';
             element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
 
             const opt = {
-                margin: 15,
+                margin: 0,
                 filename: `Memo_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row'] }
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
                 // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
+                element.style.height = originalHeight;
                 element.style.margin = originalMargin;
+                element.style.padding = originalPadding;
                 element.style.maxWidth = originalMaxWidth;
                 element.style.minHeight = originalMinHeight;
                 element.style.display = originalDisplay;
                 element.style.flexDirection = originalFlexDirection;
                 element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
 
                 const file = new File([blob], opt.filename, { type: "application/pdf" });
                 
@@ -851,38 +862,49 @@
 
             // Ensure original styling is safely stored
             const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
             const originalMaxWidth = element.style.maxWidth;
             const originalMinHeight = element.style.minHeight;
             const originalDisplay = element.style.display;
             const originalFlexDirection = element.style.flexDirection;
             const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
 
-            // Apply properties ensuring A4 exact precision and vertical alignment
+            // Apply properties ensuring exact A4 proportion (1:1.414) and 1-page vertical alignment
             element.style.width = '794px'; 
-            element.style.margin = '0 auto';
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px';
             element.style.maxWidth = 'none';
-            element.style.minHeight = '1178px';
             element.style.display = 'flex';
             element.style.flexDirection = 'column';
             element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
 
             html2pdf().from(element).set({
-                margin: 15,
+                margin: 0,
                 filename: `Receipt_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save().then(() => {
                 // Restore styling dynamically after capture completes
                 element.style.width = originalWidth;
+                element.style.height = originalHeight;
                 element.style.margin = originalMargin;
+                element.style.padding = originalPadding;
                 element.style.maxWidth = originalMaxWidth;
                 element.style.minHeight = originalMinHeight;
                 element.style.display = originalDisplay;
                 element.style.flexDirection = originalFlexDirection;
                 element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
             });
         };
 
