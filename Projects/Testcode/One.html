@@ -642,10 +642,10 @@
             const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
 
             // Sequence Tracking: Find the contextual last transaction preceding this entry
-            const staffLogs = logsList.filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
+            const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
             const currentIdx = staffLogs.findIndex(l => l.key === data.key);
             const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
-            const lastTxnStr = lastTxn ? `${getTxnId(lastTxn.key)} (${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'}: ${fmt(lastTxn.amount)})` : 'No Previous Record';
+            const lastTxnStr = lastTxn ? `${lastTxn.date} | ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) | Amt: ${fmt(lastTxn.amount)} | Bal: ${fmt(lastTxn.sb)}` : 'No Previous Record';
 
             const html = `
                 <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
