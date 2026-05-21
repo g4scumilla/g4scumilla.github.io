@@ -381,15 +381,23 @@
 
     <!-- TRANSACTION MEMO MODAL (Added Feature) -->
     <div id="memo-modal" class="modal">
-        <div class="modal-content !bg-[#F8FAFC]">
-            <div class="flex justify-between items-center mb-4">
+        <div class="modal-content !bg-[#F8FAFC] !p-0 flex flex-col !overflow-hidden">
+            <!-- Sticky Header -->
+            <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 bg-[#F8FAFC] z-20">
                 <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
-                <button onclick="closeModal('memo-modal')" class="text-slate-400 hover:text-rose-600 text-xl leading-none"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="memo-content-container"></div>
-            <div class="flex gap-2 mt-6">
-                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
-                <button onclick="downloadMemoPDF()" class="flex-1 bg-rose-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> PDF</button>
+
+            <!-- Scrollable Content -->
+            <div class="p-6 overflow-y-auto flex-1 bg-[#F8FAFC]">
+                <div id="memo-content-container"></div>
+            </div>
+
+            <!-- Sticky Footer with newly added Skip Share button -->
+            <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 bg-[#F8FAFC] z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
+                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
+                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
+                <button onclick="closeModal('memo-modal')" class="flex-1 bg-slate-200 text-slate-700 py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-sm hover:bg-slate-300 transition-colors"><i class="fa-solid fa-forward"></i> Skip Share</button>
             </div>
         </div>
     </div>
@@ -601,7 +609,7 @@
             if(!sid || !amt || !date) return alert("Select staff and fill all fields");
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
-            
+
             // Push creates the ref synchronously to give us a unique key instantly
             const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
@@ -639,7 +647,13 @@
             const u = staffData[data.staffId];
             const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
             const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
-            
+
+            // Sequence Tracking: Find the contextual last transaction preceding this entry
+            const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
+            const currentIdx = staffLogs.findIndex(l => l.key === data.key);
+            const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
+            const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
+
             const html = `
                 <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
@@ -647,11 +661,11 @@
                         <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                         <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                         <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">ID: ${getTxnId(data.key)}</span></div>
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
@@ -659,7 +673,8 @@
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
                         </div>
                     </div>
@@ -678,14 +693,14 @@
             const element = document.getElementById('memo-pdf-content');
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
-            
+
             // Lock dimensions for standard image sharing export mapping
             element.style.width = '600px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
 
             const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
-            
+
             // Restore visual styles in DOM
             element.style.width = originalWidth;
             element.style.margin = originalMargin;
@@ -698,7 +713,7 @@
                         await navigator.share({
                             files: [file],
                             title: `Transaction Memo ${getTxnId(key)}`,
-                            text: `Transaction Receipt for ${window.currentMemoData.staffName}`
+                            text: `Last Transaction Update for ${window.currentMemoData.staffName}`
                         });
                     } catch (err) { console.log('Share action cancelled or failed', err); }
                 } else {
@@ -711,27 +726,79 @@
             }, "image/png");
         };
 
-        window.downloadMemoPDF = () => {
+        // Replaced downloadMemoPDF with shareMemoPDF to allow direct PDF sharing
+        window.shareMemoPDF = () => {
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
-            const originalWidth = element.style.width;
-            const originalMargin = element.style.margin;
-            
-            element.style.width = '794px'; 
-            element.style.margin = '0 auto';
-            element.style.maxWidth = 'none';
 
-            html2pdf().from(element).set({
-                margin: 15,
+            // Backup styling before transforming for A4 perfect centering
+            const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
+            const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
+
+            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
+            element.style.width = '794px'; 
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px'; // acts as margin wrapper inside HTML
+            element.style.maxWidth = 'none';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
+
+            const opt = {
+                margin: 0,
                 filename: `Memo_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row'] }
-            }).save().then(() => {
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
+                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
+                element.style.height = originalHeight;
                 element.style.margin = originalMargin;
-                element.style.maxWidth = '';
+                element.style.padding = originalPadding;
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
+
+                const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: `Transaction Memo ${getTxnId(key)}`,
+                            text: `Transaction Memo PDF for ${window.currentMemoData.staffName}`
+                        });
+                    } catch (err) { 
+                        console.log('Share action cancelled or failed', err); 
+                    }
+                } else {
+                    // Fallback to standard download
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = opt.filename;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                }
             });
         };
 
@@ -755,7 +822,7 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto" style="text-align: center;">
+                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                         <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
@@ -765,7 +832,7 @@
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">ID: ${getTxnId(match.key)}</span></div>
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
@@ -774,7 +841,7 @@
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
@@ -793,26 +860,51 @@
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
 
-            // Format for A4 width (794px at standard DPI) to guarantee perfect horizontal alignment in the final PDF
+            // Ensure original styling is safely stored
             const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
+
+            // Apply properties ensuring exact A4 proportion (1:1.414) and 1-page vertical alignment
             element.style.width = '794px'; 
-            element.style.margin = '0 auto';
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px';
             element.style.maxWidth = 'none';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
 
             html2pdf().from(element).set({
-                margin: 15,
+                margin: 0,
                 filename: `Receipt_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                // Changed from 'a5' to 'a4' to fit requested A4 paper
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save().then(() => {
-                // Restore styling immediately after capturing
+                // Restore styling dynamically after capture completes
                 element.style.width = originalWidth;
+                element.style.height = originalHeight;
                 element.style.margin = originalMargin;
-                element.style.maxWidth = '';
+                element.style.padding = originalPadding;
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
             });
         };
 
