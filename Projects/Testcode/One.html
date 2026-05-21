@@ -177,7 +177,7 @@
 
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Imprest</option><option>Return</option><option>Voucher</option><option>Others</option><option>Cash Out</option>
+                    <option>Advance</option><option>Voucher</option><option>Return</option><option>Others</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
@@ -186,7 +186,7 @@
 
             <div class="flex gap-3 mb-6">
                 <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Cash In</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Cash Out</span></button>
             </div>
 
             <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
@@ -623,7 +623,7 @@
                             <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Advance'} (${match.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
@@ -642,18 +642,23 @@
 
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
-            const originalWidth = element.style.minWidth;
-            element.style.minWidth = "600px"; // Force width so text doesn't clip on mobile
+            
+            // Force specific width to ensure layout does not break or clip text on mobile screens
+            const originalWidth = element.style.width;
+            element.style.width = '600px'; 
+            element.style.maxWidth = 'none';
 
             html2pdf().from(element).set({
-                margin: [15, 10, 15, 10], // Enforced proper margins
+                margin: 10,
                 filename: `Receipt_${getTxnId(key)}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 650 }, // Lock canvas parsing size
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
                 jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
             }).save().then(() => {
-                element.style.minWidth = originalWidth || 'auto'; // Reset dynamically after saving
+                // Restore styling immediately after capturing
+                element.style.width = originalWidth;
+                element.style.maxWidth = '';
             });
         };
 
@@ -733,7 +738,7 @@
                     <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Advance'} (${l.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -747,7 +752,7 @@
                     <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Advance'} (${l.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -827,7 +832,7 @@
                         if(l.type === 'income') tRec += a; else tAdv += a;
 
                         const trxIdStr = getTxnId(l.key);
-                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Advance'} (${l.cat || '-'})`;
+                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
 
                         if(sid) {
                             html += `<tr>
@@ -855,12 +860,12 @@
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advance: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            element.style.minWidth = "800px"; // Enforced wide width to avoid table squish/text missing on mobile
+            element.style.minWidth = "100%"; 
 
             // Dynamic filename format based on selection
             let repName = "Abdullahil_Kuafi";
@@ -875,9 +880,9 @@
             const fName = `${repName}_${dStr}_${tStr}.pdf`;
 
             html2pdf().from(element).set({
-                margin: [15, 10, 20, 10], filename: fName,
-                image: { type: 'jpeg', quality: 1 }, 
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
+                margin: [10, 10, 20, 10], filename: fName,
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] } // Group summary rows to avoid breaking across pages
             }).save().then(() => element.style.minWidth = "650px");
