@@ -31,7 +31,7 @@
         .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid #f1f5f9; }
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        
+
         /* Search results styling */
         .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
         .search-item:active { background: #f1f5f9; border-left-color: #2563eb; }
@@ -78,18 +78,25 @@
             <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
+        <!-- Lucrative Balanced Card -->
         <div class="flex justify-center mb-8">
-            <div class="nexus-card w-[85%] !mb-0 border-[#be123c]/20 shadow-xl">
-                <div class="nexus-header !bg-[#be123c] !border-[#be123c] !py-2">
-                    <span class="nexus-header-label !text-white tracking-widest text-[9px]">Main Cash Account</span>
-                    <span class="nexus-header-val !text-white/80 text-[8px]">Active</span>
-                </div>
-                <div class="nexus-body !py-5 flex flex-col items-center text-center">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Available Balance</p>
-                    <h2 class="text-2xl font-black text-slate-800 tracking-tight" id="cb-display">0.00</h2>
-                    <div class="mt-3 px-3 py-1 bg-slate-50 rounded-md border border-slate-100">
-                        <p class="text-[8px] font-bold text-slate-500 uppercase">Primary Currency: <span id="card-curr-label" class="text-[#be123c]">BDT</span></p>
+            <div class="w-full max-w-sm bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 rounded-[28px] p-6 shadow-xl relative overflow-hidden text-white border border-slate-700/50">
+                <div class="absolute -right-6 -top-6 w-24 h-24 bg-rose-500/10 rounded-full blur-xl"></div>
+                <div class="absolute -left-6 -bottom-6 w-28 h-28 bg-blue-500/10 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-[9px] font-black tracking-widest text-slate-400 uppercase">Main Cash Account</span>
                     </div>
+                    <span class="text-[8px] font-bold bg-white/10 px-2 py-0.5 rounded-full text-slate-300 border border-white/5 uppercase tracking-wider">Active</span>
+                </div>
+                <div class="my-2 text-center">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
+                    <h2 class="text-3xl font-black tracking-tight text-white" id="cb-display">0.00</h2>
+                </div>
+                <div class="mt-4 flex justify-between items-center pt-3 border-t border-white/10 text-[9px]">
+                    <span class="font-bold text-slate-500 uppercase">Vault Secure</span>
+                    <p class="font-bold text-slate-400">Currency: <span id="card-curr-label" class="text-rose-400 font-black">BDT</span></p>
                 </div>
             </div>
         </div>
@@ -136,7 +143,7 @@
 
         <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
             <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 px-1">Select Personnel</p>
-            
+
             <!-- Search Bar -->
             <div class="relative mb-4">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
@@ -144,10 +151,10 @@
                        oninput="filterStaffSearch()"
                        class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
             </div>
-            
+
             <!-- Search Results Dropdown -->
             <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
-            
+
             <!-- Selected Personnel Display -->
             <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
                 <div>
@@ -165,7 +172,7 @@
 
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
+                    <option>Cash Out</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
@@ -173,8 +180,8 @@
             <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
 
             <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Receive</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Cash In</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Cash Out</span></button>
             </div>
 
             <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
@@ -197,16 +204,6 @@
     <div id="settings-page" class="page p-5 pb-24">
         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
         <div class="space-y-4">
-            <div class="bg-white rounded-[24px] p-4 shadow-sm border border-slate-100">
-                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-coins"></i> Local Currency</p>
-                <div class="flex gap-2">
-                    <select id="curr-select" class="flex-1 p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border-none">
-                        <option value="bdt">BDT</option>
-                        <option value="usd">USD ($)</option>
-                    </select>
-                    <button onclick="saveCurrencySettings()" class="bg-blue-600 text-white px-4 rounded-xl text-[10px] font-bold uppercase">Save</button>
-                </div>
-            </div>
             <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
@@ -293,12 +290,13 @@
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
+                    <h1 class="text-center font-black text-xl mb-1 text-slate-800 uppercase tracking-widest">G4S Imprest, Cumilla Branch</h1>
                     <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
                             <tr class="bg-slate-100 text-[8px]">
-                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Trxn Category</th><th class="border p-2 text-center">Reference</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Type</th><th class="border p-2 text-center">Trxn Category</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
                             </tr>
                         </thead>
                         <tbody id="report-body"></tbody>
@@ -376,12 +374,34 @@
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
-        window.saveCurrencySettings = () => {
-            const val = document.getElementById('curr-select').value;
-            currFormat = val;
-            document.getElementById('card-curr-label').innerText = val.toUpperCase();
-            renderHome();
-            alert("Settings saved.");
+        // Alphanumeric Transaction ID Formatter (G4SXXXXXX)
+        const getTxnId = (key) => {
+            if (!key) return "G4S000000";
+            const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            return `G4S${clean.slice(-6).padStart(6, '0')}`;
+        };
+
+        // Dhaka Date Helper Functions
+        const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+
+        const getDhakaDate = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+
+        const getDhakaFirstOfMonth = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+        };
+
+        const getDhakaMonthLabel = () => {
+            const d = getDhakaDateObj();
+            return d.toLocaleString('default', { month: 'long', year: 'numeric' });
+        };
+
+        const getDhakaMonthKey = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -390,11 +410,11 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
-                
-                // Specific Date Requirements
-                document.getElementById('r-start').value = "2026-04-30"; 
-                document.getElementById('r-end').value = "2026-05-14";
-                document.getElementById('m-date').value = "2026-05-14";
+
+                // Auto Specific Dates (Dhaka Time)
+                document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
+                document.getElementById('r-end').value = getDhakaDate();
+                document.getElementById('m-date').value = getDhakaDate();
 
                 startSync(user.uid);
             } else {
@@ -414,7 +434,7 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(id === 'entry-page') {
-                document.getElementById('m-date').value = "2026-05-14";
+                document.getElementById('m-date').value = getDhakaDate();
             }
         };
         window.openModal = (id) => {
@@ -424,19 +444,18 @@
 
         window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
 
-        // NEW SEARCH LOGIC
         window.filterStaffSearch = () => {
             const val = document.getElementById('staff-search').value.toLowerCase();
             const res = document.getElementById('search-results');
             if(!val) { res.classList.add('hidden'); return; }
-            
+
             const staffKeys = Object.keys(staffData).sort();
             let html = '';
             Object.keys(staffData).forEach(id => {
                 const u = staffData[id];
                 const gid = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
                 const matchString = `${u.name} ${gid} ${u.desig}`.toLowerCase();
-                
+
                 if(matchString.includes(val)) {
                     html += `<div onclick="selectStaff('${id}', '${u.name}', '${gid}')" class="search-item p-3 border-b border-slate-50 last:border-0 cursor-pointer">
                         <p class="text-[11px] font-bold text-slate-700 uppercase">${u.name}</p>
@@ -527,7 +546,7 @@
                 cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-            
+
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
@@ -584,8 +603,8 @@
 
         function renderHome() {
             const now = new Date();
-            const monthKey = "2026-05"; // Hardcoded for your requirement
-            document.getElementById('month-label').innerText = `May 2026`;
+            const monthKey = getDhakaMonthKey();
+            document.getElementById('month-label').innerText = getDhakaMonthLabel();
 
             let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
             const logsWithBal = logsList.map(l => {
@@ -601,12 +620,15 @@
             document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
 
             let logH = '', mLogH = '';
-            [...logsWithBal].reverse().slice(0, 8).forEach(l => {
+
+            // Limit recent transactions array loop to 5 logs only
+            [...logsWithBal].reverse().slice(0, 5).forEach(l => {
                 logH += `
                 <div class="nexus-card">
-                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">TXN#${l.key.slice(-6).toUpperCase()}</span></div>
+                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -617,11 +639,13 @@
             [...logsWithBal].reverse().forEach(l => {
                 mLogH += `
                 <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${l.key.slice(-8).toUpperCase()}</span></div>
+                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
                     </div>
                     <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
@@ -631,23 +655,39 @@
             document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
         }
 
+        const formatDt = (d) => {
+            if(!d) return "All Time";
+            return new Date(d).toLocaleDateString('en-GB');
+        };
+
         window.generateReport = () => {
             const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
+
+            document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
+
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
                     const a = Number(l.amount);
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
                     if((!start || l.date >= start) && (!end || l.date <= end)) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
-                        html += `<tr><td class="border p-2 text-center">${sl++}</td><td class="border p-2">${l.date}</td><td class="border p-2 font-bold">${l.staffName}</td><td class="border p-2">${l.type==='income'?'Received':'Advanced'}</td><td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td><td class="border p-2 text-right">${fmt(a)}</td><td class="border p-2 text-right font-bold">${fmt(runningBal)}</td></tr>`;
+                        html += `<tr>
+                            <td class="border p-2 text-center">${sl++}</td>
+                            <td class="border p-2">${l.date}</td>
+                            <td class="border p-2 font-bold">${l.staffName}</td>
+                            <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${l.type==='income'?'Cash In':'Cash Out'}</td>
+                            <td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td>
+                            <td class="border p-2 text-right">${fmt(a)}</td>
+                            <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                        </tr>`;
                     }
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advanced: ${fmt(tAdv)}</p><p class="text-teal-600">Total Received: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
@@ -655,7 +695,8 @@
             element.style.minWidth = "100%"; 
             html2pdf().from(element).set({
                 margin: [10, 10, 20, 10], filename: `G4S_Statement_${Date.now()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 4 },
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save().then(() => element.style.minWidth = "650px");
         };
