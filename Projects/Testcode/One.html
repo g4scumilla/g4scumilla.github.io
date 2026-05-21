@@ -624,7 +624,8 @@
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Individual Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
@@ -642,7 +643,7 @@
 
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
-            
+
             // Format for A4 width (794px at standard DPI) to guarantee perfect horizontal alignment in the final PDF
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
