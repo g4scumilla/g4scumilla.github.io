@@ -177,7 +177,7 @@
 
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
+                    <option>Imprest</option><option>Return</option><option>Voucher</option><option>Others</option><option>Cash Out</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
@@ -335,7 +335,7 @@
                         </thead>
                         <tbody id="report-body"></tbody>
                     </table>
-                    
+
                     <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
 
                     <!-- Watermark-style footer at the end of report -->
@@ -642,14 +642,19 @@
 
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
+            const originalWidth = element.style.minWidth;
+            element.style.minWidth = "600px"; // Force width so text doesn't clip on mobile
+
             html2pdf().from(element).set({
-                margin: 10,
+                margin: [15, 10, 15, 10], // Enforced proper margins
                 filename: `Receipt_${getTxnId(key)}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 650 }, // Lock canvas parsing size
                 jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
-            }).save();
+            }).save().then(() => {
+                element.style.minWidth = originalWidth || 'auto'; // Reset dynamically after saving
+            });
         };
 
         function startSync(uid) {
@@ -855,7 +860,7 @@
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            element.style.minWidth = "100%"; 
+            element.style.minWidth = "800px"; // Enforced wide width to avoid table squish/text missing on mobile
 
             // Dynamic filename format based on selection
             let repName = "Abdullahil_Kuafi";
@@ -870,9 +875,9 @@
             const fName = `${repName}_${dStr}_${tStr}.pdf`;
 
             html2pdf().from(element).set({
-                margin: [10, 10, 20, 10], filename: fName,
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2, useCORS: true },
+                margin: [15, 10, 20, 10], filename: fName,
+                image: { type: 'jpeg', quality: 1 }, 
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] } // Group summary rows to avoid breaking across pages
             }).save().then(() => element.style.minWidth = "650px");
