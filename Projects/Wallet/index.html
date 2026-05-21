@@ -35,6 +35,9 @@
         /* Search results styling */
         .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
         .search-item:active { background: #f1f5f9; border-left-color: #2563eb; }
+
+        /* Prevent Table Rows From Breaking in PDF */
+        tr { page-break-inside: avoid !important; break-inside: avoid !important; }
     </style>
 </head>
 <body>
@@ -172,7 +175,7 @@
 
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Cash Out</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
+                    <option>Advance</option><option>Imprest</option><option>Voucher</option><option>Return</option><option>Others</option>
                 </select>
                 <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
             </div>
@@ -181,7 +184,7 @@
 
             <div class="flex gap-3 mb-6">
                 <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-400 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Cash In</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Cash Out</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Advance</span></button>
             </div>
 
             <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
@@ -208,6 +211,10 @@
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
             </button>
+            <button onclick="showPage('trxid-lookup-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-search text-blue-600"></i> TRXID Lookup</span>
+                <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+            </button>
             <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
                 <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
@@ -218,6 +225,26 @@
             </button>
             <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
         </div>
+    </div>
+
+    <!-- TRXID LOOKUP PAGE -->
+    <div id="trxid-lookup-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold">TRXID Lookup</h2>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-3 px-1">Enter Transaction ID</p>
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
+            </div>
+        </div>
+        <div id="lookup-results" class="space-y-4"></div>
     </div>
 
     <!-- STAFF MANAGEMENT PAGE -->
@@ -290,18 +317,28 @@
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px]">
-                    <h1 class="text-center font-black text-xl mb-1 text-slate-800 uppercase tracking-widest">G4S Imprest, Cumilla Branch</h1>
-                    <h2 class="text-center font-bold text-lg mb-1 text-blue-800 uppercase tracking-tighter">Imprest Transaction Statement</h2>
+                    <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                    <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                    <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+
+                    <!-- Dynamic DBBL Bank style Individual Statement Meta Header Container -->
+                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
+
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
-                            <tr class="bg-slate-100 text-[8px]">
-                                <th class="border p-2">SL</th><th class="border p-2">Date</th><th class="border p-2">Name</th><th class="border p-2">Type</th><th class="border p-2 text-center">Trxn Category</th><th class="border p-2 text-right">Amount</th><th class="border p-2 text-right">Balance</th>
+                            <tr class="bg-slate-100 text-[8px]" id="report-table-header">
+                                <!-- Generated Dynamically based on scope selection -->
                             </tr>
                         </thead>
                         <tbody id="report-body"></tbody>
                     </table>
                     <div class="mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+
+                    <div class="mt-8 border-t border-slate-200 pt-2 text-right text-[9px] font-bold text-slate-500">
+                        <p>Report Generated by: Abdullahil Kuafi</p>
+                        <p>Report Generated From: https://kaficumilla.shop</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -552,6 +589,55 @@
             showPage('dashboard-page');
         };
 
+        window.lookupTransaction = () => {
+            const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
+            const container = document.getElementById('lookup-results');
+            if(!val) { container.innerHTML = ''; return; }
+
+            const match = logsList.find(l => getTxnId(l.key) === val);
+            if(match) {
+                const staffKeys = Object.keys(staffData).sort();
+                const u = staffData[match.staffId];
+                const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(match.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
+                const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
+
+                container.innerHTML = `
+                <div id="lookup-pdf-content-${match.key}" class="bg-white p-2 rounded-xl">
+                    <div class="text-center mb-4 mt-2">
+                        <h1 class="font-black text-sm uppercase tracking-widest"><span class="text-blue-600">Transaction</span> <span class="text-rose-600">Receipt</span></h1>
+                    </div>
+                    <div class="nexus-card !mb-0">
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">ID: ${getTxnId(match.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Advance'} (${match.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="exportLookupPDF('${match.key}')" class="w-full mt-4 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF Receipt</button>
+                `;
+            } else {
+                container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
+            }
+        };
+
+        window.exportLookupPDF = (key) => {
+            const element = document.getElementById(`lookup-pdf-content-${key}`);
+            html2pdf().from(element).set({
+                margin: 10,
+                filename: `Receipt_${getTxnId(key)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
+            }).save();
+        };
+
         function startSync(uid) {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
@@ -628,7 +714,7 @@
                     <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Advance'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -642,8 +728,7 @@
                     <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
                     <div class="nexus-body">
                         <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val">: ${l.cat}${l.note ? ` (${l.note})` : ''}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Advance'} (${l.cat || '-'})</span></div>
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
@@ -666,38 +751,116 @@
 
             document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
 
+            const metaHeader = document.getElementById('individual-header-meta');
+            const tableHeader = document.getElementById('report-table-header');
+
+            if (sid && staffData[sid]) {
+                const u = staffData[sid];
+                const staffKeys = Object.keys(staffData).sort();
+                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
+
+                // Inject sleek DBBL bank style structural individual description layout block
+                metaHeader.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4 text-[10px]">
+                        <div>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Personnel Title</span><span class="text-xs font-black text-slate-800">${u.name}</span></p>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Designation</span><span class="font-bold">${u.desig}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Account Reference</span><span class="font-bold text-blue-700">${g4sUserId}</span></p>
+                        </div>
+                        <div class="border-l border-slate-200 pl-4">
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Phone Contact</span><span class="font-bold">${u.phone || 'N/A'}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Secure Email</span><span class="font-bold">${u.email || 'N/A'}</span></p>
+                        </div>
+                    </div>
+                `;
+                metaHeader.classList.remove('hidden');
+
+                // Render dynamic header definition excluding the explicit Name row column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            } else {
+                metaHeader.classList.add('hidden');
+                metaHeader.innerHTML = '';
+
+                // Fallback structured dynamic header description including the explicit repeating Name node column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Name</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            }
+
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
                     const a = Number(l.amount);
                     if (l.type === 'income') runningBal += a; else runningBal -= a;
                     if((!start || l.date >= start) && (!end || l.date <= end)) {
                         if(l.type === 'income') tRec += a; else tAdv += a;
-                        html += `<tr>
-                            <td class="border p-2 text-center">${sl++}</td>
-                            <td class="border p-2">${l.date}</td>
-                            <td class="border p-2 font-bold">${l.staffName}</td>
-                            <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${l.type==='income'?'Cash In':'Cash Out'}</td>
-                            <td class="border p-2 text-center text-slate-500">${l.cat || '-'}</td>
-                            <td class="border p-2 text-right">${fmt(a)}</td>
-                            <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                        </tr>`;
+
+                        const trxIdStr = getTxnId(l.key);
+                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Advance'} (${l.cat || '-'})`;
+
+                        if(sid) {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        } else {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-bold">${l.staffName}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        }
                     }
                 }
             });
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Advance: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
             element.style.minWidth = "100%"; 
+
+            // Dynamic filename format based on selection
+            let repName = "Abdullahil_Kuafi";
+            const sid = document.getElementById('r-staff').value;
+            if(sid && staffData[sid]) {
+                repName = staffData[sid].name.replace(/\s+/g, '_');
+            }
+
+            const now = new Date();
+            const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            const tStr = `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}`;
+            const fName = `${repName}_${dStr}_${tStr}.pdf`;
+
             html2pdf().from(element).set({
-                margin: [10, 10, 20, 10], filename: `G4S_Statement_${Date.now()}.pdf`,
+                margin: [10, 10, 20, 10], filename: fName,
                 image: { type: 'jpeg', quality: 0.98 }, 
                 html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row'] } // Using both css and legacy modes for strict row breaking prevention
             }).save().then(() => element.style.minWidth = "650px");
         };
 
