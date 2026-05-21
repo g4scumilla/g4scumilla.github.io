@@ -26,7 +26,6 @@
         .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
         .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
         .nexus-body { padding: 12px; }
-        .nexus-body { padding: 12px; }
         .nexus-row { display: flex; font-size: 11px; padding: 6px 0; align-items: flex-start; border-bottom: 1px solid #f1f5f9; }
         .nexus-row:last-child { border-bottom: none; }
         .nexus-key { width: 105px; color: #64748b; font-weight: 600; flex-shrink: 0; }
@@ -645,7 +644,7 @@
             const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
             const currentIdx = staffLogs.findIndex(l => l.key === data.key);
             const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
-            const lastTxnStr = lastTxn ? `${lastTxn.date} | ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) | Amt: ${fmt(lastTxn.amount)} | Bal: ${fmt(lastTxn.sb)}` : 'No Previous Record';
+            const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
 
             const html = `
                 <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
@@ -658,7 +657,7 @@
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">ID: ${getTxnId(data.key)}</span></div>
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
@@ -666,7 +665,7 @@
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
                         </div>
@@ -773,7 +772,7 @@
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">ID: ${getTxnId(match.key)}</span></div>
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
@@ -782,7 +781,7 @@
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
                             <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Individual Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
