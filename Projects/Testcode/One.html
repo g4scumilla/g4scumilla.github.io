@@ -227,18 +227,41 @@
 
     <div id="all-staff-statement-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-[#F8FAFC] z-10 pt-2 pb-6 -mx-5 px-5 mb-2">
-            <div class="flex items-center gap-3">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
-                    <i class="fas fa-arrow-left"></i>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-400">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold">All Staff Statement</h2>
+                </div>
+                <button onclick="exportAllStaffPDF()" class="bg-red-500 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-red-200 flex items-center gap-2">
+                    <i class="fas fa-file-pdf"></i> Export PDF
                 </button>
-                <h2 class="text-2xl font-bold">All Staff Statement</h2>
             </div>
         </div>
-        <div class="bg-blue-600 text-white p-5 rounded-[24px] mb-6 shadow-lg">
-            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-80">Aggregate Balance</p>
-            <h3 class="text-2xl font-black" id="all-staff-total-balance">0.00</h3>
+
+        <div id="all-staff-pdf-wrapper" class="relative w-full">
+            <div id="all-staff-pdf-header" class="hidden text-center mb-6 mt-2">
+                <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                    <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">All Staff Statement</h2>
+                </div>
+            </div>
+
+            <div class="bg-blue-600 text-white p-5 rounded-[24px] mb-6 shadow-lg">
+                <p class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-80">Balance</p>
+                <h3 class="text-2xl font-black" id="all-staff-total-balance">0.00</h3>
+            </div>
+
+            <div id="all-staff-statement-list"></div>
+
+            <div id="all-staff-pdf-footer" class="hidden mt-12 pb-4 flex-col items-center justify-center opacity-20 pointer-events-none text-center">
+                <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
+                <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+            </div>
         </div>
-        <div id="all-staff-statement-list"></div>
     </div>
 
     <div id="trxid-lookup-page" class="page p-5 pb-24">
@@ -607,14 +630,12 @@
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
 
-            // Push creates the ref synchronously to give us a unique key instantly
             const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
 
-            // Generate Memo Data for automated opening
             const txnDataForMemo = {
                 key: newTxnRef.key,
                 staffId: sid,
@@ -625,18 +646,16 @@
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
                 ts: Date.now(),
-                sb: newBal // Closing / Last balance
+                sb: newBal 
             };
 
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
 
-            // Open auto memo displaying the transaction
             window.openMemoModal(txnDataForMemo);
         };
 
-        // Added functionality for Auto-Memo and Direct Sharing 
         window.currentMemoData = null;
         window.openMemoModal = (data) => {
             window.currentMemoData = data;
@@ -645,7 +664,6 @@
             const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
             const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
 
-            // Sequence Tracking: Find the contextual last transaction preceding this entry
             const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
             const currentIdx = staffLogs.findIndex(l => l.key === data.key);
             const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
@@ -691,14 +709,12 @@
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
 
-            // Lock dimensions for standard image sharing export mapping
             element.style.width = '600px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
 
             const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
 
-            // Restore visual styles in DOM
             element.style.width = originalWidth;
             element.style.margin = originalMargin;
             element.style.maxWidth = '';
@@ -714,7 +730,6 @@
                         });
                     } catch (err) { console.log('Share action cancelled or failed', err); }
                 } else {
-                    // Fallback to downloading if browser doesn't support direct sharing
                     const link = document.createElement('a');
                     link.download = `Memo_${getTxnId(key)}.png`;
                     link.href = canvas.toDataURL("image/png");
@@ -723,12 +738,10 @@
             }, "image/png");
         };
 
-        // Replaced downloadMemoPDF with shareMemoPDF to allow direct PDF sharing
         window.shareMemoPDF = () => {
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
 
-            // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
             const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
@@ -741,12 +754,11 @@
             const originalBoxSizing = element.style.boxSizing;
             const originalBg = element.style.backgroundColor;
 
-            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
             element.style.width = '794px'; 
             element.style.height = '1122px';
             element.style.minHeight = '1122px';
             element.style.margin = '0';
-            element.style.padding = '40px'; // acts as margin wrapper inside HTML
+            element.style.padding = '40px'; 
             element.style.maxWidth = 'none';
             element.style.display = 'flex';
             element.style.flexDirection = 'column';
@@ -763,7 +775,6 @@
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
                 element.style.height = originalHeight;
                 element.style.margin = originalMargin;
@@ -789,7 +800,6 @@
                         console.log('Share action cancelled or failed', err); 
                     }
                 } else {
-                    // Fallback to standard download
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
                     link.download = opt.filename;
@@ -804,7 +814,6 @@
             const match = window.logsWithBalData.find(l => l.key === key);
             if(match) window.openMemoModal(match);
         };
-        // End Auto-Memo Features
 
         window.lookupTransaction = () => {
             const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
@@ -857,7 +866,6 @@
         window.exportLookupPDF = (key) => {
             const element = document.getElementById(`lookup-pdf-content-${key}`);
 
-            // Ensure original styling is safely stored
             const originalWidth = element.style.width;
             const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
@@ -870,7 +878,6 @@
             const originalBoxSizing = element.style.boxSizing;
             const originalBg = element.style.backgroundColor;
 
-            // Apply properties ensuring exact A4 proportion (1:1.414) and 1-page vertical alignment
             element.style.width = '794px'; 
             element.style.height = '1122px';
             element.style.minHeight = '1122px';
@@ -890,7 +897,6 @@
                 html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save().then(() => {
-                // Restore styling dynamically after capture completes
                 element.style.width = originalWidth;
                 element.style.height = originalHeight;
                 element.style.margin = originalMargin;
@@ -958,17 +964,17 @@
                         </div>
                     </div>`;
                 });
-                
+
                 document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
                 document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
-                
+
                 if (document.getElementById('all-staff-statement-list')) {
                     document.getElementById('all-staff-statement-list').innerHTML = statementH || '<p class="text-center py-10 text-xs text-slate-400">No records found</p>';
                 }
                 if (document.getElementById('all-staff-total-balance')) {
                     document.getElementById('all-staff-total-balance').innerText = fmt(totalStaffBalance);
                 }
-                
+
                 if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
             });
 
@@ -992,7 +998,7 @@
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
-            window.logsWithBalData = logsWithBal; // Store globally for Sharing
+            window.logsWithBalData = logsWithBal; 
 
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
@@ -1000,10 +1006,8 @@
 
             let logH = '', mLogH = '';
 
-            // Limit recent transactions array loop to 5 logs only
             [...logsWithBal].reverse().slice(0, 5).forEach((l, index) => {
                 let shareBtnHTML = '';
-                // Add Share button ONLY to the last 2 recent transactions 
                 if (index < 2) {
                     shareBtnHTML = `<button onclick="shareTransaction('${l.key}')" class="w-full mt-3 bg-blue-50 hover:bg-blue-100 text-blue-600 p-2.5 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors border border-blue-100"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>`;
                 }
@@ -1045,6 +1049,35 @@
             return new Date(d).toLocaleDateString('en-GB');
         };
 
+        window.exportAllStaffPDF = () => {
+            const element = document.getElementById('all-staff-pdf-wrapper');
+            const header = document.getElementById('all-staff-pdf-header');
+            const footer = document.getElementById('all-staff-pdf-footer');
+
+            header.classList.remove('hidden');
+            footer.classList.remove('hidden');
+            footer.classList.add('flex');
+            element.classList.add('p-6', 'bg-white');
+            
+            const now = new Date();
+            const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            const fName = `All_Staff_Statement_${dStr}.pdf`;
+
+            html2pdf().from(element).set({
+                margin: [5, 5, 5, 5], 
+                filename: fName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['.bg-white.p-4', '.bg-blue-600'] }
+            }).save().then(() => {
+                header.classList.add('hidden');
+                footer.classList.add('hidden');
+                footer.classList.remove('flex');
+                element.classList.remove('p-6', 'bg-white');
+            });
+        };
+
         window.generateReport = () => {
             const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
             let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
@@ -1059,7 +1092,6 @@
                 const staffKeys = Object.keys(staffData).sort();
                 const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
 
-                // Inject sleek DBBL bank style structural individual description layout block
                 metaHeader.innerHTML = `
                     <div class="grid grid-cols-2 gap-4 text-[10px]">
                         <div>
@@ -1075,7 +1107,6 @@
                 `;
                 metaHeader.classList.remove('hidden');
 
-                // Render dynamic header definition excluding the explicit Name row column block
                 tableHeader.innerHTML = `
                     <th class="border p-2 w-[40px]">SL</th>
                     <th class="border p-2 w-[80px]">Date</th>
@@ -1088,7 +1119,6 @@
                 metaHeader.classList.add('hidden');
                 metaHeader.innerHTML = '';
 
-                // Fallback structured dynamic header description including the explicit repeating Name node column block
                 tableHeader.innerHTML = `
                     <th class="border p-2 w-[40px]">SL</th>
                     <th class="border p-2 w-[80px]">Date</th>
@@ -1143,7 +1173,6 @@
             const element = document.getElementById('pdf-content');
             element.style.minWidth = "100%"; 
 
-            // Dynamic filename format based on selection
             let repName = "Abdullahil_Kuafi";
             const sid = document.getElementById('r-staff').value;
             if(sid && staffData[sid]) {
@@ -1160,7 +1189,7 @@
                 image: { type: 'jpeg', quality: 0.98 }, 
                 html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] } // Group summary rows to avoid breaking across pages
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] } 
             }).save().then(() => element.style.minWidth = "650px");
         };
 
