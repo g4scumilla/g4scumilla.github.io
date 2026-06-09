@@ -1,296 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions | Kafi Comilla Shop</title>
+    <style>
+        :root {
+            --primary: #059669; /* Emerald theme for e-commerce/retail trust */
+            --primary-hover: #047857;
+            --text-dark: #1e293b;
+            --text-light: #475569;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+        }
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#8b0000">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
 
-<style>
-:root { 
-    --g4s-red: #8b0000; 
-    --safe-top: env(safe-area-inset-top, 20px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding-bottom: calc(60px + var(--safe-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
-                url('https://www.transparenttextures.com/patterns/floral-paper.png');
-    background-size: auto;
-    background-attachment: fixed;
-}
+        .logo {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
 
-.header-section {
-    background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
-    height: 60px; 
-    padding-top: var(--safe-top);
-}
+        .logo span {
+            color: var(--text-dark);
+            font-weight: 400;
+        }
 
-.card-container { 
-    padding: 0 15px 20px; 
-    margin-top: -30px; 
-    position: relative;
-    z-index: 10;
-}
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
 
-.visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
-    color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-    position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
-    background-size: cover;
-}
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
 
-.visa-card::before {
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
-    width: 100%;
-    background: url('https://g4scumilla.github.io/Files/Img/logo.png');
-    background-size: 35%; 
-    background-repeat: no-repeat;
-    background-position: 15px center; 
-    opacity: 0.85; 
-    z-index: 1;
-    mask-image: linear-gradient(to right, black 30%, transparent 80%);
-    -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
-}
+        @media (min-width: 768px) {
+            .main-container {
+                grid-template-columns: 290px 1fr;
+            }
+        }
 
-.visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
-    z-index: 2;
-}
+        /* Sticky Sidebar Navigation */
+        .sidebar {
+            position: relative;
+        }
 
-.visa-card > * { position: relative; z-index: 3; }
+        .sidebar-nav {
+            position: sticky;
+            top: 6.5rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
 
-.service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px 40px;
-    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
-    min-height: 50vh; 
-}
+        .sidebar-nav h3 {
+            font-size: 0.815rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+        }
 
-.service-item {
-    text-decoration: none; color: #333;
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 10px; font-weight: 800;
-}
+        .sidebar-nav ul {
+            list-style: none;
+        }
 
-.icon-circle {
-    width: 46px; height: 46px; background: #fff; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
-    font-size: 19px; color: var(--g4s-red);
-    transition: transform 0.2s;
-}
+        .sidebar-nav li {
+            margin-bottom: 0.75rem;
+        }
 
-.service-item:active .icon-circle { transform: scale(0.9); }
+        .sidebar-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            transition: all 0.2s ease;
+        }
 
-.rotating { animation: rotate 1s linear; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .sidebar-nav a:hover {
+            color: var(--primary);
+            padding-left: 4px;
+        }
 
-.bottom-nav {
-    position: fixed; bottom: 0; width: 100%; background: white;
-    display: flex; justify-content: space-around;
-    padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 2000;
-}
+        /* Content Card Styles */
+        .content-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
 
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
-.nav-active { color: var(--g4s-red); }
+        .content-card h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            letter-spacing: -0.03em;
+        }
 
-@media (min-width: 768px) {
-    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
-}
-</style>
+        .subtitle {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1.5rem;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 6.5rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section p {
+            color: var(--text-light);
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        /* Grid Framework for Features/Policies */
+        .policy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (min-width: 640px) {
+            .policy-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .policy-item {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .policy-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        .policy-item span {
+            font-size: 0.925rem;
+            color: var(--text-light);
+            display: block;
+        }
+
+        /* Bullet List Configuration */
+        ul.styled-list {
+            list-style-type: none;
+            margin-left: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-light);
+            font-size: 0.975rem;
+        }
+
+        ul.styled-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Alert Callout Containers */
+        .callout-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            color: #166534;
+        }
+
+        .callout-box strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .callout-box p {
+            color: #166534;
+            font-size: 0.925rem;
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            margin-top: 5rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="header-section"></div>
+    <header>
+        <div class="header-container">
+            <div class="logo">kaficumilla<span>.shop</span></div>
+            <div class="last-updated">Effective Date: June 2026</div>
+        </div>
+    </header>
 
-<div class="card-container">
-    <div class="visa-card">
-        <div style="flex:1; display:flex; padding: 20px; position: relative;">
-            <div style="flex: 0.42;"></div>
-            <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
-                <div style="margin-bottom: 12px;">
-                    <div style="font-family: 'Lobster', cursive; font-size: 20px; color: #fff; letter-spacing: 0.5px; border-bottom: 2px solid var(--g4s-red); display: inline-block; padding-bottom: 2px;">Welcome to G4S</div>
-                    <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
+    <div class="main-container">
+        <!-- Sticky Left Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <h3>Agreement Scope</h3>
+                <ul>
+                    <li><a href="#accounts">1. User Accounts</a></li>
+                    <li><a href="#products">2. Products & Pricing</a></li>
+                    <li><a href="#payments">3. Payment Framework</a></li>
+                    <li><a href="#shipping">4. Fulfillment & Returns</a></li>
+                    <li><a href="#privacy">5. Data Privacy Choice</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Document Body -->
+        <main class="content-card">
+            <h1>Terms and Conditions</h1>
+            <p class="subtitle">Thank you for choosing kaficumilla.shop. These terms outline the rules, regulations, and protections governing your digital purchases and website interactions.</p>
+
+            <!-- Section 1 -->
+            <section id="accounts" class="content-section">
+                <h2>1. Account Registration & Responsibility</h2>
+                <p>To place orders or unlock personalized dashboard tools on kaficumilla.shop, you may be requested to establish a user profile. By generating an account, you explicitly agree to the following terms:</p>
+                <ul class="styled-list">
+                    <li>You must provide accurate, current, and exhaustive information during the registration pipeline.</li>
+                    <li>You hold full operational custody over your account username, secure password, and profile access vectors.</li>
+                    <li>Any transactional requests, balance mutations, or log operations initiated through your account profile are legally recognized as authorized directly by you.</li>
+                </ul>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="products" class="content-section">
+                <h2>2. Product Listings, Specifications & Accuracy</h2>
+                <p>We work tirelessly to display our catalog items with maximum graphical precision and informational fidelity. However, subtle stock variables can occur:</p>
+                <div class="policy-grid">
+                    <div class="policy-item">
+                        <strong>Pricing Adaptations</strong>
+                        <span>All published item values are open to adjustment without prior notification. Confirmed invoices locked before adjustments remain safe.</span>
+                    </div>
+                    <div class="policy-item">
+                        <strong>Availability Thresholds</strong>
+                        <span>Certain retail goods or regional specialties may feature restricted inventory thresholds. We reserve the absolute right to limit purchase counts per customer.</span>
+                    </div>
                 </div>
-                <div>
-                    <div style="font-family: 'Lobster', cursive; font-size: 14px; color: #ffeb3b; letter-spacing: 0.5px;">Secure Access</div>
-                    <div style="font-size: 7px; font-weight: 600; opacity: 0.9; line-height: 1.4; margin-top: 2px;">Professional internal resource hub.</div>
+                <p>In the rare event that an item is mistakenly cataloged with an incorrect unit price or faulty specification matrix, kaficumilla.shop maintains the right to cancel the pending transaction and issue an immediate financial adjustment.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="payments" class="content-section">
+                <h2>3. Secure Payment Framework</h2>
+                <p>We prioritize your financial safety. To streamline checkouts while maintaining security, kaficumilla.shop interfaces with trusted processing modules across Bangladesh:</p>
+                <ul class="styled-list">
+                    <li><strong>Mobile Financial Services (MFS):</strong> Secure wallet checkouts using instant bKash, Nagad, or Rocket gateway paths.</li>
+                    <li><strong>Cash on Delivery (COD):</strong> Physical currency handover processing upon local dispatch arrival at your verified address.</li>
+                </ul>
+                <div class="callout-box">
+                    <strong>Transaction Security Advisory:</strong> kaficumilla.shop administrators will never contact you via telephone or email links demanding your confidential personal wallet PINs, card CVVs, or OTP verification strings. Keep your authentication sequences completely private.
                 </div>
-            </div>
-        </div>
-        <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; font-weight: 800;">
-            <span style="font-family: 'Lobster', cursive; font-size: 11px; text-transform: none; letter-spacing: 0.5px;">
-                <i class="fa-solid fa-code"></i> 
-                <a href="https://g4scumilla.github.io/Projects/mydashboard/index" style="color: inherit; text-decoration: none;">Developed By: Abdullahil Kuafi</a>
-            </span>
-            <span id="live-clock" style="background: rgba(255,255,255,0.15); padding: 3px 12px; border-radius: 5px; font-family: 'Lobster', cursive; font-size: 10px; font-weight: bold; letter-spacing: 0.8px;">--:--:-- --</span>
-        </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="shipping" class="content-section">
+                <h2>4. Logistics Fulfillment & Return Policies</h2>
+                <p>Our logistical tracking pipelines ensure safe transport boundaries from our Comilla hub out to our regional customers across Bangladesh:</p>
+                <div class="policy-grid">
+                    <div class="policy-item">
+                        <strong>Delivery Target Horizons</strong>
+                        <span>Local shipping within Comilla is handled within 24–48 hours. Nationwide cross-district dispatches regularly reach transit finality inside 3–5 working days.</span>
+                    </div>
+                    <div class="policy-item">
+                        <strong>Claims & Return Windows</strong>
+                        <span>Should an item arrive with visible transport faults or mismatched specifications, reach out to our desk within 7 days of delivery to arrange an exchange or refund.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="privacy" class="content-section">
+                <h2>5. Data Privacy & Operational Guardrails</h2>
+                <p>We honor the privacy boundaries of our network community. Customer profiles, mailing addresses, mobile numbers, and log preferences are processed with strict care:</p>
+                <ul class="styled-list">
+                    <li>Your shared profile metrics are utilized purely to process order fulfillment, deliver shipping receipts, and optimize internal platform dashboard features.</li>
+                    <li>No third-party data distribution, leasing, or external advertisement sharing protocols are permitted within our system ecosystem.</li>
+                </ul>
+            </section>
+        </main>
     </div>
-</div>
 
-<div class="service-grid">
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
- 
-
-
-   <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-  
-
- 
- <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-   
-
-
-
-
- <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Sports</a>
-    
-
-
-
-<a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-   
-
-
-
- <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-   
-
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
-  
-
-
-
-  <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
-</div>
-
-<div class="bottom-nav">
-    
-
-
-
-
-<a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-
-
-
-
-
-
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
-</div>
-
-<script>
-    function updateClock() {
-        const now = new Date();
-        const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
-            clockEl.innerText = now.toLocaleTimeString([], { 
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-            });
-        }
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    function syncData(el) {
-        const icon = document.getElementById('sync-icon');
-        icon.classList.remove('rotating');
-        void icon.offsetWidth; 
-        icon.classList.add('rotating');
-    }
-</script>
+    <footer>
+        <p>&copy; 2026 kaficumilla.shop. All rights reserved. Safeguarding consumer choices with reliable retail standards.</p>
+    </footer>
 
 </body>
 </html>
