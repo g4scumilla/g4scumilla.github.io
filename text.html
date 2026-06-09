@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAP | Terms and Conditions</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --text-dark: #1f2937;
+            --text-light: #4b5563;
+            --bg-main: #f9fafb;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .main-container {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        /* Sticky Sidebar Navigation */
+        .sidebar {
+            position: relative;
+        }
+
+        .sidebar-nav {
+            position: sticky;
+            top: 6.5rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+        }
+
+        .sidebar-nav h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Content Styles */
+        .content-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 2rem;
+        }
+
+        .content-card h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .content-section {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 6.5rem; /* Offsets scroll position for sticky header */
+        }
+
+        .content-section h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .content-section p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .service-item {
+            background-color: #f3f4f6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .service-item strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .service-item span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        ul.styled-list {
+            list-style-type: none;
+            margin-left: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        ul.styled-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.25rem;
+            position: absolute;
+            left: 0;
+            top: -0.15rem;
+        }
+
+        .callout-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #166534;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">TAP</div>
+            <div class="last-updated">Last Updated: March 2026</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sticky Left Navigation for Desktop -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li><a href="#services">1. Services Offered</a></li>
+                    <li><a href="#registration">2. Registration & Account</a></li>
+                    <li><a href="#security">3. User Security Duties</a></li>
+                    <li><a href="#privacy">4. Personal Data & Privacy</a></li>
+                    <li><a href="#images">5. Image Collection Policy</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-card">
+            <h1>Terms and Conditions</h1>
+            <p style="margin-bottom: 2rem; font-style: italic;">Welcome to the TAP App System. Please read these terms carefully before utilizing our mobile financial platform.</p>
+
+            <!-- Section 1 -->
+            <section id="services" class="content-section">
+                <h2>1. Main Features & Services Offered</h2>
+                <p>The Application offers a wide range of mobile financial and transactional services conducted seamlessly between users of the TAP System, including the ability to perform:</p>
+                
+                <div class="services-grid">
+                    <div class="service-item">
+                        <strong>Airtime Recharge</strong>
+                        <span>Perform instant Flexiload top-ups for yourself or any other mobile number using your wallet balance. Save favorites for quick reuse.</span>
+                    </div>
+                    <div class="service-item">
+                        <strong>Utility Bill Pay</strong>
+                        <span>Pay utility bills through designated TAP Bill Pay Service Partners and verify your instant payment status dashboard.</span>
+                    </div>
+                    <div class="service-item">
+                        <strong>Send Money & Cash Out</strong>
+                        <span>Transfer balances instantly to any active TAP wallet or withdraw hard cash through authorized TAP agent points.</span>
+                    </div>
+                    <div class="service-item">
+                        <strong>Add Money</strong>
+                        <span>Load funds directly into your digital wallet from verified associated bank accounts or credit cards.</span>
+                    </div>
+                    <div class="service-item">
+                        <strong>Merchant & Tuition Payments</strong>
+                        <span>Scan dynamic QR codes to settle retail purchases, e-commerce checkouts, and institutional tuition fees securely.</span>
+                    </div>
+                    <div class="service-item">
+                        <strong>Account Dashboard Features</strong>
+                        <span>Check real-time balances, view transaction limits (count/amount), and track up to your last 50 historical statements.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="registration" class="content-section">
+                <h2>2. Registration and Account Setup</h2>
+                <p>To access the full spectrum of TAP Services, users are required to register their active mobile number, verify identity data, and initialize a unique secure wallet PIN.</p>
+                <ul class="styled-list">
+                    <li>Authentication relies on an automatic One-Time Password (OTP) validation framework captured natively by the system environment.</li>
+                    <li>Certain legacy devices or operating systems may require users to manually input the received OTP to complete the handshake.</li>
+                </ul>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="security" class="content-section">
+                <h2>3. User Security Duties</h2>
+                <p>Security is a shared responsibility. You must take all reasonable precautions to keep your physical mobile device safe and prevent fraudulent use of your active account profile:</p>
+                <ul class="styled-list">
+                    <li>Never write down, extract, or share your PIN/security details in a format readable by third parties.</li>
+                    <li>Avoid creating simple or easily guessable security credentials.</li>
+                    <li>Log out of the TAP application immediately when your tasks are finished; do not leave the active app loop processing in the background unattended.</li>
+                    <li>The user remains solely responsible for all programmatic operations authorized from their device between login and explicit logout.</li>
+                </ul>
+                <div class="callout-box">
+                    <strong>Critical System Warning:</strong> Due to the virtual nature of digital banking structures and external exposure to threat actors, inherent system risks exist. Do not disclose credentials to anyone claiming to represent Law Enforcement Agencies or TAP administration.
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="privacy" class="content-section">
+                <h2>4. Personal Data & Confidentiality</h2>
+                <p>For identity validation, compliance, and core utility processing, TAP collects and maintains strict confidentiality over essential personal data variables, including but not limited to:</p>
+                <ul class="styled-list">
+                    <li>Full legal name, gender, date of birth, and email profile address.</li>
+                    <li>National Identity (NID) database records, copy documents, or valid Driving License numbers.</li>
+                    <li>Account balance variations and user transaction histories.</li>
+                </ul>
+                <p>Adequate administrative safeguards are constantly deployed to insulate your records against unauthorized access vectors.</p>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="images" class="content-section">
+                <h2>5. Image Collection & Consent Policy</h2>
+                <p>TAP captures and processes image data from your device under specific interactive contexts to ensure regulatory compliance:</p>
+                <div class="service-item" style="margin-bottom: 1rem;">
+                    <strong>Identity Verification & Profile Imagery</strong>
+                    <span>Images are collected solely through direct action and user permission to populate your profile and confirm physical identity against official documents.</span>
+                </div>
+                <p>By interacting with the platform, you give explicit consent to image workflows. You retain the absolute right to opt out or withdraw image permissions at any point by establishing contact with our support desk.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Bdkepler & TAP Ltd. All rights reserved. Built with strict financial data confidentiality practices.</p>
+    </footer>
+
+</body>
+</html>
