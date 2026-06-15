@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Message Kuafi</title>
+    <meta charset="UTF-8">
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            max-width:600px;
+            margin:40px auto;
+            padding:20px;
+        }
+        input, textarea{
+            width:100%;
+            padding:10px;
+            margin:8px 0;
+            box-sizing:border-box;
+        }
+        button{
+            background:#007bff;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Send a Message to Kuafi</h1>
+
+<form action="https://formsubmit.co/themadkafi@gmail.com" method="POST">
+
+    <input type="hidden" name="_captcha" value="false">
+
+    <label>Your Name</label>
+    <input type="text" name="name" required>
+
+    <label>Your Email</label>
+    <input type="email" name="email" required>
+
+    <label>Message</label>
+    <textarea name="message" rows="6" required></textarea>
+
+    <button type="submit">Send Message</button>
+
+</form>
+
+</body>
+</html>
