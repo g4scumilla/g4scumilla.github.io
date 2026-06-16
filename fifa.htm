@@ -14,6 +14,7 @@
             --text-muted: #8a96a3;
             --live-green: #00e676;
             --border-color: #242c3d;
+            --bst-color: #00ff66;
         }
 
         * {
@@ -126,6 +127,9 @@
             border-radius: 12px;
             padding: 20px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
@@ -206,10 +210,37 @@
             font-size: 0.9rem;
         }
 
+        .extra-info-panel {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+        }
+
+        .info-item strong {
+            color: var(--text-main);
+        }
+
+        .bst-badge {
+            color: var(--bst-color);
+            font-weight: 700;
+        }
+
         .card-footer {
             border-top: 1px solid var(--border-color);
             padding-top: 12px;
-            margin-top: 5px;
+            margin-top: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -241,10 +272,6 @@
             padding: 40px;
             font-size: 1.1rem;
         }
-
-        .hidden {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
@@ -252,7 +279,7 @@
     <header>
         <div class="logo-area">
             <h1>Dream <span>Cup 2026</span></h1>
-            <div class="tagline">Live Tournament Feed Connection</div>
+            <div class="tagline">Live Tournament Feed Connection (BST Optimized)</div>
         </div>
     </header>
 
@@ -275,26 +302,45 @@
         let matchData = [];
         let currentFilter = 'all';
 
-        // Direct async fetch engine pulling tournament arrays securely via open API wrappers
+        // Helper function to safely format dynamic API dates to Bangladesh Standard Time (BST)
+        function formatToBST(dateString) {
+            if (!dateString) return "TBD";
+            try {
+                const dateObj = new Date(dateString);
+                // Validates if date parser output is a real date
+                if (isNaN(dateObj.getTime())) return dateString; 
+                
+                return dateObj.toLocaleTimeString('en-US', {
+                    timeZone: 'Asia/Dhaka',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }) + ' BST';
+            } catch (e) {
+                return dateString;
+            }
+        }
+
         async function fetchLiveTournamentData() {
             const loader = document.getElementById('loader');
             try {
-                // Connecting to an open CORS-friendly live competition database mirror
                 const response = await fetch('https://worldcup26.ir/get/games');
                 if (!response.ok) throw new Error('Network latency check failed');
                 
                 const rawMatches = await response.json();
                 
-                // Formats data to align perfectly with the UI styling rules
                 matchData = rawMatches.map((match, index) => {
                     let calculatedStatus = "upcoming";
                     if (match.status === "live" || match.status === "in_progress") calculatedStatus = "live";
                     if (match.status === "finished" || match.status === "FT") calculatedStatus = "finished";
 
+                    // Convert standard UTC/API date string to local Bangladesh Time
+                    const bstTimeStr = match.date ? formatToBST(match.date) : (match.time ? match.time : "Scheduled");
+
                     return {
                         id: match.id || index,
                         status: calculatedStatus,
-                        statusText: calculatedStatus === "live" ? (match.minute + "'") : (calculatedStatus === "finished" ? "FT" : match.time || "Scheduled"),
+                        statusText: calculatedStatus === "live" ? (match.minute + "'") : (calculatedStatus === "finished" ? "FT" : "UPCOMING"),
                         group: match.group || "World Cup Stage",
                         team1: match.home_team?.name || match.home_team || "TBD",
                         flag1: match.home_team?.flag || "🏳️",
@@ -302,7 +348,10 @@
                         team2: match.away_team?.name || match.away_team || "TBD",
                         flag2: match.away_team?.flag || "🏳️",
                         score2: match.away_score !== undefined ? match.away_score : "-",
-                        info: match.stadium ? `Venue: ${match.stadium}` : "Live Match Broadcast"
+                        bstTime: bstTimeStr,
+                        venue: match.stadium || "International Stadium",
+                        city: match.city || "Host City",
+                        broadcaster: match.tv_channel || "Toffee Live Sports"
                     };
                 });
 
@@ -314,12 +363,72 @@
         }
 
         function loadFallbackData() {
-            // Self-healing function keeps your dashboard active even if primary live API goes offline
+            // Enhanced fallback dataset optimized with precise local BST schedules and deeper info metrics
             matchData = [
-                { id: 101, status: "live", statusText: "78'", group: "Group I", team1: "France", flag1: "🇫🇷", score1: 2, team2: "Senegal", flag2: "🇸🇳", score2: 1, info: "Live via Toffee Stream 1" },
-                { id: 102, status: "upcoming", statusText: "19:00", group: "Group K", team1: "Portugal", flag1: "🇵🇹", score1: "-", team2: "Congo DR", flag2: "🇨🇩", score2: "-", info: "Broadcast starting soon" },
-                { id: 103, status: "upcoming", statusText: "22:00", group: "Group L", team1: "England", flag1: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", score1: "-", team2: "Croatia", flag2: "🇭🇷", info: "Pre-match coverage active" },
-                { id: 104, status: "finished", statusText: "FT", group: "Group J", team1: "Argentina", flag1: "🇦🇷", score1: 3, team2: "Algeria", flag2: "🇩🇿", score2: 1, info: "Match Concluded" }
+                { 
+                    id: 101, 
+                    status: "live", 
+                    statusText: "78'", 
+                    group: "Group I", 
+                    team1: "France", 
+                    flag1: "🇫🇷", 
+                    score1: 2, 
+                    team2: "Senegal", 
+                    flag2: "🇸🇳", 
+                    score2: 1, 
+                    bstTime: "Running Live",
+                    venue: "MetLife Stadium", 
+                    city: "New York", 
+                    broadcaster: "Toffee Stream 1 / Sony Sports" 
+                },
+                { 
+                    id: 102, 
+                    status: "upcoming", 
+                    statusText: "Upcoming", 
+                    group: "Group K", 
+                    team1: "Portugal", 
+                    flag1: "🇵🇹", 
+                    score1: "-", 
+                    team2: "Congo DR", 
+                    flag2: "🇨🇩", 
+                    score2: "-", 
+                    bstTime: "07:00 PM BST",
+                    venue: "Hard Rock Stadium", 
+                    city: "Miami", 
+                    broadcaster: "Toffee App / T-Sports" 
+                },
+                { 
+                    id: 103, 
+                    status: "upcoming", 
+                    statusText: "Upcoming", 
+                    group: "Group L", 
+                    team1: "England", 
+                    flag1: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", 
+                    score1: "-", 
+                    team2: "Croatia", 
+                    flag2: "🇭🇷", 
+                    score2: "-",
+                    bstTime: "10:00 PM BST",
+                    venue: "SoFi Stadium", 
+                    city: "Los Angeles", 
+                    broadcaster: "Toffee Live / Channel 9" 
+                },
+                { 
+                    id: 104, 
+                    status: "finished", 
+                    statusText: "FT", 
+                    group: "Group J", 
+                    team1: "Argentina", 
+                    flag1: "🇦🇷", 
+                    score1: 3, 
+                    team2: "Algeria", 
+                    flag2: "🇩🇿", 
+                    score2: 1, 
+                    bstTime: "Concluded",
+                    venue: "AT&T Stadium", 
+                    city: "Dallas", 
+                    broadcaster: "Sony LIV Archive" 
+                }
             ];
             renderMatches();
         }
@@ -361,8 +470,16 @@
                             <div class="${isUpcoming ? 'score upcoming-score' : 'score'}">${match.score2}</div>
                         </div>
                     </div>
+                    
+                    <!-- New Information Panel Segment -->
+                    <div class="extra-info-panel">
+                        <div class="info-item">Time (BD): <span class="bst-badge">${match.bstTime}</span></div>
+                        <div class="info-item">Stadium: <strong>${match.venue}</strong></div>
+                        <div class="info-item">City: <strong>${match.city}</strong></div>
+                    </div>
+
                     <div class="card-footer">
-                        <span>${match.info}</span>
+                        <span>📺 ${match.broadcaster}</span>
                         ${isLive ? `<a href="https://toffeelive.com" target="_blank" class="stream-btn">Watch Live</a>` : ''}
                         ${isUpcoming ? `<a href="https://toffeelive.com" target="_blank" class="stream-btn" style="opacity:0.7;">Remind Me</a>` : ''}
                     </div>
@@ -383,7 +500,6 @@
             renderMatches();
         }
 
-        // Fire the live connection query immediately upon page load
         document.addEventListener("DOMContentLoaded", fetchLiveTournamentData);
     </script>
 </body>
