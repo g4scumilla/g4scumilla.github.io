@@ -3,186 +3,1389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G4S Vault & Cash Manager</title>
-    <!-- Tailwind CSS -->
+    <title>Imprest Account | G4S Cumilla Branch </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Added html2canvas for image generation and sharing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #05a04e; 
+            color: #1a231e; 
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 3D Sphere Background Wallpaper matching image */
+        .wallpaper-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 20%, #0cb85d 0%, #048842 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        /* Top Right Blue Orb */
+        .orb-blue {
+            top: -80px;
+            right: -40px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle at 35% 30%, #3faaff, #005bbd, #002d75);
+            box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Large Center Sphere */
+        .orb-center {
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle at 35% 30%, #f0f7fa 0%, #b3cddb 45%, #59798e 80%, #2c4250 100%);
+            box-shadow: inset -15px -15px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Bottom Right Orange Orb */
+        .orb-orange {
+            bottom: 15%;
+            right: -60px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle at 35% 30%, #ffc83b, #ff5500, #b82000);
+            box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Bottom Left Pink Orb */
+        .orb-pink {
+            bottom: -80px;
+            left: -60px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle at 35% 30%, #ffe3e8, #ff9eb0, #d95b72, #8c2337);
+            box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Small Red Orbs */
+        .orb-red-1 {
+            top: 22%;
+            left: -35px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 35% 30%, #ff5252, #cc0000, #730000);
+            box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .orb-red-2 {
+            bottom: 0%;
+            right: 18%;
+            width: 130px;
+            height: 130px;
+            background: radial-gradient(circle at 35% 30%, #ff4d4d, #d90000, #7a0000);
+            box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
+        .page.active { display: block !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI Theme Glass Overrides */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            background: rgba(242, 248, 238, 0.92) !important; 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.6) !important; 
+            z-index: 50; 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 12px 0 25px 0; 
+        }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(10, 25, 18, 0.6); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; }
+        .modal.active { display: flex; }
+        .modal-content { 
+            background: rgba(245, 249, 243, 0.95) !important; 
+            backdrop-filter: blur(20px);
+            width: 100%; 
+            border-top-left-radius: 32px; 
+            border-top-right-radius: 32px; 
+            padding: 24px; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+            border-top: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .nexus-card { 
+            background: rgba(242, 248, 238, 0.92); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+            border: 1px solid rgba(255, 255, 255, 0.7); 
+            overflow: hidden; 
+            margin-bottom: 16px; 
+        }
+
+        .bg-white {
+            background-color: rgba(242, 248, 238, 0.92) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .bg-slate-50, .bg-slate-100 {
+            background-color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        .nexus-header { background-color: rgba(254, 226, 226, 0.85); padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(254, 205, 211, 0.8); }
+        .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
+        .nexus-body { padding: 12px; }
+        .nexus-row { display: flex; font-size: 11px; padding: 6px 0; align-items: flex-start; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .nexus-row:last-child { border-bottom: none; }
+        .nexus-key { width: 105px; color: #475569; font-weight: 600; flex-shrink: 0; }
+        .nexus-val { flex: 1; color: #0f172a; font-weight: 700; }
+        .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid rgba(0,0,0,0.04); }
+        .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
+        .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        /* Search results styling */
+        .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
+        .search-item:active { background: rgba(226, 232, 240, 0.8); border-left-color: #2563eb; }
+
+        /* Prevent Table Rows From Breaking in PDF */
+        tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+        /* Prevent Summary Elements From Breaking in PDF */
+        .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+        /* ========================================= */
+        /* DESKTOP MODE POLISH & OPTIMIZATION        */
+        /* ========================================= */
+        @media (min-width: 768px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                background-attachment: fixed;
+                overflow-y: auto;
+            }
+            /* Centers the app and simulates a floating app widget */
+            .page {
+                width: 100%;
+                max-width: 600px;
+                margin: 40px auto 100px auto !important; 
+                border-radius: 32px !important;
+                background: rgba(255, 255, 255, 0.25) !important;
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(255,255,255,0.4);
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+                min-height: calc(100vh - 140px);
+                padding-bottom: 40px !important;
+            }
+            #login-page {
+                min-height: auto;
+                margin-top: 10vh !important;
+            }
+            .bottom-nav {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 32px 32px 0 0;
+                border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+                border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            }
+            .modal {
+                align-items: center; /* Center horizontally and vertically */
+            }
+            .modal-content {
+                max-width: 600px;
+                border-radius: 32px !important;
+                margin: 0 auto;
+                border: 1px solid rgba(255,255,255,0.6);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            }
+            /* Customized Scrollbar for Desktop */
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.8);
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 min-h-screen text-slate-100 p-4 sm:p-8 relative overflow-x-hidden">
+<body>
 
-    <!-- Ambient Background Lighting -->
-    <div class="fixed -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="fixed -bottom-40 -right-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Dynamic 3D Wallpaper Layer -->
+    <div class="wallpaper-bg">
+        <div class="orb orb-blue"></div>
+        <div class="orb orb-center"></div>
+        <div class="orb orb-orange"></div>
+        <div class="orb orb-pink"></div>
+        <div class="orb orb-red-1"></div>
+        <div class="orb orb-red-2"></div>
+    </div>
 
-    <main class="max-w-4xl mx-auto">
-        <!-- Dashboard Header -->
-        <header class="flex justify-between items-center mb-8">
+    <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-page" class="page flex-col items-center justify-center p-6">
+        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
+            <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
+            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
+            <div class="relative mb-4">
+                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
+            </div>
+            <div class="relative mb-8">
+                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="password" type="password" placeholder="Password" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
+            </div>
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-page" class="page p-5 pb-24">
+        <div class="flex justify-between items-center mb-6 mt-2">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center gap-2 justify-center text-emerald-400">
-                    <i class="fa-solid fa-vault text-lg"></i>
-                </div>
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa-solid fa-user-gear"></i></div>
                 <div>
-                    <h1 class="text-xl font-black text-white tracking-tight">G4S Financial Vault</h1>
-                    <p class="text-xs font-semibold text-emerald-400/80">Active Cash Account Overview</p>
+                    <p class="text-[10px] text-slate-600 font-bold uppercase">System Operator</p>
+                    <h1 class="text-lg font-bold text-slate-900" id="user-display">Administrator</h1>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <label for="currency-select" class="text-xs font-bold text-slate-400 uppercase hidden sm:block">Currency:</label>
-                <select id="currency-select" class="bg-slate-800/80 text-xs font-bold text-emerald-300 border border-emerald-500/30 rounded-xl px-3 py-2 outline-none focus:border-emerald-400 transition-all backdrop-blur-md">
-                    <option value="BDT" selected>BDT (৳)</option>
-                    <option value="USD">USD ($)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="GBP">GBP (£)</option>
-                </select>
-            </div>
-        </header>
-
-        <!-- MERGED DUAL CARD SECTION -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-
-            <!-- Card Option 1: Premium Emerald & Gold -->
-            <div class="w-full bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-950 rounded-[28px] p-6 shadow-2xl relative overflow-hidden text-white border border-emerald-500/30 backdrop-blur-xl">
-                <!-- Ambient Decorative Glows -->
-                <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-400/20 rounded-full blur-2xl"></div>
-                <div class="absolute -left-8 -bottom-8 w-36 h-36 bg-amber-400/15 rounded-full blur-2xl"></div>
-                
-                <div class="flex justify-between items-center mb-4 relative z-10">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
-                        <span class="text-[9px] font-black tracking-widest text-emerald-200 uppercase">Main Cash Account</span>
-                    </div>
-                    <span class="text-[8px] font-black bg-emerald-500/20 px-2.5 py-1 rounded-full text-emerald-300 border border-emerald-400/30 uppercase tracking-wider backdrop-blur-md">Vault Active</span>
-                </div>
-
-                <div class="my-3 text-center relative z-10">
-                    <p class="text-[9px] font-extrabold text-emerald-300/80 uppercase tracking-widest mb-1">Available Balance</p>
-                    <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
-                </div>
-
-                <div class="mt-5 flex justify-between items-center pt-3 border-t border-emerald-500/20 text-[9px] relative z-10">
-                    <div class="flex items-center gap-1.5 text-emerald-200/70 font-bold uppercase">
-                        <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
-                        <span>Secure Account</span>
-                    </div>
-                    <p class="font-bold text-emerald-200/80">Currency: <span id="card-curr-label" class="text-amber-300 font-black">BDT</span></p>
-                </div>
-            </div>
-
-            <!-- Card Option 2: Frosted Cyan & Glass -->
-            <div class="w-full bg-gradient-to-br from-white/90 via-emerald-50/80 to-teal-100/90 rounded-[28px] p-6 shadow-xl relative overflow-hidden text-slate-800 border border-white/80 backdrop-blur-2xl">
-                <!-- Ambient Decorative Glows -->
-                <div class="absolute -right-6 -top-6 w-28 h-28 bg-teal-400/20 rounded-full blur-xl"></div>
-                <div class="absolute -left-6 -bottom-6 w-28 h-28 bg-emerald-500/20 rounded-full blur-xl"></div>
-
-                <div class="flex justify-between items-center mb-4 relative z-10">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.6)]"></span>
-                        <span class="text-[9px] font-black tracking-widest text-teal-800 uppercase">Main Cash Account</span>
-                    </div>
-                    <span class="text-[8px] font-bold bg-teal-600 text-white px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">Active</span>
-                </div>
-
-                <div class="my-3 text-center relative z-10">
-                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Available Balance</p>
-                    <h2 class="text-3xl font-black tracking-tight text-slate-900" id="cb-display-2">0.00</h2>
-                </div>
-
-                <div class="mt-4 flex justify-between items-center pt-3 border-t border-slate-200/80 text-[9px] relative z-10">
-                    <span class="font-bold text-slate-500 uppercase flex items-center gap-1">
-                        <i class="fa-solid fa-lock text-teal-600"></i> Vault Protected
-                    </span>
-                    <p class="font-bold text-slate-600">Currency: <span id="card-curr-label-2" class="text-teal-700 font-black">BDT</span></p>
-                </div>
-            </div>
-
+            <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- Interactive Quick Actions & Deposit Panel -->
-        <section class="bg-slate-900/60 border border-slate-800 rounded-[28px] p-6 backdrop-blur-md mb-8">
-            <h3 class="text-sm font-extrabold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-sliders text-emerald-400"></i> Quick Actions
-            </h3>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 mb-2">Amount</label>
-                    <div class="relative">
-                        <input type="number" id="amount-input" placeholder="Enter amount..." class="w-full bg-slate-800/90 border border-slate-700 rounded-2xl px-4 py-3 text-sm font-bold text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400 transition-all">
+        <!-- Stylish Debit/Balance Card -->
+        <div class="flex justify-center mb-8 group perspective">
+            <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
+                <!-- Glassmorphic Accents -->
+                <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+                
+                <!-- Top Header -->
+                <div class="flex justify-between items-start z-10">
+                    <div>
+                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
+                            <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
+                        </div>
+                    </div>
+                    <!-- Card Network / Contactless -->
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
+                        <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
                     </div>
                 </div>
 
-                <div class="flex gap-3 items-end">
-                    <button id="btn-deposit" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs uppercase tracking-wider py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-900/30 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Deposit
-                    </button>
-                    <button id="btn-withdraw" class="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-rose-400 font-extrabold text-xs uppercase tracking-wider py-3.5 px-4 rounded-2xl transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-minus"></i> Withdraw
-                    </button>
+                <!-- EMV Chip -->
+                <div class="z-10 mt-1">
+                    <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm flex items-center justify-center border border-yellow-300/30 relative overflow-hidden">
+                        <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
+                            <path d="M0 10h40v2H0zM0 20h40v2H0zM10 0v40h2V0zM30 0v40h2V0z" fill="#000" fill-rule="evenodd"/>
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Area -->
+                <div class="z-10 mt-2">
+                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
+                        <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
+                    </div>
+                </div>
+
+                <!-- Cardholder & Details -->
+                <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
+                    <div>
+                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
+                        <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">System Operator</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Valid Thru</p>
+                        <p class="text-[11px] font-bold text-slate-200 tracking-wider font-mono">12/28</p>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
 
-    <!-- JavaScript to keep both cards synchronized -->
-    <script>
-        let currentBalance = 0.00;
+        <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white">
+            <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
+                <i class="fa-solid fa-calendar-day text-blue-600"></i>
+                <span id="month-label">May 2026</span>
+            </h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="nexus-card !mb-0 text-center shadow-sm">
+                    <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
+                        <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
+                    </div>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
+                    </div>
+                </div>
+                <div class="nexus-card !mb-0 text-center shadow-sm">
+                    <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
+                        <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
+                    </div>
+                    <div class="nexus-body !p-3">
+                        <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const cbDisplay1 = document.getElementById('cb-display');
-        const cbDisplay2 = document.getElementById('cb-display-2');
-        const cardCurrLabel1 = document.getElementById('card-curr-label');
-        const cardCurrLabel2 = document.getElementById('card-curr-label-2');
-        const currencySelect = document.getElementById('currency-select');
-        const amountInput = document.getElementById('amount-input');
-        const btnDeposit = document.getElementById('btn-deposit');
-        const btnWithdraw = document.getElementById('btn-withdraw');
+        <h3 class="font-bold text-slate-900 mb-4 px-1 flex items-center gap-2 uppercase text-xs tracking-wide">
+            <i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Recent Transactions
+        </h3>
+        <div id="recent-logs" class="space-y-4"></div>
+    </div>
 
-        function updateBalanceDisplays() {
-            const formatted = currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if (cbDisplay1) cbDisplay1.textContent = formatted;
-            if (cbDisplay2) cbDisplay2.textContent = formatted;
-        }
+    <!-- NEW ENTRY PAGE -->
+    <div id="entry-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-6 mt-2">
+            <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-slate-900">Post Transaction</h2>
+        </div>
 
-        function updateCurrencyDisplays(curr) {
-            if (cardCurrLabel1) cardCurrLabel1.textContent = curr;
-            if (cardCurrLabel2) cardCurrLabel2.textContent = curr;
-        }
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
+            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Select Personnel</p>
 
-        currencySelect.addEventListener('change', (e) => {
-            updateCurrencyDisplays(e.target.value);
-        });
+            <!-- Search Bar -->
+            <div class="relative mb-4">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input id="staff-search" type="text" placeholder="Search by name, ID or post..." 
+                       oninput="filterStaffSearch()"
+                       class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
+            </div>
 
-        btnDeposit.addEventListener('click', () => {
-            const val = parseFloat(amountInput.value);
-            if (!isNaN(val) && val > 0) {
-                currentBalance += val;
-                updateBalanceDisplays();
-                amountInput.value = '';
+            <!-- Search Results Dropdown -->
+            <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
+
+            <!-- Selected Personnel Display -->
+            <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p id="sel-name" class="text-xs font-black text-blue-800"></p>
+                    <p id="sel-id" class="text-[9px] font-bold text-blue-400 uppercase tracking-tighter"></p>
+                </div>
+                <input type="hidden" id="m-staff-id">
+                <button onclick="clearSelection()" class="text-blue-300 hover:text-blue-500"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
+            </div>
+
+            <div class="relative mb-4">
+                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
+                <p class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 uppercase">Amount</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
+                    <option>Advance</option><option>Voucher</option><option>Return</option><option>Others</option>
+                </select>
+                <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
+            </div>
+
+            <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
+
+            <div class="flex gap-3 mb-6">
+                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">Cash In</span></button>
+                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">Cash Out</span></button>
+            </div>
+
+            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
+        </div>
+    </div>
+
+    <!-- STAFF ACCOUNTS PAGE -->
+    <div id="users-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-8 mt-2">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
+            <div>
+                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Directory</p>
+                <h2 class="text-lg font-bold text-slate-900">Staff Accounts</h2>
+            </div>
+        </div>
+        <div id="staff-list" class="space-y-4"></div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div id="settings-page" class="page p-5 pb-24">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
+        <div class="space-y-4">
+            <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
+                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </button>
+            <button onclick="showPage('trxid-lookup-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-search text-blue-600"></i> TRXID Lookup</span>
+                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </button>
+            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
+                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </button>
+            <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
+                <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
+                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </button>
+            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
+        </div>
+    </div>
+
+    <!-- TRXID LOOKUP PAGE -->
+    <div id="trxid-lookup-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold text-slate-900">TRXID Lookup</h2>
+            </div>
+        </div>
+        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6">
+            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Enter Transaction ID</p>
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
+            </div>
+        </div>
+        <div id="lookup-results" class="space-y-4"></div>
+    </div>
+
+    <!-- STAFF MANAGEMENT PAGE -->
+    <div id="staff-mgmt-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-slate-900">Manage Staff</h2>
+                </div>
+                <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">+ Add New</button>
+            </div>
+        </div>
+
+        <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-bold text-slate-500 uppercase mb-2">Registration Form</p>
+            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-phone" type="tel" placeholder="Phone Number" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
+            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-xs uppercase mt-2">Register Staff</button>
+        </div>
+
+        <div id="mgmt-staff-list" class="space-y-4"></div>
+    </div>
+
+    <!-- TRANSACTION HISTORY PAGE -->
+    <div id="history-page" class="page p-5 pb-24">
+        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
+            <div class="flex items-center gap-3">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-bold text-slate-900">Transaction History</h2>
+            </div>
+        </div>
+        <div id="mgmt-txn-list" class="space-y-4"></div>
+    </div>
+
+    <!-- REPORTS PAGE -->
+    <div id="reports-page" class="page p-5 pb-24">
+        <div class="flex items-center gap-3 mb-6">
+            <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-slate-900">Ledger Reports</h2>
+        </div>
+        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
+                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
+                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Select Personnel</p>
+                <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
+                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
+            </div>
+        </div>
+        <div id="report-view" class="hidden">
+            <div class="report-scroll-container">
+                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative">
+                    <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                    <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                    <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+
+                    <!-- Dynamic DBBL Bank style Individual Statement Meta Header Container -->
+                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
+
+                    <table class="w-full border-collapse border border-slate-200">
+                        <thead>
+                            <tr class="bg-slate-100 text-[8px]" id="report-table-header">
+                                <!-- Generated Dynamically based on scope selection -->
+                            </tr>
+                        </thead>
+                        <tbody id="report-body"></tbody>
+                    </table>
+
+                    <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+
+                    <!-- Watermark-style footer at the end of report -->
+                    <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
+                        <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
+                        <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT STAFF MODAL -->
+    <div id="edit-staff-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex items-center gap-2 mb-6 text-slate-500"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Edit Staff Profile</p></div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Full Name</p>
+                    <input id="edit-u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                </div>
+                <div>
+                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Designation</p>
+                    <input id="edit-u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Phone</p>
+                        <input id="edit-u-phone" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                    </div>
+                    <div>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Email</p>
+                        <input id="edit-u-email" type="email" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                    </div>
+                </div>
+            </div>
+            <button onclick="updateStaff()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 mt-8 shadow-lg shadow-blue-100"><i class="fa-solid fa-check-circle"></i> Save Changes</button>
+            <button onclick="closeModal('edit-staff-modal')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase">Cancel</button>
+        </div>
+    </div>
+
+    <!-- TRANSACTION MEMO MODAL (Added Feature) -->
+    <div id="memo-modal" class="modal">
+        <div class="modal-content !p-0 flex flex-col !overflow-hidden">
+            <!-- Sticky Header -->
+            <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 z-20">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
+                <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="memo-content-container"></div>
+            </div>
+
+            <!-- Sticky Footer with newly added Skip Share button -->
+            <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
+                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
+                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
+                <button onclick="closeModal('memo-modal')" class="flex-1 bg-slate-200 text-slate-700 py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-sm hover:bg-slate-300 transition-colors"><i class="fa-solid fa-forward"></i> Skip Share</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav id="navbar" class="bottom-nav hidden">
+        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
+        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
+            authDomain: "myfinanceapp-e0be3.firebaseapp.com",
+            databaseURL: "https://myfinanceapp-e0be3-default-rtdb.firebaseio.com",
+            projectId: "myfinanceapp-e0be3",
+            storageBucket: "myfinanceapp-e0be3.firebasestorage.app",
+            messagingSenderId: "335278709493",
+            appId: "1:335278709493:web:ec6e0994ce2b07ffd103bc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        let currentType = 'expense';
+        let staffData = {};
+        let logsList = [];
+        let currFormat = 'bdt';
+        let editingStaffId = null;
+
+        window.logsWithBalData = []; // Store globally for sharing latest entries
+
+        const fmt = (num) => {
+            const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
+            if(currFormat === 'usd') return num < 0 ? `($${val})` : `$${val}`;
+            return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
+        };
+
+        // Alphanumeric Transaction ID Formatter (G4SXXXXXX)
+        const getTxnId = (key) => {
+            if (!key) return "G4S000000";
+            const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            return `G4S${clean.slice(-6).padStart(6, '0')}`;
+        };
+
+        // Dhaka Date Helper Functions
+        const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+
+        const getDhakaDate = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+
+        const getDhakaFirstOfMonth = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+        };
+
+        const getDhakaMonthLabel = () => {
+            const d = getDhakaDateObj();
+            return d.toLocaleString('default', { month: 'long', year: 'numeric' });
+        };
+
+        const getDhakaMonthKey = () => {
+            const d = getDhakaDateObj();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            document.getElementById('auth-guard').style.display = 'none';
+            if (user) {
+                showPage('dashboard-page');
+                document.getElementById('navbar').classList.remove('hidden');
+                document.getElementById('user-display').innerText = user.email.split('@')[0];
+
+                // Auto Specific Dates (Dhaka Time)
+                document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
+                document.getElementById('r-end').value = getDhakaDate();
+                document.getElementById('m-date').value = getDhakaDate();
+
+                startSync(user.uid);
+            } else {
+                showPage('login-page');
+                document.getElementById('navbar').classList.add('hidden');
             }
         });
 
-        btnWithdraw.addEventListener('click', () => {
-            const val = parseFloat(amountInput.value);
-            if (!isNaN(val) && val > 0) {
-                if (val <= currentBalance) {
-                    currentBalance -= val;
-                    updateBalanceDisplays();
-                    amountInput.value = '';
-                } else {
-                    alert('Insufficient balance!');
+        window.handleLogin = () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
+        };
+
+        window.handleLogout = () => signOut(auth);
+        window.showPage = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'entry-page') {
+                document.getElementById('m-date').value = getDhakaDate();
+            }
+        };
+        window.openModal = (id) => {
+            document.getElementById(id).classList.add('active');
+        };
+        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
+        window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
+
+        window.filterStaffSearch = () => {
+            const val = document.getElementById('staff-search').value.toLowerCase();
+            const res = document.getElementById('search-results');
+            if(!val) { res.classList.add('hidden'); return; }
+
+            const staffKeys = Object.keys(staffData).sort();
+            let html = '';
+            Object.keys(staffData).forEach(id => {
+                const u = staffData[id];
+                const gid = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                const matchString = `${u.name} ${gid} ${u.desig}`.toLowerCase();
+
+                if(matchString.includes(val)) {
+                    html += `<div onclick="selectStaff('${id}', '${u.name}', '${gid}')" class="search-item p-3 border-b border-slate-50 last:border-0 cursor-pointer">
+                        <p class="text-[11px] font-bold text-slate-700 uppercase">${u.name}</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tight">${gid} | ${u.desig}</p>
+                    </div>`;
                 }
-            }
-        });
+            });
+            res.innerHTML = html || '<p class="p-4 text-center text-[10px] text-slate-400 font-bold uppercase">No Personnel Found</p>';
+            res.classList.remove('hidden');
+        };
 
-        // Initial setup
-        updateBalanceDisplays();
+        window.selectStaff = (id, name, gid) => {
+            document.getElementById('m-staff-id').value = id;
+            document.getElementById('sel-name').innerText = name;
+            document.getElementById('sel-id').innerText = gid;
+            document.getElementById('selected-staff-view').classList.remove('hidden');
+            document.getElementById('search-results').classList.add('hidden');
+            document.getElementById('staff-search').value = '';
+        };
+
+        window.clearSelection = () => {
+            document.getElementById('m-staff-id').value = '';
+            document.getElementById('selected-staff-view').classList.add('hidden');
+        };
+
+        window.saveUser = () => {
+            const name = document.getElementById('u-name').value;
+            const des = document.getElementById('u-des').value;
+            const phone = document.getElementById('u-phone').value;
+            const email = document.getElementById('u-email').value;
+            if(!name) return alert("Name is required");
+            push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
+                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A', balance: 0 
+            });
+            document.getElementById('add-staff-form').classList.add('hidden');
+            ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(id => document.getElementById(id).value = '');
+        };
+
+        window.editUser = (id) => {
+            editingStaffId = id;
+            const u = staffData[id];
+            document.getElementById('edit-u-name').value = u.name;
+            document.getElementById('edit-u-des').value = u.desig;
+            document.getElementById('edit-u-phone').value = u.phone;
+            document.getElementById('edit-u-email').value = u.email;
+            openModal('edit-staff-modal');
+        };
+
+        window.updateStaff = () => {
+            if(!editingStaffId) return;
+            const name = document.getElementById('edit-u-name').value;
+            const des = document.getElementById('edit-u-des').value;
+            const phone = document.getElementById('edit-u-phone').value;
+            const email = document.getElementById('edit-u-email').value;
+
+            if(!name) return alert("Name is required");
+
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${editingStaffId}`), {
+                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A'
+            }).then(() => {
+                closeModal('edit-staff-modal');
+                editingStaffId = null;
+            });
+        };
+
+        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
+
+        window.delTxn = (tid, sid, amt, type) => {
+            if(confirm("Remove this transaction?")) {
+                const staff = staffData[sid];
+                if(staff) {
+                    const newBal = type === 'income' ? (Number(staff.balance || 0) - Number(amt)) : (Number(staff.balance || 0) + Number(amt));
+                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+                }
+                remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
+            }
+        };
+
+        window.postTxn = () => {
+            const sid = document.getElementById('m-staff-id').value;
+            const amt = Number(document.getElementById('m-amt').value);
+            const date = document.getElementById('m-date').value;
+            if(!sid || !amt || !date) return alert("Select staff and fill all fields");
+            const staff = staffData[sid];
+            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
+
+            // Push creates the ref synchronously to give us a unique key instantly
+            const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
+                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
+                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
+            });
+            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
+
+            // Generate Memo Data for automated opening
+            const txnDataForMemo = {
+                key: newTxnRef.key,
+                staffId: sid,
+                staffName: staff.name,
+                amount: amt,
+                type: currentType,
+                date: date,
+                cat: document.getElementById('m-cat').value,
+                note: document.getElementById('m-note').value,
+                ts: Date.now(),
+                sb: newBal // Closing / Last balance
+            };
+
+            clearSelection();
+            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
+            showPage('dashboard-page');
+
+            // Open auto memo displaying the transaction
+            window.openMemoModal(txnDataForMemo);
+        };
+
+        // Added functionality for Auto-Memo and Direct Sharing 
+        window.currentMemoData = null;
+        window.openMemoModal = (data) => {
+            window.currentMemoData = data;
+            const staffKeys = Object.keys(staffData).sort();
+            const u = staffData[data.staffId];
+            const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
+            const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
+
+            // Sequence Tracking: Find the contextual last transaction preceding this entry
+            const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
+            const currentIdx = staffLogs.findIndex(l => l.key === data.key);
+            const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
+            const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
+
+            const html = `
+                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
+                    <div class="text-center mb-6 mt-2">
+                        <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                        <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                        <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
+                        </div>
+                    </div>
+                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
+                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
+                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('memo-content-container').innerHTML = html;
+            openModal('memo-modal');
+        };
+
+        window.shareMemoImage = async () => {
+            const key = window.currentMemoData.key;
+            const element = document.getElementById('memo-pdf-content');
+            const originalWidth = element.style.width;
+            const originalMargin = element.style.margin;
+
+            // Lock dimensions for standard image sharing export mapping
+            element.style.width = '600px'; 
+            element.style.margin = '0 auto';
+            element.style.maxWidth = 'none';
+
+            const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
+
+            // Restore visual styles in DOM
+            element.style.width = originalWidth;
+            element.style.margin = originalMargin;
+            element.style.maxWidth = '';
+
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], `Memo_${getTxnId(key)}.png`, { type: "image/png" });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: `Transaction Memo ${getTxnId(key)}`,
+                            text: `Last Transaction Update for ${window.currentMemoData.staffName}`
+                        });
+                    } catch (err) { console.log('Share action cancelled or failed', err); }
+                } else {
+                    // Fallback to downloading if browser doesn't support direct sharing
+                    const link = document.createElement('a');
+                    link.download = `Memo_${getTxnId(key)}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                }
+            }, "image/png");
+        };
+
+        // Replaced downloadMemoPDF with shareMemoPDF to allow direct PDF sharing
+        window.shareMemoPDF = () => {
+            const key = window.currentMemoData.key;
+            const element = document.getElementById('memo-pdf-content');
+
+            // Backup styling before transforming for A4 perfect centering
+            const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
+            const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
+
+            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
+            element.style.width = '794px'; 
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px'; // acts as margin wrapper inside HTML
+            element.style.maxWidth = 'none';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
+
+            const opt = {
+                margin: 0,
+                filename: `Memo_${getTxnId(key)}.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
+                // Restore visual styles dynamically in DOM
+                element.style.width = originalWidth;
+                element.style.height = originalHeight;
+                element.style.margin = originalMargin;
+                element.style.padding = originalPadding;
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
+
+                const file = new File([blob], opt.filename, { type: "application/pdf" });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: `Transaction Memo ${getTxnId(key)}`,
+                            text: `Transaction Memo PDF for ${window.currentMemoData.staffName}`
+                        });
+                    } catch (err) { 
+                        console.log('Share action cancelled or failed', err); 
+                    }
+                } else {
+                    // Fallback to standard download
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = opt.filename;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                }
+            });
+        };
+
+        window.shareTransaction = (key) => {
+            if(!window.logsWithBalData) return;
+            const match = window.logsWithBalData.find(l => l.key === key);
+            if(match) window.openMemoModal(match);
+        };
+        // End Auto-Memo Features
+
+        window.lookupTransaction = () => {
+            const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
+            const container = document.getElementById('lookup-results');
+            if(!val) { container.innerHTML = ''; return; }
+
+            const match = logsList.find(l => getTxnId(l.key) === val);
+            if(match) {
+                const staffKeys = Object.keys(staffData).sort();
+                const u = staffData[match.staffId];
+                const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(match.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
+                const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
+
+                container.innerHTML = `
+                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
+                    <div class="text-center mb-6 mt-2">
+                        <h1 class="text-center font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                        <p class="text-center font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                        <p class="text-center font-bold text-slate-500 mb-2 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                        </div>
+                    </div>
+                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4">
+                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
+                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    </div>
+                </div>
+                <button onclick="exportLookupPDF('${match.key}')" class="w-full mt-4 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF Receipt</button>
+                `;
+            } else {
+                container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
+            }
+        };
+
+        window.exportLookupPDF = (key) => {
+            const element = document.getElementById(`lookup-pdf-content-${key}`);
+
+            // Ensure original styling is safely stored
+            const originalWidth = element.style.width;
+            const originalHeight = element.style.height;
+            const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalMinHeight = element.style.minHeight;
+            const originalDisplay = element.style.display;
+            const originalFlexDirection = element.style.flexDirection;
+            const originalJustifyContent = element.style.justifyContent;
+            const originalBoxSizing = element.style.boxSizing;
+            const originalBg = element.style.backgroundColor;
+
+            // Apply properties ensuring exact A4 proportion (1:1.414) and 1-page vertical alignment
+            element.style.width = '794px'; 
+            element.style.height = '1122px';
+            element.style.minHeight = '1122px';
+            element.style.margin = '0';
+            element.style.padding = '40px';
+            element.style.maxWidth = 'none';
+            element.style.display = 'flex';
+            element.style.flexDirection = 'column';
+            element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box';
+            element.style.backgroundColor = '#ffffff';
+
+            html2pdf().from(element).set({
+                margin: 0,
+                filename: `Receipt_${getTxnId(key)}.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save().then(() => {
+                // Restore styling dynamically after capture completes
+                element.style.width = originalWidth;
+                element.style.height = originalHeight;
+                element.style.margin = originalMargin;
+                element.style.padding = originalPadding;
+                element.style.maxWidth = originalMaxWidth;
+                element.style.minHeight = originalMinHeight;
+                element.style.display = originalDisplay;
+                element.style.flexDirection = originalFlexDirection;
+                element.style.justifyContent = originalJustifyContent;
+                element.style.boxSizing = originalBoxSizing;
+                element.style.backgroundColor = originalBg;
+            });
+        };
+
+        function startSync(uid) {
+            onValue(ref(db, `users/${uid}/staff`), s => {
+                staffData = s.val() || {};
+                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
+                const staffKeys = Object.keys(staffData).sort();
+
+                Object.keys(staffData).forEach(id => {
+                    const u = staffData[id];
+                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
+
+                    sH += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Ledger Statement</span></div>
+                    </div>`;
+
+                    mSH += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">G4S ID: ${g4sUserId}</span><span class="nexus-header-val">Manage</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Current Bal</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer flex justify-around items-center">
+                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
+                            <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
+                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+            });
+
+            onValue(ref(db, `users/${uid}/logs`), s => {
+                logsList = Object.keys(s.val() || {}).map(k => ({...s.val()[k], key: k})).sort((a,b) => a.ts - b.ts);
+                renderHome();
+            });
+        }
+
+        function renderHome() {
+            const now = new Date();
+            const monthKey = getDhakaMonthKey();
+            document.getElementById('month-label').innerText = getDhakaMonthLabel();
+
+            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
+            const logsWithBal = logsList.map(l => {
+                const a = Number(l.amount || 0);
+                if(!rSB[l.staffId]) rSB[l.staffId] = 0;
+                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
+                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
+                return { ...l, cb: rCB, sb: rSB[l.staffId] };
+            });
+
+            window.logsWithBalData = logsWithBal; // Store globally for Sharing
+
+            document.getElementById('cb-display').innerText = fmt(rCB);
+            document.getElementById('month-received').innerText = fmt(monthlyRec);
+            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+
+            let logH = '', mLogH = '';
+
+            // Limit recent transactions array loop to 5 logs only
+            [...logsWithBal].reverse().slice(0, 5).forEach((l, index) => {
+                let shareBtnHTML = '';
+                // Add Share button ONLY to the last 2 recent transactions 
+                if (index < 2) {
+                    shareBtnHTML = `<button onclick="shareTransaction('${l.key}')" class="w-full mt-3 bg-blue-50 hover:bg-blue-100 text-blue-600 p-2.5 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors border border-blue-100"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>`;
+                }
+
+                logH += `
+                <div class="nexus-card">
+                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                        ${shareBtnHTML}
+                    </div>
+                </div>`;
+            });
+
+            [...logsWithBal].reverse().forEach(l => {
+                mLogH += `
+                <div class="nexus-card">
+                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                    </div>
+                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
+                </div>`;
+            });
+            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent logs</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
+        }
+
+        const formatDt = (d) => {
+            if(!d) return "All Time";
+            return new Date(d).toLocaleDateString('en-GB');
+        };
+
+        window.generateReport = () => {
+            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
+            let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
+
+            document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
+
+            const metaHeader = document.getElementById('individual-header-meta');
+            const tableHeader = document.getElementById('report-table-header');
+
+            if (sid && staffData[sid]) {
+                const u = staffData[sid];
+                const staffKeys = Object.keys(staffData).sort();
+                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
+
+                // Inject sleek DBBL bank style structural individual description layout block
+                metaHeader.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4 text-[10px]">
+                        <div>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Personnel Title</span><span class="text-xs font-black text-slate-800">${u.name}</span></p>
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Designation</span><span class="font-bold">${u.desig}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Account Reference</span><span class="font-bold text-blue-700">${g4sUserId}</span></p>
+                        </div>
+                        <div class="border-l border-slate-200 pl-4">
+                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Phone Contact</span><span class="font-bold">${u.phone || 'N/A'}</span></p>
+                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Secure Email</span><span class="font-bold">${u.email || 'N/A'}</span></p>
+                        </div>
+                    </div>
+                `;
+                metaHeader.classList.remove('hidden');
+
+                // Render dynamic header definition excluding the explicit Name row column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            } else {
+                metaHeader.classList.add('hidden');
+                metaHeader.innerHTML = '';
+
+                // Fallback structured dynamic header description including the explicit repeating Name node column block
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2">Name</th>
+                    <th class="border p-2">Type (Category)</th>
+                    <th class="border p-2 text-right w-[100px]">Amount</th>
+                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                `;
+            }
+
+            logsList.forEach(l => {
+                if (!sid || l.staffId === sid) {
+                    const a = Number(l.amount);
+                    if (l.type === 'income') runningBal += a; else runningBal -= a;
+                    if((!start || l.date >= start) && (!end || l.date <= end)) {
+                        if(l.type === 'income') tRec += a; else tAdv += a;
+
+                        const trxIdStr = getTxnId(l.key);
+                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
+
+                        if(sid) {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        } else {
+                            html += `<tr>
+                                <td class="border p-2 text-center">${sl++}</td>
+                                <td class="border p-2">${l.date}</td>
+                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
+                                <td class="border p-2 font-bold">${l.staffName}</td>
+                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
+                                <td class="border p-2 text-right">${fmt(a)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                            </tr>`;
+                        }
+                    }
+                }
+            });
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('pdf-btn').classList.remove('hidden');
+            document.getElementById('report-body').innerHTML = html;
+            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+        };
+
+        window.exportPDF = () => {
+            const element = document.getElementById('pdf-content');
+            element.style.minWidth = "100%"; 
+
+            // Dynamic filename format based on selection
+            let repName = "Abdullahil_Kuafi";
+            const sid = document.getElementById('r-staff').value;
+            if(sid && staffData[sid]) {
+                repName = staffData[sid].name.replace(/\s+/g, '_');
+            }
+
+            const now = new Date();
+            const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            const tStr = `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}`;
+            const fName = `${repName}_${dStr}_${tStr}.pdf`;
+
+            html2pdf().from(element).set({
+                margin: [10, 10, 20, 10], filename: fName,
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] } // Group summary rows to avoid breaking across pages
+            }).save().then(() => element.style.minWidth = "650px");
+        };
+
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1';
+        };
     </script>
 </body>
 </html>
