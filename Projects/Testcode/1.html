@@ -547,32 +547,34 @@
         </div>
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
-                <!-- Added flex col and min-h for footer sticking -->
-                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative flex flex-col" style="min-height: 297mm;">
-                    <div class="flex justify-between items-start mb-2">
-                        <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                        <div class="text-right flex-1">
-                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                            <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                            <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                <!-- Added flex col and min-h for footer sticking, along with absolute centered watermark -->
+                <div id="pdf-content" class="p-6 text-[10px] min-w-[650px] relative flex flex-col" style="min-height: 297mm; background-color: #ffffff; overflow: hidden;">
+                    <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; width: 400px; z-index: 0; pointer-events: none;" alt="watermark">
+                    <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1;">
+                        <div class="flex justify-between items-start mb-2">
+                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
+                            <div class="text-right flex-1">
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                            </div>
                         </div>
-                    </div>
-                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
+                        <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
 
-                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
+                        <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
 
-                    <table class="w-full border-collapse border border-slate-200">
-                        <thead>
-                            <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
-                        </thead>
-                        <tbody id="report-body"></tbody>
-                    </table>
+                        <table class="w-full border-collapse border border-slate-200">
+                            <thead>
+                                <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
+                            </thead>
+                            <tbody id="report-body"></tbody>
+                        </table>
 
-                    <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+                        <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
 
-                    <!-- mt-auto pushes this to the absolute bottom of the flex container -->
-                    <div class="summary-group mt-auto pt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center w-full">
-                        <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
+                        <!-- mt-auto pushes this to the absolute bottom of the flex container -->
+                        <div class="summary-group mt-auto pt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center w-full">
+                            <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">AUTHORIZED SIGNATURE</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -868,36 +870,38 @@
             const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
 
             const html = `
-                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
-                        <div class="flex justify-between items-start mb-2">
-                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                            <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                <div id="memo-pdf-content" class="p-5 rounded-xl mx-auto w-full relative flex flex-col" style="min-height: 297mm; background-color: #ffffff; text-align: center; overflow: hidden;">
+                    <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; width: 400px; z-index: 0; pointer-events: none;" alt="watermark">
+                    <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1;">
+                        <div class="text-center mb-6 mt-2">
+                            <div class="flex justify-between items-start mb-2">
+                                <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
+                                <div class="text-right flex-1">
+                                    <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                    <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                                <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
                             </div>
                         </div>
-                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
+                        <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                            <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
+                            <div class="nexus-body">
+                                <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
+                                <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
+                                <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${data.type==='income'?'Cash In':'Cash Out'} (${data.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
+                        <div class="mt-auto text-center opacity-20 pointer-events-none pb-4 flex flex-col items-center">
+                            <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">AUTHORIZED SIGNATURE</p>
                         </div>
-                    </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2 flex flex-col items-center">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
                     </div>
                 </div>
             `;
@@ -1030,36 +1034,38 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
-                        <div class="flex justify-between items-start mb-2">
-                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                            <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                <div id="lookup-pdf-content-${match.key}" class="p-6 rounded-xl mx-auto w-full relative flex flex-col" style="min-height: 297mm; background-color: #ffffff; text-align: center; overflow: hidden;">
+                    <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; width: 400px; z-index: 0; pointer-events: none;" alt="watermark">
+                    <div style="position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1;">
+                        <div class="text-center mb-6 mt-2">
+                            <div class="flex justify-between items-start mb-2">
+                                <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
+                                <div class="text-right flex-1">
+                                    <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                    <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                                <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
                             </div>
                         </div>
-                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                        <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                            <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
+                            <div class="nexus-body">
+                                <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
+                                <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
+                                <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                                <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
+                        <div class="mt-auto text-center opacity-20 pointer-events-none pb-4 flex flex-col items-center">
+                            <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">AUTHORIZED SIGNATURE</p>
                         </div>
-                    </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4 flex flex-col items-center">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
                     </div>
                 </div>
                 
@@ -1415,7 +1421,7 @@
             const element = document.getElementById('pdf-content');
             element.style.minWidth = "100%"; 
 
-            let repName = "Abdullahil_Kuafi";
+            let repName = "G4S_Imprest_Report";
             const sid = document.getElementById('r-staff').value;
             if(sid && staffData[sid]) {
                 repName = staffData[sid].name.replace(/\s+/g, '_');
