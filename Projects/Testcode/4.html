@@ -371,10 +371,13 @@
             </div>
         </div>
 
-        <h3 class="font-bold text-slate-900 mb-4 px-1 flex items-center gap-2 uppercase text-xs tracking-wide">
-            <i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Recent Transactions
-        </h3>
-        <div id="recent-logs" class="space-y-4"></div>
+        <button onclick="toggleRecentLogs()" class="w-full flex items-center justify-between font-bold text-slate-900 mb-4 px-1 uppercase text-xs tracking-wide outline-none">
+            <span class="flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Show recent transactions
+            </span>
+            <i id="recent-logs-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-300"></i>
+        </button>
+        <div id="recent-logs" class="space-y-4 hidden"></div>
     </div>
 
     <!-- NEW ENTRY PAGE -->
@@ -708,6 +711,18 @@
         const getDhakaMonthKey = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        };
+
+        window.toggleRecentLogs = () => {
+            const logsContainer = document.getElementById('recent-logs');
+            const icon = document.getElementById('recent-logs-icon');
+            if (logsContainer.classList.contains('hidden')) {
+                logsContainer.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                logsContainer.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
         };
 
         onAuthStateChanged(auth, (user) => {
