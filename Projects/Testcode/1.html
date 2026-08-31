@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petty Cash | G4S Cumilla Branch</title>
+    <title>Imprest Account | G4S Cumilla Branch </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -19,6 +19,7 @@
             position: relative;
         }
 
+        /* 3D Sphere Background Wallpaper */
         .wallpaper-bg {
             position: fixed;
             inset: 0;
@@ -33,6 +34,7 @@
             border-radius: 50%;
         }
 
+        /* Top Right Blue Orb */
         .orb-blue {
             top: -80px;
             right: -40px;
@@ -42,6 +44,7 @@
             box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
         }
 
+        /* Large Center Sphere */
         .orb-center {
             top: 25%;
             left: 50%;
@@ -52,6 +55,7 @@
             box-shadow: inset -15px -15px 30px rgba(0, 0, 0, 0.25);
         }
 
+        /* Bottom Right Orange Orb */
         .orb-orange {
             bottom: 15%;
             right: -60px;
@@ -61,6 +65,7 @@
             box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
         }
 
+        /* Bottom Left Pink Orb */
         .orb-pink {
             bottom: -80px;
             left: -60px;
@@ -70,6 +75,7 @@
             box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.2);
         }
 
+        /* Small Red Orbs */
         .orb-red-1 {
             top: 22%;
             left: -35px;
@@ -92,6 +98,7 @@
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* UI Theme Glass Overrides */
         .bottom-nav { 
             position: fixed; 
             bottom: 0; 
@@ -155,37 +162,16 @@
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+        /* Search results styling */
         .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
         .search-item:active { background: rgba(226, 232, 240, 0.8); border-left-color: #2563eb; }
 
+        /* Prevent Table Rows From Breaking in PDF */
         tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+        /* Prevent Summary Elements From Breaking in PDF */
         .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
 
-        /* Full Page Reliable Watermark Styles */
-        .watermark-bg {
-            position: relative;
-            min-height: 100%;
-        }
-        .watermark-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .watermark-bg > * {
-            position: relative;
-            z-index: 1;
-        }
-
+        /* DESKTOP MODE POLISH & OPTIMIZATION */
         @media (min-width: 768px) {
             body {
                 display: flex;
@@ -221,7 +207,7 @@
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
             }
             .modal {
-                align-items: center;
+                align-items: center; 
             }
             .modal-content {
                 max-width: 600px;
@@ -249,6 +235,7 @@
 </head>
 <body>
 
+    <!-- Dynamic 3D Wallpaper Layer -->
     <div class="wallpaper-bg">
         <div class="orb orb-blue"></div>
         <div class="orb orb-center"></div>
@@ -297,6 +284,7 @@
             <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
+        <!-- Stylish Debit/Balance Card -->
         <div class="flex justify-center mb-8 group perspective">
             <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
                 <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
@@ -305,7 +293,7 @@
 
                 <div class="flex justify-between items-start z-10">
                     <div>
-                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">Petty Cash</h3>
+                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
                         <div class="flex items-center gap-1.5 mt-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
                             <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
@@ -559,11 +547,12 @@
         </div>
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
-                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative watermark-bg">
+                <!-- Added flex col and min-h for footer sticking -->
+                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative flex flex-col" style="min-height: 297mm;">
                     <div class="flex justify-between items-start mb-2">
                         <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                         <div class="text-right flex-1">
-                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                             <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                             <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                         </div>
@@ -581,9 +570,9 @@
 
                     <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
 
-                    <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
+                    <!-- mt-auto pushes this to the absolute bottom of the flex container -->
+                    <div class="summary-group mt-auto pt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center w-full">
                         <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
-                        <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
             </div>
@@ -671,7 +660,7 @@
         let currFormat = 'bdt';
         let editingStaffId = null;
 
-        window.logsWithBalData = [];
+        window.logsWithBalData = []; 
 
         const fmt = (num) => {
             const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
@@ -686,22 +675,18 @@
         };
 
         const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
-
         const getDhakaDate = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         };
-
         const getDhakaFirstOfMonth = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
         };
-
         const getDhakaMonthLabel = () => {
             const d = getDhakaDateObj();
             return d.toLocaleString('default', { month: 'long', year: 'numeric' });
         };
-
         const getDhakaMonthKey = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -725,11 +710,9 @@
                 showPage('dashboard-page');
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
-
                 document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
                 document.getElementById('r-end').value = getDhakaDate();
                 document.getElementById('m-date').value = getDhakaDate();
-
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -751,9 +734,7 @@
                 document.getElementById('m-date').value = getDhakaDate();
             }
         };
-        window.openModal = (id) => {
-            document.getElementById(id).classList.add('active');
-        };
+        window.openModal = (id) => document.getElementById(id).classList.add('active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 
         window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
@@ -863,22 +844,13 @@
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
 
             const txnDataForMemo = {
-                key: newTxnRef.key,
-                staffId: sid,
-                staffName: staff.name,
-                amount: amt,
-                type: currentType,
-                date: date,
-                cat: document.getElementById('m-cat').value,
-                note: document.getElementById('m-note').value,
-                ts: Date.now(),
-                sb: newBal
+                key: newTxnRef.key, staffId: sid, staffName: staff.name, amount: amt, type: currentType, date: date,
+                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now(), sb: newBal 
             };
 
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
-
             window.openMemoModal(txnDataForMemo);
         };
 
@@ -896,12 +868,12 @@
             const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
 
             const html = `
-                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full watermark-bg" style="text-align: center;">
+                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <div class="flex justify-between items-start mb-2">
                             <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                             <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                                 <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                                 <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                             </div>
@@ -924,9 +896,8 @@
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
                         </div>
                     </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2 flex flex-col items-center">
                         <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
             `;
@@ -1059,12 +1030,12 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full watermark-bg" style="text-align: center;">
+                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <div class="flex justify-between items-start mb-2">
                             <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                             <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                                 <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                                 <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                             </div>
@@ -1087,16 +1058,55 @@
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4">
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4 flex flex-col items-center">
                         <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
-                <button onclick="exportLookupPDF('${match.key}')" class="w-full mt-4 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF Receipt</button>
+                
+                <!-- Updated action buttons block inside lookup -->
+                <div class="flex gap-2 mt-4">
+                    <button onclick="shareLookupImage('${match.key}')" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
+                    <button onclick="exportLookupPDF('${match.key}')" class="flex-1 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                </div>
                 `;
             } else {
                 container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
             }
+        };
+
+        // Added functionality to Share Image directly from TRXID lookup
+        window.shareLookupImage = async (key) => {
+            const element = document.getElementById(`lookup-pdf-content-${key}`);
+            const originalWidth = element.style.width;
+            const originalMargin = element.style.margin;
+
+            element.style.width = '600px'; 
+            element.style.margin = '0 auto';
+            element.style.maxWidth = 'none';
+
+            const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
+
+            element.style.width = originalWidth;
+            element.style.margin = originalMargin;
+            element.style.maxWidth = '';
+
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], `Receipt_${getTxnId(key)}.png`, { type: "image/png" });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: `Transaction Receipt ${getTxnId(key)}`,
+                            text: `Transaction Receipt for ${getTxnId(key)}`
+                        });
+                    } catch (err) { console.log('Share action cancelled or failed', err); }
+                } else {
+                    const link = document.createElement('a');
+                    link.download = `Receipt_${getTxnId(key)}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                }
+            }, "image/png");
         };
 
         window.exportLookupPDF = (key) => {
@@ -1210,7 +1220,7 @@
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
-            window.logsWithBalData = logsWithBal;
+            window.logsWithBalData = logsWithBal; 
 
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
@@ -1371,75 +1381,65 @@
                                 <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
                                 <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
                                 <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold text-blue-700">${fmt(runningBal)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
                             </tr>`;
                         } else {
                             html += `<tr>
                                 <td class="border p-2 text-center">${sl++}</td>
                                 <td class="border p-2">${l.date}</td>
                                 <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-bold text-slate-800">${l.staffName}</td>
+                                <td class="border p-2 font-bold">${l.staffName}</td>
                                 <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
                                 <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold text-blue-700">${fmt(runningBal)}</td>
+                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
                             </tr>`;
                         }
                     }
                 }
             });
 
-            document.getElementById('report-body').innerHTML = html || `<tr><td colspan="${sid ? 6 : 7}" class="border p-4 text-center text-slate-400 font-bold uppercase text-xs">No Transactions Found for the selected criteria</td></tr>`;
-
-            document.getElementById('report-summary').innerHTML = `
-                <p>Opening Balance: <span class="text-slate-600">${fmt(openingBal)}</span></p>
-                <p>Total Cash In: <span class="text-teal-600">${fmt(tRec)}</span></p>
-                <p>Total Cash Out: <span class="text-rose-600">${fmt(tAdv)}</span></p>
-                <p class="text-[12px] mt-2 border-t pt-2 border-slate-300 inline-block w-48 border-dashed">Closing Balance: <span class="text-blue-700 font-black">${fmt(runningBal)}</span></p>
-            `;
+            const closingBal = openingBal + tRec - tAdv;
 
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
-        };
-
-        window.setT = (type) => {
-            currentType = type;
-            const ti = document.getElementById('ti');
-            const te = document.getElementById('te');
-            if (type === 'income') {
-                ti.className = "flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-teal-100";
-                te.className = "flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1";
-            } else {
-                ti.className = "flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1";
-                te.className = "flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100";
-            }
+            document.getElementById('report-body').innerHTML = html;
+            document.getElementById('report-summary').innerHTML = `
+                ${start ? `<p class="text-blue-700">Opening Balance: ${fmt(openingBal)}</p>` : ''}
+                <p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p>
+                <p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p>
+                <p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(closingBal)}</p>
+            `;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            
-            const originalWidth = element.style.width;
-            const originalMargin = element.style.margin;
-            const originalPadding = element.style.padding;
-            
-            element.style.width = '794px'; 
-            element.style.margin = '0';
-            element.style.padding = '40px';
+            element.style.minWidth = "100%"; 
 
-            const opt = {
-                margin: 0,
-                filename: 'Ledger_Report.pdf',
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            let repName = "Abdullahil_Kuafi";
+            const sid = document.getElementById('r-staff').value;
+            if(sid && staffData[sid]) {
+                repName = staffData[sid].name.replace(/\s+/g, '_');
+            }
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.width = originalWidth;
-                element.style.margin = originalMargin;
-                element.style.padding = originalPadding;
-            });
+            const now = new Date();
+            const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            const tStr = `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}`;
+            const fName = `${repName}_${dStr}_${tStr}.pdf`;
+
+            html2pdf().from(element).set({
+                margin: [10, 10, 20, 10], filename: fName,
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
+            }).save().then(() => element.style.minWidth = "650px");
         };
 
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1';
+            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1';
+        };
     </script>
 </body>
 </html>
