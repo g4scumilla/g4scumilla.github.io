@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imprest Account | G4S Cumilla Branch </title>
+    <title>Petty Cash | G4S Cumilla Branch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Added html2canvas for image generation and sharing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -20,7 +19,6 @@
             position: relative;
         }
 
-        /* 3D Sphere Background Wallpaper matching image */
         .wallpaper-bg {
             position: fixed;
             inset: 0;
@@ -35,7 +33,6 @@
             border-radius: 50%;
         }
 
-        /* Top Right Blue Orb */
         .orb-blue {
             top: -80px;
             right: -40px;
@@ -45,7 +42,6 @@
             box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
         }
 
-        /* Large Center Sphere */
         .orb-center {
             top: 25%;
             left: 50%;
@@ -56,7 +52,6 @@
             box-shadow: inset -15px -15px 30px rgba(0, 0, 0, 0.25);
         }
 
-        /* Bottom Right Orange Orb */
         .orb-orange {
             bottom: 15%;
             right: -60px;
@@ -66,7 +61,6 @@
             box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
         }
 
-        /* Bottom Left Pink Orb */
         .orb-pink {
             bottom: -80px;
             left: -60px;
@@ -76,7 +70,6 @@
             box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.2);
         }
 
-        /* Small Red Orbs */
         .orb-red-1 {
             top: 22%;
             left: -35px;
@@ -99,7 +92,6 @@
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI Theme Glass Overrides */
         .bottom-nav { 
             position: fixed; 
             bottom: 0; 
@@ -163,29 +155,24 @@
         .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
         .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-        /* Search results styling */
         .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
         .search-item:active { background: rgba(226, 232, 240, 0.8); border-left-color: #2563eb; }
 
-        /* Prevent Table Rows From Breaking in PDF */
         tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-        /* Prevent Summary Elements From Breaking in PDF */
         .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
 
-        /* ========================================= */
-        /* WATERMARK STYLES                          */
-        /* ========================================= */
+        /* Full Page Reliable Watermark Styles */
         .watermark-bg {
             position: relative;
+            min-height: 100%;
         }
         .watermark-bg::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            height: 70%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-image: url('https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png');
             background-repeat: no-repeat;
             background-position: center;
@@ -199,9 +186,6 @@
             z-index: 1;
         }
 
-        /* ========================================= */
-        /* DESKTOP MODE POLISH & OPTIMIZATION        */
-        /* ========================================= */
         @media (min-width: 768px) {
             body {
                 display: flex;
@@ -210,7 +194,6 @@
                 background-attachment: fixed;
                 overflow-y: auto;
             }
-            /* Centers the app and simulates a floating app widget */
             .page {
                 width: 100%;
                 max-width: 600px;
@@ -238,7 +221,7 @@
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
             }
             .modal {
-                align-items: center; /* Center horizontally and vertically */
+                align-items: center;
             }
             .modal-content {
                 max-width: 600px;
@@ -247,7 +230,6 @@
                 border: 1px solid rgba(255,255,255,0.6);
                 box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             }
-            /* Customized Scrollbar for Desktop */
             ::-webkit-scrollbar {
                 width: 8px;
                 height: 8px;
@@ -267,7 +249,6 @@
 </head>
 <body>
 
-    <!-- Dynamic 3D Wallpaper Layer -->
     <div class="wallpaper-bg">
         <div class="orb orb-blue"></div>
         <div class="orb orb-center"></div>
@@ -316,31 +297,26 @@
             <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- Stylish Debit/Balance Card -->
         <div class="flex justify-center mb-8 group perspective">
             <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
-                <!-- Glassmorphic Accents -->
                 <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
 
-                <!-- Top Header -->
                 <div class="flex justify-between items-start z-10">
                     <div>
-                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
+                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">Petty Cash</h3>
                         <div class="flex items-center gap-1.5 mt-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
                             <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
                         </div>
                     </div>
-                    <!-- Card Network / Contactless -->
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
                         <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
                     </div>
                 </div>
 
-                <!-- EMV Chip -->
                 <div class="z-10 mt-1">
                     <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm flex items-center justify-center border border-yellow-300/30 relative overflow-hidden">
                         <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
@@ -350,7 +326,6 @@
                     </div>
                 </div>
 
-                <!-- Balance Area -->
                 <div class="z-10 mt-2">
                     <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
                     <div class="flex items-baseline gap-1.5">
@@ -359,7 +334,6 @@
                     </div>
                 </div>
 
-                <!-- Cardholder & Details -->
                 <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
                     <div>
                         <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
@@ -419,7 +393,6 @@
         <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
             <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Select Personnel</p>
 
-            <!-- Search Bar -->
             <div class="relative mb-4">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input id="staff-search" type="text" placeholder="Search by name, ID or post..." 
@@ -427,10 +400,8 @@
                        class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
             </div>
 
-            <!-- Search Results Dropdown -->
             <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
 
-            <!-- Selected Personnel Display -->
             <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
                 <div>
                     <p id="sel-name" class="text-xs font-black text-blue-800"></p>
@@ -588,34 +559,28 @@
         </div>
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
-                <!-- Added watermark-bg class here -->
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative watermark-bg">
-                    <!-- Logo added at top left corner of the ledger statement report content -->
                     <div class="flex justify-between items-start mb-2">
                         <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                         <div class="text-right flex-1">
-                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                             <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                             <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                         </div>
                     </div>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
 
-                    <!-- Dynamic DBBL Bank style Individual Statement Meta Header Container -->
                     <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
 
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
-                            <tr class="bg-slate-100 text-[8px]" id="report-table-header">
-                                <!-- Generated Dynamically based on scope selection -->
-                            </tr>
+                            <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
                         </thead>
                         <tbody id="report-body"></tbody>
                     </table>
 
                     <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
 
-                    <!-- Watermark-style footer at the end of report -->
                     <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
                         <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
                         <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
@@ -654,21 +619,18 @@
         </div>
     </div>
 
-    <!-- TRANSACTION MEMO MODAL (Added Feature) -->
+    <!-- TRANSACTION MEMO MODAL -->
     <div id="memo-modal" class="modal">
         <div class="modal-content !p-0 flex flex-col !overflow-hidden">
-            <!-- Sticky Header -->
             <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 z-20">
                 <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
                 <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Scrollable Content -->
             <div class="p-6 overflow-y-auto flex-1">
                 <div id="memo-content-container"></div>
             </div>
 
-            <!-- Sticky Footer with newly added Skip Share button -->
             <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
                 <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
                 <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
@@ -709,7 +671,7 @@
         let currFormat = 'bdt';
         let editingStaffId = null;
 
-        window.logsWithBalData = []; // Store globally for sharing latest entries
+        window.logsWithBalData = [];
 
         const fmt = (num) => {
             const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
@@ -717,14 +679,12 @@
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
-        // Alphanumeric Transaction ID Formatter (G4SXXXXXX)
         const getTxnId = (key) => {
             if (!key) return "G4S000000";
             const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             return `G4S${clean.slice(-6).padStart(6, '0')}`;
         };
 
-        // Dhaka Date Helper Functions
         const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
 
         const getDhakaDate = () => {
@@ -766,7 +726,6 @@
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
 
-                // Auto Specific Dates (Dhaka Time)
                 document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
                 document.getElementById('r-end').value = getDhakaDate();
                 document.getElementById('m-date').value = getDhakaDate();
@@ -897,14 +856,12 @@
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
 
-            // Push creates the ref synchronously to give us a unique key instantly
             const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
 
-            // Generate Memo Data for automated opening
             const txnDataForMemo = {
                 key: newTxnRef.key,
                 staffId: sid,
@@ -915,18 +872,16 @@
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
                 ts: Date.now(),
-                sb: newBal // Closing / Last balance
+                sb: newBal
             };
 
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
 
-            // Open auto memo displaying the transaction
             window.openMemoModal(txnDataForMemo);
         };
 
-        // Added functionality for Auto-Memo and Direct Sharing 
         window.currentMemoData = null;
         window.openMemoModal = (data) => {
             window.currentMemoData = data;
@@ -935,20 +890,18 @@
             const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
             const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
 
-            // Sequence Tracking: Find the contextual last transaction preceding this entry
             const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
             const currentIdx = staffLogs.findIndex(l => l.key === data.key);
             const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
             const lastTxnStr = lastTxn ? `Last Transaction was made on ${lastTxn.date} with ${lastTxn.type === 'income' ? 'Cash In' : 'Cash Out'} (${lastTxn.cat || '-'}) amounting ${fmt(lastTxn.amount)} and Closing balance was ${fmt(lastTxn.sb)}` : 'No Previous Record';
 
             const html = `
-                <!-- Added watermark-bg class here -->
                 <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full watermark-bg" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <div class="flex justify-between items-start mb-2">
                             <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                             <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                                 <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                                 <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                             </div>
@@ -987,14 +940,12 @@
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
 
-            // Lock dimensions for standard image sharing export mapping
             element.style.width = '600px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
 
             const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
 
-            // Restore visual styles in DOM
             element.style.width = originalWidth;
             element.style.margin = originalMargin;
             element.style.maxWidth = '';
@@ -1010,7 +961,6 @@
                         });
                     } catch (err) { console.log('Share action cancelled or failed', err); }
                 } else {
-                    // Fallback to downloading if browser doesn't support direct sharing
                     const link = document.createElement('a');
                     link.download = `Memo_${getTxnId(key)}.png`;
                     link.href = canvas.toDataURL("image/png");
@@ -1023,7 +973,6 @@
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
 
-            // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
             const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
@@ -1036,7 +985,6 @@
             const originalBoxSizing = element.style.boxSizing;
             const originalBg = element.style.backgroundColor;
 
-            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
             element.style.width = '794px'; 
             element.style.height = '1122px';
             element.style.minHeight = '1122px';
@@ -1058,7 +1006,6 @@
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
                 element.style.height = originalHeight;
                 element.style.margin = originalMargin;
@@ -1112,13 +1059,12 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <!-- Added watermark-bg class here -->
                 <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full watermark-bg" style="text-align: center;">
                     <div class="text-center mb-6 mt-2">
                         <div class="flex justify-between items-start mb-2">
                             <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                             <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Petty Cash</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
                                 <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                                 <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                             </div>
@@ -1264,7 +1210,7 @@
                 return { ...l, cb: rCB, sb: rSB[l.staffId] };
             });
 
-            window.logsWithBalData = logsWithBal; // Store globally for Sharing
+            window.logsWithBalData = logsWithBal;
 
             document.getElementById('cb-display').innerText = fmt(rCB);
             document.getElementById('month-received').innerText = fmt(monthlyRec);
@@ -1425,66 +1371,34 @@
                                 <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
                                 <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
                                 <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                                <td class="border p-2 text-right font-bold text-blue-700">${fmt(runningBal)}</td>
                             </tr>`;
                         } else {
                             html += `<tr>
                                 <td class="border p-2 text-center">${sl++}</td>
                                 <td class="border p-2">${l.date}</td>
                                 <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-bold">${l.staffName}</td>
+                                <td class="border p-2 font-bold text-slate-800">${l.staffName}</td>
                                 <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
                                 <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
+                                <td class="border p-2 text-right font-bold text-blue-700">${fmt(runningBal)}</td>
                             </tr>`;
                         }
                     }
                 }
             });
 
-            const closingBal = openingBal + tRec - tAdv;
-
-            // Restoring functionality cut off from the original prompt 
-            document.getElementById('report-body').innerHTML = html || '<tr><td colspan="7" class="p-4 text-center text-slate-400">No records found</td></tr>';
+            document.getElementById('report-body').innerHTML = html || `<tr><td colspan="${sid ? 6 : 7}" class="border p-4 text-center text-slate-400 font-bold uppercase text-xs">No Transactions Found for the selected criteria</td></tr>`;
 
             document.getElementById('report-summary').innerHTML = `
                 <p>Opening Balance: <span class="text-slate-600">${fmt(openingBal)}</span></p>
                 <p>Total Cash In: <span class="text-teal-600">${fmt(tRec)}</span></p>
                 <p>Total Cash Out: <span class="text-rose-600">${fmt(tAdv)}</span></p>
-                <p class="text-[12px] mt-2 border-t pt-2 border-slate-300 inline-block w-48 border-dashed">Closing Balance: <span class="text-blue-700 font-black">${fmt(closingBal)}</span></p>
+                <p class="text-[12px] mt-2 border-t pt-2 border-slate-300 inline-block w-48 border-dashed">Closing Balance: <span class="text-blue-700 font-black">${fmt(runningBal)}</span></p>
             `;
 
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
-        };
-
-        window.exportPDF = () => {
-            const element = document.getElementById('pdf-content');
-            
-            // Backup styles
-            const originalWidth = element.style.width;
-            const originalMargin = element.style.margin;
-            const originalPadding = element.style.padding;
-            
-            // Re-map for A4 print
-            element.style.width = '794px'; 
-            element.style.margin = '0';
-            element.style.padding = '40px';
-
-            const opt = {
-                margin: 0,
-                filename: 'Ledger_Report.pdf',
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Restore visual styles dynamically in DOM
-                element.style.width = originalWidth;
-                element.style.margin = originalMargin;
-                element.style.padding = originalPadding;
-            });
         };
 
         window.setT = (type) => {
@@ -1498,6 +1412,32 @@
                 ti.className = "flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1";
                 te.className = "flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100";
             }
+        };
+
+        window.exportPDF = () => {
+            const element = document.getElementById('pdf-content');
+            
+            const originalWidth = element.style.width;
+            const originalMargin = element.style.margin;
+            const originalPadding = element.style.padding;
+            
+            element.style.width = '794px'; 
+            element.style.margin = '0';
+            element.style.padding = '40px';
+
+            const opt = {
+                margin: 0,
+                filename: 'Ledger_Report.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.width = originalWidth;
+                element.style.margin = originalMargin;
+                element.style.padding = originalPadding;
+            });
         };
 
     </script>
