@@ -1279,7 +1279,7 @@
 
         window.generateReport = () => {
             const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, runningBal = 0;
+            let html = '', sl = 1, tAdv = 0, tRec = 0, openingBal = 0;
 
             document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
 
@@ -1332,17 +1332,60 @@
                 `;
             }
 
+            // Calculate opening balance (all transactions strictly before start date)
+            if (start) {
+                logsList.forEach(l => {
+                    if (!sid || l.staffId === sid) {
+                        if (l.date < start) {
+                            const a = Number(l.amount || 0);
+                            if (l.type === 'income') openingBal += a; else openingBal -= a;
+                        }
+                    }
+                });
+            }
+
+            let runningBal = openingBal;
+
+            // Prepend Opening Balance row if start date filter is present
+            if (start) {
+                if (sid) {
+                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
+                        <td class="border p-2 text-center">-</td>
+                        <td class="border p-2">${start}</td>
+                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
+                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
+                        <td class="border p-2 text-right">-</td>
+                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
+                    </tr>`;
+                } else {
+                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
+                        <td class="border p-2 text-center">-</td>
+                        <td class="border p-2">${start}</td>
+                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
+                        <td class="border p-2 font-bold text-slate-600">System Vault</td>
+                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
+                        <td class="border p-2 text-right">-</td>
+                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
+                    </tr>`;
+                }
+            }
+
             logsList.forEach(l => {
                 if (!sid || l.staffId === sid) {
-                    const a = Number(l.amount);
-                    if (l.type === 'income') runningBal += a; else runningBal -= a;
-                    if((!start || l.date >= start) && (!end || l.date <= end)) {
-                        if(l.type === 'income') tRec += a; else tAdv += a;
+                    if ((!start || l.date >= start) && (!end || l.date <= end)) {
+                        const a = Number(l.amount || 0);
+                        if (l.type === 'income') {
+                            runningBal += a;
+                            tRec += a;
+                        } else {
+                            runningBal -= a;
+                            tAdv += a;
+                        }
 
                         const trxIdStr = getTxnId(l.key);
                         const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
 
-                        if(sid) {
+                        if (sid) {
                             html += `<tr>
                                 <td class="border p-2 text-center">${sl++}</td>
                                 <td class="border p-2">${l.date}</td>
@@ -1365,10 +1408,18 @@
                     }
                 }
             });
+
+            const closingBal = openingBal + tRec - tAdv;
+
             document.getElementById('report-view').classList.remove('hidden');
             document.getElementById('pdf-btn').classList.remove('hidden');
             document.getElementById('report-body').innerHTML = html;
-            document.getElementById('report-summary').innerHTML = `<p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p><p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p><p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(tRec - tAdv)}</p>`;
+            document.getElementById('report-summary').innerHTML = `
+                ${start ? `<p class="text-blue-700">Opening Balance: ${fmt(openingBal)}</p>` : ''}
+                <p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p>
+                <p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p>
+                <p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(closingBal)}</p>
+            `;
         };
 
         window.exportPDF = () => {
