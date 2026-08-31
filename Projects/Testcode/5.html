@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Ledger & PDF Report</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- html2pdf for Document Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Dashboard Header -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-black text-slate-800">Ledger Management</h1>
+            <p class="text-sm text-slate-500">Track balances and generate PDF reports</p>
+        </div>
+
+        <!-- Transaction Type Toggle (NexusPay Style) -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm mb-6 max-w-md">
+            <div class="flex gap-4">
+                <button id="ti" onclick="setT('income')" class="flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-teal-200 transition-all">
+                    <i class="fas fa-arrow-down text-xl"></i> Cash In
+                </button>
+                <button id="te" onclick="setT('expense')" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1 transition-all">
+                    <i class="fas fa-arrow-up text-xl"></i> Cash Out
+                </button>
+            </div>
+        </div>
+
+        <!-- Report Filter Section -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm mb-6 flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Start Date</label>
+                <input type="date" id="start-date" class="w-full border-2 border-slate-100 rounded-xl p-3 bg-slate-50 outline-none focus:border-blue-500 transition-all">
+            </div>
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">End Date</label>
+                <input type="date" id="end-date" class="w-full border-2 border-slate-100 rounded-xl p-3 bg-slate-50 outline-none focus:border-blue-500 transition-all">
+            </div>
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Staff Directory</label>
+                <select id="staff-filter" class="w-full border-2 border-slate-100 rounded-xl p-3 bg-slate-50 outline-none focus:border-blue-500 transition-all">
+                    <option value="">All Transactions (Central)</option>
+                    <option value="S001">John Doe (S001)</option>
+                    <option value="S002">Jane Smith (S002)</option>
+                </select>
+            </div>
+            <button onclick="generateReport()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all h-[52px]">
+                <i class="fas fa-bolt mr-2"></i> Generate Report
+            </button>
+            <button id="pdf-btn" onclick="exportPDF()" class="hidden bg-slate-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-900 shadow-lg transition-all h-[52px]">
+                <i class="fas fa-file-pdf mr-2 text-rose-400"></i> Export PDF
+            </button>
+        </div>
+
+        <!-- Report View Area (Printable) -->
+        <div id="report-view" class="hidden overflow-x-auto pb-10">
+            <div id="pdf-content" class="bg-white p-8 rounded-2xl shadow-sm min-w-[794px] mx-auto border border-slate-200 text-slate-800">
+                
+                <!-- Report Header -->
+                <div class="text-center mb-8 border-b-2 border-slate-800 pb-4">
+                    <h2 class="text-3xl font-black uppercase tracking-widest text-slate-800">Central Ledger</h2>
+                    <p class="text-sm text-slate-500 tracking-wider mt-1">Transaction History Report</p>
+                </div>
+
+                <!-- Meta Header for Specific Staff -->
+                <div id="meta-header" class="hidden mb-6 flex justify-between items-center text-sm bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <p class="text-slate-400 text-[10px] uppercase font-black tracking-widest">Beneficiary Name</p>
+                        <p id="meta-staff-name" class="font-bold text-slate-800 text-base"></p>
+                    </div>
+                    <div class="text-center border-x border-slate-200 px-8">
+                        <p class="text-slate-400 text-[10px] uppercase font-black tracking-widest">Staff ID</p>
+                        <p id="meta-staff-id" class="font-bold text-slate-800 text-base"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-slate-400 text-[10px] uppercase font-black tracking-widest">Report Period</p>
+                        <p id="meta-period" class="font-bold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr id="table-header" class="bg-slate-100 text-slate-600 uppercase text-[10px] tracking-wider border-b-2 border-slate-300">
+                            <!-- Dynamic headers get injected here -->
+                        </tr>
+                    </thead>
+                    <tbody id="report-body" class="text-[13px]">
+                        <!-- Dynamic rows get injected here -->
+                    </tbody>
+                </table>
+
+                <!-- Report Summary -->
+                <div id="report-summary" class="mt-6 flex flex-col items-end border-t-2 border-slate-800 pt-4 pr-2">
+                    <!-- Summary totals get injected here -->
+                </div>
+                
+                <!-- PDF Footer (Only visible on generation) -->
+                <div class="mt-12 text-center text-[10px] text-slate-400 font-mono">
+                    Report generated securely via Nexus Ledger System • <span id="gen-time"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // MOCK DATA & HELPERS: Ensure the script has data to process.
+        // In your real app, this data would come from Firebase or an API.
+        window.logsWithBalData = [
+            { key: 'trx893jd2', date: '2026-08-25', staffId: 'S001', staffName: 'John Doe', type: 'income', amount: 50000, cat: 'Deposit', note: 'Initial project fund', sb: 0, cb: 0 },
+            { key: 'trx14kf92', date: '2026-08-26', staffId: 'S002', staffName: 'Jane Smith', type: 'expense', amount: 12500, cat: 'Hardware', note: 'Bought new router', sb: 0, cb: 0 },
+            { key: 'trx99xjd4', date: '2026-08-28', staffId: 'S001', staffName: 'John Doe', type: 'expense', amount: 4500, cat: 'Travel', note: 'Site visit allowance', sb: 50000, cb: 0 },
+            { key: 'trx11abc9', date: '2026-08-30', staffId: 'S002', staffName: 'Jane Smith', type: 'income', amount: 10000, cat: 'Reimburse', note: 'Refund from vendor', sb: 0, cb: 0 },
+        ];
+
+        let currentType = 'income';
+
+        // Helper: Format Transaction IDs
+        function getTxnId(key) {
+            return key ? key.substring(0, 8).toUpperCase() : 'N/A';
+        }
+
+        // Helper: Format Currency Numbers
+        function fmt(num) {
+            return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        
+        // Update generation time in the footer
+        document.getElementById('gen-time').textContent = new Date().toLocaleString();
+
+        // -------------------------------------------------------------
+        // USER SCRIPT STARTS HERE
+        // -------------------------------------------------------------
+
+        window.generateReport = () => {
+            const sid = document.getElementById('staff-filter').value;
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+
+            let tRec = 0;
+            let tAdv = 0;
+            let openingBal = 0;
+            let html = '';
+            let sl = 1;
+
+            const metaHeader = document.getElementById('meta-header');
+            const tableHeader = document.getElementById('table-header');
+
+            if (sid) {
+                const sel = document.getElementById('staff-filter');
+                const sName = sel.options[sel.selectedIndex].text.split(' (')[0]; // Cleaned up select text
+                
+                document.getElementById('meta-staff-name').textContent = sName;
+                document.getElementById('meta-staff-id').textContent = sid;
+                document.getElementById('meta-period').textContent = (start || 'Beginning') + ' — ' + (end || 'Present');
+                
+                metaHeader.classList.remove('hidden');
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[100px]">TRXID</th>
+                    <th class="border p-2 w-[80px]">Category</th>
+                    <th class="border p-2 min-w-[120px]">Narration</th>
+                    <th class="border p-2 w-[70px]">Cash In</th>
+                    <th class="border p-2 w-[70px]">Cash Out</th>
+                    <th class="border p-2 w-[80px]">Balance</th>
+                `;
+            } else {
+                metaHeader.classList.add('hidden');
+                tableHeader.innerHTML = `
+                    <th class="border p-2 w-[40px]">SL</th>
+                    <th class="border p-2 w-[80px]">Date</th>
+                    <th class="border p-2 w-[90px]">TRXID</th>
+                    <th class="border p-2 w-[120px]">Beneficiary</th>
+                    <th class="border p-2 w-[80px]">Category</th>
+                    <th class="border p-2 min-w-[100px]">Narration</th>
+                    <th class="border p-2 w-[70px]">Cash In</th>
+                    <th class="border p-2 w-[70px]">Cash Out</th>
+                    <th class="border p-2 w-[80px]">Balance</th>
+                `;
+            }
+
+            // Calculate Opening Balance and Filter Logs
+            const sortedLogs = window.logsWithBalData || [];
+            let previousBal = 0;
+
+            if (start) {
+                const beforeLogs = sortedLogs.filter(l => l.date < start && (!sid || l.staffId === sid));
+                if (beforeLogs.length > 0) {
+                    const lastBefore = beforeLogs[beforeLogs.length - 1];
+                    previousBal = sid ? lastBefore.sb : lastBefore.cb;
+                }
+            }
+            openingBal = previousBal;
+
+            let filteredLogs = sortedLogs.filter(l => {
+                let match = true;
+                if (start && l.date < start) match = false;
+                if (end && l.date > end) match = false;
+                if (sid && l.staffId !== sid) match = false;
+                return match;
+            });
+
+            // Generate Opening Balance Row
+            html += `
+                <tr class="bg-blue-50/50">
+                    <td class="border p-2 text-center text-slate-500 font-bold uppercase tracking-widest text-[10px]" colspan="${sid ? 5 : 6}">Opening Balance</td>
+                    <td class="border p-2 text-right text-slate-400">-</td>
+                    <td class="border p-2 text-right text-slate-400">-</td>
+                    <td class="border p-2 text-right font-bold text-blue-600">${fmt(openingBal)}</td>
+                </tr>
+            `;
+
+            let runningBal = openingBal;
+
+            // Generate Transactions Rows
+            filteredLogs.forEach(l => {
+                const isInc = l.type === 'income';
+                if(isInc) tRec += Number(l.amount);
+                else tAdv += Number(l.amount);
+                
+                runningBal = isInc ? (runningBal + Number(l.amount)) : (runningBal - Number(l.amount));
+                
+                html += `<tr class="hover:bg-slate-50 transition-colors">
+                    <td class="border border-slate-200 p-2 text-center text-slate-500">${sl++}</td>
+                    <td class="border border-slate-200 p-2 text-center font-medium">${l.date}</td>
+                    <td class="border border-slate-200 p-2 text-center text-[9px] font-mono text-slate-500">${getTxnId(l.key)}</td>
+                    ${!sid ? `<td class="border border-slate-200 p-2 font-bold text-slate-700">${l.staffName}</td>` : ''}
+                    <td class="border border-slate-200 p-2 text-center text-[10px] font-bold uppercase tracking-wider text-slate-500">${l.cat || '-'}</td>
+                    <td class="border border-slate-200 p-2 text-slate-600">${l.note || '-'}</td>
+                    <td class="border border-slate-200 p-2 text-right ${isInc ? 'text-teal-600 font-bold' : 'text-slate-400'}">${isInc ? fmt(l.amount) : '-'}</td>
+                    <td class="border border-slate-200 p-2 text-right ${!isInc ? 'text-rose-600 font-bold' : 'text-slate-400'}">${!isInc ? fmt(l.amount) : '-'}</td>
+                    <td class="border border-slate-200 p-2 text-right font-bold text-slate-800">${fmt(runningBal)}</td>
+                </tr>`;
+            });
+
+            if (filteredLogs.length === 0) {
+                html += `<tr><td colspan="${sid ? 8 : 9}" class="border p-6 text-center text-slate-400 font-bold uppercase text-[10px] tracking-widest bg-slate-50">No Transactions Found for Selected Period</td></tr>`;
+            }
+
+            document.getElementById('report-body').innerHTML = html;
+            
+            // Build Summary footer
+            document.getElementById('report-summary').innerHTML = `
+                <div class="flex justify-between w-[300px] mb-1">
+                    <span class="text-[10px] text-slate-500 uppercase tracking-widest">Total Cash In:</span> 
+                    <span class="text-teal-600 font-black">${fmt(tRec)}</span>
+                </div>
+                <div class="flex justify-between w-[300px] mb-1">
+                    <span class="text-[10px] text-slate-500 uppercase tracking-widest">Total Cash Out:</span> 
+                    <span class="text-rose-600 font-black">${fmt(tAdv)}</span>
+                </div>
+                <div class="flex justify-between w-[300px] mt-2 border-t border-slate-200 pt-2">
+                    <span class="text-xs text-slate-800 uppercase tracking-widest">Closing Balance:</span> 
+                    <span class="text-blue-600 font-black text-lg">${fmt(runningBal)}</span>
+                </div>
+            `;
+
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('pdf-btn').classList.remove('hidden');
+        };
+
+        window.exportPDF = () => {
+            const element = document.getElementById('pdf-content');
+            const btn = document.getElementById('pdf-btn');
+            const originalText = btn.innerHTML;
+            
+            // Set Loading state
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Exporting...';
+            btn.classList.add('opacity-75', 'pointer-events-none');
+
+            // Save original styles
+            const originalWidth = element.style.width;
+            const originalPadding = element.style.padding;
+            const originalMaxWidth = element.style.maxWidth;
+            const originalBg = element.style.backgroundColor;
+
+            // Enforce A4 proportions before generation
+            element.style.width = '794px'; 
+            element.style.padding = '40px';
+            element.style.maxWidth = 'none';
+            element.style.backgroundColor = '#ffffff';
+
+            const opt = {
+                margin: 0,
+                filename: `Ledger_Report_${Date.now()}.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Restore Styles
+                element.style.width = originalWidth;
+                element.style.padding = originalPadding;
+                element.style.maxWidth = originalMaxWidth;
+                element.style.backgroundColor = originalBg;
+                
+                // Restore button
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75', 'pointer-events-none');
+            });
+        };
+
+        window.setT = (type) => {
+            currentType = type;
+            const btnIn = document.getElementById('ti');
+            const btnOut = document.getElementById('te');
+
+            if (type === 'income') {
+                btnIn.className = "flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-teal-200 transition-all";
+                btnOut.className = "flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1 transition-all hover:bg-slate-200";
+            } else {
+                btnOut.className = "flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-200 transition-all";
+                btnIn.className = "flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1 transition-all hover:bg-slate-200";
+            }
+        };
+    </script>
+</body>
+</html>
