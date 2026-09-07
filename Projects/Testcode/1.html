@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Added html2canvas for image generation and sharing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -448,9 +447,9 @@
         <div id="staff-list" class="space-y-4"></div>
     </div>
 
-    <!-- SETTINGS PAGE -->
+    <!-- TOOLS PAGE -->
     <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Tools</h2>
         <div class="space-y-4">
             <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
@@ -521,11 +520,22 @@
     <!-- TRANSACTION HISTORY PAGE -->
     <div id="history-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 mb-4">
                 <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-2xl font-bold text-slate-900">Transaction History</h2>
+            </div>
+            <!-- Added Duration Filters -->
+            <div class="bg-white p-4 rounded-[24px] shadow-sm border border-slate-100 flex gap-3">
+                <div class="flex-1 space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
+                    <input type="date" id="hist-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+                </div>
+                <div class="flex-1 space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
+                    <input type="date" id="hist-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+                </div>
             </div>
         </div>
         <div id="mgmt-txn-list" class="space-y-4"></div>
@@ -653,7 +663,7 @@
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">TOOLS</p></button>
     </nav>
 
     <script type="module">
@@ -719,19 +729,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         };
 
-        window.setT = (type) => {
-            currentType = type;
-            const ti = document.getElementById('ti');
-            const te = document.getElementById('te');
-            if (type === 'income') {
-                ti.className = 'flex-1 py-4 rounded-2xl font-bold bg-teal-600 text-white flex flex-col items-center gap-1 shadow-lg shadow-teal-100';
-                te.className = 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1';
-            } else {
-                ti.className = 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1';
-                te.className = 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100';
-            }
-        };
-
         window.toggleRecentLogs = () => {
             const logsContainer = document.getElementById('recent-logs');
             const icon = document.getElementById('recent-logs-icon');
@@ -756,6 +753,10 @@
                 document.getElementById('r-end').value = getDhakaDate();
                 document.getElementById('m-date').value = getDhakaDate();
 
+                // History dates added here
+                document.getElementById('hist-start').value = getDhakaFirstOfMonth(); 
+                document.getElementById('hist-end').value = getDhakaDate();
+
                 startSync(user.uid);
             } else {
                 showPage('login-page');
@@ -766,7 +767,7 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error signing in"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -1107,7 +1108,7 @@
                             </div>
                         </div>
                         <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Lookup Result</h2>
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
@@ -1117,28 +1118,294 @@
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4">
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
                         <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
                         <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
-                <button onclick="exportLookupPDF('${match.key}')" class="w-full mt-4 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF Receipt</button>
                 `;
             } else {
-                container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
+                container.innerHTML = `<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
             }
         };
 
-        window.exportLookupPDF = (key) => {
-            const element = document.getElementById(`lookup-pdf-content-${key}`);
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'income' ? 'bg-teal-500 text-white shadow-lg shadow-teal-100' : 'bg-slate-100 text-teal-600'}`;
+            document.getElementById('te').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'expense' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-slate-100 text-orange-600'}`;
+        };
 
+        const startSync = (uid) => {
+            onValue(ref(db, `users/${uid}/staff`), s => {
+                staffData = s.val() || {};
+                const staffKeys = Object.keys(staffData).sort();
+
+                let sh = '';
+                let opts = '<option value="">All Personnel (Master Ledger)</option>';
+                let mh = '';
+                
+                Object.keys(staffData).forEach(id => {
+                    const u = staffData[id];
+                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                    sh += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600 font-black">: ${fmt(u.balance)}</span></div>
+                        </div>
+                    </div>`;
+                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
+                    
+                    mh += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer flex divide-x divide-slate-100">
+                            <span onclick="editUser('${id}')" class="flex-1 text-blue-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
+                            <span onclick="delUser('${id}')" class="flex-1 text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('r-staff').innerHTML = opts;
+                renderHome();
+            });
+
+            onValue(ref(db, `users/${uid}/logs`), s => {
+                const d = s.val() || {};
+                logsList = Object.keys(d).map(k => ({...d[k], key: k})).sort((a,b) => (a.ts || 0) - (b.ts || 0));
+                renderHome();
+            });
+        };
+
+        const renderHome = () => {
+            let cb = 0, mi = 0, me = 0;
+            const m = getDhakaMonthKey();
+            let logsWithBal = [];
+            let staffBals = {};
+
+            logsList.forEach(l => {
+                if(!staffBals[l.staffId]) staffBals[l.staffId] = 0;
+                if(l.type === 'income') { cb += l.amount; staffBals[l.staffId] += l.amount; }
+                else { cb -= l.amount; staffBals[l.staffId] -= l.amount; }
+                if(l.date.startsWith(m)) { if(l.type === 'income') mi += l.amount; else me += l.amount; }
+                
+                logsWithBal.push({ ...l, sb: staffBals[l.staffId], cb });
+            });
+
+            window.logsWithBalData = logsWithBal; // Store globally
+            document.getElementById('cb-display').innerText = Math.abs(cb).toLocaleString('en-BD', {minimumFractionDigits: 2});
+            document.getElementById('month-label').innerText = getDhakaMonthLabel();
+            document.getElementById('month-received').innerText = fmt(mi);
+            document.getElementById('month-advanced').innerText = fmt(me);
+            document.getElementById('card-curr-label').innerText = currFormat === 'usd' ? '$' : 'BDT';
+
+            let rh = '';
+            [...logsWithBal].reverse().slice(0, 10).forEach(l => {
+                rh += `
+                <div class="flex items-center justify-between p-4 bg-white rounded-[20px] shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center ${l.type==='income'?'bg-teal-50 text-teal-600':'bg-orange-50 text-orange-500'}">
+                            <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'}"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-900">${l.staffName}</p>
+                            <div class="flex items-center gap-1 mt-0.5">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">${l.date}</span>
+                                <span class="text-slate-300">•</span>
+                                <span onclick="shareTransaction('${l.key}')" class="nexus-link"><i class="fa-solid fa-share-nodes"></i> Share Memo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-black ${l.type==='income'?'text-teal-600':'text-orange-500'}">${fmt(l.amount)}</p>
+                        <p class="text-[9px] font-bold text-blue-500 mt-0.5 uppercase tracking-tight">Bal: ${fmt(l.cb)}</p>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('recent-logs').innerHTML = rh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No recent transactions</p>';
+
+            // Call to update history page
+            window.renderHistory();
+        };
+
+        // Render Transaction History Page logic extracted from renderHome
+        window.renderHistory = () => {
+            const start = document.getElementById('hist-start').value;
+            const end = document.getElementById('hist-end').value;
+            let mLogH = '';
+            
+            if(!window.logsWithBalData) return;
+
+            [...window.logsWithBalData].reverse().forEach(l => {
+                if ((!start || l.date >= start) && (!end || l.date <= end)) {
+                    mLogH += `
+                    <div class="nexus-card">
+                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                        </div>
+                        <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
+                    </div>`;
+                }
+            });
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No history found</p>';
+        };
+
+        window.generateReport = () => {
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
+            const sid = document.getElementById('r-staff').value;
+            const isMaster = !sid;
+
+            let prevBalIndividual = 0, prevBalCentral = 0;
+            let fil = logsList.filter(l => {
+                if(!isMaster && l.staffId !== sid) return false;
+                
+                if (l.date < start) {
+                    if(l.type === 'income') {
+                        if(!isMaster) prevBalIndividual += l.amount;
+                        prevBalCentral += l.amount;
+                    } else {
+                        if(!isMaster) prevBalIndividual -= l.amount;
+                        prevBalCentral -= l.amount;
+                    }
+                    return false;
+                }
+                if (l.date > end) return false;
+                return true;
+            });
+
+            document.getElementById('report-duration').innerText = `STATEMENT PERIOD: ${start} TO ${end}`;
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('pdf-btn').classList.remove('hidden');
+
+            const hMeta = document.getElementById('individual-header-meta');
+            const thead = document.getElementById('report-table-header');
+            
+            if (isMaster) {
+                hMeta.classList.add('hidden');
+                hMeta.innerHTML = '';
+                thead.innerHTML = `
+                    <th class="p-2 border border-slate-200 text-left">DATE</th>
+                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-200 text-left">PERSONNEL</th>
+                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-200 text-right">C. BALANCE</th>
+                `;
+            } else {
+                const u = staffData[sid];
+                const staffKeys = Object.keys(staffData).sort();
+                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
+                
+                hMeta.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-xs font-black uppercase tracking-widest text-slate-800">${u.name}</h2>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">${u.desig}</p>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">ID: ${g4sUserId}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Contact</p>
+                            <p class="text-[9px] font-bold text-slate-800">${u.phone}</p>
+                        </div>
+                    </div>
+                `;
+                hMeta.classList.remove('hidden');
+
+                thead.innerHTML = `
+                    <th class="p-2 border border-slate-200 text-left">DATE</th>
+                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-200 text-left">PARTICULARS</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-200 text-right">BALANCE</th>
+                `;
+            }
+
+            let tbody = `
+                <tr class="text-[9px] font-bold bg-slate-50/50">
+                    <td class="p-2 border border-slate-200" colspan="${isMaster ? 6 : 6}">Opening Balance as on ${start}</td>
+                    <td class="p-2 border border-slate-200 text-right text-blue-600">${fmt(isMaster ? prevBalCentral : prevBalIndividual)}</td>
+                </tr>
+            `;
+
+            let runInd = prevBalIndividual, runCen = prevBalCentral;
+            let ti = 0, te = 0;
+
+            fil.forEach(l => {
+                const isInc = l.type === 'income';
+                if(isInc) {
+                    if(!isMaster) runInd += l.amount;
+                    runCen += l.amount;
+                    ti += l.amount;
+                } else {
+                    if(!isMaster) runInd -= l.amount;
+                    runCen -= l.amount;
+                    te += l.amount;
+                }
+
+                if (isMaster) {
+                    tbody += `
+                    <tr class="text-[9px]">
+                        <td class="p-2 border border-slate-200">${l.date}</td>
+                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-200">${l.staffName}</td>
+                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right font-bold text-slate-700">${fmt(runCen)}</td>
+                    </tr>`;
+                } else {
+                    tbody += `
+                    <tr class="text-[9px]">
+                        <td class="p-2 border border-slate-200">${l.date}</td>
+                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-200 text-slate-500">${l.note || '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right font-bold text-slate-700">${fmt(runInd)}</td>
+                    </tr>`;
+                }
+            });
+
+            document.getElementById('report-body').innerHTML = tbody;
+            
+            document.getElementById('report-summary').innerHTML = `
+                <div class="flex justify-between items-center text-[9px] uppercase"><span class="text-slate-500">Total Cash In</span><span class="text-teal-600">${fmt(ti)}</span></div>
+                <div class="flex justify-between items-center text-[9px] uppercase"><span class="text-slate-500">Total Cash Out</span><span class="text-rose-600">${fmt(te)}</span></div>
+                <div class="flex justify-between items-center text-[10px] mt-2 pt-2 border-t border-slate-200"><span class="text-slate-700">Closing Balance on ${end}</span><span class="text-blue-600">${fmt(isMaster ? runCen : runInd)}</span></div>
+            `;
+        };
+
+        window.exportPDF = () => {
+            const sid = document.getElementById('r-staff').value;
+            const uName = sid && staffData[sid] ? staffData[sid].name.replace(/\s+/g, '_') : 'Master';
+            const element = document.getElementById('pdf-content');
+
+            // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
             const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
@@ -1151,11 +1418,12 @@
             const originalBoxSizing = element.style.boxSizing;
             const originalBg = element.style.backgroundColor;
 
+            // Apply specific A4 strictly proportional sizing (at 96 DPI)
             element.style.width = '794px'; 
             element.style.height = '1122px';
             element.style.minHeight = '1122px';
             element.style.margin = '0';
-            element.style.padding = '40px';
+            element.style.padding = '40px'; 
             element.style.maxWidth = 'none';
             element.style.display = 'flex';
             element.style.flexDirection = 'column';
@@ -1163,13 +1431,16 @@
             element.style.boxSizing = 'border-box';
             element.style.backgroundColor = '#ffffff';
 
-            html2pdf().from(element).set({
-                margin: 0,
-                filename: `Receipt_${getTxnId(key)}.pdf`,
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save().then(() => {
+            const opt = {
+                margin:       0,
+                filename:     `Ledger_${uName}_${document.getElementById('r-start').value}_to_${document.getElementById('r-end').value}.pdf`,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 794 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
                 element.style.height = originalHeight;
                 element.style.margin = originalMargin;
@@ -1182,281 +1453,6 @@
                 element.style.boxSizing = originalBoxSizing;
                 element.style.backgroundColor = originalBg;
             });
-        };
-
-        function startSync(uid) {
-            onValue(ref(db, `users/${uid}/staff`), s => {
-                staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
-                const staffKeys = Object.keys(staffData).sort();
-
-                Object.keys(staffData).forEach(id => {
-                    const u = staffData[id];
-                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
-
-                    sH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Ledger Statement</span></div>
-                    </div>`;
-
-                    mSH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">G4S ID: ${g4sUserId}</span><span class="nexus-header-val">Manage</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Current Bal</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer flex justify-around items-center">
-                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
-                            <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
-                        </div>
-                    </div>`;
-                });
-                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
-            });
-
-            onValue(ref(db, `users/${uid}/logs`), s => {
-                logsList = Object.keys(s.val() || {}).map(k => ({...s.val()[k], key: k})).sort((a,b) => a.ts - b.ts);
-                renderHome();
-            });
-        }
-
-        function renderHome() {
-            const monthKey = getDhakaMonthKey();
-            document.getElementById('month-label').innerText = getDhakaMonthLabel();
-
-            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
-            const logsWithBal = logsList.map(l => {
-                const a = Number(l.amount || 0);
-                if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
-                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
-                return { ...l, cb: rCB, sb: rSB[l.staffId] };
-            });
-
-            window.logsWithBalData = logsWithBal; // Store globally for Sharing
-
-            document.getElementById('cb-display').innerText = fmt(rCB);
-            document.getElementById('month-received').innerText = fmt(monthlyRec);
-            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
-
-            let logH = '', mLogH = '';
-
-            [...logsWithBal].reverse().slice(0, 5).forEach((l, index) => {
-                let shareBtnHTML = '';
-                if (index < 2) {
-                    shareBtnHTML = `<button onclick="shareTransaction('${l.key}')" class="w-full mt-3 bg-blue-50 hover:bg-blue-100 text-blue-600 p-2.5 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors border border-blue-100"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>`;
-                }
-
-                logH += `
-                <div class="nexus-card">
-                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
-                    <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                        ${shareBtnHTML}
-                    </div>
-                </div>`;
-            });
-
-            [...logsWithBal].reverse().forEach(l => {
-                mLogH += `
-                <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
-                    <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                    </div>
-                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
-                </div>`;
-            });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent logs</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
-        }
-
-        const formatDt = (d) => {
-            if(!d) return "All Time";
-            return new Date(d).toLocaleDateString('en-GB');
-        };
-
-        window.generateReport = () => {
-            const start = document.getElementById('r-start').value;
-            const end = document.getElementById('r-end').value;
-            const sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, openingBal = 0;
-
-            document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
-
-            const metaHeader = document.getElementById('individual-header-meta');
-            const tableHeader = document.getElementById('report-table-header');
-
-            if (sid && staffData[sid]) {
-                const u = staffData[sid];
-                const staffKeys = Object.keys(staffData).sort();
-                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
-
-                metaHeader.innerHTML = `
-                    <div class="grid grid-cols-2 gap-4 text-[10px]">
-                        <div>
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Personnel Title</span><span class="text-xs font-black text-slate-800">${u.name}</span></p>
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Designation</span><span class="font-bold">${u.desig}</span></p>
-                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Account Reference</span><span class="font-bold text-blue-700">${g4sUserId}</span></p>
-                        </div>
-                        <div class="border-l border-slate-200 pl-4">
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Phone Contact</span><span class="font-bold">${u.phone || 'N/A'}</span></p>
-                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Secure Email</span><span class="font-bold">${u.email || 'N/A'}</span></p>
-                        </div>
-                    </div>
-                `;
-                metaHeader.classList.remove('hidden');
-
-                tableHeader.innerHTML = `
-                    <th class="border p-2 w-[40px]">SL</th>
-                    <th class="border p-2 w-[80px]">Date</th>
-                    <th class="border p-2 w-[90px]">TRXID</th>
-                    <th class="border p-2">Type (Category)</th>
-                    <th class="border p-2 text-right w-[100px]">Amount</th>
-                    <th class="border p-2 text-right w-[110px]">Balance</th>
-                `;
-            } else {
-                metaHeader.classList.add('hidden');
-                metaHeader.innerHTML = '';
-
-                tableHeader.innerHTML = `
-                    <th class="border p-2 w-[40px]">SL</th>
-                    <th class="border p-2 w-[80px]">Date</th>
-                    <th class="border p-2 w-[90px]">TRXID</th>
-                    <th class="border p-2">Name</th>
-                    <th class="border p-2">Type (Category)</th>
-                    <th class="border p-2 text-right w-[100px]">Amount</th>
-                    <th class="border p-2 text-right w-[110px]">Balance</th>
-                `;
-            }
-
-            if (start) {
-                logsList.forEach(l => {
-                    if (!sid || l.staffId === sid) {
-                        if (l.date < start) {
-                            const a = Number(l.amount || 0);
-                            if (l.type === 'income') openingBal += a; else openingBal -= a;
-                        }
-                    }
-                });
-            }
-
-            let runningBal = openingBal;
-
-            if (start) {
-                if (sid) {
-                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
-                        <td class="border p-2 text-center">-</td>
-                        <td class="border p-2">${start}</td>
-                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
-                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
-                        <td class="border p-2 text-right">-</td>
-                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
-                    </tr>`;
-                } else {
-                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
-                        <td class="border p-2 text-center">-</td>
-                        <td class="border p-2">${start}</td>
-                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
-                        <td class="border p-2 font-bold text-slate-600">System Vault</td>
-                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
-                        <td class="border p-2 text-right">-</td>
-                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
-                    </tr>`;
-                }
-            }
-
-            logsList.forEach(l => {
-                if (!sid || l.staffId === sid) {
-                    if ((!start || l.date >= start) && (!end || l.date <= end)) {
-                        const a = Number(l.amount || 0);
-                        if (l.type === 'income') {
-                            runningBal += a;
-                            tRec += a;
-                        } else {
-                            runningBal -= a;
-                            tAdv += a;
-                        }
-
-                        const trxIdStr = getTxnId(l.key);
-                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
-
-                        if (sid) {
-                            html += `<tr>
-                                <td class="border p-2 text-center">${sl++}</td>
-                                <td class="border p-2">${l.date}</td>
-                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
-                                <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                            </tr>`;
-                        } else {
-                            html += `<tr>
-                                <td class="border p-2 text-center">${sl++}</td>
-                                <td class="border p-2">${l.date}</td>
-                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-semibold text-slate-800">${l.staffName}</td>
-                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
-                                <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                            </tr>`;
-                        }
-                    }
-                }
-            });
-
-            document.getElementById('report-body').innerHTML = html || `<tr><td colspan="${sid ? 6 : 7}" class="text-center p-4 text-slate-400 font-bold">No Records Found</td></tr>`;
-
-            document.getElementById('report-summary').innerHTML = `
-                <div class="flex justify-between items-center text-teal-600">
-                    <span>Total Cash In (Received):</span>
-                    <span>${fmt(tRec)}</span>
-                </div>
-                <div class="flex justify-between items-center text-rose-600">
-                    <span>Total Cash Out (Advanced):</span>
-                    <span>${fmt(tAdv)}</span>
-                </div>
-                <div class="flex justify-between items-center text-slate-900 font-black text-xs border-t pt-2 mt-1">
-                    <span>Net Closing Balance:</span>
-                    <span class="text-blue-700">${fmt(runningBal)}</span>
-                </div>
-            `;
-
-            document.getElementById('report-view').classList.remove('hidden');
-            document.getElementById('pdf-btn').classList.remove('hidden');
-        };
-
-        window.exportPDF = () => {
-            const element = document.getElementById('pdf-content');
-            const opt = {
-                margin: [5, 5, 5, 5],
-                filename: `Ledger_Report_${getDhakaDate()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
         };
     </script>
 </body>
