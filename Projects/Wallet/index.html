@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Added html2canvas for image generation and sharing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -172,9 +171,7 @@
         /* Prevent Summary Elements From Breaking in PDF */
         .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
 
-        /* ========================================= */
-        /* DESKTOP MODE POLISH & OPTIMIZATION        */
-        /* ========================================= */
+        /* DESKTOP MODE POLISH & OPTIMIZATION */
         @media (min-width: 768px) {
             body {
                 display: flex;
@@ -183,7 +180,6 @@
                 background-attachment: fixed;
                 overflow-y: auto;
             }
-            /* Centers the app and simulates a floating app widget */
             .page {
                 width: 100%;
                 max-width: 600px;
@@ -211,7 +207,7 @@
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
             }
             .modal {
-                align-items: center; /* Center horizontally and vertically */
+                align-items: center;
             }
             .modal-content {
                 max-width: 600px;
@@ -220,7 +216,6 @@
                 border: 1px solid rgba(255,255,255,0.6);
                 box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             }
-            /* Customized Scrollbar for Desktop */
             ::-webkit-scrollbar {
                 width: 8px;
                 height: 8px;
@@ -289,15 +284,13 @@
             <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- Stylish Debit/Balance Card -->
+        <!-- Debit/Balance Card -->
         <div class="flex justify-center mb-8 group perspective">
             <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
-                <!-- Glassmorphic Accents -->
                 <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
 
-                <!-- Top Header -->
                 <div class="flex justify-between items-start z-10">
                     <div>
                         <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
@@ -306,14 +299,12 @@
                             <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
                         </div>
                     </div>
-                    <!-- Card Network / Contactless -->
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
                         <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
                     </div>
                 </div>
 
-                <!-- EMV Chip -->
                 <div class="z-10 mt-1">
                     <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm flex items-center justify-center border border-yellow-300/30 relative overflow-hidden">
                         <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
@@ -323,7 +314,6 @@
                     </div>
                 </div>
 
-                <!-- Balance Area -->
                 <div class="z-10 mt-2">
                     <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
                     <div class="flex items-baseline gap-1.5">
@@ -332,7 +322,6 @@
                     </div>
                 </div>
 
-                <!-- Cardholder & Details -->
                 <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
                     <div>
                         <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
@@ -392,7 +381,6 @@
         <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
             <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Select Personnel</p>
 
-            <!-- Search Bar -->
             <div class="relative mb-4">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input id="staff-search" type="text" placeholder="Search by name, ID or post..." 
@@ -400,10 +388,8 @@
                        class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
             </div>
 
-            <!-- Search Results Dropdown -->
             <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
 
-            <!-- Selected Personnel Display -->
             <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
                 <div>
                     <p id="sel-name" class="text-xs font-black text-blue-800"></p>
@@ -448,9 +434,9 @@
         <div id="staff-list" class="space-y-4"></div>
     </div>
 
-    <!-- SETTINGS PAGE -->
+    <!-- TOOLS PAGE -->
     <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Settings</h2>
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Tools</h2>
         <div class="space-y-4">
             <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
                 <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
@@ -521,11 +507,21 @@
     <!-- TRANSACTION HISTORY PAGE -->
     <div id="history-page" class="page p-5 pb-24">
         <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 mb-4">
                 <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-2xl font-bold text-slate-900">Transaction History</h2>
+            </div>
+            <div class="bg-white p-4 rounded-[24px] shadow-sm border border-slate-100 flex gap-3">
+                <div class="flex-1 space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
+                    <input type="date" id="hist-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+                </div>
+                <div class="flex-1 space-y-1">
+                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
+                    <input type="date" id="hist-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+                </div>
             </div>
         </div>
         <div id="mgmt-txn-list" class="space-y-4"></div>
@@ -562,7 +558,6 @@
         <div id="report-view" class="hidden">
             <div class="report-scroll-container">
                 <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative">
-                    <!-- Logo added at top left corner of the ledger statement report content -->
                     <div class="flex justify-between items-start mb-2">
                         <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                         <div class="text-right flex-1">
@@ -573,21 +568,17 @@
                     </div>
                     <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
 
-                    <!-- Dynamic DBBL Bank style Individual Statement Meta Header Container -->
                     <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
 
                     <table class="w-full border-collapse border border-slate-200">
                         <thead>
-                            <tr class="bg-slate-100 text-[8px]" id="report-table-header">
-                                <!-- Generated Dynamically based on scope selection -->
-                            </tr>
+                            <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
                         </thead>
                         <tbody id="report-body"></tbody>
                     </table>
 
                     <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
 
-                    <!-- Watermark-style footer at the end of report -->
                     <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
                         <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
                         <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
@@ -626,21 +617,18 @@
         </div>
     </div>
 
-    <!-- TRANSACTION MEMO MODAL (Added Feature) -->
+    <!-- TRANSACTION MEMO MODAL -->
     <div id="memo-modal" class="modal">
         <div class="modal-content !p-0 flex flex-col !overflow-hidden">
-            <!-- Sticky Header -->
             <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 z-20">
                 <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
                 <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Scrollable Content -->
             <div class="p-6 overflow-y-auto flex-1">
                 <div id="memo-content-container"></div>
             </div>
 
-            <!-- Sticky Footer with newly added Skip Share button -->
             <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
                 <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
                 <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
@@ -653,7 +641,7 @@
     <nav id="navbar" class="bottom-nav hidden">
         <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
         <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">SETTINGS</p></button>
+        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">TOOLS</p></button>
     </nav>
 
     <script type="module">
@@ -681,7 +669,7 @@
         let currFormat = 'bdt';
         let editingStaffId = null;
 
-        window.logsWithBalData = []; // Store globally for sharing latest entries
+        window.logsWithBalData = [];
 
         const fmt = (num) => {
             const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
@@ -689,14 +677,12 @@
             return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
         };
 
-        // Alphanumeric Transaction ID Formatter (G4SXXXXXX)
         const getTxnId = (key) => {
             if (!key) return "G4S000000";
             const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             return `G4S${clean.slice(-6).padStart(6, '0')}`;
         };
 
-        // Dhaka Date Helper Functions
         const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
 
         const getDhakaDate = () => {
@@ -738,10 +724,12 @@
                 document.getElementById('navbar').classList.remove('hidden');
                 document.getElementById('user-display').innerText = user.email.split('@')[0];
 
-                // Auto Specific Dates (Dhaka Time)
                 document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
                 document.getElementById('r-end').value = getDhakaDate();
                 document.getElementById('m-date').value = getDhakaDate();
+
+                document.getElementById('hist-start').value = getDhakaFirstOfMonth(); 
+                document.getElementById('hist-end').value = getDhakaDate();
 
                 startSync(user.uid);
             } else {
@@ -869,14 +857,12 @@
             const staff = staffData[sid];
             const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
 
-            // Push creates the ref synchronously to give us a unique key instantly
             const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
                 staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
                 cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
             });
             update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
 
-            // Generate Memo Data for automated opening
             const txnDataForMemo = {
                 key: newTxnRef.key,
                 staffId: sid,
@@ -887,18 +873,16 @@
                 cat: document.getElementById('m-cat').value,
                 note: document.getElementById('m-note').value,
                 ts: Date.now(),
-                sb: newBal // Closing / Last balance
+                sb: newBal
             };
 
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
 
-            // Open auto memo displaying the transaction
             window.openMemoModal(txnDataForMemo);
         };
 
-        // Added functionality for Auto-Memo and Direct Sharing 
         window.currentMemoData = null;
         window.openMemoModal = (data) => {
             window.currentMemoData = data;
@@ -907,7 +891,6 @@
             const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
             const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
 
-            // Sequence Tracking: Find the contextual last transaction preceding this entry
             const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
             const currentIdx = staffLogs.findIndex(l => l.key === data.key);
             const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
@@ -958,14 +941,12 @@
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
 
-            // Lock dimensions for standard image sharing export mapping
             element.style.width = '600px'; 
             element.style.margin = '0 auto';
             element.style.maxWidth = 'none';
 
             const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
 
-            // Restore visual styles in DOM
             element.style.width = originalWidth;
             element.style.margin = originalMargin;
             element.style.maxWidth = '';
@@ -981,7 +962,6 @@
                         });
                     } catch (err) { console.log('Share action cancelled or failed', err); }
                 } else {
-                    // Fallback to downloading if browser doesn't support direct sharing
                     const link = document.createElement('a');
                     link.download = `Memo_${getTxnId(key)}.png`;
                     link.href = canvas.toDataURL("image/png");
@@ -994,7 +974,6 @@
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
 
-            // Backup styling before transforming for A4 perfect centering
             const originalWidth = element.style.width;
             const originalHeight = element.style.height;
             const originalMargin = element.style.margin;
@@ -1007,7 +986,6 @@
             const originalBoxSizing = element.style.boxSizing;
             const originalBg = element.style.backgroundColor;
 
-            // Apply specific A4 strictly proportional sizing (at 96 DPI) and vertical center alignment
             element.style.width = '794px'; 
             element.style.height = '1122px';
             element.style.minHeight = '1122px';
@@ -1029,7 +1007,6 @@
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                // Restore visual styles dynamically in DOM
                 element.style.width = originalWidth;
                 element.style.height = originalHeight;
                 element.style.margin = originalMargin;
@@ -1094,7 +1071,7 @@
                             </div>
                         </div>
                         <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Transaction Memo</h2>
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Lookup Result</h2>
                         </div>
                     </div>
                     <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
@@ -1104,355 +1081,301 @@
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u ? u.phone : '-'}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'Cash In':'Cash Out'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50"><span class="nexus-key !text-blue-600">Current Balance</span><span class="nexus-val text-blue-600">: ${u ? fmt(u.balance) : '-'}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                         </div>
                     </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-4">
+                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
                         <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
                         <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
-                <button onclick="exportLookupPDF('${match.key}')" class="w-full mt-4 bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf"></i> Download PDF Receipt</button>
                 `;
             } else {
-                container.innerHTML = '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>';
+                container.innerHTML = `<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
             }
         };
 
-        window.exportLookupPDF = (key) => {
-            const element = document.getElementById(`lookup-pdf-content-${key}`);
-
-            const originalWidth = element.style.width;
-            const originalHeight = element.style.height;
-            const originalMargin = element.style.margin;
-            const originalPadding = element.style.padding;
-            const originalMaxWidth = element.style.maxWidth;
-            const originalMinHeight = element.style.minHeight;
-            const originalDisplay = element.style.display;
-            const originalFlexDirection = element.style.flexDirection;
-            const originalJustifyContent = element.style.justifyContent;
-            const originalBoxSizing = element.style.boxSizing;
-            const originalBg = element.style.backgroundColor;
-
-            element.style.width = '794px'; 
-            element.style.height = '1122px';
-            element.style.minHeight = '1122px';
-            element.style.margin = '0';
-            element.style.padding = '40px';
-            element.style.maxWidth = 'none';
-            element.style.display = 'flex';
-            element.style.flexDirection = 'column';
-            element.style.justifyContent = 'center';
-            element.style.boxSizing = 'border-box';
-            element.style.backgroundColor = '#ffffff';
-
-            html2pdf().from(element).set({
-                margin: 0,
-                filename: `Receipt_${getTxnId(key)}.pdf`,
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save().then(() => {
-                element.style.width = originalWidth;
-                element.style.height = originalHeight;
-                element.style.margin = originalMargin;
-                element.style.padding = originalPadding;
-                element.style.maxWidth = originalMaxWidth;
-                element.style.minHeight = originalMinHeight;
-                element.style.display = originalDisplay;
-                element.style.flexDirection = originalFlexDirection;
-                element.style.justifyContent = originalJustifyContent;
-                element.style.boxSizing = originalBoxSizing;
-                element.style.backgroundColor = originalBg;
-            });
+        window.setT = (t) => {
+            currentType = t;
+            document.getElementById('ti').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'income' ? 'bg-teal-500 text-white shadow-lg shadow-teal-100' : 'bg-slate-100 text-teal-600'}`;
+            document.getElementById('te').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'expense' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-slate-100 text-orange-600'}`;
         };
 
-        function startSync(uid) {
+        const startSync = (uid) => {
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
-                let sH = '', mSH = '', opts = '<option value="">Select Personnel</option>';
                 const staffKeys = Object.keys(staffData).sort();
 
+                let sh = '';
+                let opts = '<option value="">All Personnel (Master Ledger)</option>';
+                let mh = '';
+                
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
-
-                    sH += `
+                    sh += `
                     <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">User ID</span><span class="nexus-header-val">: ${g4sUserId}</span></div>
+                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
                         <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Account Title</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Account Balance</span><span class="nexus-val">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer"><span onclick="showPage('reports-page'); document.getElementById('r-staff').value='${id}';" class="nexus-link">View Ledger Statement</span></div>
-                    </div>`;
-
-                    mSH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">G4S ID: ${g4sUserId}</span><span class="nexus-header-val">Manage</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Full Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Current Bal</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600 font-black">: ${fmt(u.balance)}</span></div>
                         </div>
-                        <div class="nexus-footer flex justify-around items-center">
-                            <button onclick="editUser('${id}')" class="text-blue-600 text-[10px] font-bold uppercase"><i class="fas fa-edit mr-1"></i> Edit</button>
-                            <button onclick="delUser('${id}')" class="text-rose-600 text-[10px] font-bold uppercase"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
+                    </div>`;
+                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
+                    
+                    mh += `
+                    <div class="nexus-card">
+                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                        </div>
+                        <div class="nexus-footer flex divide-x divide-slate-100">
+                            <span onclick="editUser('${id}')" class="flex-1 text-blue-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
+                            <span onclick="delUser('${id}')" class="flex-1 text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
                         </div>
                     </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sH || '<p class="text-center py-10 text-xs text-slate-400">Empty directory</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mSH || '<p class="text-center py-10 text-xs text-slate-400">No records to manage</p>';
-                if(document.getElementById('r-staff')) document.getElementById('r-staff').innerHTML = opts.replace('Select Personnel', 'All Staff Members');
+                document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('r-staff').innerHTML = opts;
+                renderHome();
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
-                logsList = Object.keys(s.val() || {}).map(k => ({...s.val()[k], key: k})).sort((a,b) => a.ts - b.ts);
+                const d = s.val() || {};
+                logsList = Object.keys(d).map(k => ({...d[k], key: k})).sort((a,b) => (a.ts || 0) - (b.ts || 0));
                 renderHome();
             });
-        }
+        };
 
-        function renderHome() {
-            const now = new Date();
-            const monthKey = getDhakaMonthKey();
+        const renderHome = () => {
+            let cb = 0, mi = 0, me = 0;
+            const m = getDhakaMonthKey();
+            let logsWithBal = [];
+            let staffBals = {};
+
+            logsList.forEach(l => {
+                if(!staffBals[l.staffId]) staffBals[l.staffId] = 0;
+                if(l.type === 'income') { cb += l.amount; staffBals[l.staffId] += l.amount; }
+                else { cb -= l.amount; staffBals[l.staffId] -= l.amount; }
+                if(l.date.startsWith(m)) { if(l.type === 'income') mi += l.amount; else me += l.amount; }
+                
+                logsWithBal.push({ ...l, sb: staffBals[l.staffId], cb });
+            });
+
+            window.logsWithBalData = logsWithBal;
+            document.getElementById('cb-display').innerText = Math.abs(cb).toLocaleString('en-BD', {minimumFractionDigits: 2});
             document.getElementById('month-label').innerText = getDhakaMonthLabel();
+            document.getElementById('month-received').innerText = fmt(mi);
+            document.getElementById('month-advanced').innerText = fmt(me);
+            document.getElementById('card-curr-label').innerText = currFormat === 'usd' ? '$' : 'BDT';
 
-            let rCB = 0, monthlyRec = 0, monthlyAdv = 0, rSB = {};
-            const logsWithBal = logsList.map(l => {
-                const a = Number(l.amount || 0);
-                if(!rSB[l.staffId]) rSB[l.staffId] = 0;
-                if(l.type === 'income') { rCB += a; rSB[l.staffId] += a; } else { rCB -= a; rSB[l.staffId] -= a; }
-                if(l.date && l.date.startsWith(monthKey)) { if(l.type === 'income') monthlyRec += a; else monthlyAdv += a; }
-                return { ...l, cb: rCB, sb: rSB[l.staffId] };
+            let rh = '';
+            [...logsWithBal].reverse().slice(0, 10).forEach(l => {
+                rh += `
+                <div class="flex items-center justify-between p-4 bg-white rounded-[20px] shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center ${l.type==='income'?'bg-teal-50 text-teal-600':'bg-orange-50 text-orange-500'}">
+                            <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'}"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-900">${l.staffName}</p>
+                            <div class="flex items-center gap-1 mt-0.5">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">${l.date}</span>
+                                <span class="text-slate-300">•</span>
+                                <span onclick="shareTransaction('${l.key}')" class="nexus-link"><i class="fa-solid fa-share-nodes"></i> Share Memo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-black ${l.type==='income'?'text-teal-600':'text-orange-500'}">${fmt(l.amount)}</p>
+                        <p class="text-[9px] font-bold text-blue-500 mt-0.5 uppercase tracking-tight">Bal: ${fmt(l.cb)}</p>
+                    </div>
+                </div>`;
             });
+            document.getElementById('recent-logs').innerHTML = rh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No recent transactions</p>';
 
-            window.logsWithBalData = logsWithBal; // Store globally for Sharing
+            window.renderHistory();
+        };
 
-            document.getElementById('cb-display').innerText = fmt(rCB);
-            document.getElementById('month-received').innerText = fmt(monthlyRec);
-            document.getElementById('month-advanced').innerText = fmt(monthlyAdv);
+        window.renderHistory = () => {
+            const start = document.getElementById('hist-start').value;
+            const end = document.getElementById('hist-end').value;
+            let mLogH = '';
+            
+            if(!window.logsWithBalData) return;
 
-            let logH = '', mLogH = '';
-
-            [...logsWithBal].reverse().slice(0, 5).forEach((l, index) => {
-                let shareBtnHTML = '';
-                if (index < 2) {
-                    shareBtnHTML = `<button onclick="shareTransaction('${l.key}')" class="w-full mt-3 bg-blue-50 hover:bg-blue-100 text-blue-600 p-2.5 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors border border-blue-100"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>`;
+            [...window.logsWithBalData].reverse().forEach(l => {
+                if ((!start || l.date >= start) && (!end || l.date <= end)) {
+                    mLogH += `
+                    <div class="nexus-card">
+                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                        </div>
+                        <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
+                    </div>`;
                 }
-
-                logH += `
-                <div class="nexus-card">
-                    <div class="nexus-header"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-label">${getTxnId(l.key)}</span></div>
-                    <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                        ${shareBtnHTML}
-                    </div>
-                </div>`;
             });
-
-            [...logsWithBal].reverse().forEach(l => {
-                mLogH += `
-                <div class="nexus-card">
-                    <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
-                    <div class="nexus-body">
-                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'Cash In':'Cash Out'} (${l.cat || '-'})</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                        <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                    </div>
-                    <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
-                </div>`;
-            });
-            document.getElementById('recent-logs').innerHTML = logH || '<p class="text-center text-slate-400 text-xs py-10">No recent logs</p>';
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10">History empty</p>';
-        }
-
-        const formatDt = (d) => {
-            if(!d) return "All Time";
-            return new Date(d).toLocaleDateString('en-GB');
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No history found</p>';
         };
 
         window.generateReport = () => {
-            const start = document.getElementById('r-start').value, end = document.getElementById('r-end').value, sid = document.getElementById('r-staff').value;
-            let html = '', sl = 1, tAdv = 0, tRec = 0, openingBal = 0;
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
+            const sid = document.getElementById('r-staff').value;
+            const isMaster = !sid;
 
-            document.getElementById('report-duration').innerText = `Duration: ${start ? formatDt(start) : 'All Time'} to ${end ? formatDt(end) : 'All Time'}`;
+            let prevBalIndividual = 0, prevBalCentral = 0;
+            let fil = logsList.filter(l => {
+                if(!isMaster && l.staffId !== sid) return false;
+                
+                if (l.date < start) {
+                    if(l.type === 'income') {
+                        if(!isMaster) prevBalIndividual += l.amount;
+                        prevBalCentral += l.amount;
+                    } else {
+                        if(!isMaster) prevBalIndividual -= l.amount;
+                        prevBalCentral -= l.amount;
+                    }
+                    return false;
+                }
+                if (l.date > end) return false;
+                return true;
+            });
 
-            const metaHeader = document.getElementById('individual-header-meta');
-            const tableHeader = document.getElementById('report-table-header');
+            document.getElementById('report-duration').innerText = `STATEMENT PERIOD: ${start} TO ${end}`;
+            document.getElementById('report-view').classList.remove('hidden');
+            document.getElementById('pdf-btn').classList.remove('hidden');
 
-            if (sid && staffData[sid]) {
+            const hMeta = document.getElementById('individual-header-meta');
+            const thead = document.getElementById('report-table-header');
+            
+            if (isMaster) {
+                hMeta.classList.add('hidden');
+                hMeta.innerHTML = '';
+                thead.innerHTML = `
+                    <th class="p-2 border border-slate-200 text-left">DATE</th>
+                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-200 text-left">PERSONNEL</th>
+                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-200 text-right">C. BALANCE</th>
+                `;
+            } else {
                 const u = staffData[sid];
                 const staffKeys = Object.keys(staffData).sort();
                 const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
-
-                metaHeader.innerHTML = `
-                    <div class="grid grid-cols-2 gap-4 text-[10px]">
+                
+                hMeta.innerHTML = `
+                    <div class="flex justify-between items-start">
                         <div>
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Personnel Title</span><span class="text-xs font-black text-slate-800">${u.name}</span></p>
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Designation</span><span class="font-bold">${u.desig}</span></p>
-                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Account Reference</span><span class="font-bold text-blue-700">${g4sUserId}</span></p>
+                            <h2 class="text-xs font-black uppercase tracking-widest text-slate-800">${u.name}</h2>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">${u.desig}</p>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">ID: ${g4sUserId}</p>
                         </div>
-                        <div class="border-l border-slate-200 pl-4">
-                            <p class="mb-1"><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Phone Contact</span><span class="font-bold">${u.phone || 'N/A'}</span></p>
-                            <p><span class="text-slate-400 uppercase tracking-wider text-[8px] block">Secure Email</span><span class="font-bold">${u.email || 'N/A'}</span></p>
+                        <div class="text-right">
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Contact</p>
+                            <p class="text-[9px] font-bold text-slate-800">${u.phone}</p>
                         </div>
                     </div>
                 `;
-                metaHeader.classList.remove('hidden');
+                hMeta.classList.remove('hidden');
 
-                tableHeader.innerHTML = `
-                    <th class="border p-2 w-[40px]">SL</th>
-                    <th class="border p-2 w-[80px]">Date</th>
-                    <th class="border p-2 w-[90px]">TRXID</th>
-                    <th class="border p-2">Type (Category)</th>
-                    <th class="border p-2 text-right w-[100px]">Amount</th>
-                    <th class="border p-2 text-right w-[110px]">Balance</th>
-                `;
-            } else {
-                metaHeader.classList.add('hidden');
-                metaHeader.innerHTML = '';
-
-                tableHeader.innerHTML = `
-                    <th class="border p-2 w-[40px]">SL</th>
-                    <th class="border p-2 w-[80px]">Date</th>
-                    <th class="border p-2 w-[90px]">TRXID</th>
-                    <th class="border p-2">Name</th>
-                    <th class="border p-2">Type (Category)</th>
-                    <th class="border p-2 text-right w-[100px]">Amount</th>
-                    <th class="border p-2 text-right w-[110px]">Balance</th>
+                thead.innerHTML = `
+                    <th class="p-2 border border-slate-200 text-left">DATE</th>
+                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-200 text-left">PARTICULARS</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-200 text-right">BALANCE</th>
                 `;
             }
 
-            if (start) {
-                logsList.forEach(l => {
-                    if (!sid || l.staffId === sid) {
-                        if (l.date < start) {
-                            const a = Number(l.amount || 0);
-                            if (l.type === 'income') openingBal += a; else openingBal -= a;
-                        }
-                    }
-                });
-            }
+            let tbody = `
+                <tr class="text-[9px] font-bold bg-slate-50/50">
+                    <td class="p-2 border border-slate-200" colspan="6">Opening Balance as on ${start}</td>
+                    <td class="p-2 border border-slate-200 text-right text-blue-600">${fmt(isMaster ? prevBalCentral : prevBalIndividual)}</td>
+                </tr>
+            `;
 
-            let runningBal = openingBal;
+            let runInd = prevBalIndividual, runCen = prevBalCentral;
+            let ti = 0, te = 0;
 
-            if (start) {
-                if (sid) {
-                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
-                        <td class="border p-2 text-center">-</td>
-                        <td class="border p-2">${start}</td>
-                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
-                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
-                        <td class="border p-2 text-right">-</td>
-                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
+            fil.forEach(l => {
+                const isInc = l.type === 'income';
+                if(isInc) {
+                    if(!isMaster) runInd += l.amount;
+                    runCen += l.amount;
+                    ti += l.amount;
+                } else {
+                    if(!isMaster) runInd -= l.amount;
+                    runCen -= l.amount;
+                    te += l.amount;
+                }
+
+                if (isMaster) {
+                    tbody += `
+                    <tr class="text-[9px]">
+                        <td class="p-2 border border-slate-200">${l.date}</td>
+                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-200">${l.staffName}</td>
+                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right font-bold text-slate-900">${fmt(runCen)}</td>
                     </tr>`;
                 } else {
-                    html += `<tr class="bg-slate-50 font-bold text-slate-700">
-                        <td class="border p-2 text-center">-</td>
-                        <td class="border p-2">${start}</td>
-                        <td class="border p-2 font-mono font-bold text-slate-400">-</td>
-                        <td class="border p-2 font-bold text-slate-600">System Vault</td>
-                        <td class="border p-2 font-semibold text-slate-600">Opening Balance</td>
-                        <td class="border p-2 text-right">-</td>
-                        <td class="border p-2 text-right font-bold text-blue-700">${fmt(openingBal)}</td>
+                    tbody += `
+                    <tr class="text-[9px]">
+                        <td class="p-2 border border-slate-200">${l.date}</td>
+                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-200">${l.note || '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-200 text-right font-bold text-blue-600">${fmt(runInd)}</td>
                     </tr>`;
-                }
-            }
-
-            logsList.forEach(l => {
-                if (!sid || l.staffId === sid) {
-                    if ((!start || l.date >= start) && (!end || l.date <= end)) {
-                        const a = Number(l.amount || 0);
-                        if (l.type === 'income') {
-                            runningBal += a;
-                            tRec += a;
-                        } else {
-                            runningBal -= a;
-                            tAdv += a;
-                        }
-
-                        const trxIdStr = getTxnId(l.key);
-                        const typeCatStr = `${l.type === 'income' ? 'Cash In' : 'Cash Out'} (${l.cat || '-'})`;
-
-                        if (sid) {
-                            html += `<tr>
-                                <td class="border p-2 text-center">${sl++}</td>
-                                <td class="border p-2">${l.date}</td>
-                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
-                                <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                            </tr>`;
-                        } else {
-                            html += `<tr>
-                                <td class="border p-2 text-center">${sl++}</td>
-                                <td class="border p-2">${l.date}</td>
-                                <td class="border p-2 font-mono font-bold text-slate-600">${trxIdStr}</td>
-                                <td class="border p-2 font-bold">${l.staffName}</td>
-                                <td class="border p-2 font-semibold ${l.type==='income'?'text-teal-600':'text-rose-600'}">${typeCatStr}</td>
-                                <td class="border p-2 text-right">${fmt(a)}</td>
-                                <td class="border p-2 text-right font-bold">${fmt(runningBal)}</td>
-                            </tr>`;
-                        }
-                    }
                 }
             });
 
-            const closingBal = openingBal + tRec - tAdv;
+            document.getElementById('report-body').innerHTML = tbody;
 
-            document.getElementById('report-view').classList.remove('hidden');
-            document.getElementById('pdf-btn').classList.remove('hidden');
-            document.getElementById('report-body').innerHTML = html;
+            const finalBal = isMaster ? runCen : runInd;
             document.getElementById('report-summary').innerHTML = `
-                ${start ? `<p class="text-blue-700">Opening Balance: ${fmt(openingBal)}</p>` : ''}
-                <p class="text-teal-600">Total Cash In: ${fmt(tRec)}</p>
-                <p class="text-orange-600">Total Cash Out: ${fmt(tAdv)}</p>
-                <p class="text-slate-900 border-t-2 mt-1 pt-1">Closing Balance: ${fmt(closingBal)}</p>
+                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash In: <span class="text-teal-600">${fmt(ti)}</span></p>
+                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash Out: <span class="text-rose-600">${fmt(te)}</span></p>
+                <p class="text-xs uppercase font-black text-slate-900 border-t border-slate-200 pt-2 mt-2">Closing Balance as on ${end}: <span class="text-blue-600">${fmt(finalBal)}</span></p>
             `;
         };
 
         window.exportPDF = () => {
             const element = document.getElementById('pdf-content');
-            element.style.minWidth = "100%"; 
+            const start = document.getElementById('r-start').value;
+            const end = document.getElementById('r-end').value;
 
-            let repName = "Abdullahil_Kuafi";
-            const sid = document.getElementById('r-staff').value;
-            if(sid && staffData[sid]) {
-                repName = staffData[sid].name.replace(/\s+/g, '_');
-            }
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     `Ledger_Report_${start}_to_${end}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
 
-            const now = new Date();
-            const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-            const tStr = `${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}`;
-            const fName = `${repName}_${dStr}_${tStr}.pdf`;
-
-            html2pdf().from(element).set({
-                margin: [10, 10, 20, 10], filename: fName,
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.nexus-row', '.summary-group'] }
-            }).save().then(() => element.style.minWidth = "650px");
-        };
-
-        window.setT = (t) => {
-            currentType = t;
-            document.getElementById('ti').className = t === 'income' ? 'flex-1 py-4 rounded-2xl font-bold bg-teal-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1';
-            document.getElementById('te').className = t === 'expense' ? 'flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white shadow-lg flex flex-col items-center gap-1' : 'flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-orange-600 flex flex-col items-center gap-1';
+            html2pdf().set(opt).from(element).save();
         };
     </script>
 </body>
