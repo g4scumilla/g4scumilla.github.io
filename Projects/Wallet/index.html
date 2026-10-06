@@ -315,7 +315,10 @@
                 </div>
 
                 <div class="z-10 mt-2">
-                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Available Balance</p>
+                    <p class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
+                        Available Balance 
+                        <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal flex items-center gap-1"></span>
+                    </p>
                     <div class="flex items-baseline gap-1.5">
                         <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
                         <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
@@ -1111,7 +1114,7 @@
                 let sh = '';
                 let opts = '<option value="">All Personnel (Master Ledger)</option>';
                 let mh = '';
-                
+
                 Object.keys(staffData).forEach(id => {
                     const u = staffData[id];
                     const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
@@ -1127,7 +1130,7 @@
                         </div>
                     </div>`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
-                    
+
                     mh += `
                     <div class="nexus-card">
                         <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
@@ -1166,7 +1169,7 @@
                 if(l.type === 'income') { cb += l.amount; staffBals[l.staffId] += l.amount; }
                 else { cb -= l.amount; staffBals[l.staffId] -= l.amount; }
                 if(l.date.startsWith(m)) { if(l.type === 'income') mi += l.amount; else me += l.amount; }
-                
+
                 logsWithBal.push({ ...l, sb: staffBals[l.staffId], cb });
             });
 
@@ -1176,6 +1179,20 @@
             document.getElementById('month-received').innerText = fmt(mi);
             document.getElementById('month-advanced').innerText = fmt(me);
             document.getElementById('card-curr-label').innerText = currFormat === 'usd' ? '$' : 'BDT';
+
+            // Debt Status Logic
+            const debtStatusEl = document.getElementById('debt-status');
+            if (cb > 0) {
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]"></span> কাফি দিবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 flex items-center gap-1";
+                debtStatusEl.classList.remove('hidden');
+            } else if (cb < 0) {
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></span> কাফি পাবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 flex items-center gap-1";
+                debtStatusEl.classList.remove('hidden');
+            } else {
+                debtStatusEl.classList.add('hidden');
+            }
 
             let rh = '';
             [...logsWithBal].reverse().slice(0, 10).forEach(l => {
@@ -1209,7 +1226,7 @@
             const start = document.getElementById('hist-start').value;
             const end = document.getElementById('hist-end').value;
             let mLogH = '';
-            
+
             if(!window.logsWithBalData) return;
 
             [...window.logsWithBalData].reverse().forEach(l => {
@@ -1240,7 +1257,7 @@
             let prevBalIndividual = 0, prevBalCentral = 0;
             let fil = logsList.filter(l => {
                 if(!isMaster && l.staffId !== sid) return false;
-                
+
                 if (l.date < start) {
                     if(l.type === 'income') {
                         if(!isMaster) prevBalIndividual += l.amount;
@@ -1261,7 +1278,7 @@
 
             const hMeta = document.getElementById('individual-header-meta');
             const thead = document.getElementById('report-table-header');
-            
+
             if (isMaster) {
                 hMeta.classList.add('hidden');
                 hMeta.innerHTML = '';
@@ -1278,7 +1295,7 @@
                 const u = staffData[sid];
                 const staffKeys = Object.keys(staffData).sort();
                 const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
-                
+
                 hMeta.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
