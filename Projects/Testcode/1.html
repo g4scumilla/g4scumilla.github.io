@@ -277,7 +277,7 @@
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa-solid fa-user-gear"></i></div>
                 <div>
-                    <p class="text-[10px] text-slate-600 font-bold uppercase">System Operator</p>
+                    <p class="text-[10px] text-slate-600 font-bold uppercase">Abdullahil Kuafi</p>
                     <h1 class="text-lg font-bold text-slate-900" id="user-display">Administrator</h1>
                 </div>
             </div>
@@ -328,7 +328,7 @@
                 <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
                     <div>
                         <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
-                        <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">System Operator</p>
+                        <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">Abdullahil Kuafi</p>
                     </div>
                     <div class="text-right">
                         <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Valid Thru</p>
@@ -1211,23 +1211,35 @@
             let rh = '';
             [...logsWithBal].reverse().slice(0, 10).forEach(l => {
                 rh += `
-                <div class="flex items-center justify-between p-4 bg-white rounded-[20px] shadow-sm border border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center ${l.type==='income'?'bg-teal-50 text-teal-600':'bg-orange-50 text-orange-500'}">
-                            <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'}"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-slate-900">${l.staffName}</p>
-                            <div class="flex items-center gap-1 mt-0.5">
-                                <span class="text-[9px] font-bold text-slate-400 uppercase">${l.date}</span>
-                                <span class="text-slate-300">•</span>
-                                <span onclick="shareTransaction('${l.key}')" class="nexus-link"><i class="fa-solid fa-share-nodes"></i> Share Memo</span>
+                <div class="relative overflow-hidden p-4 rounded-[20px] mb-3 border ${l.type==='income'?'border-teal-100 bg-gradient-to-r from-teal-50/50 to-white':'border-orange-100 bg-gradient-to-r from-orange-50/50 to-white'} shadow-[0_4px_15px_-5px_rgba(0,0,0,0.05)] transition-transform active:scale-[0.98]">
+                    <div class="flex justify-between items-center z-10 relative">
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center ${l.type==='income'?'bg-teal-100/80 text-teal-600':'bg-orange-100/80 text-orange-500'} shadow-inner">
+                                    <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'} text-lg"></i>
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center ${l.type==='income'?'bg-teal-500':'bg-rose-500'}">
+                                    <i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px] text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-[13px] font-bold text-slate-800">${l.staffName}</p>
+                                <p class="text-[9px] font-bold text-slate-400 mt-0.5 uppercase tracking-wider">${l.cat || 'Transaction'} • ${l.date}</p>
                             </div>
                         </div>
+                        <div class="text-right">
+                            <p class="text-[15px] font-black ${l.type==='income'?'text-teal-600':'text-rose-600'}">${l.type==='income'?'+':'-'} ${fmt(l.amount)}</p>
+                            <p class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase tracking-wide">C.Bal: ${fmt(l.cb)}</p>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-sm font-black ${l.type==='income'?'text-teal-600':'text-orange-500'}">${fmt(l.amount)}</p>
-                        <p class="text-[9px] font-bold text-blue-500 mt-0.5 uppercase tracking-tight">Bal: ${fmt(l.cb)}</p>
+                    <div class="mt-3 pt-3 border-t ${l.type==='income'?'border-teal-100/50':'border-orange-100/50'} flex justify-between items-center z-10 relative">
+                        <span class="text-[9px] font-mono text-slate-400 bg-white/60 px-2 py-1 rounded shadow-sm border border-slate-100">ID: ${getTxnId(l.key)}</span>
+                        <button onclick="shareTransaction('${l.key}')" class="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 ${l.type==='income'?'text-teal-600 bg-teal-100/50':'text-orange-600 bg-orange-100/50'} px-3 py-1 rounded-lg hover:opacity-80">
+                            <i class="fa-solid fa-share-nodes"></i> Share Memo
+                        </button>
+                    </div>
+                    <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-6xl pointer-events-none">
+                        <i class="fa-solid ${l.type==='income'?'fa-wallet':'fa-money-bill-transfer'}"></i>
                     </div>
                 </div>`;
             });
