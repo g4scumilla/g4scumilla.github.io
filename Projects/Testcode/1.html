@@ -317,7 +317,7 @@
                 <div class="z-10 mt-2">
                     <p class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
                         Available Balance 
-                        <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal"></span>
+                        <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal flex items-center gap-1"></span>
                     </p>
                     <div class="flex items-baseline gap-1.5">
                         <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
@@ -1183,12 +1183,12 @@
             // Debt Status Logic
             const debtStatusEl = document.getElementById('debt-status');
             if (cb > 0) {
-                debtStatusEl.innerText = "কাফি ঋণী নয়";
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300";
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]"></span> কাফি দিবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 flex items-center gap-1";
                 debtStatusEl.classList.remove('hidden');
             } else if (cb < 0) {
-                debtStatusEl.innerText = "কাফি ঋণী";
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300";
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></span> কাফি পাবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 flex items-center gap-1";
                 debtStatusEl.classList.remove('hidden');
             } else {
                 debtStatusEl.classList.add('hidden');
