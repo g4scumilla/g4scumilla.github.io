@@ -87,20 +87,23 @@ body {
 
 /* ================= ANDROID.COM INSPIRED HERO CARD ================= */
 .card-container {
-    padding: calc(var(--safe-top) + 12px) 16px 16px;
+    padding: calc(var(--safe-top) + 12px) 16px 12px;
 }
 
 .android-hero-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 28px;
-    padding: 24px 22px;
+    border-radius: 22px;
+    padding: 16px 18px;
     box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
     position: relative;
     overflow: hidden;
+    transform: scale(0.92);
+    transform-origin: top center;
+    margin-bottom: -10px;
 }
 
 .hero-top-row {
@@ -118,8 +121,8 @@ body {
     color: #3ded97;
     font-size: 10px;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-transform: none;
+    letter-spacing: 0.5px;
     padding: 4px 10px;
     border-radius: 20px;
 }
@@ -127,7 +130,7 @@ body {
 .hero-main-flex {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
 }
 
 .android-avatar-container {
@@ -136,13 +139,13 @@ body {
 }
 
 .android-avatar {
-    width: 72px;
-    height: 72px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #3ded97;
     background: var(--bg-main);
-    box-shadow: 0 8px 20px rgba(61, 237, 151, 0.2);
+    box-shadow: 0 6px 16px rgba(61, 237, 151, 0.2);
 }
 
 .android-title-group {
@@ -150,18 +153,18 @@ body {
 }
 
 .android-name {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 800;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.6px;
     color: var(--text-primary);
     line-height: 1.1;
 }
 
 .android-subtitle {
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--text-secondary);
-    margin-top: 4px;
+    margin-top: 3px;
     letter-spacing: -0.2px;
 }
 
@@ -853,7 +856,7 @@ body {
         <div class="android-hero-card">
             <div class="hero-top-row">
                 <div class="android-brand-pill">
-                    <i class="fa-brands fa-android"></i> personal hub
+                    <i class="fa-brands fa-android"></i> Personal hub
                 </div>
             </div>
             <div class="hero-main-flex">
