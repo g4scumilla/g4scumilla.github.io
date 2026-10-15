@@ -27,8 +27,7 @@
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --border-color: rgba(15, 23, 42, 0.08);
-    --icon-bg: #ffffff;
-    --icon-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+    --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06);
 }
 
 [data-theme="dark"] {
@@ -38,8 +37,7 @@
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.08);
-    --icon-bg: #162038;
-    --icon-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45);
+    --card-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -229,9 +227,15 @@ body {
     padding: 0 16px 12px;
 }
 
+.search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
 .search-box {
     position: relative;
-    margin-bottom: 12px;
+    flex: 1;
 }
 
 .search-box i {
@@ -254,13 +258,33 @@ body {
     font-size: 13px;
     font-weight: 500;
     outline: none;
-    box-shadow: var(--icon-shadow);
+    box-shadow: var(--card-shadow);
     transition: border-color 0.2s;
     user-select: text;
 }
 
 .search-input:focus {
     border-color: var(--accent);
+}
+
+.layout-toggle-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: var(--card-shadow);
+    transition: color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.layout-toggle-btn:active {
+    transform: scale(0.92);
 }
 
 .filter-pills {
@@ -276,7 +300,7 @@ body {
 }
 
 .pill {
-    padding: 6px 13px;
+    padding: 7px 14px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
@@ -295,65 +319,139 @@ body {
     box-shadow: 0 4px 12px var(--accent-glow);
 }
 
-/* Service Grid */
+/* ================= REDESIGNED ATTRACTIVE LINK CARDS ================= */
 .service-grid {
     display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 6px 16px 16px;
+    transition: all 0.25s ease;
+}
+
+/* Optional 2-column & 4-column modes */
+.service-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.service-grid.cols-4 {
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px 8px;
-    padding: 8px 12px 16px;
+    gap: 10px 8px;
 }
 
 .service-item {
+    --c1: #6366f1;
+    --c2: #818cf8;
+    --c-rgb: 99, 102, 241;
     text-decoration: none;
     color: var(--text-primary);
+    background: 
+        radial-gradient(120% 90% at 50% 0%, rgba(var(--c-rgb), 0.16) 0%, transparent 70%),
+        var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 12px 10px 13px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 11px;
-    font-weight: 700;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    text-align: center;
     position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Subtle top glowing rim on each card */
+.service-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c1), transparent);
+    opacity: 0.65;
+    transition: opacity 0.2s, left 0.2s, right 0.2s;
 }
 
 .service-item.hidden {
     display: none;
 }
 
-.icon-circle {
-    width: 52px;
-    height: 52px;
-    background: var(--icon-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
+.service-item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--c-rgb), 0.45);
+    box-shadow: 0 14px 28px -8px rgba(var(--c-rgb), 0.28);
+}
+
+.service-item:hover::before {
+    left: 10%;
+    right: 10%;
+    opacity: 1;
+}
+
+.service-item:active {
+    transform: scale(0.94);
+}
+
+/* Card Top Utility Row (Live dot + Star button) */
+.card-top-bar {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    box-shadow: var(--icon-shadow);
-    margin-bottom: 7px;
-    font-size: 20px;
-    color: var(--accent);
-    position: relative;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
+    margin-bottom: 4px;
+    min-height: 20px;
+    z-index: 2;
+}
+
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.live-pill::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.dot-placeholder {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(var(--c-rgb), 0.35);
+    margin-left: 2px;
 }
 
 /* Star favourite badge */
 .fav-badge {
-    position: absolute;
-    top: -2px;
-    right: 6px;
-    background: var(--bg-card);
-    color: #cbd5e1;
-    border: 1px solid var(--border-color);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.12);
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 9px;
+    font-size: 10px;
     cursor: pointer;
     z-index: 10;
-    transition: transform 0.2s, color 0.2s, background 0.2s;
+    transition: transform 0.2s, color 0.2s, background 0.2s, border-color 0.2s;
 }
 
 .fav-badge:hover {
@@ -362,29 +460,100 @@ body {
 
 .service-item.is-favorite .fav-badge {
     color: #f59e0b;
-    background: rgba(245, 158, 11, 0.15);
-    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.16);
+    border-color: rgba(245, 158, 11, 0.35);
 }
 
-/* Active indicator dot for live links */
-.service-item[data-live="true"] .icon-circle::after {
-    content: "";
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-}
-
-.service-item:active .icon-circle {
-    transform: scale(0.88);
+/* Vibrant Gradient Icon Squircle */
+.icon-circle {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 8px 18px -4px rgba(var(--c-rgb), 0.45),
+        inset 0 1px 1px rgba(255, 255, 255, 0.35);
+    margin: 2px 0 10px;
+    font-size: 19px;
+    color: #ffffff;
+    position: relative;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .service-item:hover .icon-circle {
-    border-color: var(--accent);
-    transform: translateY(-2px);
+    transform: scale(1.08) rotate(-3deg);
+}
+
+.card-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+}
+
+.card-sub {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Adjustments when in 4-column compact mode */
+.service-grid.cols-4 .service-item {
+    padding: 9px 6px 10px;
+    border-radius: 16px;
+}
+.service-grid.cols-4 .icon-circle {
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
+    border-radius: 14px;
+    margin: 2px 0 7px;
+}
+.service-grid.cols-4 .card-title {
+    font-size: 11px;
+}
+.service-grid.cols-4 .card-sub,
+.service-grid.cols-4 .live-pill,
+.service-grid.cols-4 .dot-placeholder {
+    display: none;
+}
+.service-grid.cols-4 .card-top-bar {
+    justify-content: flex-end;
+    margin-bottom: 0;
+    min-height: 16px;
+}
+
+/* Adjustments when in 2-column wide Bento mode */
+.service-grid.cols-2 .service-item {
+    flex-direction: row;
+    text-align: left;
+    padding: 14px 14px;
+    gap: 12px;
+}
+.service-grid.cols-2 .card-top-bar {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: auto;
+    gap: 6px;
+}
+.service-grid.cols-2 .dot-placeholder {
+    display: none;
+}
+.service-grid.cols-2 .icon-circle {
+    margin: 0;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
 }
 
 .empty-fav-msg {
@@ -397,7 +566,7 @@ body {
     background: var(--bg-card);
     border: 1px dashed var(--border-color);
     border-radius: 18px;
-    margin: 4px 4px 0;
+    margin: 4px 0 0;
     display: none;
 }
 
@@ -453,7 +622,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: var(--icon-shadow);
+    box-shadow: var(--card-shadow);
     font-size: 15px;
 }
 
@@ -474,7 +643,7 @@ body {
     border-radius: 18px;
     padding: 16px;
     margin-bottom: 16px;
-    box-shadow: var(--icon-shadow);
+    box-shadow: var(--card-shadow);
 }
 
 .section-label {
@@ -754,9 +923,14 @@ body {
 
     <!-- Search & Quick Filter (Favourites Auto-Selected First) -->
     <div class="controls-section">
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+        <div class="search-row">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+            </div>
+            <button class="layout-toggle-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
+                <i class="fa-solid fa-grip" id="layout-icon"></i>
+            </button>
         </div>
         <div class="filter-pills">
             <button class="pill active" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
@@ -767,32 +941,128 @@ body {
         </div>
     </div>
 
-    <!-- 20-Item Personal App Grid -->
+    <!-- 20-Item Redesigned Attractive Link Cards Grid -->
     <div class="service-grid" id="app-grid">
-        <a href="#" class="service-item" data-id="app-work" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
-        <a href="#" class="service-item" data-id="app-edu" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-        <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Sports</a>
 
-        <a href="#" class="service-item" data-id="app-cv" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-        <a href="#" class="service-item" data-id="app-links" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-        <a href="#" class="service-item" data-id="app-media" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-        <a href="#" class="service-item" data-id="app-social" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+        <a href="#" class="service-item" data-id="app-work" data-cat="work" style="--c1:#3b82f6; --c2:#6366f1; --c-rgb:59,130,246;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="card-text"><div class="card-title">Work</div><div class="card-sub">Office & Tasks</div></div>
+        </a>
 
-        <a href="#" class="service-item" data-id="app-docs" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-        <a href="#" class="service-item" data-id="app-blog" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-        <a href="#" class="service-item" data-id="app-secure" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>Finance</a>
+        <a href="#" class="service-item" data-id="app-edu" data-cat="work" style="--c1:#f59e0b; --c2:#ea580c; --c-rgb:245,158,11;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
+        </a>
 
-        <a href="#" class="service-item" data-id="app-growth" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-        <a href="#" class="service-item" data-id="app-awards" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-        <a href="#" class="service-item" data-id="app-travel" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-        <a href="#" class="service-item" data-id="app-scan" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#06b6d4; --c2:#3b82f6; --c-rgb:6,182,212;">
+            <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
+            <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
+        </a>
 
-        <a href="#" class="service-item" data-id="app-health" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>Health</a>
-        <a href="#" class="service-item" data-id="app-home" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-        <a href="javascript:void(0)" onclick="switchPage('tools')" class="service-item" data-id="app-settings" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>Settings</a>
-        <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)"><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+        <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
+            <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>
+            <div class="card-text"><div class="card-title">Sports</div><div class="card-sub">Live TV Stream</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-cv" data-cat="work" style="--c1:#8b5cf6; --c2:#6d28d9; --c-rgb:139,92,246;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
+            <div class="card-text"><div class="card-title">CV</div><div class="card-sub">Resume & Bio</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-links" data-cat="work" style="--c1:#0ea5e9; --c2:#0284c7; --c-rgb:14,165,233;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
+            <div class="card-text"><div class="card-title">Links</div><div class="card-sub">Bookmarks</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-media" data-cat="life" style="--c1:#ec4899; --c2:#db2777; --c-rgb:236,72,153;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
+            <div class="card-text"><div class="card-title">Media</div><div class="card-sub">Photos & Clips</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-social" data-cat="life" style="--c1:#6366f1; --c2:#a855f7; --c-rgb:99,102,241;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
+            <div class="card-text"><div class="card-title">Social</div><div class="card-sub">Feeds & Connect</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-docs" data-cat="work" style="--c1:#ef4444; --c2:#dc2626; --c-rgb:239,68,68;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="card-text"><div class="card-title">Docs</div><div class="card-sub">PDFs & Papers</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-blog" data-cat="life" style="--c1:#14b8a6; --c2:#0d9488; --c-rgb:20,184,166;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="card-text"><div class="card-title">Blog</div><div class="card-sub">Notes & Stories</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-secure" data-cat="work" style="--c1:#eab308; --c2:#ca8a04; --c-rgb:234,179,8;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-vault"></i></div>
+            <div class="card-text"><div class="card-title">Secure</div><div class="card-sub">Private Vault</div></div>
+        </a>
+
+        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#10b981; --c2:#059669; --c-rgb:16,185,129;">
+            <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
+            <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-growth" data-cat="work" style="--c1:#22c55e; --c2:#16a34a; --c-rgb:34,197,94;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="card-text"><div class="card-title">Growth</div><div class="card-sub">Goals & Stats</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-awards" data-cat="life" style="--c1:#f59e0b; --c2:#d97706; --c-rgb:245,158,11;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
+            <div class="card-text"><div class="card-title">Awards</div><div class="card-sub">Honors & Wins</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-travel" data-cat="life" style="--c1:#06b6d4; --c2:#0891b2; --c-rgb:6,182,212;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
+            <div class="card-text"><div class="card-title">Travel</div><div class="card-sub">Trips & Maps</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-scan" data-cat="work" style="--c1:#a855f7; --c2:#7e22ce; --c-rgb:168,85,247;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
+            <div class="card-text"><div class="card-title">Scan</div><div class="card-sub">QR & Lens</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-health" data-cat="life" style="--c1:#fb7185; --c2:#e11d48; --c-rgb:251,113,133;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div class="card-text"><div class="card-title">Health</div><div class="card-sub">Care & Fitness</div></div>
+        </a>
+
+        <a href="#" class="service-item" data-id="app-home" data-cat="life" style="--c1:#f97316; --c2:#ea580c; --c-rgb:249,115,22;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
+            <div class="card-text"><div class="card-title">Home</div><div class="card-sub">Personal Space</div></div>
+        </a>
+
+        <a href="javascript:void(0)" onclick="switchPage('tools')" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>
+            <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
+        </a>
+
+        <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)" style="--c1:#38bdf8; --c2:#2563eb; --c-rgb:56,189,248;">
+            <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div></div>
+            <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
+            <div class="card-text"><div class="card-title">Sync</div><div class="card-sub">Refresh Data</div></div>
+        </a>
 
         <div class="empty-fav-msg" id="empty-fav-msg">
             <i class="fa-regular fa-star" style="font-size: 24px; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
@@ -825,7 +1095,7 @@ body {
 
         <!-- Appearance & Theme Section -->
         <div class="tools-section-card">
-            <div class="section-label"><i class="fa-solid fa-palette"></i> Appearance</div>
+            <div class="section-label"><i class="fa-solid fa-palette"></i> Appearance & Layout</div>
             
             <div class="setting-row">
                 <div class="setting-info">
@@ -840,8 +1110,19 @@ body {
 
             <div class="setting-row">
                 <div class="setting-info">
+                    <h4>Card Grid Style</h4>
+                    <p>Choose 3-Column, 2-Column, or 4-Column</p>
+                </div>
+                <button class="btn-action" onclick="cycleGridLayout()">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span id="grid-style-label">3 Columns</span>
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
                     <h4>Accent Color</h4>
-                    <p>Customize highlight & icon tones</p>
+                    <p>Customize highlight & button tones</p>
                 </div>
                 <div class="color-swatches">
                     <div class="swatch active" style="background: #6366f1;" onclick="setAccent('#6366f1', '#06b6d4', this)"></div>
@@ -982,6 +1263,26 @@ body {
         filterApps('fav', favPill);
     }
 
+    // Cycle Card Grid Layout (3 Columns -> 2 Columns -> 4 Columns)
+    const appGrid = document.getElementById('app-grid');
+    const gridStyleLabel = document.getElementById('grid-style-label');
+    let currentCols = parseInt(localStorage.getItem('kuafi_grid_cols') || '3', 10);
+
+    function applyGridLayout(cols, notify) {
+        appGrid.classList.remove('cols-2', 'cols-4');
+        if (cols === 2) appGrid.classList.add('cols-2');
+        if (cols === 4) appGrid.classList.add('cols-4');
+        if (gridStyleLabel) gridStyleLabel.innerText = `${cols} Columns`;
+        localStorage.setItem('kuafi_grid_cols', cols);
+        if (notify) showToast(`Card View: ${cols} Columns`);
+    }
+    applyGridLayout(currentCols, false);
+
+    function cycleGridLayout() {
+        currentCols = currentCols === 3 ? 2 : (currentCols === 2 ? 4 : 3);
+        applyGridLayout(currentCols, true);
+    }
+
     // Sync Animation + Toast Feedback
     function syncData(el) {
         const icon = document.getElementById('sync-icon');
@@ -998,7 +1299,7 @@ body {
         setTimeout(() => toast.classList.remove('show'), 1800);
     }
 
-    // Favourites Management (Default pre-selects live apps on very first visit, or loads saved)
+    // Favourites Management
     let savedFavData = localStorage.getItem('kuafi_favorites');
     let favorites = savedFavData ? JSON.parse(savedFavData) : ['app-dev', 'app-sports', 'app-finance'];
     if (!savedFavData) {
