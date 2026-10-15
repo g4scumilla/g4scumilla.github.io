@@ -98,9 +98,15 @@ body {
     padding: calc(var(--safe-top) + 8px) 16px 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     margin-bottom: 16px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.header-left-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .android-header-avatar {
@@ -117,6 +123,33 @@ body {
     font-weight: 800;
     color: var(--text-primary);
     letter-spacing: -0.4px;
+}
+
+.header-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.15s;
+    padding: 4px;
+}
+
+.header-icon-btn:hover {
+    color: var(--accent);
+}
+
+.header-icon-btn:active {
+    transform: scale(0.9);
 }
 
 /* Search & Filter Section */
@@ -804,11 +837,21 @@ body {
 
     <!-- Android.com Style Sticky Top Header -->
     <header class="android-top-header">
-        <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
-             alt="Abdullahil Kuafi" 
-             class="android-header-avatar"
-             onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
-        <span class="android-header-title">Abdullahil Kuafi</span>
+        <div class="header-left-group">
+            <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                 alt="Abdullahil Kuafi" 
+                 class="android-header-avatar"
+                 onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+            <span class="android-header-title">Abdullahil Kuafi</span>
+        </div>
+        <div class="header-actions-right">
+            <button class="header-icon-btn" onclick="focusSearchInput()" title="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button class="header-icon-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
+                <span id="header-layout-icon-holder"></span>
+            </button>
+        </div>
     </header>
 
     <!-- Search & Quick Filter (Favourites Auto-Selected First) -->
@@ -1140,6 +1183,16 @@ body {
         filterApps('fav', favPill);
     }
 
+    // Focus Search Input when tapping Header Search Icon
+    function focusSearchInput() {
+        switchPage('home');
+        const searchBox = document.getElementById('search-input');
+        if (searchBox) {
+            searchBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            searchBox.focus();
+        }
+    }
+
     // Dynamic Grid Icons for 2-Column (4 dots), 3-Column (6 dots), and 4-Column (8 dots)
     const layoutIcons = {
         2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
@@ -1172,6 +1225,7 @@ body {
     const appGrid = document.getElementById('app-grid');
     const gridStyleLabel = document.getElementById('grid-style-label');
     const layoutIconHolder = document.getElementById('layout-icon-holder');
+    const headerLayoutIconHolder = document.getElementById('header-layout-icon-holder');
     const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
     const layoutToggleBtn = document.getElementById('layout-toggle-btn');
 
@@ -1183,8 +1237,9 @@ body {
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
 
-        // Update both icons & labels dynamically
+        // Update all icons & labels dynamically
         if (layoutIconHolder) layoutIconHolder.innerHTML = layoutIcons[cols];
+        if (headerLayoutIconHolder) headerLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.innerText = `${cols} Columns`;
         if (layoutToggleBtn) layoutToggleBtn.title = `Current: ${cols} Columns (Tap to switch)`;
