@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f172a">
 
-<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -18,10 +18,10 @@
     --safe-top: env(safe-area-inset-top, 16px);
     --safe-bottom: env(safe-area-inset-bottom, 12px);
     --nav-height: 68px;
-    --accent: #6366f1;
+    --accent: #3ded97; /* Android green accent */
     --accent-secondary: #06b6d4;
-    --accent-glow: rgba(99, 102, 241, 0.35);
-    --bg-main: #f1f5f9;
+    --accent-glow: rgba(61, 237, 151, 0.25);
+    --bg-main: #f8fafc;
     --bg-card: #ffffff;
     --bg-glass: rgba(255, 255, 255, 0.92);
     --text-primary: #0f172a;
@@ -31,9 +31,9 @@
 }
 
 [data-theme="dark"] {
-    --bg-main: #090d16;
-    --bg-card: #131b2e;
-    --bg-glass: rgba(15, 23, 42, 0.92);
+    --bg-main: #0b0f19;
+    --bg-card: #131826;
+    --bg-glass: rgba(19, 24, 38, 0.92);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.08);
@@ -57,8 +57,8 @@ body {
     padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 36px);
     transition: background-color 0.3s ease, color 0.3s ease;
     background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(61, 237, 151, 0.07) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.07) 0px, transparent 50%);
     background-attachment: fixed;
     overflow-x: hidden;
 }
@@ -85,140 +85,122 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Personal Hero Card */
+/* ================= ANDROID.COM INSPIRED HERO CARD ================= */
 .card-container {
     padding: calc(var(--safe-top) + 12px) 16px 16px;
 }
 
-.personal-card {
-    border-radius: 22px;
-    width: 100%;
-    color: #ffffff;
+.android-hero-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    padding: 24px 22px;
+    box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 18px;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #0f172a 100%);
-    box-shadow: 0 18px 35px -8px rgba(30, 27, 75, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.personal-card::before {
-    content: "";
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
-    top: -60px;
-    right: -50px;
-    z-index: 1;
+.hero-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.personal-card::after {
-    content: "";
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
-    bottom: -50px;
-    left: -40px;
-    z-index: 1;
+.android-brand-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(61, 237, 151, 0.12);
+    border: 1px solid rgba(61, 237, 151, 0.3);
+    color: #3ded97;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 20px;
 }
 
-.card-main {
-    position: relative;
-    z-index: 2;
-    padding: 22px 20px 18px;
+.hero-main-flex {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
 }
 
-.avatar-wrapper {
+.android-avatar-container {
     position: relative;
     flex-shrink: 0;
 }
 
-.avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-.verified-badge {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    background: #06b6d4;
-    color: #fff;
-    width: 22px;
-    height: 22px;
+.android-avatar {
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    border: 2px solid #1e1b4b;
+    object-fit: cover;
+    border: 3px solid #3ded97;
+    background: var(--bg-main);
+    box-shadow: 0 8px 20px rgba(61, 237, 151, 0.2);
 }
 
-.profile-info {
+.android-title-group {
     flex: 1;
 }
 
-.profile-name {
-    font-family: 'Lobster', cursive;
-    font-size: 24px;
-    letter-spacing: 0.5px;
-    color: #ffffff;
-    line-height: 1.15;
+.android-name {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    color: var(--text-primary);
+    line-height: 1.1;
 }
 
-.profile-bio {
-    font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.8);
-    margin-top: 5px;
-    font-weight: 500;
+.android-subtitle {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    letter-spacing: -0.2px;
 }
 
-.card-footer {
-    position: relative;
-    z-index: 2;
-    padding: 11px 18px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+.hero-bottom-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
 }
 
 .portfolio-link {
-    color: #e2e8f0;
+    color: var(--text-primary);
     text-decoration: none;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 11.5px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 6px;
+    transition: color 0.2s;
+}
+
+.portfolio-link:hover {
+    color: #3ded97;
 }
 
 .portfolio-link i {
-    color: #38bdf8;
+    color: #3ded97;
 }
 
 #live-clock {
-    background: rgba(255, 255, 255, 0.14);
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #ffffff;
+    color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
 }
 
@@ -324,12 +306,12 @@ body {
 
 .pill.active {
     background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-    color: #ffffff;
+    color: #0b0f19;
     border-color: transparent;
     box-shadow: 0 4px 12px var(--accent-glow);
 }
 
-/* ================= REDESIGNED ATTRACTIVE LINK CARDS ================= */
+/* ================= ATTRACTIVE LINK CARDS ================= */
 .service-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -350,13 +332,13 @@ body {
 }
 
 .service-item {
-    --c1: #6366f1;
-    --c2: #818cf8;
-    --c-rgb: 99, 102, 241;
+    --c1: #3ded97;
+    --c2: #06b6d4;
+    --c-rgb: 61, 237, 151;
     text-decoration: none;
     color: var(--text-primary);
     background: 
-        radial-gradient(120% 90% at 50% 0%, rgba(var(--c-rgb), 0.16) 0%, transparent 70%),
+        radial-gradient(120% 90% at 50% 0%, rgba(var(--c-rgb), 0.12) 0%, transparent 70%),
         var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 20px;
@@ -488,7 +470,7 @@ body {
         inset 0 1px 1px rgba(255, 255, 255, 0.35);
     margin: 2px 0 10px;
     font-size: 19px;
-    color: #ffffff;
+    color: #0b0f19;
     position: relative;
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -583,7 +565,7 @@ body {
 .browse-all-btn {
     margin-top: 12px;
     background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-    color: #fff;
+    color: #0b0f19;
     border: none;
     padding: 8px 16px;
     border-radius: 20px;
@@ -698,7 +680,7 @@ body {
 
 .btn-action {
     background: var(--accent);
-    color: #fff;
+    color: #0b0f19;
     border: none;
     padding: 8px 14px;
     border-radius: 11px;
@@ -869,7 +851,7 @@ body {
     flex: 0 0 42px;
     border-radius: 13px;
     background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-    color: #ffffff !important;
+    color: #0b0f19 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -905,23 +887,27 @@ body {
 <!-- ================= HOME PAGE VIEW ================= -->
 <div id="home-view" class="page-view active">
 
-    <!-- Personal Identity Card -->
+    <!-- Android.com Inspired Profile Hero Card -->
     <div class="card-container">
-        <div class="personal-card">
-            <div class="card-main">
-                <div class="avatar-wrapper">
-                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
-                         alt="Abdullahil Kuafi" 
-                         class="avatar"
-                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=6366f1&color=fff&size=128'">
-                    <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
-                </div>
-                <div class="profile-info">
-                    <div class="profile-name">Abdullahil Kuafi</div>
-                    <div class="profile-bio">Productivity, Projects & Digital Hub</div>
+        <div class="android-hero-card">
+            <div class="hero-top-row">
+                <div class="android-brand-pill">
+                    <i class="fa-brands fa-android"></i> personal hub
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="hero-main-flex">
+                <div class="android-avatar-container">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="android-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=128'">
+                </div>
+                <div class="android-title-group">
+                    <div class="android-name">Abdullahil Kuafi</div>
+                    <div class="android-subtitle">Productivity, Projects & Digital Space</div>
+                </div>
+            </div>
+            <div class="hero-bottom-row">
                 <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="portfolio-link">
                     <i class="fa-solid fa-terminal"></i>
                     <span>My Dashboard Portal</span>
@@ -966,7 +952,7 @@ body {
             <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
         </a>
 
-        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#06b6d4; --c2:#3b82f6; --c-rgb:6,182,212;">
+        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
             <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
             <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
@@ -1020,7 +1006,7 @@ body {
             <div class="card-text"><div class="card-title">Secure</div><div class="card-sub">Private Vault</div></div>
         </a>
 
-        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#10b981; --c2:#059669; --c-rgb:16,185,129;">
+        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
             <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
             <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
@@ -1068,7 +1054,7 @@ body {
             <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
         </a>
 
-        <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)" style="--c1:#38bdf8; --c2:#2563eb; --c-rgb:56,189,248;">
+        <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)" style="--c1:#3ded97; --c2:#2563eb; --c-rgb:61,237,151;">
             <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
             <div class="card-text"><div class="card-title">Sync</div><div class="card-sub">Refresh Data</div></div>
@@ -1135,10 +1121,10 @@ body {
                     <p>Customize highlight & button tones</p>
                 </div>
                 <div class="color-swatches">
-                    <div class="swatch active" style="background: #6366f1;" onclick="setAccent('#6366f1', '#06b6d4', this)"></div>
+                    <div class="swatch active" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)"></div>
                     <div class="swatch" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)"></div>
                     <div class="swatch" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)"></div>
-                    <div class="swatch" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#6366f1', this)"></div>
+                    <div class="swatch" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#3ded97', this)"></div>
                 </div>
             </div>
         </div>
@@ -1445,6 +1431,7 @@ body {
     function setAccent(primary, secondary, el) {
         document.documentElement.style.setProperty('--accent', primary);
         document.documentElement.style.setProperty('--accent-secondary', secondary);
+        document.documentElement.style.setProperty('--accent-glow', primary === '#3ded97' ? 'rgba(61, 237, 151, 0.25)' : 'rgba(16, 185, 129, 0.25)');
         document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
         if (el) el.classList.add('active');
         localStorage.setItem('kuafi_accent', JSON.stringify({ primary, secondary }));
