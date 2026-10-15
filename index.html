@@ -1,294 +1,702 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>G4S Dashboard</title>
+<title>Abdullahil Kuafi | Personal Hub</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#8b0000">
+<meta name="theme-color" content="#0f172a">
 
-<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-:root { 
-    --g4s-red: #8b0000; 
-    --safe-top: env(safe-area-inset-top, 20px);
+:root {
+    --safe-top: env(safe-area-inset-top, 16px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --accent: #6366f1;
+    --accent-secondary: #06b6d4;
+    --accent-glow: rgba(99, 102, 241, 0.35);
+    --bg-main: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: rgba(15, 23, 42, 0.08);
+    --icon-bg: #ffffff;
+    --icon-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
 }
 
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; user-select: none; }
+[data-theme="dark"] {
+    --bg-main: #090d16;
+    --bg-card: #131b2e;
+    --bg-glass: rgba(19, 27, 46, 0.85);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --icon-bg: #162038;
+    --icon-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45);
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding-bottom: calc(60px + var(--safe-bottom));
-    background: linear-gradient(rgba(248, 249, 250, 0.98), rgba(248, 249, 250, 0.98)), 
-                url('https://www.transparenttextures.com/patterns/floral-paper.png');
-    background-size: auto;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    padding-bottom: calc(85px + var(--safe-bottom));
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
     background-attachment: fixed;
 }
 
-.header-section {
-    background: linear-gradient(180deg, var(--g4s-red) 0%, #fff 100%);
-    height: 60px; 
-    padding-top: var(--safe-top);
+/* App Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--safe-top) + 12px) 18px 12px;
 }
 
-.card-container { 
-    padding: 0 15px 20px; 
-    margin-top: -30px; 
-    position: relative;
-    z-index: 10;
+.brand-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: -0.3px;
 }
 
-.visa-card {
-    border-radius: 15px; aspect-ratio: 1.58 / 1; width: 100%;
-    color: white; display: flex; flex-direction: column;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-    position: relative; overflow: hidden;
-    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80');
-    background-size: cover;
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
 }
 
-.visa-card::before {
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
+.top-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: var(--icon-shadow);
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.action-btn:active {
+    transform: scale(0.92);
+}
+
+/* Personal Hero Card */
+.card-container {
+    padding: 4px 16px 16px;
+}
+
+.personal-card {
+    border-radius: 22px;
     width: 100%;
-    background: url('https://g4scumilla.github.io/Files/Img/logo.png');
-    background-size: 35%; 
-    background-repeat: no-repeat;
-    background-position: 15px center; 
-    opacity: 0.85; 
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #0f172a 100%);
+    box-shadow: 0 18px 35px -8px rgba(30, 27, 75, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.personal-card::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
+    top: -60px;
+    right: -50px;
     z-index: 1;
-    mask-image: linear-gradient(to right, black 30%, transparent 80%);
-    -webkit-mask-image: linear-gradient(to right, black 30%, transparent 80%);
 }
 
-.visa-card::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139, 0, 0, 0.5));
+.personal-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    bottom: -50px;
+    left: -40px;
+    z-index: 1;
+}
+
+.card-main {
+    position: relative;
     z-index: 2;
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.visa-card > * { position: relative; z-index: 3; }
+.avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
 
+.avatar {
+    width: 66px;
+    height: 66px;
+    border-radius: 18px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.verified-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #06b6d4;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border: 2px solid #1e1b4b;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.greeting-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+}
+
+.profile-name {
+    font-family: 'Lobster', cursive;
+    font-size: 23px;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    line-height: 1.15;
+}
+
+.profile-bio {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.78);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.card-footer {
+    position: relative;
+    z-index: 2;
+    padding: 11px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.portfolio-link {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.portfolio-link i {
+    color: #38bdf8;
+}
+
+#live-clock {
+    background: rgba(255, 255, 255, 0.14);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Search & Filter Section */
+.controls-section {
+    padding: 0 16px 12px;
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    box-shadow: var(--icon-shadow);
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--accent);
+}
+
+.filter-pills {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+
+.filter-pills::-webkit-scrollbar {
+    display: none;
+}
+
+.pill {
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* Service Grid */
 .service-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 15px 0; padding: 20px 10px 40px;
-    background: linear-gradient(180deg, rgba(139, 0, 0, 0.235) 0%, transparent 60%);
-    min-height: 50vh; 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 8px;
+    padding: 8px 12px 24px;
 }
 
 .service-item {
-    text-decoration: none; color: #333;
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 10px; font-weight: 800;
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.service-item.hidden {
+    display: none;
 }
 
 .icon-circle {
-    width: 46px; height: 46px; background: #fff; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.18); margin-bottom: 6px;
-    font-size: 19px; color: var(--g4s-red);
-    transition: transform 0.2s;
+    width: 52px;
+    height: 52px;
+    background: var(--icon-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--icon-shadow);
+    margin-bottom: 7px;
+    font-size: 20px;
+    color: var(--accent);
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
 }
 
-.service-item:active .icon-circle { transform: scale(0.9); }
+/* Subtle indicator for active external links */
+.service-item[data-live="true"] .icon-circle::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+}
 
-.rotating { animation: rotate 1s linear; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.service-item:active .icon-circle {
+    transform: scale(0.88);
+}
 
+.service-item:hover .icon-circle {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* Individual subtle icon color accents */
+.service-item:nth-child(4n+1) .icon-circle { color: #6366f1; }
+.service-item:nth-child(4n+2) .icon-circle { color: #06b6d4; }
+.service-item:nth-child(4n+3) .icon-circle { color: #8b5cf6; }
+.service-item:nth-child(4n+4) .icon-circle { color: #10b981; }
+
+.rotating {
+    animation: rotate 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: calc(80px + var(--safe-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text-primary);
+    color: var(--bg-main);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 3000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Glass Bottom Navigation */
 .bottom-nav {
-    position: fixed; bottom: 0; width: 100%; background: white;
-    display: flex; justify-content: space-around;
-    padding: 10px 0 calc(10px + var(--safe-bottom));
-    border-top: 1px solid #eee; z-index: 2000;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 6px calc(10px + var(--safe-bottom));
+    border-top: 1px solid var(--border-color);
+    z-index: 2000;
 }
 
-.nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #bbb; font-weight: 600; }
-.nav-active { color: var(--g4s-red); }
+.nav-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.nav-item i {
+    font-size: 17px;
+}
+
+.nav-active {
+    color: var(--accent);
+}
+
+.nav-plus {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px var(--accent-glow);
+    margin-top: -14px;
+}
+
+.nav-plus i {
+    font-size: 20px;
+}
 
 @media (min-width: 768px) {
-    body, .bottom-nav { width: 100%; max-width: 450px; margin: 0 auto; }
-    .bottom-nav { left: 50% !important; transform: translateX(-50%); }
+    body, .bottom-nav {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    body {
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+    }
+    .bottom-nav {
+        left: 50% !important;
+        transform: translateX(-50%);
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header-section"></div>
+<!-- Top Header -->
+<div class="top-bar">
+    <div class="brand-pill">
+        <span class="status-dot"></span>
+        <span>KUAFI.HUB</span>
+    </div>
+    <div class="top-actions">
+        <button class="action-btn" id="theme-toggle" title="Switch Theme">
+            <i class="fa-solid fa-sun"></i>
+        </button>
+    </div>
+</div>
 
+<!-- Personal Identity Card -->
 <div class="card-container">
-    <div class="visa-card">
-        <div style="flex:1; display:flex; padding: 20px; position: relative;">
-            <div style="flex: 0.42;"></div>
-            <div style="flex: 0.58; display: flex; flex-direction: column; justify-content: center; text-align: left; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.3);">
-                <div style="margin-bottom: 12px;">
-                    <div style="font-family: 'Lobster', cursive; font-size: 20px; color: #fff; letter-spacing: 0.5px; border-bottom: 2px solid var(--g4s-red); display: inline-block; padding-bottom: 2px;">Welcome to G4S</div>
-                    <div style="font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.95); margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Productivity & Automation</div>
-                </div>
-                <div>
-                    <div style="font-family: 'Lobster', cursive; font-size: 14px; color: #ffeb3b; letter-spacing: 0.5px;">Secure Access</div>
-                    <div style="font-size: 7px; font-weight: 600; opacity: 0.9; line-height: 1.4; margin-top: 2px;">Professional internal resource hub.</div>
-                </div>
+    <div class="personal-card">
+        <div class="card-main">
+            <div class="avatar-wrapper">
+                <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                     alt="Abdullahil Kuafi" 
+                     class="avatar"
+                     onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=6366f1&color=fff&size=128'">
+                <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div class="profile-info">
+                <div class="greeting-tag" id="greeting-text">Personal Workspace</div>
+                <div class="profile-name">Abdullahil Kuafi</div>
+                <div class="profile-bio">Productivity, Projects & Digital Hub</div>
             </div>
         </div>
-        <div style="padding:10px 15px; background: rgba(0,0,0,0.4); font-size: 8px; text-align: left; letter-spacing: 2px; display: flex; justify-content: space-between; align-items: center; font-weight: 800;">
-            <span style="font-family: 'Lobster', cursive; font-size: 11px; text-transform: none; letter-spacing: 0.5px;">
-                <i class="fa-solid fa-code"></i> 
-                <a href="https://g4scumilla.github.io/Projects/mydashboard/index" style="color: inherit; text-decoration: none;">Developed By: Abdullahil Kuafi</a>
-            </span>
-            <span id="live-clock" style="background: rgba(255,255,255,0.15); padding: 3px 12px; border-radius: 5px; font-family: 'Lobster', cursive; font-size: 10px; font-weight: bold; letter-spacing: 0.8px;">--:--:-- --</span>
+        <div class="card-footer">
+            <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="portfolio-link">
+                <i class="fa-solid fa-terminal"></i>
+                <span>My Dashboard Portal</span>
+            </a>
+            <span id="live-clock">--:--:-- --</span>
         </div>
     </div>
 </div>
 
-<div class="service-grid">
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
- 
-
-
-   <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-  
-
- 
- <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-   
-
-
-
-
- <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item"><div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>Sports</a>
-    
-
-
-
-<a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-   
-
-
-
- <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gears"></i></div>Finance</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-   
-
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-heart"></i></div>Health</a>
-   
-
-
-
- <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-  
-
-
-
-  <a href="#" class="service-item"><div class="icon-circle"><i class="fa-solid fa-gear"></i></div>Settings</a>
-  
-
-
-
-  <a href="javascript:void(0)" class="service-item" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+<!-- Search & Quick Filter -->
+<div class="controls-section">
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+    </div>
+    <div class="filter-pills">
+        <button class="pill active" onclick="filterApps('all', this)">All Apps</button>
+        <button class="pill" onclick="filterApps('live', this)">Active Links</button>
+        <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
+        <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
+    </div>
 </div>
 
+<!-- 20-Item Personal App Grid -->
+<div class="service-grid" id="app-grid">
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-cat="work" data-live="true"><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
+    <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-cat="life" data-live="true"><div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Sports</a>
+
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-cat="work" data-live="true"><div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>Finance</a>
+
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>Health</a>
+    <a href="#" class="service-item" data-cat="life"><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+    <a href="#" class="service-item" data-cat="work"><div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>Settings</a>
+    <a href="javascript:void(0)" class="service-item" data-cat="work" onclick="syncData(this)"><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+</div>
+
+<div class="toast" id="toast-msg">Workspace Synced!</div>
+
+<!-- Bottom Navigation -->
 <div class="bottom-nav">
-    
-
-
-
-
-<a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
-
-
-
-
-
-
-    <a href="#" class="nav-item"><i class="fa-solid fa-circle-plus" style="font-size: 26px; color: var(--g4s-red);"></i></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i><span>Alerts</span></a>
-    <a href="#" class="nav-item"><i class="fa-solid fa-user-circle"></i><span>Account</span></a>
+    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+    </a>
+    <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="nav-item nav-plus">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-solid fa-bell"></i>
+        <span>Alerts</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+    </a>
 </div>
 
 <script>
+    // Live Clock & Dynamic Time Greeting
     function updateClock() {
         const now = new Date();
         const clockEl = document.getElementById('live-clock');
-        if(clockEl) {
+        const greetingEl = document.getElementById('greeting-text');
+
+        if (clockEl) {
             clockEl.innerText = now.toLocaleTimeString([], { 
                 hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
             });
+        }
+
+        if (greetingEl) {
+            const hrs = now.getHours();
+            let greet = 'Good Evening';
+            if (hrs < 12) greet = 'Good Morning';
+            else if (hrs < 17) greet = 'Good Afternoon';
+            greetingEl.innerText = `${greet} • Personal Hub`;
         }
     }
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Sync Animation + Toast Feedback
     function syncData(el) {
         const icon = document.getElementById('sync-icon');
+        const toast = document.getElementById('toast-msg');
         icon.classList.remove('rotating');
         void icon.offsetWidth; 
         icon.classList.add('rotating');
+
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    // Dark / Light Mode Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    const htmlEl = document.documentElement;
+
+    const savedTheme = localStorage.getItem('kuafi_theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', next);
+        localStorage.setItem('kuafi_theme', next);
+        updateThemeIcon(next);
+    });
+
+    function updateThemeIcon(theme) {
+        themeBtn.innerHTML = theme === 'dark' 
+            ? '<i class="fa-solid fa-sun"></i>' 
+            : '<i class="fa-solid fa-moon"></i>';
+    }
+
+    // Real-time Search
+    const searchInput = document.getElementById('search-input');
+    const items = document.querySelectorAll('.service-item');
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        items.forEach(item => {
+            const label = item.textContent.toLowerCase();
+            item.classList.toggle('hidden', !label.includes(query));
+        });
+    });
+
+    // Category Filter Pills
+    function filterApps(category, btn) {
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        searchInput.value = '';
+
+        items.forEach(item => {
+            if (category === 'all') {
+                item.classList.remove('hidden');
+            } else if (category === 'live') {
+                item.classList.toggle('hidden', item.getAttribute('data-live') !== 'true');
+            } else {
+                item.classList.toggle('hidden', item.getAttribute('data-cat') !== category);
+            }
+        });
     }
 </script>
 
