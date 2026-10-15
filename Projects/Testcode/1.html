@@ -99,7 +99,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
@@ -128,7 +128,47 @@ body {
 .header-actions-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+}
+
+/* Expandable Inline Search Bar inside Header */
+.header-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header-search-input {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+    padding: 6px 0 6px 28px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    outline: none;
+    transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.28s ease;
+    user-select: text;
+}
+
+.header-search-container.active .header-search-input {
+    width: 140px;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 6px 10px 6px 30px;
+}
+
+.header-search-icon {
+    position: absolute;
+    left: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .header-icon-btn {
@@ -152,79 +192,9 @@ body {
     transform: scale(0.9);
 }
 
-/* Search & Filter Section */
+/* Filter Section */
 .controls-section {
-    padding: 0 16px 12px;
-}
-
-.search-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.search-box {
-    position: relative;
-    flex: 1;
-}
-
-.search-box i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    font-size: 13px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 11px 14px 11px 38px;
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    outline: none;
-    box-shadow: var(--card-shadow);
-    transition: border-color 0.2s;
-    user-select: text;
-}
-
-.search-input:focus {
-    border-color: var(--accent);
-}
-
-.layout-toggle-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--card-shadow);
-    transition: color 0.2s, border-color 0.2s, transform 0.15s;
-}
-
-.layout-toggle-btn:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-}
-
-.layout-toggle-btn:active {
-    transform: scale(0.92);
-}
-
-.layout-icon-svg {
-    width: 18px;
-    height: 18px;
-    display: block;
+    padding: 0 16px 10px;
 }
 
 .filter-pills {
@@ -835,7 +805,7 @@ body {
 <!-- ================= HOME PAGE VIEW ================= -->
 <div id="home-view" class="page-view active">
 
-    <!-- Android.com Style Sticky Top Header -->
+    <!-- Android.com Style Sticky Top Header with Integrated Controls -->
     <header class="android-top-header">
         <div class="header-left-group">
             <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
@@ -845,7 +815,11 @@ body {
             <span class="android-header-title">Abdullahil Kuafi</span>
         </div>
         <div class="header-actions-right">
-            <button class="header-icon-btn" onclick="focusSearchInput()" title="Search">
+            <div class="header-search-container" id="header-search-container">
+                <i class="fa-solid fa-magnifying-glass header-search-icon"></i>
+                <input type="text" id="search-input" class="header-search-input" placeholder="Search apps...">
+            </div>
+            <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <button class="header-icon-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
@@ -854,17 +828,8 @@ body {
         </div>
     </header>
 
-    <!-- Search & Quick Filter (Favourites Auto-Selected First) -->
+    <!-- Quick Filter Category Pills -->
     <div class="controls-section">
-        <div class="search-row">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
-            </div>
-            <button class="layout-toggle-btn" id="layout-toggle-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
-                <span id="layout-icon-holder"></span>
-            </button>
-        </div>
         <div class="filter-pills">
             <button class="pill active" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
             <button class="pill" id="pill-all" onclick="filterApps('all', this)">All Apps</button>
@@ -1183,17 +1148,22 @@ body {
         filterApps('fav', favPill);
     }
 
-    // Focus Search Input when tapping Header Search Icon
-    function focusSearchInput() {
+    // Toggle expand/collapse header inline search input
+    function toggleHeaderSearch() {
         switchPage('home');
-        const searchBox = document.getElementById('search-input');
-        if (searchBox) {
-            searchBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            searchBox.focus();
+        const container = document.getElementById('header-search-container');
+        const searchInput = document.getElementById('search-input');
+        
+        container.classList.toggle('active');
+        if (container.classList.contains('active')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+            filterApps(document.querySelector('.pill.active')?.id === 'pill-fav' ? 'fav' : 'all');
         }
     }
 
-    // Dynamic Grid Icons for 2-Column (4 dots), 3-Column (6 dots), and 4-Column (8 dots)
+    // Dynamic Grid Icons for 2-Column, 3-Column, and 4-Column
     const layoutIcons = {
         2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
                 <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
@@ -1221,13 +1191,11 @@ body {
             </svg>`
     };
 
-    // Cycle Card Grid Layout (3 Columns -> 2 Columns -> 4 Columns)
+    // Cycle Card Grid Layout
     const appGrid = document.getElementById('app-grid');
     const gridStyleLabel = document.getElementById('grid-style-label');
-    const layoutIconHolder = document.getElementById('layout-icon-holder');
     const headerLayoutIconHolder = document.getElementById('header-layout-icon-holder');
     const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
-    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
 
     let currentCols = parseInt(localStorage.getItem('kuafi_grid_cols') || '3', 10);
     if (![2, 3, 4].includes(currentCols)) currentCols = 3;
@@ -1237,12 +1205,9 @@ body {
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
 
-        // Update all icons & labels dynamically
-        if (layoutIconHolder) layoutIconHolder.innerHTML = layoutIcons[cols];
         if (headerLayoutIconHolder) headerLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.innerText = `${cols} Columns`;
-        if (layoutToggleBtn) layoutToggleBtn.title = `Current: ${cols} Columns (Tap to switch)`;
 
         localStorage.setItem('kuafi_grid_cols', cols);
         if (notify) showToast(`Card View: ${cols} Columns`);
@@ -1412,7 +1377,6 @@ body {
     function filterApps(category, btn) {
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
         if (btn) btn.classList.add('active');
-        searchInput.value = '';
 
         let visibleCount = 0;
         items.forEach(item => {
