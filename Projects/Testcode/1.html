@@ -277,14 +277,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
     cursor: pointer;
     box-shadow: var(--card-shadow);
     transition: color 0.2s, border-color 0.2s, transform 0.15s;
 }
 
+.layout-toggle-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
 .layout-toggle-btn:active {
     transform: scale(0.92);
+}
+
+.layout-icon-svg {
+    width: 18px;
+    height: 18px;
+    display: block;
 }
 
 .filter-pills {
@@ -697,7 +707,7 @@ body {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     font-family: inherit;
 }
 
@@ -928,8 +938,8 @@ body {
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
             </div>
-            <button class="layout-toggle-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
-                <i class="fa-solid fa-grip" id="layout-icon"></i>
+            <button class="layout-toggle-btn" id="layout-toggle-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
+                <span id="layout-icon-holder"></span>
             </button>
         </div>
         <div class="filter-pills">
@@ -1114,7 +1124,7 @@ body {
                     <p>Choose 3-Column, 2-Column, or 4-Column</p>
                 </div>
                 <button class="btn-action" onclick="cycleGridLayout()">
-                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span id="tools-layout-icon-holder"></span>
                     <span id="grid-style-label">3 Columns</span>
                 </button>
             </div>
@@ -1263,16 +1273,55 @@ body {
         filterApps('fav', favPill);
     }
 
+    // Dynamic Grid Icons for 2-Column (4 dots), 3-Column (6 dots), and 4-Column (8 dots)
+    const layoutIcons = {
+        2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
+                <rect x="10.5" y="3" width="5.5" height="5" rx="1.6"/>
+                <rect x="2" y="10" width="5.5" height="5" rx="1.6"/>
+                <rect x="10.5" y="10" width="5.5" height="5" rx="1.6"/>
+            </svg>`,
+        3: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="1.5" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="7.1" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="12.7" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="1.5" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="7.1" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="12.7" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+            </svg>`,
+        4: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="1" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="5.4" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="9.8" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="14.2" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="1" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="5.4" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="9.8" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="14.2" y="10.2" width="2.8" height="4" rx="1"/>
+            </svg>`
+    };
+
     // Cycle Card Grid Layout (3 Columns -> 2 Columns -> 4 Columns)
     const appGrid = document.getElementById('app-grid');
     const gridStyleLabel = document.getElementById('grid-style-label');
+    const layoutIconHolder = document.getElementById('layout-icon-holder');
+    const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
+    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
+
     let currentCols = parseInt(localStorage.getItem('kuafi_grid_cols') || '3', 10);
+    if (![2, 3, 4].includes(currentCols)) currentCols = 3;
 
     function applyGridLayout(cols, notify) {
         appGrid.classList.remove('cols-2', 'cols-4');
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
+
+        // Update both icons & labels dynamically
+        if (layoutIconHolder) layoutIconHolder.innerHTML = layoutIcons[cols];
+        if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.innerText = `${cols} Columns`;
+        if (layoutToggleBtn) layoutToggleBtn.title = `Current: ${cols} Columns (Tap to switch)`;
+
         localStorage.setItem('kuafi_grid_cols', cols);
         if (notify) showToast(`Card View: ${cols} Columns`);
     }
