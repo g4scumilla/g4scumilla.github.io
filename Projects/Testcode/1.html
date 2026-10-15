@@ -22,7 +22,7 @@
     --accent-glow: rgba(99, 102, 241, 0.35);
     --bg-main: #f1f5f9;
     --bg-card: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.85);
+    --bg-glass: rgba(255, 255, 255, 0.88);
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --border-color: rgba(15, 23, 42, 0.08);
@@ -33,7 +33,7 @@
 [data-theme="dark"] {
     --bg-main: #090d16;
     --bg-card: #131b2e;
-    --bg-glass: rgba(19, 27, 46, 0.85);
+    --bg-glass: rgba(19, 27, 46, 0.88);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.08);
@@ -62,34 +62,24 @@ body {
     background-attachment: fixed;
 }
 
-/* App Top Bar */
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: calc(var(--safe-top) + 12px) 18px 12px;
+/* Page Views */
+.page-view {
+    display: none;
+    animation: fadeIn 0.22s ease;
 }
 
-.brand-pill {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: -0.3px;
+.page-view.active {
+    display: block;
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Personal Hero Card */
 .card-container {
-    padding: 4px 16px 16px;
+    padding: calc(var(--safe-top) + 14px) 16px 16px;
 }
 
 .personal-card {
@@ -131,7 +121,7 @@ body {
 .card-main {
     position: relative;
     z-index: 2;
-    padding: 20px 20px 16px;
+    padding: 22px 20px 18px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -143,8 +133,8 @@ body {
 }
 
 .avatar {
-    width: 66px;
-    height: 66px;
+    width: 64px;
+    height: 64px;
     border-radius: 18px;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.35);
@@ -172,31 +162,18 @@ body {
     flex: 1;
 }
 
-.greeting-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.15);
-    padding: 3px 9px;
-    border-radius: 20px;
-    margin-bottom: 6px;
-}
-
 .profile-name {
     font-family: 'Lobster', cursive;
-    font-size: 23px;
+    font-size: 24px;
     letter-spacing: 0.5px;
     color: #ffffff;
     line-height: 1.15;
 }
 
 .profile-bio {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.78);
-    margin-top: 4px;
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 5px;
     font-weight: 500;
 }
 
@@ -269,6 +246,7 @@ body {
     outline: none;
     box-shadow: var(--icon-shadow);
     transition: border-color 0.2s;
+    user-select: text;
 }
 
 .search-input:focus {
@@ -352,7 +330,7 @@ body {
 .fav-badge {
     position: absolute;
     top: -2px;
-    right: 2px;
+    right: 6px;
     background: var(--bg-card);
     color: #cbd5e1;
     border: 1px solid var(--border-color);
@@ -399,6 +377,16 @@ body {
     transform: translateY(-2px);
 }
 
+.empty-fav-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    display: none;
+}
+
 .rotating {
     animation: rotate 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -406,6 +394,199 @@ body {
 @keyframes rotate {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+
+/* Dedicated Full-Page Tools & Settings */
+.tools-page-container {
+    padding: calc(var(--safe-top) + 14px) 16px 24px;
+}
+
+.tools-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tools-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--icon-shadow);
+    font-size: 15px;
+}
+
+.tools-title {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.tools-subtitle {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.tools-section-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--icon-shadow);
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.setting-row:first-of-type {
+    padding-top: 4px;
+}
+
+.setting-info h4 {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.setting-info p {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.btn-action {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.color-swatches {
+    display: flex;
+    gap: 8px;
+}
+
+.swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s;
+}
+
+.swatch.active {
+    border-color: var(--text-primary);
+    transform: scale(1.15);
+}
+
+/* Quick Scratchpad inside Tools */
+.quick-note-area {
+    width: 100%;
+    min-height: 95px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    padding: 12px;
+    font-family: inherit;
+    font-size: 12.5px;
+    resize: vertical;
+    outline: none;
+    user-select: text;
+}
+
+.quick-note-area:focus {
+    border-color: var(--accent);
+}
+
+/* Quick Tool Grid inside Tools Page */
+.mini-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.mini-tool-btn {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.mini-tool-btn:active {
+    transform: scale(0.96);
+}
+
+.mini-tool-btn i {
+    font-size: 16px;
+    color: var(--accent);
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Toast Notification */
@@ -429,95 +610,6 @@ body {
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-}
-
-/* Settings Modal / Drawer */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 4000;
-    display: flex;
-    align-items: flex-end;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-}
-
-.modal-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.modal-content {
-    background: var(--bg-card);
-    width: 100%;
-    max-width: 450px;
-    margin: 0 auto;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    padding: 24px 20px calc(30px + var(--safe-bottom));
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.modal-overlay.open .modal-content {
-    transform: translateY(0);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.modal-title {
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.modal-close {
-    background: var(--bg-main);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.setting-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.setting-option:last-child {
-    border-bottom: none;
-}
-
-.theme-switch-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
 
 /* Glass Bottom Navigation */
@@ -575,7 +667,7 @@ body {
 }
 
 @media (min-width: 768px) {
-    body, .bottom-nav, .modal-content {
+    body, .bottom-nav {
         width: 100%;
         max-width: 450px;
         margin: 0 auto;
@@ -595,122 +687,198 @@ body {
 
 <body>
 
-<!-- Top Header -->
-<div class="top-bar">
-    <div class="brand-pill">
-        <span class="status-dot"></span>
-        <span>KUAFI.HUB</span>
-    </div>
-</div>
+<!-- ================= HOME PAGE VIEW ================= -->
+<div id="home-view" class="page-view active">
 
-<!-- Personal Identity Card -->
-<div class="card-container">
-    <div class="personal-card">
-        <div class="card-main">
-            <div class="avatar-wrapper">
-                <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
-                     alt="Abdullahil Kuafi" 
-                     class="avatar"
-                     onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=6366f1&color=fff&size=128'">
-                <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
+    <!-- Personal Identity Card -->
+    <div class="card-container">
+        <div class="personal-card">
+            <div class="card-main">
+                <div class="avatar-wrapper">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=6366f1&color=fff&size=128'">
+                    <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">Abdullahil Kuafi</div>
+                    <div class="profile-bio">Productivity, Projects & Digital Hub</div>
+                </div>
             </div>
-            <div class="profile-info">
-                <div class="greeting-tag" id="greeting-text">Personal Workspace</div>
-                <div class="profile-name">Abdullahil Kuafi</div>
-                <div class="profile-bio">Productivity, Projects & Digital Hub</div>
+            <div class="card-footer">
+                <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="portfolio-link">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>My Dashboard Portal</span>
+                </a>
+                <span id="live-clock">--:--:-- --</span>
             </div>
         </div>
-        <div class="card-footer">
-            <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="portfolio-link">
-                <i class="fa-solid fa-terminal"></i>
-                <span>My Dashboard Portal</span>
-            </a>
-            <span id="live-clock">--:--:-- --</span>
+    </div>
+
+    <!-- Search & Quick Filter (Favourites First) -->
+    <div class="controls-section">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+        </div>
+        <div class="filter-pills">
+            <button class="pill" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
+            <button class="pill active" id="pill-all" onclick="filterApps('all', this)">All Apps</button>
+            <button class="pill" onclick="filterApps('live', this)">Active Links</button>
+            <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
+            <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
         </div>
     </div>
+
+    <!-- 20-Item Personal App Grid -->
+    <div class="service-grid" id="app-grid">
+        <a href="#" class="service-item" data-id="app-work" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+        <a href="#" class="service-item" data-id="app-edu" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
+        <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Sports</a>
+
+        <a href="#" class="service-item" data-id="app-cv" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+        <a href="#" class="service-item" data-id="app-links" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+        <a href="#" class="service-item" data-id="app-media" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+        <a href="#" class="service-item" data-id="app-social" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+
+        <a href="#" class="service-item" data-id="app-docs" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+        <a href="#" class="service-item" data-id="app-blog" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+        <a href="#" class="service-item" data-id="app-secure" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>Finance</a>
+
+        <a href="#" class="service-item" data-id="app-growth" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+        <a href="#" class="service-item" data-id="app-awards" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+        <a href="#" class="service-item" data-id="app-travel" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+        <a href="#" class="service-item" data-id="app-scan" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+
+        <a href="#" class="service-item" data-id="app-health" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>Health</a>
+        <a href="#" class="service-item" data-id="app-home" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+        <a href="javascript:void(0)" onclick="switchPage('tools')" class="service-item" data-id="app-settings" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>Settings</a>
+        <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)"><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+
+        <div class="empty-fav-msg" id="empty-fav-msg">
+            <i class="fa-regular fa-star" style="font-size: 24px; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
+            No favourite apps yet.<br>Tap the star icon on any app card to pin it here.
+        </div>
+    </div>
+
 </div>
 
-<!-- Search & Quick Filter -->
-<div class="controls-section">
-    <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+<!-- ================= DEDICATED FULL-PAGE TOOLS & SETTINGS VIEW ================= -->
+<div id="tools-view" class="page-view">
+    <div class="tools-page-container">
+        
+        <div class="tools-header">
+            <div class="tools-header-left">
+                <button class="back-btn" onclick="switchPage('home')">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <div class="tools-title">Tools & Settings</div>
+                    <div class="tools-subtitle">Personalize your workspace & utilities</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appearance & Theme Section -->
+        <div class="tools-section-card">
+            <div class="section-label"><i class="fa-solid fa-palette"></i> Appearance</div>
+            
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Display Theme</h4>
+                    <p>Switch between Dark and Light mode</p>
+                </div>
+                <button class="btn-action" id="theme-toggle">
+                    <i class="fa-solid fa-sun" id="theme-icon"></i>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Accent Color</h4>
+                    <p>Customize highlight & icon tones</p>
+                </div>
+                <div class="color-swatches">
+                    <div class="swatch active" style="background: #6366f1;" onclick="setAccent('#6366f1', '#06b6d4', this)"></div>
+                    <div class="swatch" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)"></div>
+                    <div class="swatch" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)"></div>
+                    <div class="swatch" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#6366f1', this)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Built-in Quick Utilities -->
+        <div class="tools-section-card">
+            <div class="section-label"><i class="fa-solid fa-bolt"></i> Quick Utilities</div>
+            <div class="mini-tools-grid">
+                <button class="mini-tool-btn" onclick="window.location.href='https://g4scumilla.github.io/Projects/finance/main'">
+                    <i class="fa-solid fa-wallet"></i>
+                    <div>Finance App</div>
+                </button>
+                <button class="mini-tool-btn" onclick="window.location.href='https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index'">
+                    <i class="fa-solid fa-code"></i>
+                    <div>Dev Console</div>
+                </button>
+                <button class="mini-tool-btn" onclick="copyPageUrl()">
+                    <i class="fa-solid fa-share-from-square"></i>
+                    <div>Copy Hub Link</div>
+                </button>
+                <button class="mini-tool-btn" onclick="location.reload()">
+                    <i class="fa-solid fa-rotate"></i>
+                    <div>Hard Reload</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Personal Scratchpad Tool -->
+        <div class="tools-section-card">
+            <div class="section-label"><i class="fa-solid fa-note-sticky"></i> Quick Scratchpad</div>
+            <textarea id="quick-notes" class="quick-note-area" placeholder="Write quick personal notes, reminders, or snippets here (auto-saved locally)..."></textarea>
+        </div>
+
+        <!-- Data & Storage Management -->
+        <div class="tools-section-card">
+            <div class="section-label"><i class="fa-solid fa-database"></i> Data & Preferences</div>
+            
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Saved Favourites</h4>
+                    <p id="fav-count-label">0 apps pinned to Favourites</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearFavorites()">
+                    <i class="fa-solid fa-trash"></i> Reset
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Clear Scratchpad</h4>
+                    <p>Erase saved quick notes</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearNotes()">
+                    <i class="fa-solid fa-eraser"></i> Clear
+                </button>
+            </div>
+        </div>
+
     </div>
-    <div class="filter-pills">
-        <button class="pill active" onclick="filterApps('all', this)">All Apps</button>
-        <button class="pill" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 3px;"></i> Favourites</button>
-        <button class="pill" onclick="filterApps('live', this)">Active Links</button>
-        <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
-        <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
-    </div>
-</div>
-
-<!-- 20-Item Personal App Grid with Favourites -->
-<div class="service-grid" id="app-grid">
-    <a href="#" class="service-item" data-id="app-work" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
-    <a href="#" class="service-item" data-id="app-edu" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
-    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
-    <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Sports</a>
-
-    <a href="#" class="service-item" data-id="app-cv" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
-    <a href="#" class="service-item" data-id="app-links" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
-    <a href="#" class="service-item" data-id="app-media" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
-    <a href="#" class="service-item" data-id="app-social" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
-
-    <a href="#" class="service-item" data-id="app-docs" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
-    <a href="#" class="service-item" data-id="app-blog" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
-    <a href="#" class="service-item" data-id="app-secure" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
-    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>Finance</a>
-
-    <a href="#" class="service-item" data-id="app-growth" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
-    <a href="#" class="service-item" data-id="app-awards" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
-    <a href="#" class="service-item" data-id="app-travel" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
-    <a href="#" class="service-item" data-id="app-scan" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
-
-    <a href="#" class="service-item" data-id="app-health" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>Health</a>
-    <a href="#" class="service-item" data-id="app-home" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
-    <a href="#" class="service-item" data-id="app-settings" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>Settings</a>
-    <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)"><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
 </div>
 
 <div class="toast" id="toast-msg">Workspace Synced!</div>
 
-<!-- Settings & Tools Modal Drawer -->
-<div class="modal-overlay" id="settings-modal" onclick="toggleSettings(false)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <div class="modal-title"><i class="fa-solid fa-gear" style="color: var(--accent); margin-right: 8px;"></i> Settings & Tools</div>
-            <button class="modal-close" onclick="toggleSettings(false)"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="setting-option">
-            <span>Interface Theme</span>
-            <button class="theme-switch-btn" id="theme-toggle">
-                <i class="fa-solid fa-sun" id="theme-icon"></i>
-                <span id="theme-text">Dark Mode</span>
-            </button>
-        </div>
-        <div class="setting-option">
-            <span>Clear Favourites</span>
-            <button class="theme-switch-btn" onclick="clearFavorites()" style="background: #ef4444;">
-                <i class="fa-solid fa-trash"></i> Reset
-            </button>
-        </div>
-        <div class="setting-option">
-            <span>App Version</span>
-            <span style="color: var(--text-secondary); font-weight: 500;">v2.5 Professional</span>
-        </div>
-    </div>
-</div>
-
 <!-- Glass Bottom Navigation -->
 <div class="bottom-nav">
-    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active">
+    <a href="javascript:void(0)" id="nav-home" onclick="switchPage('home')" class="nav-item nav-active">
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
-    <a href="#" class="nav-item">
-        <i class="fa-solid fa-compass"></i>
-        <span>Explore</span>
+    <a href="javascript:void(0)" onclick="openFavouritesTab()" class="nav-item">
+        <i class="fa-solid fa-star"></i>
+        <span>Favourites</span>
     </a>
     <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="nav-item nav-plus">
         <i class="fa-solid fa-plus"></i>
@@ -719,44 +887,68 @@ body {
         <i class="fa-solid fa-bell"></i>
         <span>Alerts</span>
     </a>
-    <a href="javascript:void(0)" class="nav-item" onclick="toggleSettings(true)">
+    <a href="javascript:void(0)" id="nav-tools" onclick="switchPage('tools')" class="nav-item">
         <i class="fa-solid fa-sliders"></i>
         <span>Tools</span>
     </a>
 </div>
 
 <script>
-    // Live Clock & Dynamic Time Greeting
+    // Live Clock
     function updateClock() {
         const now = new Date();
         const clockEl = document.getElementById('live-clock');
-        const greetingEl = document.getElementById('greeting-text');
-
         if (clockEl) {
             clockEl.innerText = now.toLocaleTimeString([], { 
                 hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
             });
         }
-
-        if (greetingEl) {
-            const hrs = now.getHours();
-            let greet = 'Good Evening';
-            if (hrs < 12) greet = 'Good Morning';
-            else if (hrs < 17) greet = 'Good Afternoon';
-            greetingEl.innerText = `${greet} • Personal Hub`;
-        }
     }
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Full-Page Navigation Switcher (Home <-> Tools)
+    function switchPage(page) {
+        const homeView = document.getElementById('home-view');
+        const toolsView = document.getElementById('tools-view');
+        const navHome = document.getElementById('nav-home');
+        const navTools = document.getElementById('nav-tools');
+
+        if (page === 'tools') {
+            homeView.classList.remove('active');
+            toolsView.classList.add('active');
+            navHome.classList.remove('nav-active');
+            navTools.classList.add('nav-active');
+            updateFavCountLabel();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            toolsView.classList.remove('active');
+            homeView.classList.add('active');
+            navTools.classList.remove('nav-active');
+            navHome.classList.add('nav-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    // Open Favourites directly from bottom bar or pill
+    function openFavouritesTab() {
+        switchPage('home');
+        const favPill = document.getElementById('pill-fav');
+        filterApps('fav', favPill);
+    }
+
     // Sync Animation + Toast Feedback
     function syncData(el) {
         const icon = document.getElementById('sync-icon');
-        const toast = document.getElementById('toast-msg');
         icon.classList.remove('rotating');
         void icon.offsetWidth; 
         icon.classList.add('rotating');
+        showToast('Workspace Synced!');
+    }
 
+    function showToast(text) {
+        const toast = document.getElementById('toast-msg');
+        toast.innerText = text;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 1800);
     }
@@ -771,8 +963,16 @@ body {
                 item.classList.add('is-favorite');
             }
         });
+        updateFavCountLabel();
     }
     initFavorites();
+
+    function updateFavCountLabel() {
+        const label = document.getElementById('fav-count-label');
+        if (label) {
+            label.innerText = `${favorites.length} app${favorites.length === 1 ? '' : 's'} pinned to Favourites`;
+        }
+    }
 
     function toggleFav(e, id) {
         e.preventDefault();
@@ -789,10 +989,10 @@ body {
             showToast('Added to Favourites ⭐');
         }
         localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
+        updateFavCountLabel();
 
-        // If currently filtering by favorites, refresh view
         const activePill = document.querySelector('.pill.active');
-        if (activePill && activePill.textContent.includes('Favourites')) {
+        if (activePill && activePill.id === 'pill-fav') {
             filterApps('fav', activePill);
         }
     }
@@ -803,25 +1003,11 @@ body {
         document.querySelectorAll('.service-item').forEach(item => {
             item.classList.remove('is-favorite');
         });
+        updateFavCountLabel();
         showToast('All favourites cleared');
-        toggleSettings(false);
     }
 
-    function showToast(text) {
-        const toast = document.getElementById('toast-msg');
-        toast.innerText = text;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 1800);
-    }
-
-    // Settings Modal Drawer Control
-    function toggleSettings(open) {
-        const modal = document.getElementById('settings-modal');
-        if (open) modal.classList.add('open');
-        else modal.classList.remove('open');
-    }
-
-    // Dark / Light Mode Toggle
+    // Dark / Light Mode Toggle inside Tools Page
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
@@ -849,12 +1035,48 @@ body {
         }
     }
 
+    // Accent Color Customizer
+    function setAccent(primary, secondary, el) {
+        document.documentElement.style.setProperty('--accent', primary);
+        document.documentElement.style.setProperty('--accent-secondary', secondary);
+        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        if (el) el.classList.add('active');
+        localStorage.setItem('kuafi_accent', JSON.stringify({ primary, secondary }));
+        showToast('Accent color updated');
+    }
+
+    const savedAccent = JSON.parse(localStorage.getItem('kuafi_accent') || 'null');
+    if (savedAccent) {
+        document.documentElement.style.setProperty('--accent', savedAccent.primary);
+        document.documentElement.style.setProperty('--accent-secondary', savedAccent.secondary);
+    }
+
+    // Quick Scratchpad Auto-save
+    const notesEl = document.getElementById('quick-notes');
+    notesEl.value = localStorage.getItem('kuafi_notes') || '';
+    notesEl.addEventListener('input', () => {
+        localStorage.setItem('kuafi_notes', notesEl.value);
+    });
+
+    function clearNotes() {
+        notesEl.value = '';
+        localStorage.removeItem('kuafi_notes');
+        showToast('Scratchpad cleared');
+    }
+
+    function copyPageUrl() {
+        navigator.clipboard?.writeText(window.location.href);
+        showToast('Hub link copied!');
+    }
+
     // Real-time Search
     const searchInput = document.getElementById('search-input');
     const items = document.querySelectorAll('.service-item');
+    const emptyFavMsg = document.getElementById('empty-fav-msg');
 
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
+        emptyFavMsg.style.display = 'none';
         items.forEach(item => {
             const label = item.textContent.toLowerCase();
             item.classList.toggle('hidden', !label.includes(query));
@@ -864,21 +1086,27 @@ body {
     // Category Filter Pills
     function filterApps(category, btn) {
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
+        if (btn) btn.classList.add('active');
         searchInput.value = '';
 
+        let visibleCount = 0;
         items.forEach(item => {
             const id = item.getAttribute('data-id');
+            let show = false;
             if (category === 'all') {
-                item.classList.remove('hidden');
+                show = true;
             } else if (category === 'fav') {
-                item.classList.toggle('hidden', !favorites.includes(id));
+                show = favorites.includes(id);
             } else if (category === 'live') {
-                item.classList.toggle('hidden', item.getAttribute('data-live') !== 'true');
+                show = item.getAttribute('data-live') === 'true';
             } else {
-                item.classList.toggle('hidden', item.getAttribute('data-cat') !== category);
+                show = item.getAttribute('data-cat') === category;
             }
+            item.classList.toggle('hidden', !show);
+            if (show) visibleCount++;
         });
+
+        emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
     }
 </script>
 
