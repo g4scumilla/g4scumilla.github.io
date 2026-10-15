@@ -142,7 +142,7 @@ body {
     width: 0;
     opacity: 0;
     pointer-events: none;
-    padding: 6px 0 6px 28px;
+    padding: 6px 0 6px 10px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     background: var(--bg-card);
@@ -159,16 +159,7 @@ body {
     width: 140px;
     opacity: 1;
     pointer-events: auto;
-    padding: 6px 10px 6px 30px;
-}
-
-.header-search-icon {
-    position: absolute;
-    left: 8px;
-    color: var(--text-secondary);
-    font-size: 13px;
-    pointer-events: none;
-    z-index: 2;
+    padding: 6px 10px;
 }
 
 .header-icon-btn {
@@ -805,7 +796,7 @@ body {
 <!-- ================= HOME PAGE VIEW ================= -->
 <div id="home-view" class="page-view active">
 
-    <!-- Android.com Style Sticky Top Header with Integrated Controls -->
+    <!-- Android.com Style Sticky Top Header with Integrated Clean Search -->
     <header class="android-top-header">
         <div class="header-left-group">
             <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
@@ -816,7 +807,6 @@ body {
         </div>
         <div class="header-actions-right">
             <div class="header-search-container" id="header-search-container">
-                <i class="fa-solid fa-magnifying-glass header-search-icon"></i>
                 <input type="text" id="search-input" class="header-search-input" placeholder="Search apps...">
             </div>
             <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
