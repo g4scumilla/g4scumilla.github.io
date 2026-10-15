@@ -85,76 +85,33 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= ANDROID.COM INSPIRED HERO CARD ================= */
-.card-container {
-    padding: calc(var(--safe-top) + 12px) 16px 12px;
-}
-
-.android-hero-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 22px;
-    padding: 16px 18px;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
+/* ================= ANDROID.COM HEADER ================= */
+.android-top-header {
     width: 100%;
-    margin-bottom: 4px;
-}
-
-.hero-top-row {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: calc(var(--safe-top) + 8px) 16px 12px;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.android-brand-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(61, 237, 151, 0.12);
-    border: 1px solid rgba(61, 237, 151, 0.3);
-    color: #3ded97;
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    padding: 5px 12px;
-    border-radius: 20px;
-}
-
-.pill-logo-img {
-    width: 20px;
-    height: 20px;
+.android-header-avatar {
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #3ded97;
+    border: 2px solid var(--accent);
     flex-shrink: 0;
 }
 
-.hero-main-flex {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.android-title-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-}
-
-.android-subtitle {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    letter-spacing: -0.2px;
-    margin-left: 2px;
+.android-header-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.4px;
 }
 
 /* Search & Filter Section */
@@ -840,20 +797,14 @@ body {
 <!-- ================= HOME PAGE VIEW ================= -->
 <div id="home-view" class="page-view active">
 
-    <!-- Android.com Inspired Profile Hero Card -->
-    <div class="card-container">
-        <div class="android-hero-card">
-            <div class="hero-top-row">
-                <div class="android-brand-pill">
-                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
-                         alt="Abdullahil Kuafi" 
-                         class="pill-logo-img"
-                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
-                    <span>ABDULLAHIL KUAFI - Productivity and Pages</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Android.com Style Top Header -->
+    <header class="android-top-header">
+        <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+             alt="Abdullahil Kuafi" 
+             class="android-header-avatar"
+             onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+        <span class="android-header-title">Abdullahil Kuafi</span>
+    </header>
 
     <!-- Search & Quick Filter (Favourites Auto-Selected First) -->
     <div class="controls-section">
