@@ -16,13 +16,14 @@
 <style>
 :root {
     --safe-top: env(safe-area-inset-top, 16px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 12px);
+    --nav-height: 68px;
     --accent: #6366f1;
     --accent-secondary: #06b6d4;
     --accent-glow: rgba(99, 102, 241, 0.35);
     --bg-main: #f1f5f9;
     --bg-card: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.88);
+    --bg-glass: rgba(255, 255, 255, 0.92);
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --border-color: rgba(15, 23, 42, 0.08);
@@ -33,7 +34,7 @@
 [data-theme="dark"] {
     --bg-main: #090d16;
     --bg-card: #131b2e;
-    --bg-glass: rgba(19, 27, 46, 0.88);
+    --bg-glass: rgba(15, 23, 42, 0.92);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.08);
@@ -53,13 +54,22 @@ body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-main);
     color: var(--text-primary);
-    padding-bottom: calc(85px + var(--safe-bottom));
     min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 36px);
     transition: background-color 0.3s ease, color 0.3s ease;
     background-image: 
         radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
         radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
     background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* Explicit bottom spacer so fixed bottom menu never overlaps content */
+.bottom-safe-spacer {
+    width: 100%;
+    height: calc(var(--nav-height) + var(--safe-bottom) + 28px);
+    pointer-events: none;
 }
 
 /* Page Views */
@@ -79,7 +89,7 @@ body {
 
 /* Personal Hero Card */
 .card-container {
-    padding: calc(var(--safe-top) + 14px) 16px 16px;
+    padding: calc(var(--safe-top) + 12px) 16px 16px;
 }
 
 .personal-card {
@@ -290,7 +300,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px 8px;
-    padding: 8px 12px 24px;
+    padding: 8px 12px 16px;
 }
 
 .service-item {
@@ -380,11 +390,29 @@ body {
 .empty-fav-msg {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 36px 20px;
+    padding: 32px 20px;
     color: var(--text-secondary);
     font-size: 12px;
     font-weight: 600;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-color);
+    border-radius: 18px;
+    margin: 4px 4px 0;
     display: none;
+}
+
+.browse-all-btn {
+    margin-top: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .rotating {
@@ -398,7 +426,7 @@ body {
 
 /* Dedicated Full-Page Tools & Settings */
 .tools-page-container {
-    padding: calc(var(--safe-top) + 14px) 16px 24px;
+    padding: calc(var(--safe-top) + 12px) 16px 16px;
 }
 
 .tools-header {
@@ -592,7 +620,7 @@ body {
 /* Toast Notification */
 .toast {
     position: fixed;
-    bottom: calc(80px + var(--safe-bottom));
+    bottom: calc(var(--nav-height) + var(--safe-bottom) + 14px);
     left: 50%;
     transform: translateX(-50%) translateY(20px);
     background: var(--text-primary);
@@ -605,6 +633,7 @@ body {
     pointer-events: none;
     transition: all 0.25s ease;
     z-index: 3000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .toast.show {
@@ -612,19 +641,23 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Glass Bottom Navigation */
+/* Glass Bottom Navigation - Clean Non-Overlapping Fit */
 .bottom-nav {
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
+    min-height: var(--nav-height);
     background: var(--bg-glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 10px 6px calc(10px + var(--safe-bottom));
+    padding: 8px 6px calc(8px + var(--safe-bottom));
     border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
     z-index: 2000;
 }
 
@@ -633,16 +666,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     font-size: 10px;
     color: var(--text-secondary);
     font-weight: 700;
     transition: color 0.2s ease;
     cursor: pointer;
+    flex: 1;
 }
 
 .nav-item i {
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .nav-active {
@@ -650,20 +685,20 @@ body {
 }
 
 .nav-plus {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 13px;
     background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
     color: #ffffff !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 16px var(--accent-glow);
-    margin-top: -14px;
+    box-shadow: 0 4px 14px var(--accent-glow);
 }
 
 .nav-plus i {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 @media (min-width: 768px) {
@@ -679,6 +714,7 @@ body {
     }
     .bottom-nav {
         left: 50% !important;
+        right: auto;
         transform: translateX(-50%);
     }
 }
@@ -716,15 +752,15 @@ body {
         </div>
     </div>
 
-    <!-- Search & Quick Filter (Favourites First) -->
+    <!-- Search & Quick Filter (Favourites Auto-Selected First) -->
     <div class="controls-section">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
         </div>
         <div class="filter-pills">
-            <button class="pill" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
-            <button class="pill active" id="pill-all" onclick="filterApps('all', this)">All Apps</button>
+            <button class="pill active" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
+            <button class="pill" id="pill-all" onclick="filterApps('all', this)">All Apps</button>
             <button class="pill" onclick="filterApps('live', this)">Active Links</button>
             <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
             <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
@@ -760,10 +796,15 @@ body {
 
         <div class="empty-fav-msg" id="empty-fav-msg">
             <i class="fa-regular fa-star" style="font-size: 24px; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
-            No favourite apps yet.<br>Tap the star icon on any app card to pin it here.
+            No favourite apps pinned yet.<br>Tap the star icon on any app card to add it here.
+            <br>
+            <button class="browse-all-btn" onclick="filterApps('all', document.getElementById('pill-all'))">
+                Browse All Apps
+            </button>
         </div>
     </div>
 
+    <div class="bottom-safe-spacer"></div>
 </div>
 
 <!-- ================= DEDICATED FULL-PAGE TOOLS & SETTINGS VIEW ================= -->
@@ -865,6 +906,7 @@ body {
             </div>
         </div>
 
+        <div class="bottom-safe-spacer"></div>
     </div>
 </div>
 
@@ -876,7 +918,7 @@ body {
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
-    <a href="javascript:void(0)" onclick="openFavouritesTab()" class="nav-item">
+    <a href="javascript:void(0)" id="nav-fav" onclick="openFavouritesTab()" class="nav-item">
         <i class="fa-solid fa-star"></i>
         <span>Favourites</span>
     </a>
@@ -913,6 +955,9 @@ body {
         const toolsView = document.getElementById('tools-view');
         const navHome = document.getElementById('nav-home');
         const navTools = document.getElementById('nav-tools');
+        const navFav = document.getElementById('nav-fav');
+
+        navFav.classList.remove('nav-active');
 
         if (page === 'tools') {
             homeView.classList.remove('active');
@@ -930,7 +975,7 @@ body {
         }
     }
 
-    // Open Favourites directly from bottom bar or pill
+    // Open Favourites directly from bottom bar
     function openFavouritesTab() {
         switchPage('home');
         const favPill = document.getElementById('pill-fav');
@@ -953,11 +998,19 @@ body {
         setTimeout(() => toast.classList.remove('show'), 1800);
     }
 
-    // Favourites Management
-    let favorites = JSON.parse(localStorage.getItem('kuafi_favorites') || '[]');
+    // Favourites Management (Default pre-selects live apps on very first visit, or loads saved)
+    let savedFavData = localStorage.getItem('kuafi_favorites');
+    let favorites = savedFavData ? JSON.parse(savedFavData) : ['app-dev', 'app-sports', 'app-finance'];
+    if (!savedFavData) {
+        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
+    }
+
+    const searchInput = document.getElementById('search-input');
+    const items = document.querySelectorAll('.service-item');
+    const emptyFavMsg = document.getElementById('empty-fav-msg');
 
     function initFavorites() {
-        document.querySelectorAll('.service-item').forEach(item => {
+        items.forEach(item => {
             const id = item.getAttribute('data-id');
             if (favorites.includes(id)) {
                 item.classList.add('is-favorite');
@@ -965,7 +1018,6 @@ body {
         });
         updateFavCountLabel();
     }
-    initFavorites();
 
     function updateFavCountLabel() {
         const label = document.getElementById('fav-count-label');
@@ -999,11 +1051,15 @@ body {
 
     function clearFavorites() {
         favorites = [];
-        localStorage.removeItem('kuafi_favorites');
-        document.querySelectorAll('.service-item').forEach(item => {
+        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
+        items.forEach(item => {
             item.classList.remove('is-favorite');
         });
         updateFavCountLabel();
+        const activePill = document.querySelector('.pill.active');
+        if (activePill && activePill.id === 'pill-fav') {
+            filterApps('fav', activePill);
+        }
         showToast('All favourites cleared');
     }
 
@@ -1070,10 +1126,6 @@ body {
     }
 
     // Real-time Search
-    const searchInput = document.getElementById('search-input');
-    const items = document.querySelectorAll('.service-item');
-    const emptyFavMsg = document.getElementById('empty-fav-msg');
-
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
         emptyFavMsg.style.display = 'none';
@@ -1108,6 +1160,10 @@ body {
 
         emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
     }
+
+    // Initialize Favourites and auto-select Favourites filter on load
+    initFavorites();
+    filterApps('fav', document.getElementById('pill-fav'));
 </script>
 
 </body>
