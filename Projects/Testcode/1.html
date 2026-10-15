@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Abdullahil Kuafi | Personal Hub</title>
+<title>Abdullahil Kuafi | Productivity and Pages</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -107,23 +107,32 @@ body {
 
 .hero-top-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
 .android-brand-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background: rgba(61, 237, 151, 0.12);
     border: 1px solid rgba(61, 237, 151, 0.3);
     color: #3ded97;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
+}
+
+.pill-logo-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #3ded97;
+    flex-shrink: 0;
 }
 
 .hero-main-flex {
@@ -132,41 +141,12 @@ body {
     gap: 14px;
 }
 
-.android-avatar-container {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.android-avatar {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #3ded97;
-    background: var(--bg-main);
-    box-shadow: 0 6px 16px rgba(61, 237, 151, 0.2);
-}
-
 .android-title-group {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
-}
-
-.android-name-pill {
-    display: inline-flex;
-    align-items: center;
-    background: rgba(61, 237, 151, 0.12);
-    border: 1px solid rgba(61, 237, 151, 0.3);
-    color: #3ded97;
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 5px 12px;
-    border-radius: 20px;
 }
 
 .android-subtitle {
@@ -865,19 +845,11 @@ body {
         <div class="android-hero-card">
             <div class="hero-top-row">
                 <div class="android-brand-pill">
-                    <i class="fa-brands fa-android"></i> PERSONAL HUB
-                </div>
-            </div>
-            <div class="hero-main-flex">
-                <div class="android-avatar-container">
                     <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
                          alt="Abdullahil Kuafi" 
-                         class="android-avatar"
-                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=128'">
-                </div>
-                <div class="android-title-group">
-                    <div class="android-name-pill">ABDULLAHIL KUAFI</div>
-                    <div class="android-subtitle">Productivity, Projects & Digital Space</div>
+                         class="pill-logo-img"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+                    <span>ABDULLAHIL KUAFI - Productivity and Pages</span>
                 </div>
             </div>
         </div>
