@@ -1,1425 +1,886 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imprest Account | G4S Cumilla Branch </title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Abdullahil Kuafi | Personal Hub</title>
 
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; 
-            background-color: #05a04e; 
-            color: #1a231e; 
-            min-height: 100vh;
-            position: relative;
-        }
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f172a">
 
-        /* 3D Sphere Background Wallpaper matching image */
-        .wallpaper-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            background: radial-gradient(circle at 20% 20%, #0cb85d 0%, #048842 100%);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-        }
+<style>
+:root {
+    --safe-top: env(safe-area-inset-top, 16px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --accent: #6366f1;
+    --accent-secondary: #06b6d4;
+    --accent-glow: rgba(99, 102, 241, 0.35);
+    --bg-main: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: rgba(15, 23, 42, 0.08);
+    --icon-bg: #ffffff;
+    --icon-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+}
 
-        /* Top Right Blue Orb */
-        .orb-blue {
-            top: -80px;
-            right: -40px;
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle at 35% 30%, #3faaff, #005bbd, #002d75);
-            box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
-        }
+[data-theme="dark"] {
+    --bg-main: #090d16;
+    --bg-card: #131b2e;
+    --bg-glass: rgba(19, 27, 46, 0.85);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --icon-bg: #162038;
+    --icon-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45);
+}
 
-        /* Large Center Sphere */
-        .orb-center {
-            top: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle at 35% 30%, #f0f7fa 0%, #b3cddb 45%, #59798e 80%, #2c4250 100%);
-            box-shadow: inset -15px -15px 30px rgba(0, 0, 0, 0.25);
-        }
+* {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+}
 
-        /* Bottom Right Orange Orb */
-        .orb-orange {
-            bottom: 15%;
-            right: -60px;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle at 35% 30%, #ffc83b, #ff5500, #b82000);
-            box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35);
-        }
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    padding-bottom: calc(85px + var(--safe-bottom));
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+    background-attachment: fixed;
+}
 
-        /* Bottom Left Pink Orb */
-        .orb-pink {
-            bottom: -80px;
-            left: -60px;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle at 35% 30%, #ffe3e8, #ff9eb0, #d95b72, #8c2337);
-            box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.2);
-        }
+/* App Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--safe-top) + 12px) 18px 12px;
+}
 
-        /* Small Red Orbs */
-        .orb-red-1 {
-            top: 22%;
-            left: -35px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle at 35% 30%, #ff5252, #cc0000, #730000);
-            box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4);
-        }
+.brand-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+}
 
-        .orb-red-2 {
-            bottom: 0%;
-            right: 18%;
-            width: 130px;
-            height: 130px;
-            background: radial-gradient(circle at 35% 30%, #ff4d4d, #d90000, #7a0000);
-            box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4);
-        }
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+}
 
-        .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
-        .page.active { display: block !important; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Personal Hero Card */
+.card-container {
+    padding: 4px 16px 16px;
+}
 
-        /* UI Theme Glass Overrides */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; 
-            width: 100%; 
-            background: rgba(242, 248, 238, 0.92) !important; 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.6) !important; 
-            z-index: 50; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 12px 0 25px 0; 
-        }
+.personal-card {
+    border-radius: 22px;
+    width: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #0f172a 100%);
+    box-shadow: 0 18px 35px -8px rgba(30, 27, 75, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(10, 25, 18, 0.6); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; }
-        .modal.active { display: flex; }
-        .modal-content { 
-            background: rgba(245, 249, 243, 0.95) !important; 
-            backdrop-filter: blur(20px);
-            width: 100%; 
-            border-top-left-radius: 32px; 
-            border-top-right-radius: 32px; 
-            padding: 24px; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            position: relative; 
-            border-top: 1px solid rgba(255,255,255,0.8);
-        }
+.personal-card::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
+    top: -60px;
+    right: -50px;
+    z-index: 1;
+}
 
-        .nexus-card { 
-            background: rgba(242, 248, 238, 0.92); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
-            border: 1px solid rgba(255, 255, 255, 0.7); 
-            overflow: hidden; 
-            margin-bottom: 16px; 
-        }
+.personal-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    bottom: -50px;
+    left: -40px;
+    z-index: 1;
+}
 
-        .bg-white {
-            background-color: rgba(242, 248, 238, 0.92) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
+.card-main {
+    position: relative;
+    z-index: 2;
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
-        .bg-slate-50, .bg-slate-100 {
-            background-color: rgba(255, 255, 255, 0.75) !important;
-        }
+.avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
 
-        .nexus-header { background-color: rgba(254, 226, 226, 0.85); padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(254, 205, 211, 0.8); }
-        .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
-        .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
-        .nexus-body { padding: 12px; }
-        .nexus-row { display: flex; font-size: 11px; padding: 6px 0; align-items: flex-start; border-bottom: 1px solid rgba(0,0,0,0.04); }
-        .nexus-row:last-child { border-bottom: none; }
-        .nexus-key { width: 105px; color: #475569; font-weight: 600; flex-shrink: 0; }
-        .nexus-val { flex: 1; color: #0f172a; font-weight: 700; }
-        .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid rgba(0,0,0,0.04); }
-        .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
-        .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.avatar {
+    width: 66px;
+    height: 66px;
+    border-radius: 18px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
 
-        /* Search results styling */
-        .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
-        .search-item:active { background: rgba(226, 232, 240, 0.8); border-left-color: #2563eb; }
+.verified-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #06b6d4;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border: 2px solid #1e1b4b;
+}
 
-        /* Prevent Table Rows From Breaking in PDF */
-        tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-        /* Prevent Summary Elements From Breaking in PDF */
-        .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
+.profile-info {
+    flex: 1;
+}
 
-        /* DESKTOP MODE POLISH & OPTIMIZATION */
-        @media (min-width: 768px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                background-attachment: fixed;
-                overflow-y: auto;
-            }
-            .page {
-                width: 100%;
-                max-width: 600px;
-                margin: 40px auto 100px auto !important; 
-                border-radius: 32px !important;
-                background: rgba(255, 255, 255, 0.25) !important;
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255,255,255,0.4);
-                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-                min-height: calc(100vh - 140px);
-                padding-bottom: 40px !important;
-            }
-            #login-page {
-                min-height: auto;
-                margin-top: 10vh !important;
-            }
-            .bottom-nav {
-                max-width: 600px;
-                left: 50%;
-                transform: translateX(-50%);
-                border-radius: 32px 32px 0 0;
-                border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
-                border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
-            }
-            .modal {
-                align-items: center;
-            }
-            .modal-content {
-                max-width: 600px;
-                border-radius: 32px !important;
-                margin: 0 auto;
-                border: 1px solid rgba(255,255,255,0.6);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            }
-            ::-webkit-scrollbar {
-                width: 8px;
-                height: 8px;
-            }
-            ::-webkit-scrollbar-track {
-                background: transparent;
-            }
-            ::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.5);
-                border-radius: 10px;
-            }
-            ::-webkit-scrollbar-thumb:hover {
-                background: rgba(255, 255, 255, 0.8);
-            }
-        }
-    </style>
+.greeting-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+}
+
+.profile-name {
+    font-family: 'Lobster', cursive;
+    font-size: 23px;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    line-height: 1.15;
+}
+
+.profile-bio {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.78);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.card-footer {
+    position: relative;
+    z-index: 2;
+    padding: 11px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.portfolio-link {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.portfolio-link i {
+    color: #38bdf8;
+}
+
+#live-clock {
+    background: rgba(255, 255, 255, 0.14);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Search & Filter Section */
+.controls-section {
+    padding: 0 16px 12px;
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    box-shadow: var(--icon-shadow);
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--accent);
+}
+
+.filter-pills {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+
+.filter-pills::-webkit-scrollbar {
+    display: none;
+}
+
+.pill {
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* Service Grid */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 8px;
+    padding: 8px 12px 24px;
+}
+
+.service-item {
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    position: relative;
+}
+
+.service-item.hidden {
+    display: none;
+}
+
+.icon-circle {
+    width: 52px;
+    height: 52px;
+    background: var(--icon-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--icon-shadow);
+    margin-bottom: 7px;
+    font-size: 20px;
+    color: var(--accent);
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s;
+}
+
+/* Star favourite badge */
+.fav-badge {
+    position: absolute;
+    top: -2px;
+    right: 2px;
+    background: var(--bg-card);
+    color: #cbd5e1;
+    border: 1px solid var(--border-color);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s, color 0.2s, background 0.2s;
+}
+
+.fav-badge:hover {
+    transform: scale(1.15);
+}
+
+.service-item.is-favorite .fav-badge {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Active indicator dot for live links */
+.service-item[data-live="true"] .icon-circle::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+.service-item:active .icon-circle {
+    transform: scale(0.88);
+}
+
+.service-item:hover .icon-circle {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.rotating {
+    animation: rotate 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: calc(80px + var(--safe-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text-primary);
+    color: var(--bg-main);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 3000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Settings Modal / Drawer */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 4000;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 24px 20px calc(30px + var(--safe-bottom));
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.open .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.modal-close {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.setting-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.setting-option:last-child {
+    border-bottom: none;
+}
+
+.theme-switch-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Glass Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 6px calc(10px + var(--safe-bottom));
+    border-top: 1px solid var(--border-color);
+    z-index: 2000;
+}
+
+.nav-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.nav-item i {
+    font-size: 17px;
+}
+
+.nav-active {
+    color: var(--accent);
+}
+
+.nav-plus {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px var(--accent-glow);
+    margin-top: -14px;
+}
+
+.nav-plus i {
+    font-size: 20px;
+}
+
+@media (min-width: 768px) {
+    body, .bottom-nav, .modal-content {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    body {
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+    }
+    .bottom-nav {
+        left: 50% !important;
+        transform: translateX(-50%);
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- Dynamic 3D Wallpaper Layer -->
-    <div class="wallpaper-bg">
-        <div class="orb orb-blue"></div>
-        <div class="orb orb-center"></div>
-        <div class="orb orb-orange"></div>
-        <div class="orb orb-pink"></div>
-        <div class="orb orb-red-1"></div>
-        <div class="orb orb-red-2"></div>
+<!-- Top Header -->
+<div class="top-bar">
+    <div class="brand-pill">
+        <span class="status-dot"></span>
+        <span>KUAFI.HUB</span>
     </div>
+</div>
 
-    <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
-        <div class="flex flex-col items-center">
-            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
+<!-- Personal Identity Card -->
+<div class="card-container">
+    <div class="personal-card">
+        <div class="card-main">
+            <div class="avatar-wrapper">
+                <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                     alt="Abdullahil Kuafi" 
+                     class="avatar"
+                     onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=6366f1&color=fff&size=128'">
+                <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <div class="profile-info">
+                <div class="greeting-tag" id="greeting-text">Personal Workspace</div>
+                <div class="profile-name">Abdullahil Kuafi</div>
+                <div class="profile-bio">Productivity, Projects & Digital Hub</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="portfolio-link">
+                <i class="fa-solid fa-terminal"></i>
+                <span>My Dashboard Portal</span>
+            </a>
+            <span id="live-clock">--:--:-- --</span>
         </div>
     </div>
+</div>
 
-    <!-- LOGIN -->
-    <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
-            <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
-            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
-            <div class="relative mb-4">
-                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-            </div>
-            <div class="relative mb-8">
-                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input id="password" type="password" placeholder="Password" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-            </div>
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+<!-- Search & Quick Filter -->
+<div class="controls-section">
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Search my apps & tools...">
+    </div>
+    <div class="filter-pills">
+        <button class="pill active" onclick="filterApps('all', this)">All Apps</button>
+        <button class="pill" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 3px;"></i> Favourites</button>
+        <button class="pill" onclick="filterApps('live', this)">Active Links</button>
+        <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
+        <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
+    </div>
+</div>
+
+<!-- 20-Item Personal App Grid with Favourites -->
+<div class="service-grid" id="app-grid">
+    <a href="#" class="service-item" data-id="app-work" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>Work</a>
+    <a href="#" class="service-item" data-id="app-edu" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>Edu</a>
+    <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-code"></i></div>Dev</a>
+    <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-tv"></i></div>Sports</a>
+
+    <a href="#" class="service-item" data-id="app-cv" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>CV</a>
+    <a href="#" class="service-item" data-id="app-links" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-link"></i></div>Links</a>
+    <a href="#" class="service-item" data-id="app-media" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-image"></i></div>Media</a>
+    <a href="#" class="service-item" data-id="app-social" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>Social</a>
+
+    <a href="#" class="service-item" data-id="app-docs" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>Docs</a>
+    <a href="#" class="service-item" data-id="app-blog" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>Blog</a>
+    <a href="#" class="service-item" data-id="app-secure" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-vault"></i></div>Secure</a>
+    <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true"><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>Finance</a>
+
+    <a href="#" class="service-item" data-id="app-growth" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>Growth</a>
+    <a href="#" class="service-item" data-id="app-awards" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>Awards</a>
+    <a href="#" class="service-item" data-id="app-travel" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>Travel</a>
+    <a href="#" class="service-item" data-id="app-scan" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-camera"></i></div>Scan</a>
+
+    <a href="#" class="service-item" data-id="app-health" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>Health</a>
+    <a href="#" class="service-item" data-id="app-home" data-cat="life"><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>Home</a>
+    <a href="#" class="service-item" data-id="app-settings" data-cat="work"><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>Settings</a>
+    <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData(this)"><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div><div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>Sync</a>
+</div>
+
+<div class="toast" id="toast-msg">Workspace Synced!</div>
+
+<!-- Settings & Tools Modal Drawer -->
+<div class="modal-overlay" id="settings-modal" onclick="toggleSettings(false)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-title"><i class="fa-solid fa-gear" style="color: var(--accent); margin-right: 8px;"></i> Settings & Tools</div>
+            <button class="modal-close" onclick="toggleSettings(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="setting-option">
+            <span>Interface Theme</span>
+            <button class="theme-switch-btn" id="theme-toggle">
+                <i class="fa-solid fa-sun" id="theme-icon"></i>
+                <span id="theme-text">Dark Mode</span>
             </button>
         </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard-page" class="page p-5 pb-24">
-        <div class="flex justify-between items-center mb-6 mt-2">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa-solid fa-user-gear"></i></div>
-                <div>
-                    <p class="text-[10px] text-slate-600 font-bold uppercase">Abdullahil Kuafi</p>
-                    <h1 class="text-lg font-bold text-slate-900" id="user-display">Administrator</h1>
-                </div>
-            </div>
-            <button onclick="showPage('entry-page')" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200"><i class="fas fa-plus"></i></button>
-        </div>
-
-        <!-- Debit/Balance Card -->
-        <div class="flex justify-center mb-8 group perspective">
-            <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
-                <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
-
-                <div class="flex justify-between items-start z-10">
-                    <div>
-                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
-                        <div class="flex items-center gap-1.5 mt-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
-                            <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
-                        <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
-                    </div>
-                </div>
-
-                <div class="z-10 mt-1">
-                    <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm flex items-center justify-center border border-yellow-300/30 relative overflow-hidden">
-                        <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
-                            <path d="M0 10h40v2H0zM0 20h40v2H0zM10 0v40h2V0zM30 0v40h2V0z" fill="#000" fill-rule="evenodd"/>
-                        </svg>
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent"></div>
-                    </div>
-                </div>
-
-                <div class="z-10 mt-2">
-                    <p class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
-                        Available Balance 
-                        <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal flex items-center gap-1"></span>
-                    </p>
-                    <div class="flex items-baseline gap-1.5">
-                        <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
-                        <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
-                    <div>
-                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
-                        <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">Abdullahil Kuafi</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Valid Thru</p>
-                        <p class="text-[11px] font-bold text-slate-200 tracking-wider font-mono">12/28</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white">
-            <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
-                <i class="fa-solid fa-calendar-day text-blue-600"></i>
-                <span id="month-label">May 2026</span>
-            </h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="nexus-card !mb-0 text-center shadow-sm">
-                    <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
-                        <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
-                    </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
-                    </div>
-                </div>
-                <div class="nexus-card !mb-0 text-center shadow-sm">
-                    <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
-                        <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
-                    </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button onclick="toggleRecentLogs()" class="w-full flex items-center justify-between font-bold text-slate-900 mb-4 px-1 uppercase text-xs tracking-wide outline-none">
-            <span class="flex items-center gap-1.5">
-                <i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Recent Transactions
-            </span>
-            <i id="recent-logs-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-300"></i>
-        </button>
-        <div id="recent-logs" class="space-y-4 hidden"></div>
-    </div>
-
-    <!-- NEW ENTRY PAGE -->
-    <div id="entry-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-6 mt-2">
-            <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                <i class="fas fa-arrow-left"></i>
+        <div class="setting-option">
+            <span>Clear Favourites</span>
+            <button class="theme-switch-btn" onclick="clearFavorites()" style="background: #ef4444;">
+                <i class="fa-solid fa-trash"></i> Reset
             </button>
-            <h2 class="text-2xl font-bold text-slate-900">Post Transaction</h2>
         </div>
-
-        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Select Personnel</p>
-
-            <div class="relative mb-4">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="staff-search" type="text" placeholder="Search by name, ID or post..." 
-                       oninput="filterStaffSearch()"
-                       class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
-            </div>
-
-            <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
-
-            <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
-                <div>
-                    <p id="sel-name" class="text-xs font-black text-blue-800"></p>
-                    <p id="sel-id" class="text-[9px] font-bold text-blue-400 uppercase tracking-tighter"></p>
-                </div>
-                <input type="hidden" id="m-staff-id">
-                <button onclick="clearSelection()" class="text-blue-300 hover:text-blue-500"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
-            </div>
-
-            <div class="relative mb-4">
-                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
-                <p class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 uppercase">Amount</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option><option>Voucher</option><option>Return</option><option>Others</option>
-                </select>
-                <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
-            </div>
-
-            <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
-
-            <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">অফিসে জমা</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">অফিস থেকে উত্তোলন</span></button>
-            </div>
-
-            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
+        <div class="setting-option">
+            <span>App Version</span>
+            <span style="color: var(--text-secondary); font-weight: 500;">v2.5 Professional</span>
         </div>
     </div>
+</div>
 
-    <!-- STAFF ACCOUNTS PAGE -->
-    <div id="users-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-8 mt-2">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
-            <div>
-                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Directory</p>
-                <h2 class="text-lg font-bold text-slate-900">Staff Accounts</h2>
-            </div>
-        </div>
-        <div id="staff-list" class="space-y-4"></div>
-    </div>
+<!-- Glass Bottom Navigation -->
+<div class="bottom-nav">
+    <a href="javascript:void(0)" onclick="location.reload()" class="nav-item nav-active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+    </a>
+    <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="nav-item nav-plus">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fa-solid fa-bell"></i>
+        <span>Alerts</span>
+    </a>
+    <a href="javascript:void(0)" class="nav-item" onclick="toggleSettings(true)">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Tools</span>
+    </a>
+</div>
 
-    <!-- TOOLS PAGE -->
-    <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900"><i class="fa-solid fa-gears text-blue-600"></i> Tools</h2>
-        <div class="space-y-4">
-            <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('trxid-lookup-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-search text-blue-600"></i> TRXID Lookup</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
-        </div>
-    </div>
+<script>
+    // Live Clock & Dynamic Time Greeting
+    function updateClock() {
+        const now = new Date();
+        const clockEl = document.getElementById('live-clock');
+        const greetingEl = document.getElementById('greeting-text');
 
-    <!-- TRXID LOOKUP PAGE -->
-    <div id="trxid-lookup-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2 class="text-2xl font-bold text-slate-900">TRXID Lookup</h2>
-            </div>
-        </div>
-        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Enter Transaction ID</p>
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
-            </div>
-        </div>
-        <div id="lookup-results" class="space-y-4"></div>
-    </div>
+        if (clockEl) {
+            clockEl.innerText = now.toLocaleTimeString([], { 
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+            });
+        }
 
-    <!-- STAFF MANAGEMENT PAGE -->
-    <div id="staff-mgmt-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold text-slate-900">Manage Staff</h2>
-                </div>
-                <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">+ Add New</button>
-            </div>
-        </div>
+        if (greetingEl) {
+            const hrs = now.getHours();
+            let greet = 'Good Evening';
+            if (hrs < 12) greet = 'Good Morning';
+            else if (hrs < 17) greet = 'Good Afternoon';
+            greetingEl.innerText = `${greet} • Personal Hub`;
+        }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-        <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-2">Registration Form</p>
-            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-phone" type="tel" placeholder="Phone Number" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-xs uppercase mt-2">Register Staff</button>
-        </div>
+    // Sync Animation + Toast Feedback
+    function syncData(el) {
+        const icon = document.getElementById('sync-icon');
+        const toast = document.getElementById('toast-msg');
+        icon.classList.remove('rotating');
+        void icon.offsetWidth; 
+        icon.classList.add('rotating');
 
-        <div id="mgmt-staff-list" class="space-y-4"></div>
-    </div>
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+    }
 
-    <!-- TRANSACTION HISTORY PAGE -->
-    <div id="history-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3 mb-4">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2 class="text-2xl font-bold text-slate-900">Transaction History</h2>
-            </div>
-            <div class="bg-white p-4 rounded-[24px] shadow-sm border border-slate-100 flex gap-3">
-                <div class="flex-1 space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
-                    <input type="date" id="hist-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
-                </div>
-                <div class="flex-1 space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
-                    <input type="date" id="hist-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
-                </div>
-            </div>
-        </div>
-        <div id="mgmt-txn-list" class="space-y-4"></div>
-    </div>
+    // Favourites Management
+    let favorites = JSON.parse(localStorage.getItem('kuafi_favorites') || '[]');
 
-    <!-- REPORTS PAGE -->
-    <div id="reports-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-6">
-            <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2 class="text-2xl font-bold text-slate-900">Ledger Reports</h2>
-        </div>
-        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
-                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
-                </div>
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
-                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
-                </div>
-            </div>
-            <div class="space-y-1">
-                <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Select Personnel</p>
-                <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
-                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
-            </div>
-        </div>
-        <div id="report-view" class="hidden">
-            <div class="report-scroll-container">
-                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative">
-                    <div class="flex justify-between items-start mb-2">
-                        <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                        <div class="text-right flex-1">
-                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                            <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                            <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
-                        </div>
-                    </div>
-                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
-
-                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
-
-                    <table class="w-full border-collapse border border-slate-200">
-                        <thead>
-                            <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
-                        </thead>
-                        <tbody id="report-body"></tbody>
-                    </table>
-
-                    <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
-
-                    <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
-                        <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
-                        <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- EDIT STAFF MODAL -->
-    <div id="edit-staff-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex items-center gap-2 mb-6 text-slate-500"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Edit Staff Profile</p></div>
-            <div class="space-y-4">
-                <div>
-                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Full Name</p>
-                    <input id="edit-u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                </div>
-                <div>
-                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Designation</p>
-                    <input id="edit-u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Phone</p>
-                        <input id="edit-u-phone" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                    </div>
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Email</p>
-                        <input id="edit-u-email" type="email" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
-                    </div>
-                </div>
-            </div>
-            <button onclick="updateStaff()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 mt-8 shadow-lg shadow-blue-100"><i class="fa-solid fa-check-circle"></i> Save Changes</button>
-            <button onclick="closeModal('edit-staff-modal')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase">Cancel</button>
-        </div>
-    </div>
-
-    <!-- TRANSACTION MEMO MODAL -->
-    <div id="memo-modal" class="modal">
-        <div class="modal-content !p-0 flex flex-col !overflow-hidden">
-            <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 z-20">
-                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
-                <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="p-6 overflow-y-auto flex-1">
-                <div id="memo-content-container"></div>
-            </div>
-
-            <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
-                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
-                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
-                <button onclick="closeModal('memo-modal')" class="flex-1 bg-slate-200 text-slate-700 py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-sm hover:bg-slate-300 transition-colors"><i class="fa-solid fa-forward"></i> Skip Share</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAV -->
-    <nav id="navbar" class="bottom-nav hidden">
-        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
-        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">TOOLS</p></button>
-    </nav>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-QHFieDKhSY_dZZfcpM5sl8b8m7zP_js",
-            authDomain: "myfinanceapp-e0be3.firebaseapp.com",
-            databaseURL: "https://myfinanceapp-e0be3-default-rtdb.firebaseio.com",
-            projectId: "myfinanceapp-e0be3",
-            storageBucket: "myfinanceapp-e0be3.firebasestorage.app",
-            messagingSenderId: "335278709493",
-            appId: "1:335278709493:web:ec6e0994ce2b07ffd103bc"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-
-        let currentType = 'expense';
-        let staffData = {};
-        let logsList = [];
-        let currFormat = 'bdt';
-        let editingStaffId = null;
-
-        window.logsWithBalData = [];
-
-        const fmt = (num) => {
-            const val = Math.abs(num || 0).toLocaleString('en-BD', {minimumFractionDigits: 2});
-            if(currFormat === 'usd') return num < 0 ? `($${val})` : `$${val}`;
-            return num < 0 ? `(BDT ${val})` : `BDT ${val}`;
-        };
-
-        const getTxnId = (key) => {
-            if (!key) return "G4S000000";
-            const clean = key.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-            return `G4S${clean.slice(-6).padStart(6, '0')}`;
-        };
-
-        const getDhakaDateObj = () => new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
-
-        const getDhakaDate = () => {
-            const d = getDhakaDateObj();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        };
-
-        const getDhakaFirstOfMonth = () => {
-            const d = getDhakaDateObj();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
-        };
-
-        const getDhakaMonthLabel = () => {
-            const d = getDhakaDateObj();
-            return d.toLocaleString('default', { month: 'long', year: 'numeric' });
-        };
-
-        const getDhakaMonthKey = () => {
-            const d = getDhakaDateObj();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        };
-
-        window.toggleRecentLogs = () => {
-            const logsContainer = document.getElementById('recent-logs');
-            const icon = document.getElementById('recent-logs-icon');
-            if (logsContainer.classList.contains('hidden')) {
-                logsContainer.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                logsContainer.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            document.getElementById('auth-guard').style.display = 'none';
-            if (user) {
-                showPage('dashboard-page');
-                document.getElementById('navbar').classList.remove('hidden');
-                document.getElementById('user-display').innerText = user.email.split('@')[0];
-
-                document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
-                document.getElementById('r-end').value = getDhakaDate();
-                document.getElementById('m-date').value = getDhakaDate();
-
-                document.getElementById('hist-start').value = getDhakaFirstOfMonth(); 
-                document.getElementById('hist-end').value = getDhakaDate();
-
-                startSync(user.uid);
-            } else {
-                showPage('login-page');
-                document.getElementById('navbar').classList.add('hidden');
+    function initFavorites() {
+        document.querySelectorAll('.service-item').forEach(item => {
+            const id = item.getAttribute('data-id');
+            if (favorites.includes(id)) {
+                item.classList.add('is-favorite');
             }
         });
+    }
+    initFavorites();
 
-        window.handleLogin = () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
-        };
+    function toggleFav(e, id) {
+        e.preventDefault();
+        e.stopPropagation();
+        const item = document.querySelector(`[data-id="${id}"]`);
+        
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(fav => fav !== id);
+            item.classList.remove('is-favorite');
+            showToast('Removed from Favourites');
+        } else {
+            favorites.push(id);
+            item.classList.add('is-favorite');
+            showToast('Added to Favourites ⭐');
+        }
+        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
 
-        window.handleLogout = () => signOut(auth);
-        window.showPage = (id) => {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(id === 'entry-page') {
-                document.getElementById('m-date').value = getDhakaDate();
-            }
-        };
-        window.openModal = (id) => {
-            document.getElementById(id).classList.add('active');
-        };
-        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+        // If currently filtering by favorites, refresh view
+        const activePill = document.querySelector('.pill.active');
+        if (activePill && activePill.textContent.includes('Favourites')) {
+            filterApps('fav', activePill);
+        }
+    }
 
-        window.toggleAddStaff = () => document.getElementById('add-staff-form').classList.toggle('hidden');
+    function clearFavorites() {
+        favorites = [];
+        localStorage.removeItem('kuafi_favorites');
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.classList.remove('is-favorite');
+        });
+        showToast('All favourites cleared');
+        toggleSettings(false);
+    }
 
-        window.filterStaffSearch = () => {
-            const val = document.getElementById('staff-search').value.toLowerCase();
-            const res = document.getElementById('search-results');
-            if(!val) { res.classList.add('hidden'); return; }
+    function showToast(text) {
+        const toast = document.getElementById('toast-msg');
+        toast.innerText = text;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+    }
 
-            const staffKeys = Object.keys(staffData).sort();
-            let html = '';
-            Object.keys(staffData).forEach(id => {
-                const u = staffData[id];
-                const gid = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                const matchString = `${u.name} ${gid} ${u.desig}`.toLowerCase();
+    // Settings Modal Drawer Control
+    function toggleSettings(open) {
+        const modal = document.getElementById('settings-modal');
+        if (open) modal.classList.add('open');
+        else modal.classList.remove('open');
+    }
 
-                if(matchString.includes(val)) {
-                    html += `<div onclick="selectStaff('${id}', '${u.name}', '${gid}')" class="search-item p-3 border-b border-slate-50 last:border-0 cursor-pointer">
-                        <p class="text-[11px] font-bold text-slate-700 uppercase">${u.name}</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tight">${gid} | ${u.desig}</p>
-                    </div>`;
-                }
-            });
-            res.innerHTML = html || '<p class="p-4 text-center text-[10px] text-slate-400 font-bold uppercase">No Personnel Found</p>';
-            res.classList.remove('hidden');
-        };
+    // Dark / Light Mode Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const htmlEl = document.documentElement;
 
-        window.selectStaff = (id, name, gid) => {
-            document.getElementById('m-staff-id').value = id;
-            document.getElementById('sel-name').innerText = name;
-            document.getElementById('sel-id').innerText = gid;
-            document.getElementById('selected-staff-view').classList.remove('hidden');
-            document.getElementById('search-results').classList.add('hidden');
-            document.getElementById('staff-search').value = '';
-        };
+    const savedTheme = localStorage.getItem('kuafi_theme') || 'dark';
+    setTheme(savedTheme, false);
 
-        window.clearSelection = () => {
-            document.getElementById('m-staff-id').value = '';
-            document.getElementById('selected-staff-view').classList.add('hidden');
-        };
+    themeBtn.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        setTheme(next, true);
+    });
 
-        window.saveUser = () => {
-            const name = document.getElementById('u-name').value;
-            const des = document.getElementById('u-des').value;
-            const phone = document.getElementById('u-phone').value;
-            const email = document.getElementById('u-email').value;
-            if(!name) return alert("Name is required");
-            push(ref(db, `users/${auth.currentUser.uid}/staff`), { 
-                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A', balance: 0 
-            });
-            document.getElementById('add-staff-form').classList.add('hidden');
-            ['u-name', 'u-des', 'u-phone', 'u-email'].forEach(id => document.getElementById(id).value = '');
-        };
+    function setTheme(theme, save) {
+        htmlEl.setAttribute('data-theme', theme);
+        if (save) localStorage.setItem('kuafi_theme', theme);
 
-        window.editUser = (id) => {
-            editingStaffId = id;
-            const u = staffData[id];
-            document.getElementById('edit-u-name').value = u.name;
-            document.getElementById('edit-u-des').value = u.desig;
-            document.getElementById('edit-u-phone').value = u.phone;
-            document.getElementById('edit-u-email').value = u.email;
-            openModal('edit-staff-modal');
-        };
+        if (theme === 'dark') {
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.innerText = 'Dark Mode';
+        } else {
+            themeIcon.className = 'fa-solid fa-moon';
+            themeText.innerText = 'Light Mode';
+        }
+    }
 
-        window.updateStaff = () => {
-            if(!editingStaffId) return;
-            const name = document.getElementById('edit-u-name').value;
-            const des = document.getElementById('edit-u-des').value;
-            const phone = document.getElementById('edit-u-phone').value;
-            const email = document.getElementById('edit-u-email').value;
+    // Real-time Search
+    const searchInput = document.getElementById('search-input');
+    const items = document.querySelectorAll('.service-item');
 
-            if(!name) return alert("Name is required");
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        items.forEach(item => {
+            const label = item.textContent.toLowerCase();
+            item.classList.toggle('hidden', !label.includes(query));
+        });
+    });
 
-            update(ref(db, `users/${auth.currentUser.uid}/staff/${editingStaffId}`), {
-                name, desig: des || 'Personnel', phone: phone || 'N/A', email: email || 'N/A'
-            }).then(() => {
-                closeModal('edit-staff-modal');
-                editingStaffId = null;
-            });
-        };
+    // Category Filter Pills
+    function filterApps(category, btn) {
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        searchInput.value = '';
 
-        window.delUser = (sid) => confirm("Delete staff member?") && remove(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`));
-
-        window.delTxn = (tid, sid, amt, type) => {
-            if(confirm("Remove this transaction?")) {
-                const staff = staffData[sid];
-                if(staff) {
-                    const newBal = type === 'income' ? (Number(staff.balance || 0) - Number(amt)) : (Number(staff.balance || 0) + Number(amt));
-                    update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-                }
-                remove(ref(db, `users/${auth.currentUser.uid}/logs/${tid}`));
-            }
-        };
-
-        window.postTxn = () => {
-            const sid = document.getElementById('m-staff-id').value;
-            const amt = Number(document.getElementById('m-amt').value);
-            const date = document.getElementById('m-date').value;
-            if(!sid || !amt || !date) return alert("Select staff and fill all fields");
-            const staff = staffData[sid];
-            const newBal = currentType === 'income' ? (Number(staff.balance || 0) + amt) : (Number(staff.balance || 0) - amt);
-
-            const newTxnRef = push(ref(db, `users/${auth.currentUser.uid}/logs`), {
-                staffId: sid, staffName: staff.name, amount: amt, type: currentType, date,
-                cat: document.getElementById('m-cat').value, note: document.getElementById('m-note').value, ts: Date.now()
-            });
-            update(ref(db, `users/${auth.currentUser.uid}/staff/${sid}`), { balance: newBal });
-
-            const txnDataForMemo = {
-                key: newTxnRef.key,
-                staffId: sid,
-                staffName: staff.name,
-                amount: amt,
-                type: currentType,
-                date: date,
-                cat: document.getElementById('m-cat').value,
-                note: document.getElementById('m-note').value,
-                ts: Date.now(),
-                sb: newBal
-            };
-
-            clearSelection();
-            ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
-            showPage('dashboard-page');
-
-            window.openMemoModal(txnDataForMemo);
-        };
-
-        window.currentMemoData = null;
-        window.openMemoModal = (data) => {
-            window.currentMemoData = data;
-            const staffKeys = Object.keys(staffData).sort();
-            const u = staffData[data.staffId];
-            const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(data.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
-            const tsDate = data.ts ? new Date(data.ts).toLocaleString('en-GB') : 'N/A';
-
-            const staffLogs = (window.logsWithBalData || []).filter(l => l.staffId === data.staffId).sort((a, b) => a.ts - b.ts);
-            const currentIdx = staffLogs.findIndex(l => l.key === data.key);
-            const lastTxn = currentIdx > 0 ? staffLogs[currentIdx - 1] : (staffLogs.length > 0 && currentIdx === -1 ? staffLogs[staffLogs.length - 1] : null);
-            
-            let lastTxnStr = 'No Previous Record';
-            if (lastTxn) {
-                const lastTypeStr = lastTxn.type === 'income' ? 'অফিসে জমা' : 'অফিস থেকে উত্তোলন';
-                lastTxnStr = `সর্বশেষ লেনদেন ছিলো ${lastTxn.date} তারিখে, ${lastTypeStr} যার পরিমাণ ছিলো ${fmt(lastTxn.amount)} এবং সর্বশেষ ব্যালেন্স ছিল ${fmt(lastTxn.sb)}।`;
-            }
-
-            let cbLabel = 'Current Balance';
-            if (data.sb > 0) {
-                cbLabel = 'Current Balance <br><span class="text-[8px]">(অফিসের নিকট আপনি পাবেন)</span>';
-            } else if (data.sb < 0) {
-                cbLabel = 'Current Balance <br><span class="text-[8px]">(অফিস আপনার নিকট পাওনা রইলো)</span>';
-            }
-
-            const txnTypeStr = data.type === 'income' ? 'অফিসে জমা' : 'অফিস থেকে উত্তোলন';
-
-            const html = `
-                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
-                        <div class="flex justify-between items-start mb-2">
-                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                            <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
-                            </div>
-                        </div>
-                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
-                        </div>
-                    </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${txnTypeStr} (${data.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50 items-center"><span class="nexus-key !text-blue-600 leading-tight !w-auto pr-2 min-w-[105px]">${cbLabel}</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
-                        </div>
-                    </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
-                    </div>
-                </div>
-            `;
-            document.getElementById('memo-content-container').innerHTML = html;
-            openModal('memo-modal');
-        };
-
-        window.shareMemoImage = async () => {
-            const key = window.currentMemoData.key;
-            const element = document.getElementById('memo-pdf-content');
-            const originalWidth = element.style.width;
-            const originalMargin = element.style.margin;
-
-            element.style.width = '600px'; 
-            element.style.margin = '0 auto';
-            element.style.maxWidth = 'none';
-
-            const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 600 });
-
-            element.style.width = originalWidth;
-            element.style.margin = originalMargin;
-            element.style.maxWidth = '';
-
-            canvas.toBlob(async (blob) => {
-                const file = new File([blob], `Memo_${getTxnId(key)}.png`, { type: "image/png" });
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: `Transaction Memo ${getTxnId(key)}`,
-                            text: `Last Transaction Update for ${window.currentMemoData.staffName}`
-                        });
-                    } catch (err) { console.log('Share action cancelled or failed', err); }
-                } else {
-                    const link = document.createElement('a');
-                    link.download = `Memo_${getTxnId(key)}.png`;
-                    link.href = canvas.toDataURL("image/png");
-                    link.click();
-                }
-            }, "image/png");
-        };
-
-        window.shareMemoPDF = () => {
-            const key = window.currentMemoData.key;
-            const element = document.getElementById('memo-pdf-content');
-
-            const originalWidth = element.style.width;
-            const originalHeight = element.style.height;
-            const originalMargin = element.style.margin;
-            const originalPadding = element.style.padding;
-            const originalMaxWidth = element.style.maxWidth;
-            const originalMinHeight = element.style.minHeight;
-            const originalDisplay = element.style.display;
-            const originalFlexDirection = element.style.flexDirection;
-            const originalJustifyContent = element.style.justifyContent;
-            const originalBoxSizing = element.style.boxSizing;
-            const originalBg = element.style.backgroundColor;
-
-            element.style.width = '794px'; 
-            element.style.height = '1122px';
-            element.style.minHeight = '1122px';
-            element.style.margin = '0';
-            element.style.padding = '40px'; 
-            element.style.maxWidth = 'none';
-            element.style.display = 'flex';
-            element.style.flexDirection = 'column';
-            element.style.justifyContent = 'center';
-            element.style.boxSizing = 'border-box';
-            element.style.backgroundColor = '#ffffff';
-
-            const opt = {
-                margin: 0,
-                filename: `Memo_${getTxnId(key)}.pdf`,
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                element.style.width = originalWidth;
-                element.style.height = originalHeight;
-                element.style.margin = originalMargin;
-                element.style.padding = originalPadding;
-                element.style.maxWidth = originalMaxWidth;
-                element.style.minHeight = originalMinHeight;
-                element.style.display = originalDisplay;
-                element.style.flexDirection = originalFlexDirection;
-                element.style.justifyContent = originalJustifyContent;
-                element.style.boxSizing = originalBoxSizing;
-                element.style.backgroundColor = originalBg;
-
-                const file = new File([blob], opt.filename, { type: "application/pdf" });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: `Transaction Memo ${getTxnId(key)}`,
-                            text: `Transaction Memo PDF for ${window.currentMemoData.staffName}`
-                        });
-                    } catch (err) { 
-                        console.log('Share action cancelled or failed', err); 
-                    }
-                } else {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = opt.filename;
-                    link.click();
-                    URL.revokeObjectURL(link.href);
-                }
-            });
-        };
-
-        window.shareTransaction = (key) => {
-            if(!window.logsWithBalData) return;
-            const match = window.logsWithBalData.find(l => l.key === key);
-            if(match) window.openMemoModal(match);
-        };
-
-        window.lookupTransaction = () => {
-            const val = document.getElementById('lookup-trxid').value.trim().toUpperCase();
-            const container = document.getElementById('lookup-results');
-            if(!val) { container.innerHTML = ''; return; }
-
-            const match = logsList.find(l => getTxnId(l.key) === val);
-            if(match) {
-                const staffKeys = Object.keys(staffData).sort();
-                const u = staffData[match.staffId];
-                const g4sUserId = u ? `G4SXXXX${(staffKeys.indexOf(match.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
-                const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
-
-                container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
-                        <div class="flex justify-between items-start mb-2">
-                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                            <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
-                            </div>
-                        </div>
-                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Lookup Result</h2>
-                        </div>
-                    </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
-                        </div>
-                    </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
-                    </div>
-                </div>
-                `;
+        items.forEach(item => {
+            const id = item.getAttribute('data-id');
+            if (category === 'all') {
+                item.classList.remove('hidden');
+            } else if (category === 'fav') {
+                item.classList.toggle('hidden', !favorites.includes(id));
+            } else if (category === 'live') {
+                item.classList.toggle('hidden', item.getAttribute('data-live') !== 'true');
             } else {
-                container.innerHTML = `<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
+                item.classList.toggle('hidden', item.getAttribute('data-cat') !== category);
             }
-        };
+        });
+    }
+</script>
 
-        window.setT = (t) => {
-            currentType = t;
-            document.getElementById('ti').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'income' ? 'bg-teal-500 text-white shadow-lg shadow-teal-100' : 'bg-slate-100 text-teal-600'}`;
-            document.getElementById('te').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'expense' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-slate-100 text-orange-600'}`;
-        };
-
-        const startSync = (uid) => {
-            onValue(ref(db, `users/${uid}/staff`), s => {
-                staffData = s.val() || {};
-                const staffKeys = Object.keys(staffData).sort();
-
-                let sh = '';
-                let opts = '<option value="">All Personnel (Master Ledger)</option>';
-                let mh = '';
-                
-                Object.keys(staffData).forEach(id => {
-                    const u = staffData[id];
-                    const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
-                    sh += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
-                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600 font-black">: ${fmt(u.balance)}</span></div>
-                        </div>
-                    </div>`;
-                    opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
-                    
-                    mh += `
-                    <div class="nexus-card">
-                        <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
-                        </div>
-                        <div class="nexus-footer flex divide-x divide-slate-100">
-                            <span onclick="editUser('${id}')" class="flex-1 text-blue-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
-                            <span onclick="delUser('${id}')" class="flex-1 text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
-                        </div>
-                    </div>`;
-                });
-                document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
-                document.getElementById('r-staff').innerHTML = opts;
-                renderHome();
-            });
-
-            onValue(ref(db, `users/${uid}/logs`), s => {
-                const d = s.val() || {};
-                logsList = Object.keys(d).map(k => ({...d[k], key: k})).sort((a,b) => (a.ts || 0) - (b.ts || 0));
-                renderHome();
-            });
-        };
-
-        const renderHome = () => {
-            let cb = 0, mi = 0, me = 0;
-            const m = getDhakaMonthKey();
-            let logsWithBal = [];
-            let staffBals = {};
-
-            logsList.forEach(l => {
-                if(!staffBals[l.staffId]) staffBals[l.staffId] = 0;
-                if(l.type === 'income') { cb += l.amount; staffBals[l.staffId] += l.amount; }
-                else { cb -= l.amount; staffBals[l.staffId] -= l.amount; }
-                if(l.date.startsWith(m)) { if(l.type === 'income') mi += l.amount; else me += l.amount; }
-                
-                logsWithBal.push({ ...l, sb: staffBals[l.staffId], cb });
-            });
-
-            window.logsWithBalData = logsWithBal;
-            document.getElementById('cb-display').innerText = Math.abs(cb).toLocaleString('en-BD', {minimumFractionDigits: 2});
-            document.getElementById('month-label').innerText = getDhakaMonthLabel();
-            document.getElementById('month-received').innerText = fmt(mi);
-            document.getElementById('month-advanced').innerText = fmt(me);
-            document.getElementById('card-curr-label').innerText = currFormat === 'usd' ? '$' : 'BDT';
-
-            // Debt Status Logic
-            const debtStatusEl = document.getElementById('debt-status');
-            if (cb > 0) {
-                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]"></span> কাফি দিবে';
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 flex items-center gap-1";
-                debtStatusEl.classList.remove('hidden');
-            } else if (cb < 0) {
-                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></span> কাফি পাবে';
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 flex items-center gap-1";
-                debtStatusEl.classList.remove('hidden');
-            } else {
-                debtStatusEl.classList.add('hidden');
-            }
-
-            let rh = '';
-            [...logsWithBal].reverse().slice(0, 10).forEach(l => {
-                rh += `
-                <div class="relative overflow-hidden p-4 rounded-[20px] mb-3 border ${l.type==='income'?'border-teal-100 bg-gradient-to-r from-teal-50/50 to-white':'border-orange-100 bg-gradient-to-r from-orange-50/50 to-white'} shadow-[0_4px_15px_-5px_rgba(0,0,0,0.05)] transition-transform active:scale-[0.98]">
-                    <div class="flex justify-between items-center z-10 relative">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center ${l.type==='income'?'bg-teal-100/80 text-teal-600':'bg-orange-100/80 text-orange-500'} shadow-inner">
-                                    <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'} text-lg"></i>
-                                </div>
-                                <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center ${l.type==='income'?'bg-teal-500':'bg-rose-500'}">
-                                    <i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px] text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-[13px] font-bold text-slate-800">${l.staffName}</p>
-                                <p class="text-[9px] font-bold text-slate-400 mt-0.5 uppercase tracking-wider">${l.cat || 'Transaction'} • ${l.date}</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[15px] font-black ${l.type==='income'?'text-teal-600':'text-rose-600'}">${l.type==='income'?'+':'-'} ${fmt(l.amount)}</p>
-                            <p class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase tracking-wide">C.Bal: ${fmt(l.cb)}</p>
-                        </div>
-                    </div>
-                    <div class="mt-3 pt-3 border-t ${l.type==='income'?'border-teal-100/50':'border-orange-100/50'} flex justify-between items-center z-10 relative">
-                        <span class="text-[9px] font-mono text-slate-400 bg-white/60 px-2 py-1 rounded shadow-sm border border-slate-100">ID: ${getTxnId(l.key)}</span>
-                        <button onclick="shareTransaction('${l.key}')" class="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 ${l.type==='income'?'text-teal-600 bg-teal-100/50':'text-orange-600 bg-orange-100/50'} px-3 py-1 rounded-lg hover:opacity-80">
-                            <i class="fa-solid fa-share-nodes"></i> Share Memo
-                        </button>
-                    </div>
-                    <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-6xl pointer-events-none">
-                        <i class="fa-solid ${l.type==='income'?'fa-wallet':'fa-money-bill-transfer'}"></i>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('recent-logs').innerHTML = rh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No recent transactions</p>';
-
-            window.renderHistory();
-        };
-
-        window.renderHistory = () => {
-            const start = document.getElementById('hist-start').value;
-            const end = document.getElementById('hist-end').value;
-            let mLogH = '';
-            
-            if(!window.logsWithBalData) return;
-
-            [...window.logsWithBalData].reverse().forEach(l => {
-                if ((!start || l.date >= start) && (!end || l.date <= end)) {
-                    mLogH += `
-                    <div class="nexus-card">
-                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${l.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
-                        </div>
-                        <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
-                    </div>`;
-                }
-            });
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No history found</p>';
-        };
-
-        window.generateReport = () => {
-            const start = document.getElementById('r-start').value;
-            const end = document.getElementById('r-end').value;
-            const sid = document.getElementById('r-staff').value;
-            const isMaster = !sid;
-
-            let prevBalIndividual = 0, prevBalCentral = 0;
-            let fil = logsList.filter(l => {
-                if(!isMaster && l.staffId !== sid) return false;
-                
-                if (l.date < start) {
-                    if(l.type === 'income') {
-                        if(!isMaster) prevBalIndividual += l.amount;
-                        prevBalCentral += l.amount;
-                    } else {
-                        if(!isMaster) prevBalIndividual -= l.amount;
-                        prevBalCentral -= l.amount;
-                    }
-                    return false;
-                }
-                if (l.date > end) return false;
-                return true;
-            });
-
-            document.getElementById('report-duration').innerText = `STATEMENT PERIOD: ${start} TO ${end}`;
-            document.getElementById('report-view').classList.remove('hidden');
-            document.getElementById('pdf-btn').classList.remove('hidden');
-
-            const hMeta = document.getElementById('individual-header-meta');
-            const thead = document.getElementById('report-table-header');
-            
-            if (isMaster) {
-                hMeta.classList.add('hidden');
-                hMeta.innerHTML = '';
-                thead.innerHTML = `
-                    <th class="p-2 border border-slate-200 text-left">DATE</th>
-                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
-                    <th class="p-2 border border-slate-200 text-left">PERSONNEL</th>
-                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
-                    <th class="p-2 border border-slate-200 text-right">C. BALANCE</th>
-                `;
-            } else {
-                const u = staffData[sid];
-                const staffKeys = Object.keys(staffData).sort();
-                const g4sUserId = `G4SXXXX${(staffKeys.indexOf(sid) + 1).toString().padStart(2, '0')}`;
-                
-                hMeta.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-xs font-black uppercase tracking-widest text-slate-800">${u.name}</h2>
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">${u.desig}</p>
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">ID: ${g4sUserId}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Contact</p>
-                            <p class="text-[9px] font-bold text-slate-800">${u.phone}</p>
-                        </div>
-                    </div>
-                `;
-                hMeta.classList.remove('hidden');
-
-                thead.innerHTML = `
-                    <th class="p-2 border border-slate-200 text-left">DATE</th>
-                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
-                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
-                    <th class="p-2 border border-slate-200 text-left">PARTICULARS</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
-                    <th class="p-2 border border-slate-200 text-right">BALANCE</th>
-                `;
-            }
-
-            let tbody = `
-                <tr class="text-[9px] font-bold bg-slate-50/50">
-                    <td class="p-2 border border-slate-200" colspan="6">Opening Balance as on ${start}</td>
-                    <td class="p-2 border border-slate-200 text-right text-blue-600">${fmt(isMaster ? prevBalCentral : prevBalIndividual)}</td>
-                </tr>
-            `;
-
-            let runInd = prevBalIndividual, runCen = prevBalCentral;
-            let ti = 0, te = 0;
-
-            fil.forEach(l => {
-                const isInc = l.type === 'income';
-                if(isInc) {
-                    if(!isMaster) runInd += l.amount;
-                    runCen += l.amount;
-                    ti += l.amount;
-                } else {
-                    if(!isMaster) runInd -= l.amount;
-                    runCen -= l.amount;
-                    te += l.amount;
-                }
-
-                if (isMaster) {
-                    tbody += `
-                    <tr class="text-[9px]">
-                        <td class="p-2 border border-slate-200">${l.date}</td>
-                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
-                        <td class="p-2 border border-slate-200">${l.staffName}</td>
-                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right font-bold text-slate-900">${fmt(runCen)}</td>
-                    </tr>`;
-                } else {
-                    tbody += `
-                    <tr class="text-[9px]">
-                        <td class="p-2 border border-slate-200">${l.date}</td>
-                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
-                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
-                        <td class="p-2 border border-slate-200">${l.note || '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right font-bold text-blue-600">${fmt(runInd)}</td>
-                    </tr>`;
-                }
-            });
-
-            document.getElementById('report-body').innerHTML = tbody;
-
-            const finalBal = isMaster ? runCen : runInd;
-            document.getElementById('report-summary').innerHTML = `
-                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash In: <span class="text-teal-600">${fmt(ti)}</span></p>
-                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash Out: <span class="text-rose-600">${fmt(te)}</span></p>
-                <p class="text-xs uppercase font-black text-slate-900 border-t border-slate-200 pt-2 mt-2">Closing Balance as on ${end}: <span class="text-blue-600">${fmt(finalBal)}</span></p>
-            `;
-        };
-
-        window.exportPDF = () => {
-            const element = document.getElementById('pdf-content');
-            const start = document.getElementById('r-start').value;
-            const end = document.getElementById('r-end').value;
-
-            const opt = {
-                margin:       [10, 10, 10, 10],
-                filename:     `Ledger_Report_${start}_to_${end}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save();
-        };
-    </script>
 </body>
 </html>
