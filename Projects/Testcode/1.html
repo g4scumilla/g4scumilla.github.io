@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- Content Security Policy for XSS & Injection Protection -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com; script-src 'self' 'unsafe-inline'; connect-src 'self';">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Abdullahil Kuafi | Productivity and Pages</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,14 +14,14 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="apple-touch-icon" href="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 <style>
 :root {
     --safe-top: env(safe-area-inset-top, 16px);
     --safe-bottom: env(safe-area-inset-bottom, 12px);
     --nav-height: 68px;
-    --accent: #3ded97; /* Android green accent */
+    --accent: #3ded97;
     --accent-secondary: #06b6d4;
     --accent-glow: rgba(61, 237, 151, 0.25);
     --bg-main: #f8fafc;
@@ -63,7 +66,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Explicit bottom spacer so fixed bottom menu never overlaps content */
 .bottom-safe-spacer {
     width: 100%;
     height: calc(var(--nav-height) + var(--safe-bottom) + 28px);
@@ -85,7 +87,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= ANDROID.COM STICKY TOP HEADER ================= */
+/* ================= STICKY TOP HEADER ================= */
 .android-top-header {
     position: sticky;
     top: 0;
@@ -128,10 +130,9 @@ body {
 .header-actions-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-/* Expandable Inline Search Bar inside Header */
 .header-search-container {
     position: relative;
     display: flex;
@@ -156,7 +157,7 @@ body {
 }
 
 .header-search-container.active .header-search-input {
-    width: 140px;
+    width: 130px;
     opacity: 1;
     pointer-events: auto;
     padding: 6px 10px;
@@ -164,23 +165,70 @@ body {
 
 .header-icon-btn {
     background: none;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 10px;
     color: var(--text-secondary);
     font-size: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s, transform 0.15s;
-    padding: 4px;
+    transition: color 0.2s, transform 0.15s, background 0.2s, border-color 0.2s;
+    width: 32px;
+    height: 32px;
 }
 
 .header-icon-btn:hover {
     color: var(--accent);
 }
 
+.header-icon-btn.active-mode {
+    color: #0b0f19;
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 2px 10px var(--accent-glow);
+}
+
 .header-icon-btn:active {
     transform: scale(0.9);
+}
+
+.layout-icon-svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+/* Rearrange Banner */
+.rearrange-banner {
+    display: none;
+    margin: 0 16px 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(61, 237, 151, 0.12);
+    border: 1px solid var(--accent);
+    color: var(--text-primary);
+    font-size: 11.5px;
+    font-weight: 700;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.rearrange-banner.show {
+    display: flex;
+}
+
+.rearrange-done-btn {
+    background: var(--accent);
+    color: #0b0f19;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
 }
 
 /* Filter Section */
@@ -229,7 +277,6 @@ body {
     transition: all 0.25s ease;
 }
 
-/* Optional 2-column & 4-column modes */
 .service-grid.cols-2 {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -262,7 +309,6 @@ body {
     transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
-/* Subtle top glowing rim on each card */
 .service-item::before {
     content: "";
     position: absolute;
@@ -295,7 +341,62 @@ body {
     transform: scale(0.94);
 }
 
-/* Card Top Utility Row (Live dot + Star button) */
+/* Rearrange Mode Styling */
+.service-grid.rearrange-active .service-item {
+    border-style: dashed;
+    border-color: var(--accent);
+    cursor: grab;
+    animation: subtleWiggle 1.8s infinite ease-in-out;
+}
+
+.service-grid.rearrange-active .service-item.dragging {
+    opacity: 0.45;
+    transform: scale(0.95);
+}
+
+@keyframes subtleWiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-0.8deg); }
+    75% { transform: rotate(0.8deg); }
+}
+
+.card-move-controls {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    z-index: 15;
+}
+
+.service-grid.rearrange-active .card-move-controls {
+    display: flex;
+}
+
+.move-btn {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 26px;
+    height: 24px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.move-btn:hover {
+    background: var(--accent);
+    color: #0b0f19;
+}
+
+.move-btn:active {
+    transform: scale(0.88);
+}
+
 .card-top-bar {
     width: 100%;
     display: flex;
@@ -338,7 +439,6 @@ body {
     margin-left: 2px;
 }
 
-/* Star favourite badge */
 .fav-badge {
     background: rgba(148, 163, 184, 0.12);
     color: var(--text-secondary);
@@ -365,7 +465,6 @@ body {
     border-color: rgba(245, 158, 11, 0.35);
 }
 
-/* Vibrant Gradient Icon Squircle */
 .icon-circle {
     width: 48px;
     height: 48px;
@@ -407,7 +506,7 @@ body {
     max-width: 100%;
 }
 
-/* Adjustments when in 4-column compact mode */
+/* 4-column mode */
 .service-grid.cols-4 .service-item {
     padding: 9px 6px 10px;
     border-radius: 16px;
@@ -433,9 +532,10 @@ body {
     min-height: 16px;
 }
 
-/* Adjustments when in 2-column wide Bento mode */
+/* 2-column mode */
 .service-grid.cols-2 .service-item {
     flex-direction: row;
+    flex-wrap: wrap;
     text-align: left;
     padding: 14px 14px;
     gap: 12px;
@@ -494,7 +594,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Dedicated Full-Page Tools & Settings */
+/* ================= DEDICATED SUB-PAGES (TOOLS & NOTICES) ================= */
 .tools-page-container {
     padding: calc(var(--safe-top) + 12px) 16px 16px;
 }
@@ -556,6 +656,7 @@ body {
     margin-bottom: 12px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 6px;
 }
 
@@ -565,6 +666,7 @@ body {
     align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
+    gap: 10px;
 }
 
 .setting-row:last-child {
@@ -600,6 +702,7 @@ body {
     align-items: center;
     gap: 7px;
     font-family: inherit;
+    white-space: nowrap;
 }
 
 .btn-danger {
@@ -627,7 +730,6 @@ body {
     transform: scale(1.15);
 }
 
-/* Quick Scratchpad inside Tools */
 .quick-note-area {
     width: 100%;
     min-height: 95px;
@@ -647,7 +749,6 @@ body {
     border-color: var(--accent);
 }
 
-/* Quick Tool Grid inside Tools Page */
 .mini-tools-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -687,6 +788,157 @@ body {
     justify-content: center;
 }
 
+/* ================= NOTICES VIEW STYLES ================= */
+.notice-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notice-input {
+    width: 100%;
+    min-height: 76px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    padding: 11px 12px;
+    font-family: inherit;
+    font-size: 12.5px;
+    resize: none;
+    outline: none;
+    user-select: text;
+}
+
+.notice-input:focus {
+    border-color: var(--accent);
+}
+
+.notice-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notice-limit-hint {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.notices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notice-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--accent);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    animation: fadeIn 0.2s ease;
+}
+
+.notice-content {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.notice-text {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.45;
+    white-space: pre-wrap;
+    user-select: text;
+}
+
+.notice-meta {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notice-delete-btn {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 11px;
+}
+
+.empty-notices {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ================= SECURITY PIN LOCK MODAL ================= */
+.lock-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-main);
+    z-index: 5000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+}
+
+.lock-overlay.active {
+    display: flex;
+}
+
+.lock-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 28px 22px;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: var(--card-shadow);
+}
+
+.lock-pin-input {
+    width: 100%;
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 20px;
+    font-weight: 800;
+    padding: 12px;
+    margin: 16px 0 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    outline: none;
+    user-select: text;
+}
+
+.lock-pin-input:focus {
+    border-color: var(--accent);
+}
+
 /* Toast Notification */
 .toast {
     position: fixed;
@@ -711,7 +963,7 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Glass Bottom Navigation - Clean Non-Overlapping Fit */
+/* ================= GLASS BOTTOM NAVIGATION ================= */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -744,6 +996,7 @@ body {
     transition: color 0.2s ease;
     cursor: pointer;
     flex: 1;
+    position: relative;
 }
 
 .nav-item i {
@@ -754,21 +1007,25 @@ body {
     color: var(--accent);
 }
 
-.nav-plus {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-    color: #0b0f19 !important;
-    display: flex;
+.nav-badge {
+    position: absolute;
+    top: -4px;
+    right: calc(50% - 18px);
+    background: var(--accent);
+    color: #0b0f19;
+    font-size: 9px;
+    font-weight: 800;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    display: none;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px var(--accent-glow);
+    padding: 0 4px;
 }
 
-.nav-plus i {
-    font-size: 18px;
+.nav-badge.show {
+    display: inline-flex;
 }
 
 @media (min-width: 768px) {
@@ -793,10 +1050,22 @@ body {
 
 <body>
 
+<!-- ================= SECURITY PIN OVERLAY ================= -->
+<div class="lock-overlay" id="lock-overlay">
+    <div class="lock-card">
+        <div class="icon-circle" style="margin: 0 auto 12px;"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 style="font-size: 17px; font-weight: 800;">Workspace Locked</h3>
+        <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Enter your security PIN to continue</p>
+        <input type="password" id="unlock-pin-input" class="lock-pin-input" maxlength="8" inputmode="numeric" placeholder="••••">
+        <button class="btn-action" style="width: 100%; justify-content: center; padding: 10px;" onclick="verifyPinUnlock()">
+            <i class="fa-solid fa-unlock"></i> Unlock Hub
+        </button>
+    </div>
+</div>
+
 <!-- ================= HOME PAGE VIEW ================= -->
 <div id="home-view" class="page-view active">
 
-    <!-- Android.com Style Sticky Top Header with Integrated Clean Search -->
     <header class="android-top-header">
         <div class="header-left-group">
             <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
@@ -812,24 +1081,33 @@ body {
             <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
+            <button class="header-icon-btn" id="rearrange-toggle-btn" onclick="toggleRearrangeMode()" title="Rearrange Cards">
+                <i class="fa-solid fa-arrows-up-down-left-right"></i>
+            </button>
             <button class="header-icon-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
                 <span id="header-layout-icon-holder"></span>
             </button>
         </div>
     </header>
 
+    <!-- Active Rearrange Mode Banner -->
+    <div class="rearrange-banner" id="rearrange-banner">
+        <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Rearrange Mode: Use arrows or drag cards</span>
+        <button class="rearrange-done-btn" onclick="toggleRearrangeMode()">Done</button>
+    </div>
+
     <!-- Quick Filter Category Pills -->
     <div class="controls-section">
         <div class="filter-pills">
-            <button class="pill active" id="pill-fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
-            <button class="pill" id="pill-all" onclick="filterApps('all', this)">All Apps</button>
-            <button class="pill" onclick="filterApps('live', this)">Active Links</button>
-            <button class="pill" onclick="filterApps('work', this)">Work & Dev</button>
-            <button class="pill" onclick="filterApps('life', this)">Lifestyle</button>
+            <button class="pill" id="pill-fav" data-filter="fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
+            <button class="pill" id="pill-all" data-filter="all" onclick="filterApps('all', this)">All Apps</button>
+            <button class="pill" id="pill-live" data-filter="live" onclick="filterApps('live', this)">Active Links</button>
+            <button class="pill" id="pill-work" data-filter="work" onclick="filterApps('work', this)">Work & Dev</button>
+            <button class="pill" id="pill-life" data-filter="life" onclick="filterApps('life', this)">Lifestyle</button>
         </div>
     </div>
 
-    <!-- 20-Item Redesigned Attractive Link Cards Grid -->
+    <!-- 20-Item Link Cards Grid -->
     <div class="service-grid" id="app-grid">
 
         <a href="#" class="service-item" data-id="app-work" data-cat="work" style="--c1:#3b82f6; --c2:#6366f1; --c-rgb:59,130,246;">
@@ -844,13 +1122,13 @@ body {
             <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
         </a>
 
-        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
+        <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" rel="noopener noreferrer" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
             <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
             <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
         </a>
 
-        <a href="https://g4scumilla.github.io/Projects/Television/index" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
+        <a href="https://g4scumilla.github.io/Projects/Television/index" rel="noopener noreferrer" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
             <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>
             <div class="card-text"><div class="card-title">Sports</div><div class="card-sub">Live TV Stream</div></div>
@@ -892,13 +1170,13 @@ body {
             <div class="card-text"><div class="card-title">Blog</div><div class="card-sub">Notes & Stories</div></div>
         </a>
 
-        <a href="#" class="service-item" data-id="app-secure" data-cat="work" style="--c1:#eab308; --c2:#ca8a04; --c-rgb:234,179,8;">
+        <a href="javascript:void(0)" onclick="handleSecureCardClick()" class="service-item" data-id="app-secure" data-cat="work" style="--c1:#eab308; --c2:#ca8a04; --c-rgb:234,179,8;">
             <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-vault"></i></div>
-            <div class="card-text"><div class="card-title">Secure</div><div class="card-sub">Private Vault</div></div>
+            <div class="card-text"><div class="card-title">Secure</div><div class="card-sub">PIN & Vault</div></div>
         </a>
 
-        <a href="https://g4scumilla.github.io/Projects/finance/main" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
+        <a href="https://g4scumilla.github.io/Projects/finance/main" rel="noopener noreferrer" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
             <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
             <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
@@ -940,7 +1218,7 @@ body {
             <div class="card-text"><div class="card-title">Home</div><div class="card-sub">Personal Space</div></div>
         </a>
 
-        <a href="javascript:void(0)" onclick="switchPage('tools')" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
+        <a href="javascript:void(0)" onclick="handleSettingsCardClick()" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
             <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div></div>
             <div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>
             <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
@@ -965,6 +1243,50 @@ body {
     <div class="bottom-safe-spacer"></div>
 </div>
 
+<!-- ================= DEDICATED NOTICES VIEW (MAX LAST 4 SHOWN) ================= -->
+<div id="notices-view" class="page-view">
+    <div class="tools-page-container">
+        <div class="tools-header">
+            <div class="tools-header-left">
+                <button class="back-btn" onclick="switchPage('home')">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <div class="tools-title">Notices</div>
+                    <div class="tools-subtitle">Permanently saved updates (shows latest 4)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Notice Box -->
+        <div class="tools-section-card">
+            <div class="section-label">
+                <span><i class="fa-solid fa-plus-circle"></i> New Notice</span>
+            </div>
+            <div class="notice-form">
+                <textarea id="notice-input" class="notice-input" maxlength="280" placeholder="Write a notice or important update..."></textarea>
+                <div class="notice-form-footer">
+                    <span class="notice-limit-hint">Saved permanently on device</span>
+                    <button class="btn-action" onclick="addNotice()">
+                        <i class="fa-solid fa-paper-plane"></i> Post Notice
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent 4 Notices Display -->
+        <div class="tools-section-card">
+            <div class="section-label">
+                <span><i class="fa-solid fa-bullhorn"></i> Recent Notices (Max 4)</span>
+                <span id="notice-count-pill" style="color: var(--text-secondary); font-size: 10px;">0 / 4</span>
+            </div>
+            <div id="notices-list" class="notices-list"></div>
+        </div>
+
+        <div class="bottom-safe-spacer"></div>
+    </div>
+</div>
+
 <!-- ================= DEDICATED FULL-PAGE TOOLS & SETTINGS VIEW ================= -->
 <div id="tools-view" class="page-view">
     <div class="tools-page-container">
@@ -976,14 +1298,14 @@ body {
                 </button>
                 <div>
                     <div class="tools-title">Tools & Settings</div>
-                    <div class="tools-subtitle">Personalize your workspace & utilities</div>
+                    <div class="tools-subtitle">Personalize your workspace & security</div>
                 </div>
             </div>
         </div>
 
-        <!-- Appearance & Theme Section -->
+        <!-- Appearance & Arrangement Section -->
         <div class="tools-section-card">
-            <div class="section-label"><i class="fa-solid fa-palette"></i> Appearance & Layout</div>
+            <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
 
             <div class="setting-row">
                 <div class="setting-info">
@@ -1009,27 +1331,57 @@ body {
 
             <div class="setting-row">
                 <div class="setting-info">
+                    <h4>Rearrange Link Cards</h4>
+                    <p>Reorder cards permanently on home grid</p>
+                </div>
+                <button class="btn-action" onclick="switchPage('home'); toggleRearrangeMode(true);">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> Rearrange
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
                     <h4>Accent Color</h4>
                     <p>Customize highlight & button tones</p>
                 </div>
                 <div class="color-swatches">
-                    <div class="swatch active" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)"></div>
-                    <div class="swatch" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)"></div>
-                    <div class="swatch" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)"></div>
-                    <div class="swatch" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#3ded97', this)"></div>
+                    <div class="swatch active" data-primary="#3ded97" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)"></div>
+                    <div class="swatch" data-primary="#10b981" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)"></div>
+                    <div class="swatch" data-primary="#f43f5e" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)"></div>
+                    <div class="swatch" data-primary="#0ea5e9" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#3ded97', this)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workspace Security Section -->
+        <div class="tools-section-card">
+            <div class="section-label"><span><i class="fa-solid fa-shield-halved"></i> Security & Lock</span></div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>PIN Lock Protection</h4>
+                    <p id="pin-status-label">Protect dashboard on startup</p>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn-action" onclick="configurePinLock()">
+                        <i class="fa-solid fa-key"></i> <span id="pin-btn-text">Set PIN</span>
+                    </button>
+                    <button class="btn-action btn-danger" id="remove-pin-btn" style="display: none;" onclick="removePinLock()">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Built-in Quick Utilities -->
         <div class="tools-section-card">
-            <div class="section-label"><i class="fa-solid fa-bolt"></i> Quick Utilities</div>
+            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities</span></div>
             <div class="mini-tools-grid">
-                <button class="mini-tool-btn" onclick="window.location.href='https://g4scumilla.github.io/Projects/finance/main'">
+                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/finance/main')">
                     <i class="fa-solid fa-wallet"></i>
                     <div>Finance App</div>
                 </button>
-                <button class="mini-tool-btn" onclick="window.location.href='https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index'">
+                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index')">
                     <i class="fa-solid fa-code"></i>
                     <div>Dev Console</div>
                 </button>
@@ -1046,13 +1398,23 @@ body {
 
         <!-- Personal Scratchpad Tool -->
         <div class="tools-section-card">
-            <div class="section-label"><i class="fa-solid fa-note-sticky"></i> Quick Scratchpad</div>
-            <textarea id="quick-notes" class="quick-note-area" placeholder="Write quick personal notes, reminders, or snippets here (auto-saved locally)..."></textarea>
+            <div class="section-label"><span><i class="fa-solid fa-note-sticky"></i> Quick Scratchpad</span></div>
+            <textarea id="quick-notes" class="quick-note-area" placeholder="Write quick personal notes, reminders, or snippets here (auto-saved permanently)..."></textarea>
         </div>
 
         <!-- Data & Storage Management -->
         <div class="tools-section-card">
-            <div class="section-label"><i class="fa-solid fa-database"></i> Data & Preferences</div>
+            <div class="section-label"><span><i class="fa-solid fa-database"></i> Data & Preferences</span></div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Card Arrangement Order</h4>
+                    <p>Restore default 20-card sequence</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="resetCardOrder()">
+                    <i class="fa-solid fa-rotate-left"></i> Default
+                </button>
+            </div>
 
             <div class="setting-row">
                 <div class="setting-info">
@@ -1081,9 +1443,9 @@ body {
 
 <div class="toast" id="toast-msg">Workspace Synced!</div>
 
-<!-- Glass Bottom Navigation -->
+<!-- ================= GLASS BOTTOM NAVIGATION (NO PLUS ICON, NOTICES ADDED) ================= -->
 <div class="bottom-nav">
-    <a href="javascript:void(0)" id="nav-home" onclick="switchPage('home')" class="nav-item nav-active">
+    <a href="javascript:void(0)" id="nav-home" onclick="openHomeTab()" class="nav-item nav-active">
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
@@ -1091,12 +1453,10 @@ body {
         <i class="fa-solid fa-star"></i>
         <span>Favourites</span>
     </a>
-    <a href="https://g4scumilla.github.io/Projects/mydashboard/index" class="nav-item nav-plus">
-        <i class="fa-solid fa-plus"></i>
-    </a>
-    <a href="#" class="nav-item">
-        <i class="fa-solid fa-bell"></i>
-        <span>Alerts</span>
+    <a href="javascript:void(0)" id="nav-notices" onclick="switchPage('notices')" class="nav-item">
+        <i class="fa-solid fa-clipboard-list"></i>
+        <span>Notices</span>
+        <span class="nav-badge" id="nav-notice-badge">0</span>
     </a>
     <a href="javascript:void(0)" id="nav-tools" onclick="switchPage('tools')" class="nav-item">
         <i class="fa-solid fa-sliders"></i>
@@ -1105,55 +1465,140 @@ body {
 </div>
 
 <script>
-    // Full-Page Navigation Switcher (Home <-> Tools)
-    function switchPage(page) {
-        const homeView = document.getElementById('home-view');
-        const toolsView = document.getElementById('tools-view');
-        const navHome = document.getElementById('nav-home');
-        const navTools = document.getElementById('nav-tools');
-        const navFav = document.getElementById('nav-fav');
+    "use strict";
 
-        navFav.classList.remove('nav-active');
+    // ================= SAFE STORAGE UTILITIES (SECURITY) =================
+    const SafeStorage = {
+        get(key, fallback = null) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw !== null ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        },
+        set(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.warn('Storage quota or permission issue:', e);
+            }
+        },
+        getRaw(key, fallback = '') {
+            try {
+                const val = localStorage.getItem(key);
+                return val !== null ? val : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        },
+        setRaw(key, value) {
+            try {
+                localStorage.setItem(key, String(value));
+            } catch (e) {}
+        },
+        remove(key) {
+            try {
+                localStorage.removeItem(key);
+            } catch (e) {}
+        }
+    };
 
-        if (page === 'tools') {
-            homeView.classList.remove('active');
-            toolsView.classList.add('active');
-            navHome.classList.remove('nav-active');
-            navTools.classList.add('nav-active');
-            updateFavCountLabel();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            toolsView.classList.remove('active');
-            homeView.classList.add('active');
-            navTools.classList.remove('nav-active');
-            navHome.classList.add('nav-active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    function openSafeUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.origin);
+            if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+                window.location.href = parsed.href;
+            }
+        } catch (e) {
+            showToast('Invalid URL blocked');
         }
     }
 
-    // Open Favourites directly from bottom bar
-    function openFavouritesTab() {
-        switchPage('home');
-        const favPill = document.getElementById('pill-fav');
-        filterApps('fav', favPill);
+    // ================= PAGE NAVIGATION =================
+    function switchPage(page) {
+        const views = {
+            home: document.getElementById('home-view'),
+            notices: document.getElementById('notices-view'),
+            tools: document.getElementById('tools-view')
+        };
+        const navs = {
+            home: document.getElementById('nav-home'),
+            fav: document.getElementById('nav-fav'),
+            notices: document.getElementById('nav-notices'),
+            tools: document.getElementById('nav-tools')
+        };
+
+        Object.values(views).forEach(v => v.classList.remove('active'));
+        Object.values(navs).forEach(n => n.classList.remove('nav-active'));
+
+        if (page === 'tools') {
+            views.tools.classList.add('active');
+            navs.tools.classList.add('nav-active');
+            updateFavCountLabel();
+        } else if (page === 'notices') {
+            views.notices.classList.add('active');
+            navs.notices.classList.add('nav-active');
+            renderNotices();
+        } else {
+            views.home.classList.add('active');
+            const currentFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+            if (currentFilter === 'fav') {
+                navs.fav.classList.add('nav-active');
+            } else {
+                navs.home.classList.add('nav-active');
+            }
+        }
+        SafeStorage.setRaw('kuafi_active_page', page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Toggle expand/collapse header inline search input
+    function openHomeTab() {
+        const allPill = document.getElementById('pill-all');
+        filterApps('all', allPill);
+        switchPage('home');
+    }
+
+    function openFavouritesTab() {
+        const favPill = document.getElementById('pill-fav');
+        filterApps('fav', favPill);
+        switchPage('home');
+    }
+
+    function handleSettingsCardClick() {
+        if (!rearrangeMode) switchPage('tools');
+    }
+
+    function handleSecureCardClick() {
+        if (rearrangeMode) return;
+        const pinHash = SafeStorage.getRaw('kuafi_pin_hash', '');
+        if (pinHash) {
+            document.getElementById('lock-overlay').classList.add('active');
+            document.getElementById('unlock-pin-input').value = '';
+            document.getElementById('unlock-pin-input').focus();
+        } else {
+            switchPage('tools');
+            showToast('Set a Security PIN in Tools');
+        }
+    }
+
+    // ================= HEADER SEARCH =================
     function toggleHeaderSearch() {
         switchPage('home');
         const container = document.getElementById('header-search-container');
         const searchInput = document.getElementById('search-input');
-        
+
         container.classList.toggle('active');
         if (container.classList.contains('active')) {
             searchInput.focus();
         } else {
             searchInput.value = '';
-            filterApps(document.querySelector('.pill.active')?.id === 'pill-fav' ? 'fav' : 'all');
+            const activeFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+            filterApps(activeFilter, document.querySelector(`.pill[data-filter="${activeFilter}"]`));
         }
     }
 
-    // Dynamic Grid Icons for 2-Column, 3-Column, and 4-Column
+    // ================= GRID LAYOUT (2 / 3 / 4 COLS) =================
     const layoutIcons = {
         2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
                 <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
@@ -1181,13 +1626,12 @@ body {
             </svg>`
     };
 
-    // Cycle Card Grid Layout
     const appGrid = document.getElementById('app-grid');
     const gridStyleLabel = document.getElementById('grid-style-label');
     const headerLayoutIconHolder = document.getElementById('header-layout-icon-holder');
     const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
 
-    let currentCols = parseInt(localStorage.getItem('kuafi_grid_cols') || '3', 10);
+    let currentCols = parseInt(SafeStorage.getRaw('kuafi_grid_cols', '3'), 10);
     if (![2, 3, 4].includes(currentCols)) currentCols = 3;
 
     function applyGridLayout(cols, notify) {
@@ -1197,9 +1641,9 @@ body {
 
         if (headerLayoutIconHolder) headerLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
-        if (gridStyleLabel) gridStyleLabel.innerText = `${cols} Columns`;
+        if (gridStyleLabel) gridStyleLabel.textContent = `${cols} Columns`;
 
-        localStorage.setItem('kuafi_grid_cols', cols);
+        SafeStorage.setRaw('kuafi_grid_cols', cols);
         if (notify) showToast(`Card View: ${cols} Columns`);
     }
     applyGridLayout(currentCols, false);
@@ -1209,39 +1653,170 @@ body {
         applyGridLayout(currentCols, true);
     }
 
-    // Sync Animation + Toast Feedback
-    function syncData(el) {
-        const icon = document.getElementById('sync-icon');
-        icon.classList.remove('rotating');
-        void icon.offsetWidth; 
-        icon.classList.add('rotating');
-        showToast('Workspace Synced!');
-    }
-
-    function showToast(text) {
-        const toast = document.getElementById('toast-msg');
-        toast.innerText = text;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 1800);
-    }
-
-    // Favourites Management
-    let savedFavData = localStorage.getItem('kuafi_favorites');
-    let favorites = savedFavData ? JSON.parse(savedFavData) : ['app-dev', 'app-sports', 'app-finance'];
-    if (!savedFavData) {
-        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
-    }
-
-    const searchInput = document.getElementById('search-input');
-    const items = document.querySelectorAll('.service-item');
+    // ================= PERMANENT CARD REARRANGEMENT =================
     const emptyFavMsg = document.getElementById('empty-fav-msg');
+    let rearrangeMode = false;
+    let draggedCard = null;
+
+    function getCardElements() {
+        return Array.from(appGrid.querySelectorAll('.service-item'));
+    }
+
+    const defaultCardOrder = getCardElements().map(el => el.getAttribute('data-id'));
+
+    function setupCardControls() {
+        getCardElements().forEach(card => {
+            const id = card.getAttribute('data-id');
+
+            // Inject Left/Right Move Controls for Rearrange Mode
+            const controls = document.createElement('div');
+            controls.className = 'card-move-controls';
+
+            const leftBtn = document.createElement('button');
+            leftBtn.type = 'button';
+            leftBtn.className = 'move-btn';
+            leftBtn.title = 'Move Backward';
+            leftBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            leftBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                moveCardStep(id, -1);
+            });
+
+            const rightBtn = document.createElement('button');
+            rightBtn.type = 'button';
+            rightBtn.className = 'move-btn';
+            rightBtn.title = 'Move Forward';
+            rightBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            rightBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                moveCardStep(id, 1);
+            });
+
+            controls.appendChild(leftBtn);
+            controls.appendChild(rightBtn);
+            card.appendChild(controls);
+
+            // Prevent accidental link navigation while Rearrange Mode is active
+            card.addEventListener('click', (e) => {
+                if (rearrangeMode) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+
+            // HTML5 Drag & Drop support
+            card.addEventListener('dragstart', (e) => {
+                if (!rearrangeMode) {
+                    e.preventDefault();
+                    return;
+                }
+                draggedCard = card;
+                card.classList.add('dragging');
+                if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+            });
+
+            card.addEventListener('dragend', () => {
+                if (draggedCard) draggedCard.classList.remove('dragging');
+                draggedCard = null;
+                saveCardOrder();
+            });
+
+            card.addEventListener('dragover', (e) => {
+                if (!rearrangeMode || !draggedCard || draggedCard === card) return;
+                e.preventDefault();
+                const cards = getCardElements();
+                const draggedIdx = cards.indexOf(draggedCard);
+                const targetIdx = cards.indexOf(card);
+                if (draggedIdx < targetIdx) {
+                    appGrid.insertBefore(draggedCard, card.nextSibling);
+                } else {
+                    appGrid.insertBefore(draggedCard, card);
+                }
+            });
+        });
+    }
+
+    function moveCardStep(id, direction) {
+        const visibleCards = getCardElements().filter(c => !c.classList.contains('hidden'));
+        const card = appGrid.querySelector(`[data-id="${id}"]`);
+        const currentIndex = visibleCards.indexOf(card);
+        if (currentIndex === -1) return;
+
+        const targetIndex = currentIndex + direction;
+        if (targetIndex < 0 || targetIndex >= visibleCards.length) return;
+
+        const targetCard = visibleCards[targetIndex];
+        if (direction === -1) {
+            appGrid.insertBefore(card, targetCard);
+        } else {
+            appGrid.insertBefore(card, targetCard.nextSibling);
+        }
+        saveCardOrder();
+        showToast('Card order saved');
+    }
+
+    function saveCardOrder() {
+        const order = getCardElements().map(el => el.getAttribute('data-id'));
+        SafeStorage.set('kuafi_card_order', order);
+    }
+
+    function loadCardOrder() {
+        const savedOrder = SafeStorage.get('kuafi_card_order', null);
+        if (!Array.isArray(savedOrder) || savedOrder.length === 0) return;
+
+        const cardMap = {};
+        getCardElements().forEach(el => {
+            cardMap[el.getAttribute('data-id')] = el;
+        });
+
+        savedOrder.forEach(id => {
+            if (cardMap[id]) {
+                appGrid.insertBefore(cardMap[id], emptyFavMsg);
+                delete cardMap[id];
+            }
+        });
+
+        // Append any remaining cards not in saved list
+        Object.values(cardMap).forEach(el => {
+            appGrid.insertBefore(el, emptyFavMsg);
+        });
+    }
+
+    function resetCardOrder() {
+        SafeStorage.set('kuafi_card_order', defaultCardOrder);
+        loadCardOrder();
+        showToast('Default card order restored');
+    }
+
+    function toggleRearrangeMode(forceState) {
+        rearrangeMode = typeof forceState === 'boolean' ? forceState : !rearrangeMode;
+        const btn = document.getElementById('rearrange-toggle-btn');
+        const banner = document.getElementById('rearrange-banner');
+
+        appGrid.classList.toggle('rearrange-active', rearrangeMode);
+        btn.classList.toggle('active-mode', rearrangeMode);
+        banner.classList.toggle('show', rearrangeMode);
+
+        getCardElements().forEach(card => {
+            card.setAttribute('draggable', rearrangeMode ? 'true' : 'false');
+        });
+
+        showToast(rearrangeMode ? 'Rearrange Mode ON' : 'Arrangement Saved');
+    }
+
+    // ================= PERMANENT FAVOURITES =================
+    let favorites = SafeStorage.get('kuafi_favorites', null);
+    if (!Array.isArray(favorites)) {
+        favorites = ['app-dev', 'app-sports', 'app-finance'];
+        SafeStorage.set('kuafi_favorites', favorites);
+    }
 
     function initFavorites() {
-        items.forEach(item => {
+        getCardElements().forEach(item => {
             const id = item.getAttribute('data-id');
-            if (favorites.includes(id)) {
-                item.classList.add('is-favorite');
-            }
+            item.classList.toggle('is-favorite', favorites.includes(id));
         });
         updateFavCountLabel();
     }
@@ -1249,7 +1824,7 @@ body {
     function updateFavCountLabel() {
         const label = document.getElementById('fav-count-label');
         if (label) {
-            label.innerText = `${favorites.length} app${favorites.length === 1 ? '' : 's'} pinned to Favourites`;
+            label.textContent = `${favorites.length} app${favorites.length === 1 ? '' : 's'} pinned to Favourites`;
         }
     }
 
@@ -1257,6 +1832,7 @@ body {
         e.preventDefault();
         e.stopPropagation();
         const item = document.querySelector(`[data-id="${id}"]`);
+        if (!item) return;
 
         if (favorites.includes(id)) {
             favorites = favorites.filter(fav => fav !== id);
@@ -1267,7 +1843,7 @@ body {
             item.classList.add('is-favorite');
             showToast('Added to Favourites ⭐');
         }
-        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
+        SafeStorage.set('kuafi_favorites', favorites);
         updateFavCountLabel();
 
         const activePill = document.querySelector('.pill.active');
@@ -1278,10 +1854,8 @@ body {
 
     function clearFavorites() {
         favorites = [];
-        localStorage.setItem('kuafi_favorites', JSON.stringify(favorites));
-        items.forEach(item => {
-            item.classList.remove('is-favorite');
-        });
+        SafeStorage.set('kuafi_favorites', favorites);
+        getCardElements().forEach(item => item.classList.remove('is-favorite'));
         updateFavCountLabel();
         const activePill = document.querySelector('.pill.active');
         if (activePill && activePill.id === 'pill-fav') {
@@ -1290,61 +1864,226 @@ body {
         showToast('All favourites cleared');
     }
 
-    // Dark / Light Mode Toggle inside Tools Page
+    // ================= PERMANENT NOTICES (MAX SHOW LAST 4) =================
+    let notices = SafeStorage.get('kuafi_notices', []);
+    if (!Array.isArray(notices)) notices = [];
+
+    function updateNoticeBadge() {
+        const badge = document.getElementById('nav-notice-badge');
+        const countPill = document.getElementById('notice-count-pill');
+        const visibleTotal = Math.min(notices.length, 4);
+        if (badge) {
+            badge.textContent = String(visibleTotal);
+            badge.classList.toggle('show', visibleTotal > 0);
+        }
+        if (countPill) {
+            countPill.textContent = `${visibleTotal} / 4 shown`;
+        }
+    }
+
+    function renderNotices() {
+        const listEl = document.getElementById('notices-list');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        // Always slice the last 4 notices (newest first)
+        const latestFour = notices.slice(-4).reverse();
+        updateNoticeBadge();
+
+        if (latestFour.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-notices';
+            empty.textContent = 'No notices posted yet. Add your first notice above.';
+            listEl.appendChild(empty);
+            return;
+        }
+
+        latestFour.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'notice-card';
+
+            const content = document.createElement('div');
+            content.className = 'notice-content';
+
+            const textEl = document.createElement('div');
+            textEl.className = 'notice-text';
+            textEl.textContent = item.text; // Safe textContent prevents XSS
+
+            const metaEl = document.createElement('div');
+            metaEl.className = 'notice-meta';
+            metaEl.textContent = item.time || 'Saved Notice';
+
+            content.appendChild(textEl);
+            content.appendChild(metaEl);
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'notice-delete-btn';
+            delBtn.title = 'Delete Notice';
+            delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            delBtn.addEventListener('click', () => deleteNotice(item.id));
+
+            card.appendChild(content);
+            card.appendChild(delBtn);
+            listEl.appendChild(card);
+        });
+    }
+
+    function addNotice() {
+        const input = document.getElementById('notice-input');
+        const text = (input.value || '').trim();
+        if (!text) {
+            showToast('Please enter notice text');
+            return;
+        }
+
+        const now = new Date();
+        const formattedTime = now.toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        notices.push({
+            id: 'nt-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+            text: text.slice(0, 280),
+            time: formattedTime
+        });
+
+        // Keep last 4 notices permanently stored so storage stays clean & bounded
+        if (notices.length > 4) {
+            notices = notices.slice(-4);
+        }
+
+        SafeStorage.set('kuafi_notices', notices);
+        input.value = '';
+        renderNotices();
+        showToast('Notice saved permanently');
+    }
+
+    function deleteNotice(id) {
+        notices = notices.filter(n => n.id !== id);
+        SafeStorage.set('kuafi_notices', notices);
+        renderNotices();
+        showToast('Notice removed');
+    }
+
+    // ================= SECURITY PIN LOCK =================
+    function hashPin(pin) {
+        let h = 2166136261;
+        for (let i = 0; i < pin.length; i++) {
+            h ^= pin.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+        }
+        return (h >>> 0).toString(16);
+    }
+
+    function updatePinUI() {
+        const hasPin = Boolean(SafeStorage.getRaw('kuafi_pin_hash', ''));
+        const statusLabel = document.getElementById('pin-status-label');
+        const btnText = document.getElementById('pin-btn-text');
+        const removeBtn = document.getElementById('remove-pin-btn');
+
+        if (statusLabel) statusLabel.textContent = hasPin ? 'PIN lock is active on startup' : 'Protect dashboard on startup';
+        if (btnText) btnText.textContent = hasPin ? 'Change PIN' : 'Set PIN';
+        if (removeBtn) removeBtn.style.display = hasPin ? 'inline-flex' : 'none';
+    }
+
+    function configurePinLock() {
+        const pin = prompt('Enter a new 4 to 8 digit security PIN:');
+        if (pin === null) return;
+        const cleaned = pin.trim();
+        if (!/^\d{4,8}$/.test(cleaned)) {
+            showToast('PIN must be 4 to 8 digits');
+            return;
+        }
+        SafeStorage.setRaw('kuafi_pin_hash', hashPin(cleaned));
+        updatePinUI();
+        showToast('Security PIN enabled 🔒');
+    }
+
+    function removePinLock() {
+        const currentHash = SafeStorage.getRaw('kuafi_pin_hash', '');
+        const entered = prompt('Enter current PIN to disable lock:');
+        if (entered === null) return;
+        if (hashPin(entered.trim()) === currentHash) {
+            SafeStorage.remove('kuafi_pin_hash');
+            updatePinUI();
+            showToast('Security PIN removed');
+        } else {
+            showToast('Incorrect PIN');
+        }
+    }
+
+    function verifyPinUnlock() {
+        const input = document.getElementById('unlock-pin-input');
+        const currentHash = SafeStorage.getRaw('kuafi_pin_hash', '');
+        if (hashPin(input.value.trim()) === currentHash) {
+            document.getElementById('lock-overlay').classList.remove('active');
+            input.value = '';
+            showToast('Workspace Unlocked');
+        } else {
+            input.value = '';
+            showToast('Incorrect PIN');
+        }
+    }
+
+    document.getElementById('unlock-pin-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') verifyPinUnlock();
+    });
+
+    // ================= THEME & ACCENT CUSTOMIZATION =================
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
     const htmlEl = document.documentElement;
 
-    const savedTheme = localStorage.getItem('kuafi_theme') || 'dark';
-    setTheme(savedTheme, false);
-
-    themeBtn.addEventListener('click', () => {
-        const current = htmlEl.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        setTheme(next, true);
-    });
-
     function setTheme(theme, save) {
         htmlEl.setAttribute('data-theme', theme);
-        if (save) localStorage.setItem('kuafi_theme', theme);
+        if (save) SafeStorage.setRaw('kuafi_theme', theme);
 
         if (theme === 'dark') {
             themeIcon.className = 'fa-solid fa-sun';
-            themeText.innerText = 'Dark Mode';
+            themeText.textContent = 'Dark Mode';
         } else {
             themeIcon.className = 'fa-solid fa-moon';
-            themeText.innerText = 'Light Mode';
+            themeText.textContent = 'Light Mode';
         }
     }
 
-    // Accent Color Customizer
-    function setAccent(primary, secondary, el) {
+    setTheme(SafeStorage.getRaw('kuafi_theme', 'dark'), false);
+
+    themeBtn.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark', true);
+    });
+
+    function setAccent(primary, secondary, el, notify = true) {
         document.documentElement.style.setProperty('--accent', primary);
         document.documentElement.style.setProperty('--accent-secondary', secondary);
         document.documentElement.style.setProperty('--accent-glow', primary === '#3ded97' ? 'rgba(61, 237, 151, 0.25)' : 'rgba(16, 185, 129, 0.25)');
-        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-        if (el) el.classList.add('active');
-        localStorage.setItem('kuafi_accent', JSON.stringify({ primary, secondary }));
-        showToast('Accent color updated');
+        document.querySelectorAll('.swatch').forEach(s => {
+            s.classList.toggle('active', s === el || s.getAttribute('data-primary') === primary);
+        });
+        SafeStorage.set('kuafi_accent', { primary, secondary });
+        if (notify) showToast('Accent color updated');
     }
 
-    const savedAccent = JSON.parse(localStorage.getItem('kuafi_accent') || 'null');
-    if (savedAccent) {
-        document.documentElement.style.setProperty('--accent', savedAccent.primary);
-        document.documentElement.style.setProperty('--accent-secondary', savedAccent.secondary);
+    const savedAccent = SafeStorage.get('kuafi_accent', null);
+    if (savedAccent && savedAccent.primary && savedAccent.secondary) {
+        setAccent(savedAccent.primary, savedAccent.secondary, null, false);
     }
 
-    // Quick Scratchpad Auto-save
+    // ================= SCRATCHPAD & UTILITIES =================
     const notesEl = document.getElementById('quick-notes');
-    notesEl.value = localStorage.getItem('kuafi_notes') || '';
+    notesEl.value = SafeStorage.getRaw('kuafi_notes', '');
     notesEl.addEventListener('input', () => {
-        localStorage.setItem('kuafi_notes', notesEl.value);
+        SafeStorage.setRaw('kuafi_notes', notesEl.value);
     });
 
     function clearNotes() {
         notesEl.value = '';
-        localStorage.removeItem('kuafi_notes');
+        SafeStorage.remove('kuafi_notes');
         showToast('Scratchpad cleared');
     }
 
@@ -1353,23 +2092,43 @@ body {
         showToast('Hub link copied!');
     }
 
-    // Real-time Search
+    function syncData() {
+        if (rearrangeMode) return;
+        const icon = document.getElementById('sync-icon');
+        icon.classList.remove('rotating');
+        void icon.offsetWidth;
+        icon.classList.add('rotating');
+        saveCardOrder();
+        showToast('Workspace Synced!');
+    }
+
+    function showToast(text) {
+        const toast = document.getElementById('toast-msg');
+        toast.textContent = text;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    // ================= SEARCH & PERMANENT CATEGORY FILTER =================
+    const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
         emptyFavMsg.style.display = 'none';
-        items.forEach(item => {
+        getCardElements().forEach(item => {
             const label = item.textContent.toLowerCase();
             item.classList.toggle('hidden', !label.includes(query));
         });
     });
 
-    // Category Filter Pills
     function filterApps(category, btn) {
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        if (btn) btn.classList.add('active');
+        const targetBtn = btn || document.querySelector(`.pill[data-filter="${category}"]`) || document.getElementById('pill-fav');
+        if (targetBtn) targetBtn.classList.add('active');
+
+        SafeStorage.setRaw('kuafi_active_filter', category);
 
         let visibleCount = 0;
-        items.forEach(item => {
+        getCardElements().forEach(item => {
             const id = item.getAttribute('data-id');
             let show = false;
             if (category === 'all') {
@@ -1386,11 +2145,30 @@ body {
         });
 
         emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
+
+        // Sync bottom nav highlight between Home and Favourites
+        const navHome = document.getElementById('nav-home');
+        const navFav = document.getElementById('nav-fav');
+        if (document.getElementById('home-view').classList.contains('active')) {
+            navHome.classList.toggle('nav-active', category !== 'fav');
+            navFav.classList.toggle('nav-active', category === 'fav');
+        }
     }
 
-    // Initialize Favourites and auto-select Favourites filter on load
+    // ================= INITIALIZATION ON LOAD =================
+    setupCardControls();
+    loadCardOrder();
     initFavorites();
-    filterApps('fav', document.getElementById('pill-fav'));
+    renderNotices();
+    updatePinUI();
+
+    const initialFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+    filterApps(initialFilter);
+
+    // Check if PIN Lock is enabled on startup
+    if (SafeStorage.getRaw('kuafi_pin_hash', '')) {
+        document.getElementById('lock-overlay').classList.add('active');
+    }
 </script>
 
 </body>
