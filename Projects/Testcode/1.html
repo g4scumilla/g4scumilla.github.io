@@ -157,7 +157,7 @@ body {
 }
 
 .header-search-container.active .header-search-input {
-    width: 130px;
+    width: 150px;
     opacity: 1;
     pointer-events: auto;
     padding: 6px 10px;
@@ -180,13 +180,6 @@ body {
 
 .header-icon-btn:hover {
     color: var(--accent);
-}
-
-.header-icon-btn.active-mode {
-    color: #0b0f19;
-    background: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 2px 10px var(--accent-glow);
 }
 
 .header-icon-btn:active {
@@ -1081,19 +1074,13 @@ body {
             <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-            <button class="header-icon-btn" id="rearrange-toggle-btn" onclick="toggleRearrangeMode()" title="Rearrange Cards">
-                <i class="fa-solid fa-arrows-up-down-left-right"></i>
-            </button>
-            <button class="header-icon-btn" onclick="cycleGridLayout()" title="Switch Card Layout">
-                <span id="header-layout-icon-holder"></span>
-            </button>
         </div>
     </header>
 
     <!-- Active Rearrange Mode Banner -->
     <div class="rearrange-banner" id="rearrange-banner">
         <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Rearrange Mode: Use arrows or drag cards</span>
-        <button class="rearrange-done-btn" onclick="toggleRearrangeMode()">Done</button>
+        <button class="rearrange-done-btn" onclick="toggleRearrangeMode(false)">Done</button>
     </div>
 
     <!-- Quick Filter Category Pills -->
@@ -1334,8 +1321,8 @@ body {
                     <h4>Rearrange Link Cards</h4>
                     <p>Reorder cards permanently on home grid</p>
                 </div>
-                <button class="btn-action" onclick="switchPage('home'); toggleRearrangeMode(true);">
-                    <i class="fa-solid fa-arrows-up-down-left-right"></i> Rearrange
+                <button class="btn-action" onclick="openRearrangeFromTools()">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
                 </button>
             </div>
 
@@ -1443,7 +1430,7 @@ body {
 
 <div class="toast" id="toast-msg">Workspace Synced!</div>
 
-<!-- ================= GLASS BOTTOM NAVIGATION (NO PLUS ICON, NOTICES ADDED) ================= -->
+<!-- ================= GLASS BOTTOM NAVIGATION ================= -->
 <div class="bottom-nav">
     <a href="javascript:void(0)" id="nav-home" onclick="openHomeTab()" class="nav-item nav-active">
         <i class="fa-solid fa-house"></i>
@@ -1565,6 +1552,11 @@ body {
         switchPage('home');
     }
 
+    function openRearrangeFromTools() {
+        switchPage('home');
+        toggleRearrangeMode(true);
+    }
+
     function handleSettingsCardClick() {
         if (!rearrangeMode) switchPage('tools');
     }
@@ -1598,7 +1590,7 @@ body {
         }
     }
 
-    // ================= GRID LAYOUT (2 / 3 / 4 COLS) =================
+    // ================= GRID LAYOUT (2 / 3 / 4 COLS - TOOLS MENU ONLY) =================
     const layoutIcons = {
         2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
                 <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
@@ -1628,7 +1620,6 @@ body {
 
     const appGrid = document.getElementById('app-grid');
     const gridStyleLabel = document.getElementById('grid-style-label');
-    const headerLayoutIconHolder = document.getElementById('header-layout-icon-holder');
     const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
 
     let currentCols = parseInt(SafeStorage.getRaw('kuafi_grid_cols', '3'), 10);
@@ -1639,7 +1630,6 @@ body {
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
 
-        if (headerLayoutIconHolder) headerLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.textContent = `${cols} Columns`;
 
@@ -1778,7 +1768,6 @@ body {
             }
         });
 
-        // Append any remaining cards not in saved list
         Object.values(cardMap).forEach(el => {
             appGrid.insertBefore(el, emptyFavMsg);
         });
@@ -1792,12 +1781,12 @@ body {
 
     function toggleRearrangeMode(forceState) {
         rearrangeMode = typeof forceState === 'boolean' ? forceState : !rearrangeMode;
-        const btn = document.getElementById('rearrange-toggle-btn');
         const banner = document.getElementById('rearrange-banner');
+        const toolsRearrangeLabel = document.getElementById('tools-rearrange-label');
 
         appGrid.classList.toggle('rearrange-active', rearrangeMode);
-        btn.classList.toggle('active-mode', rearrangeMode);
-        banner.classList.toggle('show', rearrangeMode);
+        if (banner) banner.classList.toggle('show', rearrangeMode);
+        if (toolsRearrangeLabel) toolsRearrangeLabel.textContent = rearrangeMode ? 'Active' : 'Rearrange';
 
         getCardElements().forEach(card => {
             card.setAttribute('draggable', rearrangeMode ? 'true' : 'false');
@@ -1886,7 +1875,6 @@ body {
         if (!listEl) return;
         listEl.innerHTML = '';
 
-        // Always slice the last 4 notices (newest first)
         const latestFour = notices.slice(-4).reverse();
         updateNoticeBadge();
 
@@ -1907,7 +1895,7 @@ body {
 
             const textEl = document.createElement('div');
             textEl.className = 'notice-text';
-            textEl.textContent = item.text; // Safe textContent prevents XSS
+            textEl.textContent = item.text;
 
             const metaEl = document.createElement('div');
             metaEl.className = 'notice-meta';
@@ -1950,7 +1938,6 @@ body {
             time: formattedTime
         });
 
-        // Keep last 4 notices permanently stored so storage stays clean & bounded
         if (notices.length > 4) {
             notices = notices.slice(-4);
         }
@@ -2146,7 +2133,6 @@ body {
 
         emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
 
-        // Sync bottom nav highlight between Home and Favourites
         const navHome = document.getElementById('nav-home');
         const navFav = document.getElementById('nav-fav');
         if (document.getElementById('home-view').classList.contains('active')) {
@@ -2165,7 +2151,6 @@ body {
     const initialFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
     filterApps(initialFilter);
 
-    // Check if PIN Lock is enabled on startup
     if (SafeStorage.getRaw('kuafi_pin_hash', '')) {
         document.getElementById('lock-overlay').classList.add('active');
     }
