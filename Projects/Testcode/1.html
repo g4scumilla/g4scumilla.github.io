@@ -1538,39 +1538,41 @@ body.is-admin .fav-badge:hover {
     </a>
 </div>
 
-<!-- Firebase SDKs for Google Sign-In -->
+<!-- Firebase SDK using signInWithRedirect for robust mobile/subpath support -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // TODO: Replace with your web app's Firebase project configuration
     const firebaseConfig = {
-        apiKey: "YOUR_FIREBASE_API_KEY",
-        authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-        projectId: "YOUR_FIREBASE_PROJECT_ID",
-        storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-        appId: "YOUR_FIREBASE_APP_ID"
+        apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+        authDomain: "my-project-1-13e18.firebaseapp.com",
+        projectId: "my-project-1-13e18",
+        storageBucket: "my-project-1-13e18.firebasestorage.app",
+        messagingSenderId: "628695847732",
+        appId: "1:628695847732:web:03af3d8569762d29ce0b61"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
+    // Handle return from redirect login flow
+    getRedirectResult(auth).catch((error) => {
+        console.error("Redirect sign-in error:", error);
+    });
+
     window.loginWithGoogle = async function() {
         try {
-            await signInWithPopup(auth, provider);
-            showToast("Successfully signed in with Google! 🎉");
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error("Google sign-in error:", error);
-            showToast("Google sign-in failed");
+            alert("Google sign-in failed: " + error.message);
         }
     };
 
     window.logoutGoogle = async function() {
         try {
             await signOut(auth);
-            showToast("Signed out successfully");
         } catch (error) {
             console.error("Sign-out error:", error);
         }
@@ -2254,7 +2256,9 @@ body.is-admin .fav-badge:hover {
         document.querySelectorAll('.swatch').forEach(s => {
             s.classList.toggle('active', s === el || s.getAttribute('data-primary') === primary);
         });
-        if (pushToCloud && isAdmin) pushStateToCloud(true);
+        if (pushToCloud && isAdmin) {
+            pushStateToCloud(true);
+        }
     }
 
     function clearNotes() {
