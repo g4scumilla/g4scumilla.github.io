@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<!-- CSP allowing GitHub Pages, Google Apps Script, and Firebase Auth / Google Sign-In -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com https://*.googleusercontent.com; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com https://apis.google.com https://www.gstatic.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.firebaseio.com https://*.firebasedatabase.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com;">
+<!-- CSP updated with frame-src and googleapis.com so Firebase Google Auth completes and persists -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io https://*.firebaseapp.com https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: http:; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com https://apis.google.com https://www.gstatic.com https://accounts.google.com https://*.firebaseapp.com; frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.firebaseio.com https://*.firebasedatabase.app https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.firebaseapp.com https://www.gstatic.com;">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Abdullahil Kuafi | Productivity and Pages</title>
 
@@ -699,6 +699,36 @@ body.is-admin .fav-badge:hover {
     margin-top: 2px;
 }
 
+.user-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.user-profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+}
+
+.user-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 7px;
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
 .btn-action {
     background: var(--accent);
     color: #0b0f19;
@@ -1338,17 +1368,32 @@ body.is-admin .fav-badge:hover {
 
         <!-- Google User Authentication Section -->
         <div class="tools-section-card">
-            <div class="section-label"><span><i class="fa-brands fa-google"></i> User Authentication</span></div>
-            <div class="setting-row">
-                <div class="setting-info" id="user-auth-info">
+            <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
+            
+            <!-- State 1: Logged Out View -->
+            <div class="setting-row" id="google-logged-out-view">
+                <div class="setting-info">
                     <h4>Google Account Sign-In</h4>
-                    <p id="user-auth-desc">Sign in with your Google account for personalized tracking.</p>
+                    <p>Sign in with your Google account to verify your session.</p>
                 </div>
-                <div id="auth-btn-container">
-                    <button class="btn-action btn-google" onclick="loginWithGoogle()">
-                        <i class="fa-brands fa-google" style="color: #4285F4;"></i> Sign in with Google
-                    </button>
+                <button class="btn-action btn-google" id="google-login-btn" onclick="loginWithGoogle()">
+                    <i class="fa-brands fa-google" style="color: #4285F4;"></i> <span id="google-login-btn-text">Sign in with Google</span>
+                </button>
+            </div>
+
+            <!-- State 2: Logged In View (Hides Sign-In Button Completely) -->
+            <div class="setting-row" id="google-logged-in-view" style="display: none;">
+                <div class="user-profile-row">
+                    <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
+                    <div class="setting-info" style="min-width: 0;">
+                        <h4 id="google-user-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome!</h4>
+                        <p id="google-user-email" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></p>
+                        <span class="user-status-pill"><i class="fa-solid fa-circle-check"></i> Signed in with Google</span>
+                    </div>
                 </div>
+                <button class="btn-action btn-danger" onclick="logoutGoogle()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
             </div>
         </div>
 
@@ -1538,10 +1583,10 @@ body.is-admin .fav-badge:hover {
     </a>
 </div>
 
-<!-- Firebase SDK using signInWithRedirect for robust mobile/subpath support -->
+<!-- Firebase SDK with persistent session cache -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, browserLocalPersistence, setPersistence, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
@@ -1555,40 +1600,113 @@ body.is-admin .fav-badge:hover {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    const USER_CACHE_KEY = "kuafi_google_auth_user";
 
-    // Handle return from redirect login flow
-    getRedirectResult(auth).catch((error) => {
-        console.error("Redirect sign-in error:", error);
-    });
+    function saveCachedUser(user) {
+        if (!user) return;
+        const profile = {
+            uid: user.uid || "",
+            displayName: user.displayName || "Google User",
+            email: user.email || "",
+            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=3ded97&color=0b0f19`
+        };
+        try {
+            localStorage.setItem(USER_CACHE_KEY, JSON.stringify(profile));
+        } catch (e) {}
+        return profile;
+    }
+
+    function getCachedUser() {
+        try {
+            const raw = localStorage.getItem(USER_CACHE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function clearCachedUser() {
+        try {
+            localStorage.removeItem(USER_CACHE_KEY);
+        } catch (e) {}
+    }
+
+    function renderGoogleAuthState(userObj) {
+        const loggedOutView = document.getElementById("google-logged-out-view");
+        const loggedInView = document.getElementById("google-logged-in-view");
+        const nameEl = document.getElementById("google-user-name");
+        const emailEl = document.getElementById("google-user-email");
+        const avatarEl = document.getElementById("google-user-avatar");
+        const btnText = document.getElementById("google-login-btn-text");
+
+        if (userObj && userObj.email) {
+            if (loggedOutView) loggedOutView.style.display = "none";
+            if (loggedInView) loggedInView.style.display = "flex";
+            if (nameEl) nameEl.textContent = userObj.displayName || "Google User";
+            if (emailEl) emailEl.textContent = userObj.email;
+            if (avatarEl) {
+                avatarEl.src = userObj.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(userObj.displayName || 'User')}&background=3ded97&color=0b0f19`;
+            }
+        } else {
+            if (loggedInView) loggedInView.style.display = "none";
+            if (loggedOutView) loggedOutView.style.display = "flex";
+            if (btnText) btnText.textContent = "Sign in with Google";
+        }
+    }
+
+    // Immediately restore cached session on load so the Sign-In button stays hidden
+    const initialCachedUser = getCachedUser();
+    if (initialCachedUser) {
+        renderGoogleAuthState(initialCachedUser);
+    }
+
+    setPersistence(auth, browserLocalPersistence).catch(() => {});
+
+    // Check if returning from a redirect flow
+    getRedirectResult(auth).then((result) => {
+        if (result && result.user) {
+            const profile = saveCachedUser(result.user);
+            renderGoogleAuthState(profile);
+            window.showToast?.("Signed in as " + profile.displayName + " 🎉");
+        }
+    }).catch(() => {});
 
     window.loginWithGoogle = async function() {
+        const btnText = document.getElementById("google-login-btn-text");
+        if (btnText) btnText.textContent = "Signing in...";
+
         try {
-            await signInWithRedirect(auth, provider);
+            const result = await signInWithPopup(auth, provider);
+            if (result && result.user) {
+                const profile = saveCachedUser(result.user);
+                renderGoogleAuthState(profile);
+                window.showToast?.("Signed in as " + profile.displayName + " 🎉");
+            }
         } catch (error) {
             console.error("Google sign-in error:", error);
-            alert("Google sign-in failed: " + error.message);
+            if (btnText) btnText.textContent = "Sign in with Google";
+            window.showToast?.("Sign-in cancelled or failed");
         }
     };
 
     window.logoutGoogle = async function() {
+        clearCachedUser();
+        renderGoogleAuthState(null);
         try {
             await signOut(auth);
         } catch (error) {
             console.error("Sign-out error:", error);
         }
+        window.showToast?.("Signed out of Google account");
     };
 
     onAuthStateChanged(auth, (user) => {
-        const infoEl = document.getElementById("user-auth-info");
-        const container = document.getElementById("auth-btn-container");
-        if (!infoEl || !container) return;
-
         if (user) {
-            infoEl.innerHTML = `<h4>Welcome, ${user.displayName || 'User'}!</h4><p>${user.email}</p>`;
-            container.innerHTML = `<button class="btn-action btn-danger" onclick="logoutGoogle()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>`;
+            const profile = saveCachedUser(user);
+            renderGoogleAuthState(profile);
         } else {
-            infoEl.innerHTML = `<h4>Google Account Sign-In</h4><p>Sign in with your Google account for personalized tracking.</p>`;
-            container.innerHTML = `<button class="btn-action btn-google" onclick="loginWithGoogle()"><i class="fa-brands fa-google" style="color: #4285F4;"></i> Sign in with Google</button>`;
+            const cached = getCachedUser();
+            renderGoogleAuthState(cached || null);
         }
     });
 </script>
@@ -2294,6 +2412,7 @@ body.is-admin .fav-badge:hover {
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 1900);
     }
+    window.showToast = showToast;
 
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => {
@@ -2346,7 +2465,7 @@ body.is-admin .fav-badge:hover {
     pullStateFromCloud(false);
     setInterval(() => {
         if (!rearrangeMode) pullStateFromCloud(false);
-    }, 15000);
+    }, 4000);
 </script>
 
 </body>
