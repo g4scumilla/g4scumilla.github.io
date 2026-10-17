@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<!-- Content Security Policy allowing GitHub Pages + Google Apps Script (Fetch & JSONP) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
+<!-- CSP allowing GitHub Pages, Google Apps Script, and Firebase Auth / Google Sign-In -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com https://*.googleusercontent.com; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com https://apis.google.com https://www.gstatic.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.firebaseio.com https://*.firebasedatabase.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com;">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Abdullahil Kuafi | Productivity and Pages</title>
 
@@ -66,7 +66,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Role-based visibility utility */
 body:not(.is-admin) .admin-only {
     display: none !important;
 }
@@ -137,32 +136,6 @@ body.is-admin .visitor-only {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-/* Role Badge in Header */
-.role-badge {
-    font-size: 9px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 3px 7px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-}
-
-body.is-admin .role-badge {
-    background: rgba(61, 237, 151, 0.16);
-    color: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .header-actions-right {
@@ -372,7 +345,6 @@ body.is-admin .role-badge {
     transform: scale(0.94);
 }
 
-/* Rearrange Mode Styling */
 .service-grid.rearrange-active .service-item {
     border-style: dashed;
     border-color: var(--accent);
@@ -486,7 +458,6 @@ body.is-admin .role-badge {
     transition: transform 0.2s, color 0.2s, background 0.2s, border-color 0.2s;
 }
 
-/* Visitors see stars on favourited items only, non-interactive */
 body:not(.is-admin) .service-item:not(.is-favorite) .fav-badge {
     opacity: 0;
     pointer-events: none;
@@ -547,7 +518,6 @@ body.is-admin .fav-badge:hover {
     max-width: 100%;
 }
 
-/* 4-column mode */
 .service-grid.cols-4 .service-item {
     padding: 9px 6px 10px;
     border-radius: 16px;
@@ -573,7 +543,6 @@ body.is-admin .fav-badge:hover {
     min-height: 16px;
 }
 
-/* 2-column mode */
 .service-grid.cols-2 .service-item {
     flex-direction: row;
     flex-wrap: wrap;
@@ -744,6 +713,13 @@ body.is-admin .fav-badge:hover {
     gap: 7px;
     font-family: inherit;
     white-space: nowrap;
+}
+
+.btn-google {
+    background: #ffffff;
+    color: #1f2937;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .btn-danger {
@@ -1112,15 +1088,15 @@ body.is-admin .fav-badge:hover {
 
 <body>
 
-<!-- ================= ADMIN LOGIN MODAL ================= -->
+<!-- ================= ADMIN PIN LOGIN MODAL ================= -->
 <div class="lock-overlay" id="lock-overlay">
     <div class="lock-card">
-        <button class="modal-close-btn" onclick="closeAdminModal()" title="Continue as Visitor">
+        <button class="modal-close-btn" onclick="closeAdminModal()" title="Close">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <div class="icon-circle" style="margin: 0 auto 12px;"><i class="fa-solid fa-user-shield"></i></div>
         <h3 style="font-size: 17px; font-weight: 800;">Admin Authentication</h3>
-        <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Enter Admin PIN to unlock live Cloud editing & notices</p>
+        <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Enter Admin PIN to unlock layout controls</p>
         <input type="password" id="unlock-pin-input" class="lock-pin-input" maxlength="12" placeholder="••••">
         <button class="btn-action" style="width: 100%; justify-content: center; padding: 10px;" onclick="verifyAdminLogin()">
             <i class="fa-solid fa-unlock-keyhole"></i> Unlock Admin Mode
@@ -1138,10 +1114,6 @@ body.is-admin .fav-badge:hover {
                  class="android-header-avatar"
                  onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
             <span class="android-header-title">Abdullahil Kuafi</span>
-            <span class="role-badge" id="header-role-badge" onclick="handleRoleBadgeClick()" title="Tap to switch Admin / Visitor mode">
-                <i class="fa-solid fa-eye" id="role-badge-icon"></i>
-                <span id="role-badge-text">Visitor</span>
-            </span>
         </div>
         <div class="header-actions-right">
             <div class="header-search-container" id="header-search-container">
@@ -1306,7 +1278,7 @@ body.is-admin .fav-badge:hover {
     <div class="bottom-safe-spacer"></div>
 </div>
 
-<!-- ================= DEDICATED NOTICES VIEW (MAX LAST 4 SHOWN) ================= -->
+<!-- ================= DEDICATED NOTICES VIEW ================= -->
 <div id="notices-view" class="page-view">
     <div class="tools-page-container">
         <div class="tools-header">
@@ -1321,7 +1293,6 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Add Notice Box (Strictly Admin Only) -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-plus-circle"></i> Post Global Cloud Notice (Admin)</span>
@@ -1337,7 +1308,6 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Recent 4 Notices Display (Visible to Everyone) -->
         <div class="tools-section-card">
             <div class="section-label">
                 <span><i class="fa-solid fa-bullhorn"></i> Recent Notices (Max 4)</span>
@@ -1361,18 +1331,34 @@ body.is-admin .fav-badge:hover {
                 </button>
                 <div>
                     <div class="tools-title">Tools & Settings</div>
-                    <div class="tools-subtitle" id="tools-role-subtitle">Visitor View (100% Cloud-Synced State)</div>
+                    <div class="tools-subtitle">Account Login & Preferences</div>
                 </div>
             </div>
         </div>
 
-        <!-- Visitor Login Prompt Card (Shown Only to Visitors) -->
+        <!-- Google User Authentication Section -->
+        <div class="tools-section-card">
+            <div class="section-label"><span><i class="fa-brands fa-google"></i> User Authentication</span></div>
+            <div class="setting-row">
+                <div class="setting-info" id="user-auth-info">
+                    <h4>Google Account Sign-In</h4>
+                    <p id="user-auth-desc">Sign in with your Google account for personalized tracking.</p>
+                </div>
+                <div id="auth-btn-container">
+                    <button class="btn-action btn-google" onclick="loginWithGoogle()">
+                        <i class="fa-brands fa-google" style="color: #4285F4;"></i> Sign in with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Login Section -->
         <div class="tools-section-card visitor-only">
-            <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Controls Locked</span></div>
+            <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Access</span></div>
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Are you Abdullahil Kuafi?</h4>
-                    <p>Unlock Admin Mode to rearrange cards, change grid columns, or post notices directly to the Cloud.</p>
+                    <p>Enter your Admin PIN to manage layout and publish notices.</p>
                 </div>
                 <button class="btn-action" onclick="openAdminModal()">
                     <i class="fa-solid fa-user-shield"></i> Admin Login
@@ -1380,7 +1366,7 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Appearance & Arrangement Section -->
+        <!-- Appearance Section -->
         <div class="tools-section-card">
             <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
 
@@ -1395,7 +1381,6 @@ body.is-admin .fav-badge:hover {
                 </button>
             </div>
 
-            <!-- Admin Only: Card Grid Style -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid Style (Cloud)</h4>
@@ -1407,7 +1392,6 @@ body.is-admin .fav-badge:hover {
                 </button>
             </div>
 
-            <!-- Admin Only: Rearrange Link Cards -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Rearrange Link Cards (Cloud)</h4>
@@ -1418,7 +1402,6 @@ body.is-admin .fav-badge:hover {
                 </button>
             </div>
 
-            <!-- Admin Only: Accent Color -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Accent Color (Cloud)</h4>
@@ -1433,21 +1416,11 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Admin Only: Cloud Sync & Security Configuration -->
+        <!-- Admin Controls Section -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Cloud-Only Engine (Apps Script)</span>
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management</span>
                 <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Live Cloud Active ✓</span>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Force Push to Cloud</h4>
-                    <p>Immediately broadcast current layout & notices to all visitors</p>
-                </div>
-                <button class="btn-action" onclick="pushStateToCloud(true)">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Push Now
-                </button>
             </div>
 
             <div class="setting-row">
@@ -1471,7 +1444,7 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Built-in Quick Utilities (Visible to All) -->
+        <!-- Built-in Quick Utilities -->
         <div class="tools-section-card">
             <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities</span></div>
             <div class="mini-tools-grid">
@@ -1494,7 +1467,7 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Personal Scratchpad Tool (Admin Only - Synced to Cloud) -->
+        <!-- Admin Scratchpad -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-note-sticky"></i> Admin Cloud Scratchpad</span>
@@ -1503,7 +1476,7 @@ body.is-admin .fav-badge:hover {
             <textarea id="quick-notes" class="quick-note-area" placeholder="Write admin notes here and tap Save Note to store in Cloud..."></textarea>
         </div>
 
-        <!-- Data & Storage Management (Admin Only) -->
+        <!-- Global Data Reset -->
         <div class="tools-section-card admin-only">
             <div class="section-label"><span><i class="fa-solid fa-database"></i> Global Cloud Data Reset (Admin)</span></div>
 
@@ -1565,16 +1538,64 @@ body.is-admin .fav-badge:hover {
     </a>
 </div>
 
+<!-- Firebase SDKs for Google Sign-In -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // TODO: Replace with your web app's Firebase project configuration
+    const firebaseConfig = {
+        apiKey: "YOUR_FIREBASE_API_KEY",
+        authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+        projectId: "YOUR_FIREBASE_PROJECT_ID",
+        storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+        appId: "YOUR_FIREBASE_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.loginWithGoogle = async function() {
+        try {
+            await signInWithPopup(auth, provider);
+            showToast("Successfully signed in with Google! 🎉");
+        } catch (error) {
+            console.error("Google sign-in error:", error);
+            showToast("Google sign-in failed");
+        }
+    };
+
+    window.logoutGoogle = async function() {
+        try {
+            await signOut(auth);
+            showToast("Signed out successfully");
+        } catch (error) {
+            console.error("Sign-out error:", error);
+        }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        const infoEl = document.getElementById("user-auth-info");
+        const container = document.getElementById("auth-btn-container");
+        if (!infoEl || !container) return;
+
+        if (user) {
+            infoEl.innerHTML = `<h4>Welcome, ${user.displayName || 'User'}!</h4><p>${user.email}</p>`;
+            container.innerHTML = `<button class="btn-action btn-danger" onclick="logoutGoogle()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>`;
+        } else {
+            infoEl.innerHTML = `<h4>Google Account Sign-In</h4><p>Sign in with your Google account for personalized tracking.</p>`;
+            container.innerHTML = `<button class="btn-action btn-google" onclick="loginWithGoogle()"><i class="fa-brands fa-google" style="color: #4285F4;"></i> Sign in with Google</button>`;
+        }
+    });
+</script>
+
 <script>
     "use strict";
 
-    // ============================================================================
-    // 100% CLOUD-ONLY ENDPOINT (GOOGLE APPS SCRIPT)
-    // No localStorage is used for app state. All changes live in Google Cloud.
-    // ============================================================================
     const CLOUD_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1RPjfWxB99rjmhExHpfcHJr9MgDPPeWvv8T6wEK7-focj4I1z9ueiDBu8YFad_o_FuA/exec";
 
-    // ================= IN-MEMORY CLOUD STATE =================
     function hashPin(pin) {
         let h = 2166136261;
         for (let i = 0; i < pin.length; i++) {
@@ -1585,7 +1606,7 @@ body.is-admin .fav-badge:hover {
     }
 
     let isAdmin = false;
-    let adminPinHash = hashPin('1234'); // Default PIN "1234" until overridden in Cloud
+    let adminPinHash = hashPin('1234'); 
     let favorites = ['app-dev', 'app-sports', 'app-finance'];
     let notices = [];
     let currentCols = 3;
@@ -1594,37 +1615,16 @@ body.is-admin .fav-badge:hover {
     let rearrangeMode = false;
     let draggedCard = null;
 
-    // ================= ADMIN VS. VISITOR ROLE SYSTEM =================
     function applyRoleUI() {
         document.body.classList.toggle('is-admin', isAdmin);
-        const badgeIcon = document.getElementById('role-badge-icon');
-        const badgeText = document.getElementById('role-badge-text');
         const secureSub = document.getElementById('secure-card-sub');
-        const toolsSubtitle = document.getElementById('tools-role-subtitle');
-
         if (isAdmin) {
-            if (badgeIcon) badgeIcon.className = 'fa-solid fa-user-shield';
-            if (badgeText) badgeText.textContent = 'Admin';
             if (secureSub) secureSub.textContent = 'Lock Admin';
-            if (toolsSubtitle) toolsSubtitle.textContent = 'Admin Mode Active (100% Cloud-Only Sync)';
         } else {
             if (rearrangeMode) toggleRearrangeMode(false);
-            if (badgeIcon) badgeIcon.className = 'fa-solid fa-eye';
-            if (badgeText) badgeText.textContent = 'Visitor';
             if (secureSub) secureSub.textContent = 'Admin Login';
-            if (toolsSubtitle) toolsSubtitle.textContent = 'Visitor View (100% Cloud-Synced State)';
         }
         renderNotices();
-    }
-
-    function handleRoleBadgeClick() {
-        if (isAdmin) {
-            if (confirm('Exit Admin Mode and return to Visitor View?')) {
-                logoutAdmin();
-            }
-        } else {
-            openAdminModal();
-        }
     }
 
     function openAdminModal() {
@@ -1677,7 +1677,6 @@ body.is-admin .fav-badge:hover {
         if (e.key === 'Enter') verifyAdminLogin();
     });
 
-    // ================= BULLETPROOF CLOUD SYNC ENGINE (FETCH + JSONP FALLBACK) =================
     function jsonpRequest(url) {
         return new Promise((resolve, reject) => {
             const cbName = 'kuafi_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
@@ -1708,7 +1707,6 @@ body.is-admin .fav-badge:hover {
         });
     }
 
-    // Push Admin's changes directly to Google Apps Script
     async function pushStateToCloud(notify = false) {
         if (!isAdmin) return;
         const pill = document.getElementById('cloud-status-pill');
@@ -1730,7 +1728,6 @@ body.is-admin .fav-badge:hover {
         const jsonString = JSON.stringify(payload);
         let savedOk = false;
 
-        // 1. Try POST fetch
         try {
             const res = await fetch(CLOUD_SCRIPT_URL, {
                 method: 'POST',
@@ -1739,11 +1736,8 @@ body.is-admin .fav-badge:hover {
                 body: jsonString
             });
             if (res.ok) savedOk = true;
-        } catch (e) {
-            console.warn('POST push fallback triggered:', e);
-        }
+        } catch (e) {}
 
-        // 2. Also execute GET / JSONP save if POST didn't confirm (guarantees delivery on mobile browsers)
         if (!savedOk) {
             const saveUrl = `${CLOUD_SCRIPT_URL}?action=save&payload=${encodeURIComponent(jsonString)}`;
             try {
@@ -1758,14 +1752,13 @@ body.is-admin .fav-badge:hover {
         }
 
         if (pill) {
-            pill.textContent = savedOk ? 'Live Cloud Saved ✓' : 'Cloud Error (Check Deploy)';
+            pill.textContent = savedOk ? 'Live Cloud Saved ✓' : 'Cloud Error';
         }
         if (notify) {
             showToast(savedOk ? 'Saved to Cloud for all visitors ☁️' : 'Cloud Save Failed');
         }
     }
 
-    // Apply Cloud Data directly to DOM
     function applyCloudState(data) {
         if (!data || typeof data !== 'object' || Object.keys(data).length === 0) return;
 
@@ -1799,35 +1792,24 @@ body.is-admin .fav-badge:hover {
                 notesEl.value = data.adminNotes;
             }
         }
-
         filterApps(activeFilter);
     }
 
-    // Pull latest state from Google Apps Script for Visitors & Admin
     async function pullStateFromCloud(notify = false) {
         let data = null;
-
-        // 1. Try standard CORS Fetch
         try {
             const res = await fetch(`${CLOUD_SCRIPT_URL}?t=${Date.now()}`, {
                 method: 'GET',
                 redirect: 'follow',
                 cache: 'no-store'
             });
-            if (res.ok) {
-                data = await res.json();
-            }
-        } catch (e) {
-            console.warn('Standard fetch blocked or redirected, trying JSONP:', e);
-        }
+            if (res.ok) data = await res.json();
+        } catch (e) {}
 
-        // 2. Fallback to JSONP if CORS blocked the response
         if (!data) {
             try {
                 data = await jsonpRequest(CLOUD_SCRIPT_URL);
-            } catch (err) {
-                console.warn('JSONP pull failed:', err);
-            }
+            } catch (err) {}
         }
 
         if (data && typeof data === 'object') {
@@ -1838,7 +1820,6 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= SAFE URL & PAGE NAVIGATION =================
     function openSafeUrl(url) {
         try {
             const parsed = new URL(url, window.location.origin);
@@ -1886,14 +1867,12 @@ body.is-admin .fav-badge:hover {
     }
 
     function openHomeTab() {
-        const allPill = document.getElementById('pill-all');
-        filterApps('all', allPill);
+        filterApps('all', document.getElementById('pill-all'));
         switchPage('home');
     }
 
     function openFavouritesTab() {
-        const favPill = document.getElementById('pill-fav');
-        filterApps('fav', favPill);
+        filterApps('fav', document.getElementById('pill-fav'));
         switchPage('home');
     }
 
@@ -1919,12 +1898,10 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= HEADER SEARCH =================
     function toggleHeaderSearch() {
         switchPage('home');
         const container = document.getElementById('header-search-container');
         const searchInput = document.getElementById('search-input');
-
         container.classList.toggle('active');
         if (container.classList.contains('active')) {
             searchInput.focus();
@@ -1934,32 +1911,10 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= GRID LAYOUT (CLOUD-SYNCED) =================
     const layoutIcons = {
-        2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
-                <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
-                <rect x="10.5" y="3" width="5.5" height="5" rx="1.6"/>
-                <rect x="2" y="10" width="5.5" height="5" rx="1.6"/>
-                <rect x="10.5" y="10" width="5.5" height="5" rx="1.6"/>
-            </svg>`,
-        3: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
-                <rect x="1.5" y="3.5" width="3.8" height="4.2" rx="1.2"/>
-                <rect x="7.1" y="3.5" width="3.8" height="4.2" rx="1.2"/>
-                <rect x="12.7" y="3.5" width="3.8" height="4.2" rx="1.2"/>
-                <rect x="1.5" y="10.3" width="3.8" height="4.2" rx="1.2"/>
-                <rect x="7.1" y="10.3" width="3.8" height="4.2" rx="1.2"/>
-                <rect x="12.7" y="10.3" width="3.8" height="4.2" rx="1.2"/>
-            </svg>`,
-        4: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
-                <rect x="1" y="3.8" width="2.8" height="4" rx="1"/>
-                <rect x="5.4" y="3.8" width="2.8" height="4" rx="1"/>
-                <rect x="9.8" y="3.8" width="2.8" height="4" rx="1"/>
-                <rect x="14.2" y="3.8" width="2.8" height="4" rx="1"/>
-                <rect x="1" y="10.2" width="2.8" height="4" rx="1"/>
-                <rect x="5.4" y="10.2" width="2.8" height="4" rx="1"/>
-                <rect x="9.8" y="10.2" width="2.8" height="4" rx="1"/>
-                <rect x="14.2" y="10.2" width="2.8" height="4" rx="1"/>
-            </svg>`
+        2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="3" width="5.5" height="5" rx="1.6"/><rect x="10.5" y="3" width="5.5" height="5" rx="1.6"/><rect x="2" y="10" width="5.5" height="5" rx="1.6"/><rect x="10.5" y="10" width="5.5" height="5" rx="1.6"/></svg>`,
+        3: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor"><rect x="1.5" y="3.5" width="3.8" height="4.2" rx="1.2"/><rect x="7.1" y="3.5" width="3.8" height="4.2" rx="1.2"/><rect x="12.7" y="3.5" width="3.8" height="4.2" rx="1.2"/><rect x="1.5" y="10.3" width="3.8" height="4.2" rx="1.2"/><rect x="7.1" y="10.3" width="3.8" height="4.2" rx="1.2"/><rect x="12.7" y="10.3" width="3.8" height="4.2" rx="1.2"/></svg>`,
+        4: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor"><rect x="1" y="3.8" width="2.8" height="4" rx="1"/><rect x="5.4" y="3.8" width="2.8" height="4" rx="1"/><rect x="9.8" y="3.8" width="2.8" height="4" rx="1"/><rect x="14.2" y="3.8" width="2.8" height="4" rx="1"/><rect x="1" y="10.2" width="2.8" height="4" rx="1"/><rect x="5.4" y="10.2" width="2.8" height="4" rx="1"/><rect x="9.8" y="10.2" width="2.8" height="4" rx="1"/><rect x="14.2" y="10.2" width="2.8" height="4" rx="1"/></svg>`
     };
 
     const appGrid = document.getElementById('app-grid');
@@ -1970,13 +1925,9 @@ body.is-admin .fav-badge:hover {
         appGrid.classList.remove('cols-2', 'cols-4');
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
-
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.textContent = `${cols} Columns`;
-
-        if (pushToCloud && isAdmin) {
-            pushStateToCloud(true);
-        }
+        if (pushToCloud && isAdmin) pushStateToCloud(true);
     }
     applyGridLayout(currentCols, false);
 
@@ -1986,7 +1937,6 @@ body.is-admin .fav-badge:hover {
         applyGridLayout(currentCols, true);
     }
 
-    // ================= CLOUD CARD REARRANGEMENT (ADMIN ONLY) =================
     const emptyFavMsg = document.getElementById('empty-fav-msg');
 
     function getCardElements() {
@@ -1998,14 +1948,12 @@ body.is-admin .fav-badge:hover {
     function setupCardControls() {
         getCardElements().forEach(card => {
             const id = card.getAttribute('data-id');
-
             const controls = document.createElement('div');
             controls.className = 'card-move-controls';
 
             const leftBtn = document.createElement('button');
             leftBtn.type = 'button';
             leftBtn.className = 'move-btn';
-            leftBtn.title = 'Move Backward';
             leftBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
             leftBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -2016,7 +1964,6 @@ body.is-admin .fav-badge:hover {
             const rightBtn = document.createElement('button');
             rightBtn.type = 'button';
             rightBtn.className = 'move-btn';
-            rightBtn.title = 'Move Forward';
             rightBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
             rightBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -2042,7 +1989,6 @@ body.is-admin .fav-badge:hover {
                 }
                 draggedCard = card;
                 card.classList.add('dragging');
-                if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
             });
 
             card.addEventListener('dragend', () => {
@@ -2087,7 +2033,6 @@ body.is-admin .fav-badge:hover {
 
     function applyCardOrderFromArray(orderArray) {
         if (!Array.isArray(orderArray) || orderArray.length === 0) return;
-
         const cardMap = {};
         getCardElements().forEach(el => {
             cardMap[el.getAttribute('data-id')] = el;
@@ -2132,7 +2077,6 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= CLOUD FAVOURITES (ADMIN CURATED) =================
     function initFavorites() {
         getCardElements().forEach(item => {
             const id = item.getAttribute('data-id');
@@ -2182,7 +2126,6 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= CLOUD NOTICES (MAX SHOW LAST 4) =================
     function updateNoticeBadge() {
         const badge = document.getElementById('nav-notice-badge');
         const countPill = document.getElementById('notice-count-pill');
@@ -2267,9 +2210,7 @@ body.is-admin .fav-badge:hover {
             time: formattedTime
         });
 
-        if (notices.length > 4) {
-            notices = notices.slice(-4);
-        }
+        if (notices.length > 4) notices = notices.slice(-4);
 
         input.value = '';
         renderNotices();
@@ -2283,7 +2224,6 @@ body.is-admin .fav-badge:hover {
         pushStateToCloud(true);
     }
 
-    // ================= THEME & ACCENT CUSTOMIZATION (CLOUD-SYNCED) =================
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
@@ -2298,9 +2238,7 @@ body.is-admin .fav-badge:hover {
             themeIcon.className = 'fa-solid fa-moon';
             themeText.textContent = 'Light Mode';
         }
-        if (pushToCloud && isAdmin) {
-            pushStateToCloud(true);
-        }
+        if (pushToCloud && isAdmin) pushStateToCloud(true);
     }
 
     themeBtn.addEventListener('click', () => {
@@ -2316,12 +2254,9 @@ body.is-admin .fav-badge:hover {
         document.querySelectorAll('.swatch').forEach(s => {
             s.classList.toggle('active', s === el || s.getAttribute('data-primary') === primary);
         });
-        if (pushToCloud && isAdmin) {
-            pushStateToCloud(true);
-        }
+        if (pushToCloud && isAdmin) pushStateToCloud(true);
     }
 
-    // ================= CLOUD SCRATCHPAD & UTILITIES =================
     function clearNotes() {
         if (!isAdmin) return;
         const notesEl = document.getElementById('quick-notes');
@@ -2356,7 +2291,6 @@ body.is-admin .fav-badge:hover {
         setTimeout(() => toast.classList.remove('show'), 1900);
     }
 
-    // ================= SEARCH & CATEGORY FILTER =================
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
@@ -2400,17 +2334,15 @@ body.is-admin .fav-badge:hover {
         }
     }
 
-    // ================= INITIALIZATION & LIVE CLOUD AUTO-SYNC =================
     setupCardControls();
     initFavorites();
     applyRoleUI();
     filterApps('fav');
 
-    // Pull 100% live Cloud state immediately on startup and every 15 seconds
     pullStateFromCloud(false);
     setInterval(() => {
         if (!rearrangeMode) pullStateFromCloud(false);
-    }, 800);
+    }, 15000);
 </script>
 
 </body>
