@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<!-- Content Security Policy allowing GitHub Pages + Free Cloud Backends (Google Apps Script, Firebase, JSONBin) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.firebaseio.com https://*.firebasedatabase.app https://api.jsonbin.io;">
+<!-- Content Security Policy allowing GitHub Pages + Google Apps Script (Fetch & JSONP) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.github.io https://ui-avatars.com; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Abdullahil Kuafi | Productivity and Pages</title>
 
@@ -771,8 +771,10 @@ body.is-admin .fav-badge:hover {
     transform: scale(1.15);
 }
 
-.quick-note-area, .cloud-url-input {
+.quick-note-area {
     width: 100%;
+    min-height: 95px;
+    resize: vertical;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     background: var(--bg-main);
@@ -784,12 +786,7 @@ body.is-admin .fav-badge:hover {
     user-select: text;
 }
 
-.quick-note-area {
-    min-height: 95px;
-    resize: vertical;
-}
-
-.quick-note-area:focus, .cloud-url-input:focus {
+.quick-note-area:focus {
     border-color: var(--accent);
 }
 
@@ -1123,7 +1120,7 @@ body.is-admin .fav-badge:hover {
         </button>
         <div class="icon-circle" style="margin: 0 auto 12px;"><i class="fa-solid fa-user-shield"></i></div>
         <h3 style="font-size: 17px; font-weight: 800;">Admin Authentication</h3>
-        <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Enter Admin PIN to unlock global editing & notices</p>
+        <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Enter Admin PIN to unlock live Cloud editing & notices</p>
         <input type="password" id="unlock-pin-input" class="lock-pin-input" maxlength="12" placeholder="••••">
         <button class="btn-action" style="width: 100%; justify-content: center; padding: 10px;" onclick="verifyAdminLogin()">
             <i class="fa-solid fa-unlock-keyhole"></i> Unlock Admin Mode
@@ -1158,8 +1155,8 @@ body.is-admin .fav-badge:hover {
 
     <!-- Active Rearrange Mode Banner (Admin Only) -->
     <div class="rearrange-banner admin-only" id="rearrange-banner">
-        <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Admin Rearrange: Use arrows or drag</span>
-        <button class="rearrange-done-btn" onclick="toggleRearrangeMode(false)">Save & Done</button>
+        <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
+        <button class="rearrange-done-btn" onclick="toggleRearrangeMode(false)">Save to Cloud</button>
     </div>
 
     <!-- Quick Filter Category Pills -->
@@ -1298,7 +1295,7 @@ body.is-admin .fav-badge:hover {
 
         <div class="empty-fav-msg" id="empty-fav-msg">
             <i class="fa-regular fa-star" style="font-size: 24px; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
-            No favourite apps pinned yet.
+            No favourite apps pinned in Cloud yet.
             <br>
             <button class="browse-all-btn" onclick="filterApps('all', document.getElementById('pill-all'))">
                 Browse All Apps
@@ -1319,7 +1316,7 @@ body.is-admin .fav-badge:hover {
                 </button>
                 <div>
                     <div class="tools-title">Notices</div>
-                    <div class="tools-subtitle">Official updates from Abdullahil Kuafi (latest 4)</div>
+                    <div class="tools-subtitle">Live Cloud updates from Abdullahil Kuafi (latest 4)</div>
                 </div>
             </div>
         </div>
@@ -1327,12 +1324,12 @@ body.is-admin .fav-badge:hover {
         <!-- Add Notice Box (Strictly Admin Only) -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-plus-circle"></i> Post Global Notice (Admin)</span>
+                <span><i class="fa-solid fa-plus-circle"></i> Post Global Cloud Notice (Admin)</span>
             </div>
             <div class="notice-form">
                 <textarea id="notice-input" class="notice-input" maxlength="280" placeholder="Write a notice for all visitors..."></textarea>
                 <div class="notice-form-footer">
-                    <span class="notice-limit-hint">Syncs live to all visitors</span>
+                    <span class="notice-limit-hint">Saves directly to Google Cloud</span>
                     <button class="btn-action" onclick="addNotice()">
                         <i class="fa-solid fa-paper-plane"></i> Publish Notice
                     </button>
@@ -1364,7 +1361,7 @@ body.is-admin .fav-badge:hover {
                 </button>
                 <div>
                     <div class="tools-title">Tools & Settings</div>
-                    <div class="tools-subtitle" id="tools-role-subtitle">Visitor View (Read-Only Global State)</div>
+                    <div class="tools-subtitle" id="tools-role-subtitle">Visitor View (100% Cloud-Synced State)</div>
                 </div>
             </div>
         </div>
@@ -1375,7 +1372,7 @@ body.is-admin .fav-badge:hover {
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Are you Abdullahil Kuafi?</h4>
-                    <p>Unlock Admin Mode to rearrange cards, change grid columns, or post notices for all visitors.</p>
+                    <p>Unlock Admin Mode to rearrange cards, change grid columns, or post notices directly to the Cloud.</p>
                 </div>
                 <button class="btn-action" onclick="openAdminModal()">
                     <i class="fa-solid fa-user-shield"></i> Admin Login
@@ -1401,7 +1398,7 @@ body.is-admin .fav-badge:hover {
             <!-- Admin Only: Card Grid Style -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Card Grid Style (Global)</h4>
+                    <h4>Card Grid Style (Cloud)</h4>
                     <p>Set 3-Column, 2-Column, or 4-Column for all visitors</p>
                 </div>
                 <button class="btn-action" onclick="cycleGridLayout()">
@@ -1413,8 +1410,8 @@ body.is-admin .fav-badge:hover {
             <!-- Admin Only: Rearrange Link Cards -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Rearrange Link Cards (Global)</h4>
-                    <p>Reorder cards permanently for all visitors</p>
+                    <h4>Rearrange Link Cards (Cloud)</h4>
+                    <p>Reorder cards in Google Apps Script for all visitors</p>
                 </div>
                 <button class="btn-action" onclick="openRearrangeFromTools()">
                     <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
@@ -1424,7 +1421,7 @@ body.is-admin .fav-badge:hover {
             <!-- Admin Only: Accent Color -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Accent Color (Global)</h4>
+                    <h4>Accent Color (Cloud)</h4>
                     <p>Customize highlight & button tones for everyone</p>
                 </div>
                 <div class="color-swatches">
@@ -1439,26 +1436,24 @@ body.is-admin .fav-badge:hover {
         <!-- Admin Only: Cloud Sync & Security Configuration -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Global Visitor Cloud Sync</span>
-                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Cloud Connected ✓</span>
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Cloud-Only Engine (Apps Script)</span>
+                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Live Cloud Active ✓</span>
             </div>
 
-            <div style="margin-bottom: 12px;">
-                <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">
-                    Your Google Apps Script Web App URL is pre-connected below so your changes broadcast live to all visitors:
-                </p>
-                <div style="display: flex; gap: 8px;">
-                    <input type="url" id="cloud-url-input" class="cloud-url-input" value="https://script.google.com/macros/s/AKfycbw1RPjfWxB99rjmhExHpfcHJr9MgDPPeWvv8T6wEK7-focj4I1z9ueiDBu8YFad_o_FuA/exec" placeholder="https://script.google.com/macros/s/.../exec">
-                    <button class="btn-action" onclick="saveCloudEndpoint()">
-                        <i class="fa-solid fa-check"></i> Save
-                    </button>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Force Push to Cloud</h4>
+                    <p>Immediately broadcast current layout & notices to all visitors</p>
                 </div>
+                <button class="btn-action" onclick="pushStateToCloud(true)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Push Now
+                </button>
             </div>
 
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Change Admin PIN</h4>
-                    <p>Update the PIN used to unlock Admin Mode</p>
+                    <p>Update the PIN stored in Cloud for Admin Mode</p>
                 </div>
                 <button class="btn-action" onclick="changeAdminPin()">
                     <i class="fa-solid fa-key"></i> Change PIN
@@ -1499,20 +1494,23 @@ body.is-admin .fav-badge:hover {
             </div>
         </div>
 
-        <!-- Personal Scratchpad Tool (Admin Only) -->
+        <!-- Personal Scratchpad Tool (Admin Only - Synced to Cloud) -->
         <div class="tools-section-card admin-only">
-            <div class="section-label"><span><i class="fa-solid fa-note-sticky"></i> Admin Private Scratchpad</span></div>
-            <textarea id="quick-notes" class="quick-note-area" placeholder="Write private admin notes or snippets here..."></textarea>
+            <div class="section-label">
+                <span><i class="fa-solid fa-note-sticky"></i> Admin Cloud Scratchpad</span>
+                <button class="btn-action" style="padding: 4px 10px; font-size: 10px;" onclick="pushStateToCloud(true)">Save Note</button>
+            </div>
+            <textarea id="quick-notes" class="quick-note-area" placeholder="Write admin notes here and tap Save Note to store in Cloud..."></textarea>
         </div>
 
         <!-- Data & Storage Management (Admin Only) -->
         <div class="tools-section-card admin-only">
-            <div class="section-label"><span><i class="fa-solid fa-database"></i> Global Data Reset (Admin)</span></div>
+            <div class="section-label"><span><i class="fa-solid fa-database"></i> Global Cloud Data Reset (Admin)</span></div>
 
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Card Arrangement Order</h4>
-                    <p>Restore default 20-card sequence for all visitors</p>
+                    <p>Restore default 20-card sequence in Cloud</p>
                 </div>
                 <button class="btn-action btn-danger" onclick="resetCardOrder()">
                     <i class="fa-solid fa-rotate-left"></i> Default
@@ -1532,7 +1530,7 @@ body.is-admin .fav-badge:hover {
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Clear Scratchpad</h4>
-                    <p>Erase private admin notes</p>
+                    <p>Erase admin notes from Cloud</p>
                 </div>
                 <button class="btn-action btn-danger" onclick="clearNotes()">
                     <i class="fa-solid fa-eraser"></i> Clear
@@ -1544,7 +1542,7 @@ body.is-admin .fav-badge:hover {
     </div>
 </div>
 
-<div class="toast" id="toast-msg">Workspace Synced!</div>
+<div class="toast" id="toast-msg">Cloud Synced!</div>
 
 <!-- ================= GLASS BOTTOM NAVIGATION ================= -->
 <div class="bottom-nav">
@@ -1571,46 +1569,12 @@ body.is-admin .fav-badge:hover {
     "use strict";
 
     // ============================================================================
-    // GLOBAL CLOUD SYNC ENDPOINT (HARDCODED FOR ALL VISITORS)
+    // 100% CLOUD-ONLY ENDPOINT (GOOGLE APPS SCRIPT)
+    // No localStorage is used for app state. All changes live in Google Cloud.
     // ============================================================================
-    const DEFAULT_CLOUD_SYNC_URL = "https://script.google.com/macros/s/AKfycbw1RPjfWxB99rjmhExHpfcHJr9MgDPPeWvv8T6wEK7-focj4I1z9ueiDBu8YFad_o_FuA/exec";
+    const CLOUD_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1RPjfWxB99rjmhExHpfcHJr9MgDPPeWvv8T6wEK7-focj4I1z9ueiDBu8YFad_o_FuA/exec";
 
-    // ================= SAFE STORAGE UTILITIES =================
-    const SafeStorage = {
-        get(key, fallback = null) {
-            try {
-                const raw = localStorage.getItem(key);
-                return raw !== null ? JSON.parse(raw) : fallback;
-            } catch (e) {
-                return fallback;
-            }
-        },
-        set(key, value) {
-            try {
-                localStorage.setItem(key, JSON.stringify(value));
-            } catch (e) {}
-        },
-        getRaw(key, fallback = '') {
-            try {
-                const val = localStorage.getItem(key);
-                return val !== null ? val : fallback;
-            } catch (e) {
-                return fallback;
-            }
-        },
-        setRaw(key, value) {
-            try {
-                localStorage.setItem(key, String(value));
-            } catch (e) {}
-        },
-        remove(key) {
-            try {
-                localStorage.removeItem(key);
-            } catch (e) {}
-        }
-    };
-
-    // ================= ADMIN VS. GENERAL VISITOR ROLE SYSTEM =================
+    // ================= IN-MEMORY CLOUD STATE =================
     function hashPin(pin) {
         let h = 2166136261;
         for (let i = 0; i < pin.length; i++) {
@@ -1620,13 +1584,17 @@ body.is-admin .fav-badge:hover {
         return (h >>> 0).toString(16);
     }
 
-    // Default Admin PIN is "1234" if not customized yet
-    if (!SafeStorage.getRaw('kuafi_admin_pin_hash', '')) {
-        SafeStorage.setRaw('kuafi_admin_pin_hash', hashPin('1234'));
-    }
+    let isAdmin = false;
+    let adminPinHash = hashPin('1234'); // Default PIN "1234" until overridden in Cloud
+    let favorites = ['app-dev', 'app-sports', 'app-finance'];
+    let notices = [];
+    let currentCols = 3;
+    let currentAccent = { primary: '#3ded97', secondary: '#06b6d4' };
+    let activeFilter = 'fav';
+    let rearrangeMode = false;
+    let draggedCard = null;
 
-    let isAdmin = SafeStorage.getRaw('kuafi_is_admin_session', 'false') === 'true';
-
+    // ================= ADMIN VS. VISITOR ROLE SYSTEM =================
     function applyRoleUI() {
         document.body.classList.toggle('is-admin', isAdmin);
         const badgeIcon = document.getElementById('role-badge-icon');
@@ -1638,13 +1606,13 @@ body.is-admin .fav-badge:hover {
             if (badgeIcon) badgeIcon.className = 'fa-solid fa-user-shield';
             if (badgeText) badgeText.textContent = 'Admin';
             if (secureSub) secureSub.textContent = 'Lock Admin';
-            if (toolsSubtitle) toolsSubtitle.textContent = 'Admin Mode Active (Global Sync Enabled)';
+            if (toolsSubtitle) toolsSubtitle.textContent = 'Admin Mode Active (100% Cloud-Only Sync)';
         } else {
             if (rearrangeMode) toggleRearrangeMode(false);
             if (badgeIcon) badgeIcon.className = 'fa-solid fa-eye';
             if (badgeText) badgeText.textContent = 'Visitor';
             if (secureSub) secureSub.textContent = 'Admin Login';
-            if (toolsSubtitle) toolsSubtitle.textContent = 'Visitor View (Read-Only Global State)';
+            if (toolsSubtitle) toolsSubtitle.textContent = 'Visitor View (100% Cloud-Synced State)';
         }
         renderNotices();
     }
@@ -1673,12 +1641,9 @@ body.is-admin .fav-badge:hover {
     function verifyAdminLogin() {
         const input = document.getElementById('unlock-pin-input');
         const entered = input.value.trim();
-        const savedHash = SafeStorage.getRaw('kuafi_admin_pin_hash', hashPin('1234'));
 
-        if (hashPin(entered) === savedHash) {
+        if (hashPin(entered) === adminPinHash) {
             isAdmin = true;
-            SafeStorage.setRaw('kuafi_is_admin_session', 'true');
-            SafeStorage.setRaw('kuafi_admin_raw_token', entered);
             closeAdminModal();
             applyRoleUI();
             showToast('Admin Mode Unlocked 🔓');
@@ -1690,7 +1655,6 @@ body.is-admin .fav-badge:hover {
 
     function logoutAdmin() {
         isAdmin = false;
-        SafeStorage.setRaw('kuafi_is_admin_session', 'false');
         applyRoleUI();
         showToast('Switched to Visitor View');
     }
@@ -1704,153 +1668,173 @@ body.is-admin .fav-badge:hover {
             showToast('PIN must be 4 to 8 digits');
             return;
         }
-        SafeStorage.setRaw('kuafi_admin_pin_hash', hashPin(cleaned));
-        SafeStorage.setRaw('kuafi_admin_raw_token', cleaned);
-        pushStateToCloud();
-        showToast('Admin PIN Updated 🔒');
+        adminPinHash = hashPin(cleaned);
+        pushStateToCloud(true);
+        showToast('Admin PIN Updated in Cloud 🔒');
     }
 
     document.getElementById('unlock-pin-input').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') verifyAdminLogin();
     });
 
-    // ================= CLOUD SYNC ENGINE (ADMIN -> ALL VISITORS) =================
-    function getCloudUrl() {
-        return (SafeStorage.getRaw('kuafi_cloud_url', '') || DEFAULT_CLOUD_SYNC_URL).trim();
+    // ================= BULLETPROOF CLOUD SYNC ENGINE (FETCH + JSONP FALLBACK) =================
+    function jsonpRequest(url) {
+        return new Promise((resolve, reject) => {
+            const cbName = 'kuafi_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+            const script = document.createElement('script');
+            const timer = setTimeout(() => {
+                cleanup();
+                reject(new Error('JSONP timeout'));
+            }, 10000);
+
+            function cleanup() {
+                clearTimeout(timer);
+                delete window[cbName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+            }
+
+            window[cbName] = (data) => {
+                cleanup();
+                resolve(data);
+            };
+
+            script.onerror = () => {
+                cleanup();
+                reject(new Error('JSONP script error'));
+            };
+
+            script.src = `${url}${url.includes('?') ? '&' : '?'}callback=${cbName}&t=${Date.now()}`;
+            document.body.appendChild(script);
+        });
     }
 
-    function updateCloudStatusUI() {
-        const url = getCloudUrl();
-        const input = document.getElementById('cloud-url-input');
-        const pill = document.getElementById('cloud-status-pill');
-        if (input && url) input.value = url;
-        if (pill) {
-            pill.textContent = url ? 'Cloud Connected ✓' : 'Local Only (Set URL)';
-            pill.style.color = url ? 'var(--accent)' : 'var(--text-secondary)';
-        }
-    }
-
-    function saveCloudEndpoint() {
-        if (!isAdmin) return;
-        const input = document.getElementById('cloud-url-input');
-        const url = (input.value || '').trim();
-        SafeStorage.setRaw('kuafi_cloud_url', url);
-        updateCloudStatusUI();
-        if (url) {
-            pushStateToCloud(true);
-        } else {
-            showToast('Using default Cloud URL');
-        }
-    }
-
-    // Push Admin's changes to Cloud so all visitors receive them automatically
+    // Push Admin's changes directly to Google Apps Script
     async function pushStateToCloud(notify = false) {
         if (!isAdmin) return;
-        const url = getCloudUrl();
-        if (!url) return;
+        const pill = document.getElementById('cloud-status-pill');
+        if (pill) pill.textContent = 'Saving to Cloud...';
 
+        const notesEl = document.getElementById('quick-notes');
         const payload = {
             updatedAt: Date.now(),
-            adminTokenHash: SafeStorage.getRaw('kuafi_admin_pin_hash', ''),
+            adminTokenHash: adminPinHash,
             cardOrder: getCardElements().map(el => el.getAttribute('data-id')),
             favorites: favorites,
             notices: notices.slice(-4),
             gridCols: currentCols,
             theme: document.documentElement.getAttribute('data-theme') || 'dark',
-            accent: SafeStorage.get('kuafi_accent', { primary: '#3ded97', secondary: '#06b6d4' })
+            accent: currentAccent,
+            adminNotes: notesEl ? notesEl.value : ''
         };
 
         const jsonString = JSON.stringify(payload);
+        let savedOk = false;
 
+        // 1. Try POST fetch
         try {
-            const isFirebase = url.includes('firebaseio.com') || url.includes('firebasedatabase.app');
-            if (isFirebase) {
-                await fetch(url, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: jsonString
-                });
-            } else {
-                // Google Apps Script POST with redirect follow + GET fallback
-                const res = await fetch(url, {
-                    method: 'POST',
-                    redirect: 'follow',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: jsonString
-                });
-                if (!res.ok) {
-                    const fallbackUrl = `${url}${url.includes('?') ? '&' : '?'}action=save&payload=${encodeURIComponent(jsonString)}`;
-                    await fetch(fallbackUrl, { method: 'GET', mode: 'no-cors' });
-                }
-            }
-            if (notify) showToast('Synced to Cloud for all visitors ☁️');
+            const res = await fetch(CLOUD_SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: jsonString
+            });
+            if (res.ok) savedOk = true;
         } catch (e) {
-            console.warn('Primary push failed, trying GET fallback:', e);
+            console.warn('POST push fallback triggered:', e);
+        }
+
+        // 2. Also execute GET / JSONP save if POST didn't confirm (guarantees delivery on mobile browsers)
+        if (!savedOk) {
+            const saveUrl = `${CLOUD_SCRIPT_URL}?action=save&payload=${encodeURIComponent(jsonString)}`;
             try {
-                const fallbackUrl = `${url}${url.includes('?') ? '&' : '?'}action=save&payload=${encodeURIComponent(jsonString)}`;
-                await fetch(fallbackUrl, { method: 'GET', mode: 'no-cors' });
-                if (notify) showToast('Synced to Cloud ☁️');
-            } catch (err) {
-                if (notify) showToast('Cloud push failed (check URL)');
+                await jsonpRequest(saveUrl);
+                savedOk = true;
+            } catch (e) {
+                try {
+                    await fetch(saveUrl, { method: 'GET', mode: 'no-cors' });
+                    savedOk = true;
+                } catch (err) {}
             }
+        }
+
+        if (pill) {
+            pill.textContent = savedOk ? 'Live Cloud Saved ✓' : 'Cloud Error (Check Deploy)';
+        }
+        if (notify) {
+            showToast(savedOk ? 'Saved to Cloud for all visitors ☁️' : 'Cloud Save Failed');
         }
     }
 
-    // Pull Admin's latest state for General Visitors (and Admin devices)
-    async function pullStateFromCloud(notify = false) {
-        const url = getCloudUrl();
-        if (!url) {
-            if (notify) showToast('Workspace Refreshed');
-            return;
+    // Apply Cloud Data directly to DOM
+    function applyCloudState(data) {
+        if (!data || typeof data !== 'object' || Object.keys(data).length === 0) return;
+
+        if (Array.isArray(data.cardOrder) && data.cardOrder.length > 0) {
+            applyCardOrderFromArray(data.cardOrder);
+        }
+        if (Array.isArray(data.favorites)) {
+            favorites = data.favorites;
+            initFavorites();
+        }
+        if (Array.isArray(data.notices)) {
+            notices = data.notices.slice(-4);
+            renderNotices();
+        }
+        if ([2, 3, 4].includes(Number(data.gridCols))) {
+            currentCols = Number(data.gridCols);
+            applyGridLayout(currentCols, false);
+        }
+        if (data.theme === 'dark' || data.theme === 'light') {
+            setTheme(data.theme, false);
+        }
+        if (data.accent && data.accent.primary && data.accent.secondary) {
+            setAccent(data.accent.primary, data.accent.secondary, null, false);
+        }
+        if (data.adminTokenHash) {
+            adminPinHash = data.adminTokenHash;
+        }
+        if (typeof data.adminNotes === 'string') {
+            const notesEl = document.getElementById('quick-notes');
+            if (notesEl && document.activeElement !== notesEl) {
+                notesEl.value = data.adminNotes;
+            }
         }
 
+        filterApps(activeFilter);
+    }
+
+    // Pull latest state from Google Apps Script for Visitors & Admin
+    async function pullStateFromCloud(notify = false) {
+        let data = null;
+
+        // 1. Try standard CORS Fetch
         try {
-            const fetchUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
-            const res = await fetch(fetchUrl, {
+            const res = await fetch(`${CLOUD_SCRIPT_URL}?t=${Date.now()}`, {
                 method: 'GET',
-                redirect: 'follow'
+                redirect: 'follow',
+                cache: 'no-store'
             });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-
-            const data = await res.json();
-            if (!data || typeof data !== 'object' || Object.keys(data).length === 0) return;
-
-            if (Array.isArray(data.cardOrder) && data.cardOrder.length > 0) {
-                SafeStorage.set('kuafi_card_order', data.cardOrder);
-                loadCardOrder();
+            if (res.ok) {
+                data = await res.json();
             }
-            if (Array.isArray(data.favorites)) {
-                favorites = data.favorites;
-                SafeStorage.set('kuafi_favorites', favorites);
-                initFavorites();
-            }
-            if (Array.isArray(data.notices)) {
-                notices = data.notices.slice(-4);
-                SafeStorage.set('kuafi_notices', notices);
-                renderNotices();
-            }
-            if ([2, 3, 4].includes(Number(data.gridCols))) {
-                currentCols = Number(data.gridCols);
-                applyGridLayout(currentCols, false);
-            }
-            if (data.theme === 'dark' || data.theme === 'light') {
-                setTheme(data.theme, false);
-            }
-            if (data.accent && data.accent.primary && data.accent.secondary) {
-                setAccent(data.accent.primary, data.accent.secondary, null, false);
-            }
-            if (data.adminTokenHash) {
-                SafeStorage.setRaw('kuafi_admin_pin_hash', data.adminTokenHash);
-            }
-
-            // Refresh active filter view
-            const activeFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
-            filterApps(activeFilter);
-
-            if (notify) showToast('Live Cloud State Synced ✓');
         } catch (e) {
-            console.warn('Cloud pull notice:', e);
-            if (notify) showToast('Using cached workspace');
+            console.warn('Standard fetch blocked or redirected, trying JSONP:', e);
+        }
+
+        // 2. Fallback to JSONP if CORS blocked the response
+        if (!data) {
+            try {
+                data = await jsonpRequest(CLOUD_SCRIPT_URL);
+            } catch (err) {
+                console.warn('JSONP pull failed:', err);
+            }
+        }
+
+        if (data && typeof data === 'object') {
+            applyCloudState(data);
+            if (notify) showToast('Live Cloud State Synced ✓');
+        } else {
+            if (notify) showToast('Could not reach Cloud Script');
         }
     }
 
@@ -1886,15 +1870,13 @@ body.is-admin .fav-badge:hover {
             views.tools.classList.add('active');
             navs.tools.classList.add('nav-active');
             updateFavCountLabel();
-            updateCloudStatusUI();
         } else if (page === 'notices') {
             views.notices.classList.add('active');
             navs.notices.classList.add('nav-active');
             renderNotices();
         } else {
             views.home.classList.add('active');
-            const currentFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
-            if (currentFilter === 'fav') {
+            if (activeFilter === 'fav') {
                 navs.fav.classList.add('nav-active');
             } else {
                 navs.home.classList.add('nav-active');
@@ -1948,12 +1930,11 @@ body.is-admin .fav-badge:hover {
             searchInput.focus();
         } else {
             searchInput.value = '';
-            const activeFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
             filterApps(activeFilter, document.querySelector(`.pill[data-filter="${activeFilter}"]`));
         }
     }
 
-    // ================= GRID LAYOUT (ADMIN IN TOOLS MENU ONLY) =================
+    // ================= GRID LAYOUT (CLOUD-SYNCED) =================
     const layoutIcons = {
         2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
                 <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
@@ -1985,10 +1966,7 @@ body.is-admin .fav-badge:hover {
     const gridStyleLabel = document.getElementById('grid-style-label');
     const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
 
-    let currentCols = parseInt(SafeStorage.getRaw('kuafi_grid_cols', '3'), 10);
-    if (![2, 3, 4].includes(currentCols)) currentCols = 3;
-
-    function applyGridLayout(cols, notify) {
+    function applyGridLayout(cols, pushToCloud) {
         appGrid.classList.remove('cols-2', 'cols-4');
         if (cols === 2) appGrid.classList.add('cols-2');
         if (cols === 4) appGrid.classList.add('cols-4');
@@ -1996,10 +1974,8 @@ body.is-admin .fav-badge:hover {
         if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
         if (gridStyleLabel) gridStyleLabel.textContent = `${cols} Columns`;
 
-        SafeStorage.setRaw('kuafi_grid_cols', cols);
-        if (notify) {
-            pushStateToCloud();
-            showToast(`Global Card View: ${cols} Columns`);
+        if (pushToCloud && isAdmin) {
+            pushStateToCloud(true);
         }
     }
     applyGridLayout(currentCols, false);
@@ -2010,10 +1986,8 @@ body.is-admin .fav-badge:hover {
         applyGridLayout(currentCols, true);
     }
 
-    // ================= PERMANENT CARD REARRANGEMENT (ADMIN ONLY) =================
+    // ================= CLOUD CARD REARRANGEMENT (ADMIN ONLY) =================
     const emptyFavMsg = document.getElementById('empty-fav-msg');
-    let rearrangeMode = false;
-    let draggedCard = null;
 
     function getCardElements() {
         return Array.from(appGrid.querySelectorAll('.service-item'));
@@ -2074,7 +2048,7 @@ body.is-admin .fav-badge:hover {
             card.addEventListener('dragend', () => {
                 if (draggedCard) draggedCard.classList.remove('dragging');
                 draggedCard = null;
-                saveCardOrder();
+                pushStateToCloud(false);
             });
 
             card.addEventListener('dragover', (e) => {
@@ -2108,27 +2082,18 @@ body.is-admin .fav-badge:hover {
         } else {
             appGrid.insertBefore(card, targetCard.nextSibling);
         }
-        saveCardOrder();
-        showToast('Card order saved');
+        pushStateToCloud(false);
     }
 
-    function saveCardOrder() {
-        if (!isAdmin) return;
-        const order = getCardElements().map(el => el.getAttribute('data-id'));
-        SafeStorage.set('kuafi_card_order', order);
-        pushStateToCloud();
-    }
-
-    function loadCardOrder() {
-        const savedOrder = SafeStorage.get('kuafi_card_order', null);
-        if (!Array.isArray(savedOrder) || savedOrder.length === 0) return;
+    function applyCardOrderFromArray(orderArray) {
+        if (!Array.isArray(orderArray) || orderArray.length === 0) return;
 
         const cardMap = {};
         getCardElements().forEach(el => {
             cardMap[el.getAttribute('data-id')] = el;
         });
 
-        savedOrder.forEach(id => {
+        orderArray.forEach(id => {
             if (cardMap[id]) {
                 appGrid.insertBefore(cardMap[id], emptyFavMsg);
                 delete cardMap[id];
@@ -2142,10 +2107,8 @@ body.is-admin .fav-badge:hover {
 
     function resetCardOrder() {
         if (!isAdmin) return;
-        SafeStorage.set('kuafi_card_order', defaultCardOrder);
-        loadCardOrder();
-        pushStateToCloud();
-        showToast('Default card order restored');
+        applyCardOrderFromArray(defaultCardOrder);
+        pushStateToCloud(true);
     }
 
     function toggleRearrangeMode(forceState) {
@@ -2163,18 +2126,13 @@ body.is-admin .fav-badge:hover {
         });
 
         if (!rearrangeMode && isAdmin) {
-            pushStateToCloud();
+            pushStateToCloud(true);
+        } else if (rearrangeMode) {
+            showToast('Admin Rearrange ON');
         }
-        showToast(rearrangeMode ? 'Admin Rearrange ON' : 'Arrangement Saved');
     }
 
-    // ================= PERMANENT FAVOURITES (ADMIN CURATED) =================
-    let favorites = SafeStorage.get('kuafi_favorites', null);
-    if (!Array.isArray(favorites)) {
-        favorites = ['app-dev', 'app-sports', 'app-finance'];
-        SafeStorage.set('kuafi_favorites', favorites);
-    }
-
+    // ================= CLOUD FAVOURITES (ADMIN CURATED) =================
     function initFavorites() {
         getCardElements().forEach(item => {
             const id = item.getAttribute('data-id');
@@ -2193,7 +2151,7 @@ body.is-admin .fav-badge:hover {
     function toggleFav(e, id) {
         e.preventDefault();
         e.stopPropagation();
-        if (!isAdmin) return; // Visitors cannot alter global favourites
+        if (!isAdmin) return;
 
         const item = document.querySelector(`[data-id="${id}"]`);
         if (!item) return;
@@ -2201,40 +2159,30 @@ body.is-admin .fav-badge:hover {
         if (favorites.includes(id)) {
             favorites = favorites.filter(fav => fav !== id);
             item.classList.remove('is-favorite');
-            showToast('Removed from Favourites');
         } else {
             favorites.push(id);
             item.classList.add('is-favorite');
-            showToast('Pinned to Global Favourites ⭐');
         }
-        SafeStorage.set('kuafi_favorites', favorites);
         updateFavCountLabel();
-        pushStateToCloud();
+        pushStateToCloud(true);
 
-        const activePill = document.querySelector('.pill.active');
-        if (activePill && activePill.id === 'pill-fav') {
-            filterApps('fav', activePill);
+        if (activeFilter === 'fav') {
+            filterApps('fav', document.getElementById('pill-fav'));
         }
     }
 
     function clearFavorites() {
         if (!isAdmin) return;
         favorites = [];
-        SafeStorage.set('kuafi_favorites', favorites);
         getCardElements().forEach(item => item.classList.remove('is-favorite'));
         updateFavCountLabel();
-        pushStateToCloud();
-        const activePill = document.querySelector('.pill.active');
-        if (activePill && activePill.id === 'pill-fav') {
-            filterApps('fav', activePill);
+        pushStateToCloud(true);
+        if (activeFilter === 'fav') {
+            filterApps('fav', document.getElementById('pill-fav'));
         }
-        showToast('All favourites cleared');
     }
 
-    // ================= PERMANENT NOTICES (MAX SHOW LAST 4) =================
-    let notices = SafeStorage.get('kuafi_notices', []);
-    if (!Array.isArray(notices)) notices = [];
-
+    // ================= CLOUD NOTICES (MAX SHOW LAST 4) =================
     function updateNoticeBadge() {
         const badge = document.getElementById('nav-notice-badge');
         const countPill = document.getElementById('notice-count-pill');
@@ -2259,7 +2207,7 @@ body.is-admin .fav-badge:hover {
         if (latestFour.length === 0) {
             const empty = document.createElement('div');
             empty.className = 'empty-notices';
-            empty.textContent = 'No active notices at the moment.';
+            empty.textContent = 'No active notices in Cloud at the moment.';
             listEl.appendChild(empty);
             return;
         }
@@ -2283,7 +2231,6 @@ body.is-admin .fav-badge:hover {
             content.appendChild(metaEl);
             card.appendChild(content);
 
-            // Delete button is strictly rendered for Admin only
             if (isAdmin) {
                 const delBtn = document.createElement('button');
                 delBtn.className = 'notice-delete-btn';
@@ -2324,35 +2271,26 @@ body.is-admin .fav-badge:hover {
             notices = notices.slice(-4);
         }
 
-        SafeStorage.set('kuafi_notices', notices);
         input.value = '';
         renderNotices();
         pushStateToCloud(true);
-        showToast('Notice published for all visitors');
     }
 
     function deleteNotice(id) {
         if (!isAdmin) return;
         notices = notices.filter(n => n.id !== id);
-        SafeStorage.set('kuafi_notices', notices);
         renderNotices();
-        pushStateToCloud();
-        showToast('Notice removed');
+        pushStateToCloud(true);
     }
 
-    // ================= THEME & ACCENT CUSTOMIZATION =================
+    // ================= THEME & ACCENT CUSTOMIZATION (CLOUD-SYNCED) =================
     const themeBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
     const htmlEl = document.documentElement;
 
-    function setTheme(theme, save) {
+    function setTheme(theme, pushToCloud) {
         htmlEl.setAttribute('data-theme', theme);
-        if (save) {
-            SafeStorage.setRaw('kuafi_theme', theme);
-            if (isAdmin) pushStateToCloud();
-        }
-
         if (theme === 'dark') {
             themeIcon.className = 'fa-solid fa-sun';
             themeText.textContent = 'Dark Mode';
@@ -2360,46 +2298,35 @@ body.is-admin .fav-badge:hover {
             themeIcon.className = 'fa-solid fa-moon';
             themeText.textContent = 'Light Mode';
         }
+        if (pushToCloud && isAdmin) {
+            pushStateToCloud(true);
+        }
     }
-
-    setTheme(SafeStorage.getRaw('kuafi_theme', 'dark'), false);
 
     themeBtn.addEventListener('click', () => {
         const current = htmlEl.getAttribute('data-theme');
         setTheme(current === 'dark' ? 'light' : 'dark', true);
     });
 
-    function setAccent(primary, secondary, el, notify = true) {
+    function setAccent(primary, secondary, el, pushToCloud = true) {
+        currentAccent = { primary, secondary };
         document.documentElement.style.setProperty('--accent', primary);
         document.documentElement.style.setProperty('--accent-secondary', secondary);
         document.documentElement.style.setProperty('--accent-glow', primary === '#3ded97' ? 'rgba(61, 237, 151, 0.25)' : 'rgba(16, 185, 129, 0.25)');
         document.querySelectorAll('.swatch').forEach(s => {
             s.classList.toggle('active', s === el || s.getAttribute('data-primary') === primary);
         });
-        SafeStorage.set('kuafi_accent', { primary, secondary });
-        if (notify && isAdmin) {
-            pushStateToCloud();
-            showToast('Global accent color updated');
+        if (pushToCloud && isAdmin) {
+            pushStateToCloud(true);
         }
     }
 
-    const savedAccent = SafeStorage.get('kuafi_accent', null);
-    if (savedAccent && savedAccent.primary && savedAccent.secondary) {
-        setAccent(savedAccent.primary, savedAccent.secondary, null, false);
-    }
-
-    // ================= SCRATCHPAD & UTILITIES =================
-    const notesEl = document.getElementById('quick-notes');
-    notesEl.value = SafeStorage.getRaw('kuafi_notes', '');
-    notesEl.addEventListener('input', () => {
-        if (isAdmin) SafeStorage.setRaw('kuafi_notes', notesEl.value);
-    });
-
+    // ================= CLOUD SCRATCHPAD & UTILITIES =================
     function clearNotes() {
         if (!isAdmin) return;
-        notesEl.value = '';
-        SafeStorage.remove('kuafi_notes');
-        showToast('Scratchpad cleared');
+        const notesEl = document.getElementById('quick-notes');
+        if (notesEl) notesEl.value = '';
+        pushStateToCloud(true);
     }
 
     function copyPageUrl() {
@@ -2441,54 +2368,49 @@ body.is-admin .fav-badge:hover {
     });
 
     function filterApps(category, btn) {
+        activeFilter = category || 'fav';
         document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-        const targetBtn = btn || document.querySelector(`.pill[data-filter="${category}"]`) || document.getElementById('pill-fav');
+        const targetBtn = btn || document.querySelector(`.pill[data-filter="${activeFilter}"]`) || document.getElementById('pill-fav');
         if (targetBtn) targetBtn.classList.add('active');
-
-        SafeStorage.setRaw('kuafi_active_filter', category);
 
         let visibleCount = 0;
         getCardElements().forEach(item => {
             const id = item.getAttribute('data-id');
             let show = false;
-            if (category === 'all') {
+            if (activeFilter === 'all') {
                 show = true;
-            } else if (category === 'fav') {
+            } else if (activeFilter === 'fav') {
                 show = favorites.includes(id);
-            } else if (category === 'live') {
+            } else if (activeFilter === 'live') {
                 show = item.getAttribute('data-live') === 'true';
             } else {
-                show = item.getAttribute('data-cat') === category;
+                show = item.getAttribute('data-cat') === activeFilter;
             }
             item.classList.toggle('hidden', !show);
             if (show) visibleCount++;
         });
 
-        emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
+        emptyFavMsg.style.display = (activeFilter === 'fav' && visibleCount === 0) ? 'block' : 'none';
 
         const navHome = document.getElementById('nav-home');
         const navFav = document.getElementById('nav-fav');
         if (document.getElementById('home-view').classList.contains('active')) {
-            navHome.classList.toggle('nav-active', category !== 'fav');
-            navFav.classList.toggle('nav-active', category === 'fav');
+            navHome.classList.toggle('nav-active', activeFilter !== 'fav');
+            navFav.classList.toggle('nav-active', activeFilter === 'fav');
         }
     }
 
-    // ================= INITIALIZATION & LIVE AUTO-SYNC =================
+    // ================= INITIALIZATION & LIVE CLOUD AUTO-SYNC =================
     setupCardControls();
-    loadCardOrder();
     initFavorites();
     applyRoleUI();
-    updateCloudStatusUI();
+    filterApps('fav');
 
-    const initialFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
-    filterApps(initialFilter);
-
-    // Automatically pull latest Admin changes on startup & every 30s for Visitors
+    // Pull 100% live Cloud state immediately on startup and every 15 seconds
     pullStateFromCloud(false);
     setInterval(() => {
         if (!rearrangeMode) pullStateFromCloud(false);
-    }, 30000);
+    }, 15000);
 </script>
 
 </body>
