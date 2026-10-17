@@ -1440,15 +1440,15 @@ body.is-admin .fav-badge:hover {
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-cloud-arrow-up"></i> Global Visitor Cloud Sync</span>
-                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--text-secondary);">Cloud Connected ✓</span>
+                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Cloud Connected ✓</span>
             </div>
 
             <div style="margin-bottom: 12px;">
                 <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">
-                    Your Google Apps Script Web App URL is connected below so your changes broadcast live to all visitors:
+                    Your Google Apps Script Web App URL is pre-connected below so your changes broadcast live to all visitors:
                 </p>
                 <div style="display: flex; gap: 8px;">
-                    <input type="url" id="cloud-url-input" class="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec">
+                    <input type="url" id="cloud-url-input" class="cloud-url-input" value="https://script.google.com/macros/s/AKfycbw1RPjfWxB99rjmhExHpfcHJr9MgDPPeWvv8T6wEK7-focj4I1z9ueiDBu8YFad_o_FuA/exec" placeholder="https://script.google.com/macros/s/.../exec">
                     <button class="btn-action" onclick="saveCloudEndpoint()">
                         <i class="fa-solid fa-check"></i> Save
                     </button>
@@ -1723,7 +1723,7 @@ body.is-admin .fav-badge:hover {
         const url = getCloudUrl();
         const input = document.getElementById('cloud-url-input');
         const pill = document.getElementById('cloud-status-pill');
-        if (input && !input.value && url) input.value = url;
+        if (input && url) input.value = url;
         if (pill) {
             pill.textContent = url ? 'Cloud Connected ✓' : 'Local Only (Set URL)';
             pill.style.color = url ? 'var(--accent)' : 'var(--text-secondary)';
@@ -1739,7 +1739,7 @@ body.is-admin .fav-badge:hover {
         if (url) {
             pushStateToCloud(true);
         } else {
-            showToast('Reverted to default Cloud URL');
+            showToast('Using default Cloud URL');
         }
     }
 
@@ -1835,3 +1835,661 @@ body.is-admin .fav-badge:hover {
             }
             if (data.theme === 'dark' || data.theme === 'light') {
                 setTheme(data.theme, false);
+            }
+            if (data.accent && data.accent.primary && data.accent.secondary) {
+                setAccent(data.accent.primary, data.accent.secondary, null, false);
+            }
+            if (data.adminTokenHash) {
+                SafeStorage.setRaw('kuafi_admin_pin_hash', data.adminTokenHash);
+            }
+
+            // Refresh active filter view
+            const activeFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+            filterApps(activeFilter);
+
+            if (notify) showToast('Live Cloud State Synced ✓');
+        } catch (e) {
+            console.warn('Cloud pull notice:', e);
+            if (notify) showToast('Using cached workspace');
+        }
+    }
+
+    // ================= SAFE URL & PAGE NAVIGATION =================
+    function openSafeUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.origin);
+            if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+                window.location.href = parsed.href;
+            }
+        } catch (e) {
+            showToast('Invalid URL blocked');
+        }
+    }
+
+    function switchPage(page) {
+        const views = {
+            home: document.getElementById('home-view'),
+            notices: document.getElementById('notices-view'),
+            tools: document.getElementById('tools-view')
+        };
+        const navs = {
+            home: document.getElementById('nav-home'),
+            fav: document.getElementById('nav-fav'),
+            notices: document.getElementById('nav-notices'),
+            tools: document.getElementById('nav-tools')
+        };
+
+        Object.values(views).forEach(v => v.classList.remove('active'));
+        Object.values(navs).forEach(n => n.classList.remove('nav-active'));
+
+        if (page === 'tools') {
+            views.tools.classList.add('active');
+            navs.tools.classList.add('nav-active');
+            updateFavCountLabel();
+            updateCloudStatusUI();
+        } else if (page === 'notices') {
+            views.notices.classList.add('active');
+            navs.notices.classList.add('nav-active');
+            renderNotices();
+        } else {
+            views.home.classList.add('active');
+            const currentFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+            if (currentFilter === 'fav') {
+                navs.fav.classList.add('nav-active');
+            } else {
+                navs.home.classList.add('nav-active');
+            }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openHomeTab() {
+        const allPill = document.getElementById('pill-all');
+        filterApps('all', allPill);
+        switchPage('home');
+    }
+
+    function openFavouritesTab() {
+        const favPill = document.getElementById('pill-fav');
+        filterApps('fav', favPill);
+        switchPage('home');
+    }
+
+    function openRearrangeFromTools() {
+        if (!isAdmin) {
+            openAdminModal();
+            return;
+        }
+        switchPage('home');
+        toggleRearrangeMode(true);
+    }
+
+    function handleSettingsCardClick() {
+        if (!rearrangeMode) switchPage('tools');
+    }
+
+    function handleSecureCardClick() {
+        if (rearrangeMode) return;
+        if (isAdmin) {
+            logoutAdmin();
+        } else {
+            openAdminModal();
+        }
+    }
+
+    // ================= HEADER SEARCH =================
+    function toggleHeaderSearch() {
+        switchPage('home');
+        const container = document.getElementById('header-search-container');
+        const searchInput = document.getElementById('search-input');
+
+        container.classList.toggle('active');
+        if (container.classList.contains('active')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+            const activeFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+            filterApps(activeFilter, document.querySelector(`.pill[data-filter="${activeFilter}"]`));
+        }
+    }
+
+    // ================= GRID LAYOUT (ADMIN IN TOOLS MENU ONLY) =================
+    const layoutIcons = {
+        2: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="2" y="3" width="5.5" height="5" rx="1.6"/>
+                <rect x="10.5" y="3" width="5.5" height="5" rx="1.6"/>
+                <rect x="2" y="10" width="5.5" height="5" rx="1.6"/>
+                <rect x="10.5" y="10" width="5.5" height="5" rx="1.6"/>
+            </svg>`,
+        3: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="1.5" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="7.1" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="12.7" y="3.5" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="1.5" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="7.1" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+                <rect x="12.7" y="10.3" width="3.8" height="4.2" rx="1.2"/>
+            </svg>`,
+        4: `<svg class="layout-icon-svg" viewBox="0 0 18 18" fill="currentColor">
+                <rect x="1" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="5.4" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="9.8" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="14.2" y="3.8" width="2.8" height="4" rx="1"/>
+                <rect x="1" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="5.4" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="9.8" y="10.2" width="2.8" height="4" rx="1"/>
+                <rect x="14.2" y="10.2" width="2.8" height="4" rx="1"/>
+            </svg>`
+    };
+
+    const appGrid = document.getElementById('app-grid');
+    const gridStyleLabel = document.getElementById('grid-style-label');
+    const toolsLayoutIconHolder = document.getElementById('tools-layout-icon-holder');
+
+    let currentCols = parseInt(SafeStorage.getRaw('kuafi_grid_cols', '3'), 10);
+    if (![2, 3, 4].includes(currentCols)) currentCols = 3;
+
+    function applyGridLayout(cols, notify) {
+        appGrid.classList.remove('cols-2', 'cols-4');
+        if (cols === 2) appGrid.classList.add('cols-2');
+        if (cols === 4) appGrid.classList.add('cols-4');
+
+        if (toolsLayoutIconHolder) toolsLayoutIconHolder.innerHTML = layoutIcons[cols];
+        if (gridStyleLabel) gridStyleLabel.textContent = `${cols} Columns`;
+
+        SafeStorage.setRaw('kuafi_grid_cols', cols);
+        if (notify) {
+            pushStateToCloud();
+            showToast(`Global Card View: ${cols} Columns`);
+        }
+    }
+    applyGridLayout(currentCols, false);
+
+    function cycleGridLayout() {
+        if (!isAdmin) return;
+        currentCols = currentCols === 3 ? 2 : (currentCols === 2 ? 4 : 3);
+        applyGridLayout(currentCols, true);
+    }
+
+    // ================= PERMANENT CARD REARRANGEMENT (ADMIN ONLY) =================
+    const emptyFavMsg = document.getElementById('empty-fav-msg');
+    let rearrangeMode = false;
+    let draggedCard = null;
+
+    function getCardElements() {
+        return Array.from(appGrid.querySelectorAll('.service-item'));
+    }
+
+    const defaultCardOrder = getCardElements().map(el => el.getAttribute('data-id'));
+
+    function setupCardControls() {
+        getCardElements().forEach(card => {
+            const id = card.getAttribute('data-id');
+
+            const controls = document.createElement('div');
+            controls.className = 'card-move-controls';
+
+            const leftBtn = document.createElement('button');
+            leftBtn.type = 'button';
+            leftBtn.className = 'move-btn';
+            leftBtn.title = 'Move Backward';
+            leftBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            leftBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                moveCardStep(id, -1);
+            });
+
+            const rightBtn = document.createElement('button');
+            rightBtn.type = 'button';
+            rightBtn.className = 'move-btn';
+            rightBtn.title = 'Move Forward';
+            rightBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            rightBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                moveCardStep(id, 1);
+            });
+
+            controls.appendChild(leftBtn);
+            controls.appendChild(rightBtn);
+            card.appendChild(controls);
+
+            card.addEventListener('click', (e) => {
+                if (rearrangeMode) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+
+            card.addEventListener('dragstart', (e) => {
+                if (!rearrangeMode || !isAdmin) {
+                    e.preventDefault();
+                    return;
+                }
+                draggedCard = card;
+                card.classList.add('dragging');
+                if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+            });
+
+            card.addEventListener('dragend', () => {
+                if (draggedCard) draggedCard.classList.remove('dragging');
+                draggedCard = null;
+                saveCardOrder();
+            });
+
+            card.addEventListener('dragover', (e) => {
+                if (!rearrangeMode || !isAdmin || !draggedCard || draggedCard === card) return;
+                e.preventDefault();
+                const cards = getCardElements();
+                const draggedIdx = cards.indexOf(draggedCard);
+                const targetIdx = cards.indexOf(card);
+                if (draggedIdx < targetIdx) {
+                    appGrid.insertBefore(draggedCard, card.nextSibling);
+                } else {
+                    appGrid.insertBefore(draggedCard, card);
+                }
+            });
+        });
+    }
+
+    function moveCardStep(id, direction) {
+        if (!isAdmin) return;
+        const visibleCards = getCardElements().filter(c => !c.classList.contains('hidden'));
+        const card = appGrid.querySelector(`[data-id="${id}"]`);
+        const currentIndex = visibleCards.indexOf(card);
+        if (currentIndex === -1) return;
+
+        const targetIndex = currentIndex + direction;
+        if (targetIndex < 0 || targetIndex >= visibleCards.length) return;
+
+        const targetCard = visibleCards[targetIndex];
+        if (direction === -1) {
+            appGrid.insertBefore(card, targetCard);
+        } else {
+            appGrid.insertBefore(card, targetCard.nextSibling);
+        }
+        saveCardOrder();
+        showToast('Card order saved');
+    }
+
+    function saveCardOrder() {
+        if (!isAdmin) return;
+        const order = getCardElements().map(el => el.getAttribute('data-id'));
+        SafeStorage.set('kuafi_card_order', order);
+        pushStateToCloud();
+    }
+
+    function loadCardOrder() {
+        const savedOrder = SafeStorage.get('kuafi_card_order', null);
+        if (!Array.isArray(savedOrder) || savedOrder.length === 0) return;
+
+        const cardMap = {};
+        getCardElements().forEach(el => {
+            cardMap[el.getAttribute('data-id')] = el;
+        });
+
+        savedOrder.forEach(id => {
+            if (cardMap[id]) {
+                appGrid.insertBefore(cardMap[id], emptyFavMsg);
+                delete cardMap[id];
+            }
+        });
+
+        Object.values(cardMap).forEach(el => {
+            appGrid.insertBefore(el, emptyFavMsg);
+        });
+    }
+
+    function resetCardOrder() {
+        if (!isAdmin) return;
+        SafeStorage.set('kuafi_card_order', defaultCardOrder);
+        loadCardOrder();
+        pushStateToCloud();
+        showToast('Default card order restored');
+    }
+
+    function toggleRearrangeMode(forceState) {
+        if (!isAdmin && forceState !== false) return;
+        rearrangeMode = typeof forceState === 'boolean' ? forceState : !rearrangeMode;
+        const banner = document.getElementById('rearrange-banner');
+        const toolsRearrangeLabel = document.getElementById('tools-rearrange-label');
+
+        appGrid.classList.toggle('rearrange-active', rearrangeMode);
+        if (banner) banner.classList.toggle('show', rearrangeMode);
+        if (toolsRearrangeLabel) toolsRearrangeLabel.textContent = rearrangeMode ? 'Active' : 'Rearrange';
+
+        getCardElements().forEach(card => {
+            card.setAttribute('draggable', rearrangeMode ? 'true' : 'false');
+        });
+
+        if (!rearrangeMode && isAdmin) {
+            pushStateToCloud();
+        }
+        showToast(rearrangeMode ? 'Admin Rearrange ON' : 'Arrangement Saved');
+    }
+
+    // ================= PERMANENT FAVOURITES (ADMIN CURATED) =================
+    let favorites = SafeStorage.get('kuafi_favorites', null);
+    if (!Array.isArray(favorites)) {
+        favorites = ['app-dev', 'app-sports', 'app-finance'];
+        SafeStorage.set('kuafi_favorites', favorites);
+    }
+
+    function initFavorites() {
+        getCardElements().forEach(item => {
+            const id = item.getAttribute('data-id');
+            item.classList.toggle('is-favorite', favorites.includes(id));
+        });
+        updateFavCountLabel();
+    }
+
+    function updateFavCountLabel() {
+        const label = document.getElementById('fav-count-label');
+        if (label) {
+            label.textContent = `${favorites.length} app${favorites.length === 1 ? '' : 's'} pinned to Favourites`;
+        }
+    }
+
+    function toggleFav(e, id) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!isAdmin) return; // Visitors cannot alter global favourites
+
+        const item = document.querySelector(`[data-id="${id}"]`);
+        if (!item) return;
+
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(fav => fav !== id);
+            item.classList.remove('is-favorite');
+            showToast('Removed from Favourites');
+        } else {
+            favorites.push(id);
+            item.classList.add('is-favorite');
+            showToast('Pinned to Global Favourites ⭐');
+        }
+        SafeStorage.set('kuafi_favorites', favorites);
+        updateFavCountLabel();
+        pushStateToCloud();
+
+        const activePill = document.querySelector('.pill.active');
+        if (activePill && activePill.id === 'pill-fav') {
+            filterApps('fav', activePill);
+        }
+    }
+
+    function clearFavorites() {
+        if (!isAdmin) return;
+        favorites = [];
+        SafeStorage.set('kuafi_favorites', favorites);
+        getCardElements().forEach(item => item.classList.remove('is-favorite'));
+        updateFavCountLabel();
+        pushStateToCloud();
+        const activePill = document.querySelector('.pill.active');
+        if (activePill && activePill.id === 'pill-fav') {
+            filterApps('fav', activePill);
+        }
+        showToast('All favourites cleared');
+    }
+
+    // ================= PERMANENT NOTICES (MAX SHOW LAST 4) =================
+    let notices = SafeStorage.get('kuafi_notices', []);
+    if (!Array.isArray(notices)) notices = [];
+
+    function updateNoticeBadge() {
+        const badge = document.getElementById('nav-notice-badge');
+        const countPill = document.getElementById('notice-count-pill');
+        const visibleTotal = Math.min(notices.length, 4);
+        if (badge) {
+            badge.textContent = String(visibleTotal);
+            badge.classList.toggle('show', visibleTotal > 0);
+        }
+        if (countPill) {
+            countPill.textContent = `${visibleTotal} / 4 shown`;
+        }
+    }
+
+    function renderNotices() {
+        const listEl = document.getElementById('notices-list');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const latestFour = notices.slice(-4).reverse();
+        updateNoticeBadge();
+
+        if (latestFour.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-notices';
+            empty.textContent = 'No active notices at the moment.';
+            listEl.appendChild(empty);
+            return;
+        }
+
+        latestFour.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'notice-card';
+
+            const content = document.createElement('div');
+            content.className = 'notice-content';
+
+            const textEl = document.createElement('div');
+            textEl.className = 'notice-text';
+            textEl.textContent = item.text;
+
+            const metaEl = document.createElement('div');
+            metaEl.className = 'notice-meta';
+            metaEl.textContent = item.time || 'Posted by Admin';
+
+            content.appendChild(textEl);
+            content.appendChild(metaEl);
+            card.appendChild(content);
+
+            // Delete button is strictly rendered for Admin only
+            if (isAdmin) {
+                const delBtn = document.createElement('button');
+                delBtn.className = 'notice-delete-btn';
+                delBtn.title = 'Delete Notice';
+                delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                delBtn.addEventListener('click', () => deleteNotice(item.id));
+                card.appendChild(delBtn);
+            }
+
+            listEl.appendChild(card);
+        });
+    }
+
+    function addNotice() {
+        if (!isAdmin) return;
+        const input = document.getElementById('notice-input');
+        const text = (input.value || '').trim();
+        if (!text) {
+            showToast('Please enter notice text');
+            return;
+        }
+
+        const now = new Date();
+        const formattedTime = now.toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        notices.push({
+            id: 'nt-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+            text: text.slice(0, 280),
+            time: formattedTime
+        });
+
+        if (notices.length > 4) {
+            notices = notices.slice(-4);
+        }
+
+        SafeStorage.set('kuafi_notices', notices);
+        input.value = '';
+        renderNotices();
+        pushStateToCloud(true);
+        showToast('Notice published for all visitors');
+    }
+
+    function deleteNotice(id) {
+        if (!isAdmin) return;
+        notices = notices.filter(n => n.id !== id);
+        SafeStorage.set('kuafi_notices', notices);
+        renderNotices();
+        pushStateToCloud();
+        showToast('Notice removed');
+    }
+
+    // ================= THEME & ACCENT CUSTOMIZATION =================
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const htmlEl = document.documentElement;
+
+    function setTheme(theme, save) {
+        htmlEl.setAttribute('data-theme', theme);
+        if (save) {
+            SafeStorage.setRaw('kuafi_theme', theme);
+            if (isAdmin) pushStateToCloud();
+        }
+
+        if (theme === 'dark') {
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.textContent = 'Dark Mode';
+        } else {
+            themeIcon.className = 'fa-solid fa-moon';
+            themeText.textContent = 'Light Mode';
+        }
+    }
+
+    setTheme(SafeStorage.getRaw('kuafi_theme', 'dark'), false);
+
+    themeBtn.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark', true);
+    });
+
+    function setAccent(primary, secondary, el, notify = true) {
+        document.documentElement.style.setProperty('--accent', primary);
+        document.documentElement.style.setProperty('--accent-secondary', secondary);
+        document.documentElement.style.setProperty('--accent-glow', primary === '#3ded97' ? 'rgba(61, 237, 151, 0.25)' : 'rgba(16, 185, 129, 0.25)');
+        document.querySelectorAll('.swatch').forEach(s => {
+            s.classList.toggle('active', s === el || s.getAttribute('data-primary') === primary);
+        });
+        SafeStorage.set('kuafi_accent', { primary, secondary });
+        if (notify && isAdmin) {
+            pushStateToCloud();
+            showToast('Global accent color updated');
+        }
+    }
+
+    const savedAccent = SafeStorage.get('kuafi_accent', null);
+    if (savedAccent && savedAccent.primary && savedAccent.secondary) {
+        setAccent(savedAccent.primary, savedAccent.secondary, null, false);
+    }
+
+    // ================= SCRATCHPAD & UTILITIES =================
+    const notesEl = document.getElementById('quick-notes');
+    notesEl.value = SafeStorage.getRaw('kuafi_notes', '');
+    notesEl.addEventListener('input', () => {
+        if (isAdmin) SafeStorage.setRaw('kuafi_notes', notesEl.value);
+    });
+
+    function clearNotes() {
+        if (!isAdmin) return;
+        notesEl.value = '';
+        SafeStorage.remove('kuafi_notes');
+        showToast('Scratchpad cleared');
+    }
+
+    function copyPageUrl() {
+        navigator.clipboard?.writeText(window.location.href);
+        showToast('Hub link copied!');
+    }
+
+    async function syncData() {
+        if (rearrangeMode) return;
+        const icon = document.getElementById('sync-icon');
+        if (icon) {
+            icon.classList.remove('rotating');
+            void icon.offsetWidth;
+            icon.classList.add('rotating');
+        }
+        if (isAdmin) {
+            await pushStateToCloud(true);
+        } else {
+            await pullStateFromCloud(true);
+        }
+    }
+
+    function showToast(text) {
+        const toast = document.getElementById('toast-msg');
+        toast.textContent = text;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1900);
+    }
+
+    // ================= SEARCH & CATEGORY FILTER =================
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        emptyFavMsg.style.display = 'none';
+        getCardElements().forEach(item => {
+            const label = item.textContent.toLowerCase();
+            item.classList.toggle('hidden', !label.includes(query));
+        });
+    });
+
+    function filterApps(category, btn) {
+        document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        const targetBtn = btn || document.querySelector(`.pill[data-filter="${category}"]`) || document.getElementById('pill-fav');
+        if (targetBtn) targetBtn.classList.add('active');
+
+        SafeStorage.setRaw('kuafi_active_filter', category);
+
+        let visibleCount = 0;
+        getCardElements().forEach(item => {
+            const id = item.getAttribute('data-id');
+            let show = false;
+            if (category === 'all') {
+                show = true;
+            } else if (category === 'fav') {
+                show = favorites.includes(id);
+            } else if (category === 'live') {
+                show = item.getAttribute('data-live') === 'true';
+            } else {
+                show = item.getAttribute('data-cat') === category;
+            }
+            item.classList.toggle('hidden', !show);
+            if (show) visibleCount++;
+        });
+
+        emptyFavMsg.style.display = (category === 'fav' && visibleCount === 0) ? 'block' : 'none';
+
+        const navHome = document.getElementById('nav-home');
+        const navFav = document.getElementById('nav-fav');
+        if (document.getElementById('home-view').classList.contains('active')) {
+            navHome.classList.toggle('nav-active', category !== 'fav');
+            navFav.classList.toggle('nav-active', category === 'fav');
+        }
+    }
+
+    // ================= INITIALIZATION & LIVE AUTO-SYNC =================
+    setupCardControls();
+    loadCardOrder();
+    initFavorites();
+    applyRoleUI();
+    updateCloudStatusUI();
+
+    const initialFilter = SafeStorage.getRaw('kuafi_active_filter', 'fav');
+    filterApps(initialFilter);
+
+    // Automatically pull latest Admin changes on startup & every 30s for Visitors
+    pullStateFromCloud(false);
+    setInterval(() => {
+        if (!rearrangeMode) pullStateFromCloud(false);
+    }, 30000);
+</script>
+
+</body>
+</html>
