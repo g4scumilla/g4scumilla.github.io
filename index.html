@@ -38,6 +38,7 @@
             --card-bg: var(--bg-card);
             --card-shadow: 0 8px 20px -6px rgba(0,0,0,0.2);
             --card-padding: 10px 8px 12px;
+            --card-align: center;
         }
 
         body.light-mode {
@@ -220,7 +221,7 @@
             border-color: var(--accent);
         }
 
-        /* Notice Showcase */
+        /* Notice Showcase (Clickable anywhere to expand) */
         .notice-showcase {
             position: relative;
             border-radius: 16px;
@@ -230,6 +231,7 @@
             border: 1px solid rgba(61, 237, 151, 0.35);
             box-shadow: 0 10px 28px -8px rgba(61, 237, 151, 0.18);
             overflow: hidden;
+            cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .notice-showcase.urgent {
@@ -480,8 +482,8 @@
             box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: var(--card-align, center);
+            text-align: var(--card-align, center);
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             overflow: hidden;
         }
@@ -719,6 +721,23 @@
         .google-user-only { display: none !important; }
         body.is-google-auth .google-user-only { display: block !important; }
         body.is-google-auth .setting-row.google-user-only { display: flex !important; }
+
+        /* Focus Timer Widget */
+        .pomodoro-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .pomodoro-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 6px 0;
+            letter-spacing: 1px;
+        }
 
         /* Attractive Notices Page Cards & Expandable Text */
         .notice-input, .quick-note-area {
@@ -1074,11 +1093,11 @@
     <!-- ==================== HOME PAGE ==================== -->
     <div id="page-home" class="page-view active">
 
-        <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
-        <div class="notice-showcase" id="home-notice-showcase">
+        <!-- ATTRACTIVE NOTICE SHOWCASE BANNER (Clickable Anywhere to Expand) -->
+        <div class="notice-showcase" id="home-notice-showcase" onclick="toggleHomeNoticeBannerExpand(event)">
             <div class="notice-showcase-top">
                 <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
-                <div class="notice-showcase-controls">
+                <div class="notice-showcase-controls" onclick="event.stopPropagation()">
                     <span id="home-notice-counter" style="font-size:10px; color:var(--text-secondary);">1 / 1</span>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
@@ -1088,10 +1107,10 @@
             <div class="notice-showcase-body" id="home-notice-text">
                 Welcome to Abdullahil Kuafi's Smart Cloud Hub!
             </div>
-            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;" onclick="toggleHomeNoticeBannerExpand()">Expand</button>
+            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;">Expand</button>
             <div class="notice-showcase-footer">
                 <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
-                <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices')">View Board →</span>
+                <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices'); event.stopPropagation();">View Board →</span>
             </div>
         </div>
 
@@ -1336,10 +1355,10 @@
             </div>
         </div>
 
-        <!-- NEW: Individual Google User Tools & Settings Section -->
+        <!-- Individual Google User Tools & Settings Section -->
         <div class="tools-section-card google-user-only" id="google-user-tools-section">
             <div class="section-label"><span><i class="fa-solid fa-user-gear"></i> My Personal Hub Controls</span></div>
-
+            
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Personal Cloud Notes</h4>
@@ -1414,6 +1433,7 @@
                 </div>
             </div>
 
+            <!-- Card Grid Column Option (2, 3, or 4) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid Columns (2, 3, or 4)</h4>
@@ -1426,6 +1446,7 @@
                 </select>
             </div>
 
+            <!-- Card Grid UI Style (15 Popular Styles) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid UI Style (15 Popular Styles)</h4>
@@ -1447,6 +1468,31 @@
                     <option value="13">13. Pill Shaped Accent</option>
                     <option value="14">14. Velvet Dark Elevation</option>
                     <option value="15">15. Classic Standard Grid</option>
+                </select>
+            </div>
+
+            <!-- NEW: 15 Distinct Card Grid Layout Options -->
+            <div class="setting-row admin-only">
+                <div class="setting-info">
+                    <h4>Card Grid Layout (15 Layout Options)</h4>
+                    <p>Choose structure and spacing layout for cards</p>
+                </div>
+                <select id="grid-layout-select" class="form-select" style="max-width:190px; padding:6px; font-size:11.5px;" onchange="setCardGridLayoutChoice(this.value)">
+                    <option value="1">1. Standard Balanced Grid</option>
+                    <option value="2">2. Compact Dense Grid</option>
+                    <option value="3">3. Spaced Airy Grid</option>
+                    <option value="4">4. Centered Alignment Grid</option>
+                    <option value="5">5. Border-Framed Grid</option>
+                    <option value="6">6. Shadow-Lifted Grid</option>
+                    <option value="7">7. Floating Island Grid</option>
+                    <option value="8">8. Rounded Capsule Grid</option>
+                    <option value="9">9. Minimal Flat Grid</option>
+                    <option value="10">10. Glowing Accent Grid</option>
+                    <option value="11">11. Dual-Tone Gradient Grid</option>
+                    <option value="12">12. Borderless Clean Grid</option>
+                    <option value="13">13. Elevated Card Grid</option>
+                    <option value="14">14. Sharp Geometric Grid</option>
+                    <option value="15">15. Fluid Auto-Fit Grid</option>
                 </select>
             </div>
 
@@ -1493,7 +1539,7 @@
             </div>
         </div>
 
-        <!-- NEW: Expanded Admin Management & All-User Sync Features -->
+        <!-- Expanded Admin Management & All-User Sync Features -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & All-User Sync</span>
@@ -1551,9 +1597,9 @@
             </div>
         </div>
 
-        <!-- Built-in Quick Utilities -->
+        <!-- Built-in Quick Utilities & Focus Pomodoro Timer -->
         <div class="tools-section-card">
-            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities</span></div>
+            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities & Focus Timer</span></div>
             <div class="mini-tools-grid">
                 <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/finance/main')">
                     <i class="fa-solid fa-wallet"></i>
@@ -1571,6 +1617,16 @@
                     <i class="fa-solid fa-rotate"></i>
                     <div>Sync Latest</div>
                 </button>
+            </div>
+
+            <!-- Focus Pomodoro Timer Widget -->
+            <div class="pomodoro-box">
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary);">POMODORO FOCUS TIMER</div>
+                <div class="pomodoro-display" id="pomodoro-timer">25:00</div>
+                <div style="display:flex; justify-content:center; gap:6px;">
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="startPomodoro()">Start</button>
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="resetPomodoro()">Reset</button>
+                </div>
             </div>
         </div>
 
@@ -1822,6 +1878,8 @@
     let isPushing = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
+    let pomodoroInterval = null;
+    let pomodoroSeconds = 1500;
 
     const DEFAULT_CATEGORIES = [
         { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -1844,6 +1902,7 @@
         ],
         gridCols: 3,
         gridStyleChoice: '1',
+        gridLayoutChoice: '1',
         accentPrimary: '#3ded97',
         accentSecondary: '#06b6d4',
         scratchpad: '',
@@ -1918,6 +1977,11 @@
             const styleSelect = document.getElementById('grid-style-select');
             if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
             applyCardGridStyleVars(appState.gridStyleChoice);
+        }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -2009,6 +2073,11 @@
             if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
             applyCardGridStyleVars(appState.gridStyleChoice);
         }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
+        }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
             document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
@@ -2034,6 +2103,7 @@
         const isLight = document.body.classList.toggle('light-mode');
         localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
         updateThemeButtonUI(isLight);
+        applyCardGridStyleVars(appState.gridStyleChoice || '1');
     }
 
     function updateThemeButtonUI(isLight) {
@@ -2616,12 +2686,14 @@
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
     }
 
-    function toggleHomeNoticeBannerExpand() {
+    function toggleHomeNoticeBannerExpand(e) {
+        if (e && e.target.closest('button')) return;
         const txtEl = document.getElementById('home-notice-text');
         const btnEl = document.getElementById('home-notice-exp-btn');
         if (!txtEl || !btnEl) return;
         const isExpanded = txtEl.classList.toggle('expanded');
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+        btnEl.style.display = isExpanded ? 'inline-block' : (txtEl.scrollHeight > txtEl.clientHeight ? 'inline-block' : 'none');
     }
 
     function updateHomeNoticeShowcase() {
@@ -2799,7 +2871,7 @@
         pushStateToCloud(false);
     }
 
-    // 15 Popular Card Styles Harmonized for Both Dark & Light Modes
+    // 15 Popular Card UI Styles Harmonized for Both Dark & Light Modes
     function setCardGridStyle(styleKey) {
         appState.gridStyleChoice = styleKey;
         applyCardGridStyleVars(styleKey);
@@ -2858,6 +2930,74 @@
         document.documentElement.style.setProperty('--card-padding', padding);
     }
 
+    // 15 Distinct Card Grid Layout Options
+    function setCardGridLayoutChoice(layoutKey) {
+        appState.gridLayoutChoice = layoutKey;
+        applyCardGridLayoutVars(layoutKey);
+        pushStateToCloud(false);
+    }
+
+    function applyCardGridLayoutVars(layoutKey) {
+        let align = 'center';
+        let padding = '10px 8px 12px';
+        let gap = '10px';
+
+        switch (layoutKey) {
+            case '1': align = 'center'; padding = '10px 8px 12px'; gap = '10px'; break; // Standard Balanced Grid
+            case '2': align = 'center'; padding = '6px 4px 8px';   gap = '6px';  break; // Compact Dense Grid
+            case '3': align = 'center'; padding = '16px 12px 18px';gap = '16px'; break; // Spaced Airy Grid
+            case '4': align = 'center'; padding = '12px 10px 14px';gap = '10px'; break; // Centered Alignment Grid
+            case '5': align = 'flex-start'; padding = '12px 10px 14px'; gap = '10px'; break; // Border-Framed Grid
+            case '6': align = 'center'; padding = '14px 10px 16px'; gap = '12px'; break; // Shadow-Lifted Grid
+            case '7': align = 'center'; padding = '15px 12px 18px'; gap = '14px'; break; // Floating Island Grid
+            case '8': align = 'center'; padding = '18px 12px 20px'; gap = '10px'; break; // Rounded Capsule Grid
+            case '9': align = 'flex-start'; padding = '8px 8px 10px';   gap = '8px';  break; // Minimal Flat Grid
+            case '10': align = 'center'; padding = '12px 10px 14px'; gap = '12px'; break; // Glowing Accent Grid
+            case '11': align = 'center'; padding = '14px 10px 16px'; gap = '10px'; break; // Dual-Tone Gradient Grid
+            case '12': align = 'center'; padding = '10px 8px 12px';  gap = '10px'; break; // Borderless Clean Grid
+            case '13': align = 'center'; padding = '16px 12px 18px'; gap = '14px'; break; // Elevated Card Grid
+            case '14': align = 'flex-start'; padding = '10px 8px 12px'; gap = '8px';  break; // Sharp Geometric Grid
+            case '15': 
+            default:
+                align = 'center'; padding = '10px 8px 12px'; gap = '10px';
+        }
+
+        document.documentElement.style.setProperty('--card-align', align);
+        document.documentElement.style.setProperty('--card-padding', padding);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+    }
+
+    // Pomodoro Focus Timer Functions
+    function startPomodoro() {
+        if (pomodoroInterval) return;
+        pomodoroInterval = setInterval(() => {
+            if (pomodoroSeconds > 0) {
+                pomodoroSeconds--;
+                updatePomodoroDisplay();
+            } else {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+                alert('Pomodoro session completed! Take a break.');
+            }
+        }, 1000);
+    }
+
+    function resetPomodoro() {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        pomodoroSeconds = 1500;
+        updatePomodoroDisplay();
+    }
+
+    function updatePomodoroDisplay() {
+        const m = Math.floor(pomodoroSeconds / 60);
+        const s = pomodoroSeconds % 60;
+        const disp = document.getElementById('pomodoro-timer');
+        if (disp) {
+            disp.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+    }
+
     function setAccent(primary, secondary, el) {
         appState.accentPrimary = primary;
         appState.accentSecondary = secondary;
@@ -2896,7 +3036,6 @@
         pushStateToCloud(true);
     }
 
-    // Individual Google User Private Notes & Backup
     function openUserNotesModal() {
         const email = auth.currentUser?.email || 'guest';
         const savedNotes = localStorage.getItem(`kuafi_user_notes_${email}`) || '';
@@ -3087,6 +3226,7 @@
         setAccessMode,
         setGridColumns,
         setCardGridStyle,
+        setCardGridLayoutChoice,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
@@ -3100,6 +3240,8 @@
         saveUserPrivateNotes,
         exportUserPersonalData,
         exportGlobalBackup,
+        startPomodoro,
+        resetPomodoro,
         closeModal,
         saveServiceCard,
         removeCardToBin,
