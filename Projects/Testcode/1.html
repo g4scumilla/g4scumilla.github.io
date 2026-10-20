@@ -1,1 +1,3368 @@
-ffg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Abdullahil Kuafi | Smart Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Import Map so standard "firebase/*" imports work directly in the browser -->
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+        }
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: rgba(22, 29, 47, 0.78);
+            --bg-elevated: #1a2235;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3ded97;
+            --accent-secondary: #06b6d4;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+            --app-max-width: 440px;
+            --grid-cols: 3;
+            --grid-gap: 10px;
+            --card-radius: 16px;
+            --card-border: 1px solid var(--border-color);
+            --card-bg: var(--bg-card);
+            --card-shadow: 0 8px 20px -6px rgba(0,0,0,0.2);
+            --card-padding: 10px 8px 12px;
+            --card-align: center;
+        }
+
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: rgba(15, 23, 42, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Access Modes */
+        body.access-android { --app-max-width: 430px; }
+        body.access-tab { --app-max-width: 820px; }
+        body.access-laptop { --app-max-width: 1120px; }
+        body.access-desktop { --app-max-width: 1440px; }
+        body.access-auto { --app-max-width: 100%; }
+
+        @media (min-width: 640px) { body.access-auto { --app-max-width: 780px; } }
+        @media (min-width: 1024px) { body.access-auto { --app-max-width: 1080px; } }
+        @media (min-width: 1366px) { body.access-auto { --app-max-width: 1380px; } }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: var(--app-max-width);
+            min-height: 100vh;
+            position: relative;
+            padding: 0 14px;
+            transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Header */
+        .android-top-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 4px;
+            background: rgba(11, 15, 25, 0.82);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 12px;
+        }
+        body.light-mode .android-top-header {
+            background: rgba(241, 245, 249, 0.88);
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .android-header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+        .android-header-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .header-search-container {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.25s ease;
+        }
+        .header-search-container.open {
+            width: 160px;
+        }
+        .header-search-input {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-size: 12px;
+            outline: none;
+        }
+        .header-icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .header-icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .live-sync-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            background: rgba(61, 237, 151, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(61, 237, 151, 0.25);
+        }
+        body.is-admin .live-sync-indicator {
+            display: inline-flex;
+        }
+        .sync-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .sync-dot.polling {
+            transform: scale(1.5);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .access-mode-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .access-pill {
+            padding: 6px 11px;
+            border-radius: 9px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .access-pill.active {
+            background: rgba(61, 237, 151, 0.15);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Notice Showcase */
+        .notice-showcase {
+            position: relative;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, rgba(61, 237, 151, 0.12) 0%, rgba(6, 182, 212, 0.09) 50%, var(--bg-card) 100%);
+            border: 1px solid rgba(61, 237, 151, 0.35);
+            box-shadow: 0 10px 28px -8px rgba(61, 237, 151, 0.18);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .notice-showcase.urgent {
+            border-color: rgba(244, 63, 94, 0.5);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.14) 0%, rgba(6, 182, 212, 0.05) 50%, var(--bg-card) 100%);
+        }
+        .notice-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+        }
+        .notice-showcase.urgent::before {
+            background: linear-gradient(180deg, var(--danger), var(--warning));
+        }
+        .notice-showcase-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .notice-live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: rgba(61, 237, 151, 0.18);
+            color: var(--accent);
+            border: 1px solid rgba(61, 237, 151, 0.4);
+        }
+        .notice-showcase.urgent .notice-live-badge {
+            background: rgba(244, 63, 94, 0.2);
+            color: var(--danger);
+            border-color: rgba(244, 63, 94, 0.4);
+        }
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            animation: pulseGlow 1.5s infinite;
+        }
+        .notice-showcase.urgent .pulse-dot {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.45); opacity: 0.55; }
+        }
+        .notice-showcase-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notice-nav-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+            font-size: 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notice-showcase-body {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.45;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .notice-showcase-body.expanded {
+            -webkit-line-clamp: unset;
+        }
+        .notice-showcase-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10.5px;
+            color: var(--text-secondary);
+        }
+
+        /* Live Preview Banner */
+        .preview-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(6, 182, 212, 0.16);
+            border: 1px solid var(--accent-secondary);
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .preview-banner.active {
+            display: flex;
+        }
+        .preview-save-btn {
+            background: var(--accent);
+            color: #0b0f19;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Rearrange Banner & Admin Grid Bar */
+        .rearrange-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(61, 237, 151, 0.14);
+            border: 1px solid var(--accent);
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .rearrange-banner.active {
+            display: flex;
+        }
+        .rearrange-done-btn {
+            background: var(--accent);
+            color: #0b0f19;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .admin-grid-toolbar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        body.is-admin .admin-grid-toolbar {
+            display: flex;
+        }
+        .admin-chip-btn {
+            flex: 1;
+            min-width: 105px;
+            padding: 7px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .admin-chip-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .bin-count-badge {
+            background: var(--danger);
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* Filter Category Pills */
+        .controls-section {
+            margin-bottom: 12px;
+        }
+        .filter-pills {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+        .filter-pills::-webkit-scrollbar { display: none; }
+        .pill-wrapper {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            gap: 2px;
+        }
+        .pill {
+            padding: 7px 13px;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .pill.active {
+            background: var(--accent);
+            color: #0b0f19;
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+        .pill-admin-actions {
+            display: none;
+            align-items: center;
+            gap: 2px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 2px 5px;
+        }
+        body.rearrange-active .pill-admin-actions,
+        body.cat-edit-active .pill-admin-actions {
+            display: inline-flex;
+        }
+        .pill-mini-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            cursor: pointer;
+            padding: 2px 3px;
+        }
+        .pill-mini-btn:hover { color: var(--accent); }
+        .pill-mini-btn.del:hover { color: var(--danger); }
+
+        /* Service Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols, 3), minmax(0, 1fr));
+            gap: var(--grid-gap, 10px);
+        }
+
+        .service-item {
+            position: relative;
+            text-decoration: none;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: var(--card-radius);
+            padding: var(--card-padding);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: var(--card-align, center);
+            text-align: var(--card-align, center);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+        .service-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(var(--c-rgb, 61, 237, 151), 0.5);
+            box-shadow: 0 8px 20px -6px rgba(var(--c-rgb, 61, 237, 151), 0.25);
+        }
+        .card-top-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            min-height: 18px;
+        }
+        .live-pill {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 999px;
+            background: rgba(61, 237, 151, 0.16);
+            color: #3ded97;
+            border: 1px solid rgba(61, 237, 151, 0.35);
+        }
+        .dot-placeholder {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.25);
+        }
+        .fav-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: rgba(148, 163, 184, 0.35);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .fav-badge.is-fav {
+            color: #f59e0b;
+        }
+        .icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--c1, #3b82f6), var(--c2, #6366f1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 8px;
+            box-shadow: 0 6px 14px -4px rgba(var(--c-rgb, 59, 130, 246), 0.5);
+        }
+        .card-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2px;
+            color: var(--text-primary);
+        }
+        .card-sub {
+            font-size: 10px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Card Admin Overlay Controls */
+        .card-admin-bar {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 7px;
+            padding-top: 6px;
+            border-top: 1px dashed var(--border-color);
+        }
+        body.is-admin .service-item:hover .card-admin-bar,
+        body.rearrange-active .card-admin-bar {
+            display: flex;
+        }
+        .card-ctrl-btn {
+            width: 23px;
+            height: 23px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-size: 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-ctrl-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .card-ctrl-btn.danger:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .empty-fav-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 28px 16px;
+            background: var(--bg-card);
+            border: 1px dashed var(--border-color);
+            border-radius: 16px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            display: none;
+        }
+        .browse-all-btn {
+            margin-top: 10px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            background: rgba(61, 237, 151, 0.12);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Pages */
+        .page-view {
+            display: none;
+        }
+        .page-view.active {
+            display: block;
+        }
+
+        /* Tools & Notices Cards */
+        .tools-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 8px 0 14px;
+        }
+        .tools-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        .tools-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .tools-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .tools-section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .section-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .setting-row:first-of-type {
+            border-top: none;
+            padding-top: 2px;
+        }
+        .setting-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .setting-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .btn-action {
+            padding: 7px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action:hover {
+            border-color: var(--accent);
+        }
+        .btn-danger {
+            border-color: rgba(244, 63, 94, 0.4);
+            color: var(--danger);
+        }
+
+        /* User Authenticated Only Section */
+        .google-user-only { display: none !important; }
+        body.is-google-auth .google-user-only { display: block !important; }
+        body.is-google-auth .setting-row.google-user-only { display: flex !important; }
+
+        /* Focus Timer Widget */
+        .pomodoro-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .pomodoro-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 6px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Attractive Notices Page Cards & Expandable Text */
+        .notice-input, .quick-note-area {
+            width: 100%;
+            min-height: 80px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 10px;
+            font-size: 12.5px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 8px;
+        }
+        .notice-form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .notice-limit-hint {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .notices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .attractive-notice-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(61, 237, 151, 0.08), var(--bg-elevated));
+            border: 1px solid rgba(61, 237, 151, 0.28);
+            border-left: 4px solid var(--accent);
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+        .attractive-notice-card.urgent {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), var(--bg-elevated));
+            border-color: rgba(244, 63, 94, 0.35);
+        }
+        .attractive-notice-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .notice-badges-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .notice-rank-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(61, 237, 151, 0.14);
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+        .notice-rank-pill.urgent {
+            color: var(--danger);
+            background: rgba(244, 63, 94, 0.16);
+        }
+        .admin-posted-badge {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            padding: 2px 7px;
+            border-radius: 999px;
+        }
+        .notice-time-badge {
+            font-size: 10.5px;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .attractive-notice-text {
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--text-primary);
+            font-weight: 500;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            transition: max-height 0.3s ease;
+        }
+        .attractive-notice-text.expanded {
+            -webkit-line-clamp: unset;
+        }
+        .notice-expand-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            display: inline-block;
+        }
+
+        /* User Profile & Swatches */
+        .user-profile-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-status-pill {
+            display: inline-block;
+            font-size: 10px;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+        .color-swatches-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            max-width: 100%;
+        }
+        .swatch {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s ease;
+        }
+        .swatch.active {
+            border-color: var(--text-primary);
+            transform: scale(1.15);
+        }
+        .mini-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .mini-tool-btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Toast Confirmation Notification */
+        .sync-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: var(--bg-elevated);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .sync-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Admin Visibility & Mutual Login Exclusivity Rules */
+        .admin-only { display: none !important; }
+        body.is-admin .admin-only { display: block !important; }
+        body.is-admin .setting-row.admin-only { display: flex !important; }
+
+        body.is-admin .visitor-only,
+        body.is-google-auth .visitor-only,
+        body.is-admin .service-item[data-id="app-secure"],
+        body.is-google-auth .service-item[data-id="app-secure"] {
+            display: none !important;
+        }
+        body.is-admin:not(.is-google-auth) #google-auth-card {
+            display: none !important;
+        }
+
+        /* Bottom Navigation */
+        .bottom-safe-spacer {
+            height: 86px;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 28px);
+            max-width: calc(var(--app-max-width) - 28px);
+            background: rgba(18, 25, 41, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 6px;
+            z-index: 200;
+        }
+        body.light-mode .bottom-nav {
+            background: rgba(255, 255, 255, 0.94);
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 14px;
+            border-radius: 12px;
+        }
+        .nav-item i { font-size: 16px; }
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(61, 237, 151, 0.1);
+        }
+
+        /* Modals */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            padding: 16px;
+        }
+        .modal-backdrop.open {
+            display: flex;
+        }
+        .modal-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 18px;
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+        .modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 12.5px;
+            outline: none;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .bin-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body class="access-auto">
+<script>
+    (function() {
+        const savedTheme = localStorage.getItem('kuafi_theme_mode');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    })();
+</script>
+
+<div class="app-shell">
+    <!-- TOP HEADER -->
+    <header class="android-top-header">
+        <div class="header-left-group">
+            <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                 alt="Abdullahil Kuafi" 
+                 class="android-header-avatar"
+                 onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+            <span class="android-header-title">Abdullahil Kuafi</span>
+        </div>
+        <div class="header-actions-right">
+            <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                <span class="sync-dot" id="live-sync-dot"></span>
+                <span id="live-sync-text">Live</span>
+            </span>
+            <div class="header-search-container" id="header-search-container">
+                <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
+            </div>
+            <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== HOME PAGE ==================== -->
+    <div id="page-home" class="page-view active">
+
+        <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
+        <div class="notice-showcase" id="home-notice-showcase" onclick="toggleHomeNoticeBannerExpand(event)">
+            <div class="notice-showcase-top">
+                <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
+                <div class="notice-showcase-controls" onclick="event.stopPropagation()">
+                    <span id="home-notice-counter" style="font-size:10px; color:var(--text-secondary);">1 / 1</span>
+                    <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button class="notice-nav-btn" onclick="switchPage('notices')" title="All Notices"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                </div>
+            </div>
+            <div class="notice-showcase-body" id="home-notice-text">
+                Welcome to Abdullahil Kuafi's Smart Cloud Hub!
+            </div>
+            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;">Expand</button>
+            <div class="notice-showcase-footer">
+                <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
+                <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices'); event.stopPropagation();">View Board →</span>
+            </div>
+        </div>
+
+        <!-- Live Preview Banner -->
+        <div class="preview-banner admin-only" id="preview-banner">
+            <span><i class="fa-solid fa-eye" style="color: var(--accent-secondary); margin-right: 6px;"></i>🎨 Live Grid Preview Active</span>
+            <button class="preview-save-btn" onclick="savePreviewAndSync()">Apply to Cloud</button>
+        </div>
+
+        <!-- Rearrange Banner (Admin Only) -->
+        <div class="rearrange-banner admin-only" id="rearrange-banner">
+            <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
+            <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
+        </div>
+
+        <!-- Admin App Grid & Category Management Toolbar -->
+        <div class="admin-grid-toolbar">
+            <button class="admin-chip-btn" onclick="openCardModal()">
+                <i class="fa-solid fa-plus" style="color:var(--accent);"></i> Add Service Card
+            </button>
+            <button class="admin-chip-btn" onclick="openCategoryModal()">
+                <i class="fa-solid fa-tags" style="color:#f59e0b;"></i> Edit Categories
+            </button>
+            <button class="admin-chip-btn" onclick="toggleRearrangeMode()">
+                <i class="fa-solid fa-arrows-up-down-left-right" style="color:#38bdf8;"></i> Rearrange
+            </button>
+            <button class="admin-chip-btn" onclick="openRecycleBinModal()">
+                <i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Recycle Bin
+                <span class="bin-count-badge" id="grid-bin-count">0</span>
+            </button>
+        </div>
+
+        <!-- Quick Filter Category Pills -->
+        <div class="controls-section">
+            <div class="filter-pills" id="filter-pills-container">
+                <button class="pill" id="pill-fav" data-filter="fav" onclick="filterApps('fav', this)"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 4px;"></i>Favourites</button>
+                <button class="pill" id="pill-all" data-filter="all" onclick="filterApps('all', this)">All Apps</button>
+                <button class="pill" id="pill-live" data-filter="live" onclick="filterApps('live', this)">Active Links</button>
+                <button class="pill" id="pill-work" data-filter="work" onclick="filterApps('work', this)">Work & Dev</button>
+                <button class="pill" id="pill-life" data-filter="life" onclick="filterApps('life', this)">Lifestyle</button>
+            </div>
+        </div>
+
+        <!-- 20-Item Link Cards Grid -->
+        <div class="service-grid" id="app-grid">
+            <a href="#" class="service-item" data-id="app-work" data-cat="work" style="--c1:#3b82f6; --c2:#6366f1; --c-rgb:59,130,246;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="card-text"><div class="card-title">Work</div><div class="card-sub">Office & Tasks</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-edu" data-cat="work" style="--c1:#f59e0b; --c2:#ea580c; --c-rgb:245,158,11;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
+            </a>
+            <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" rel="noopener noreferrer" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
+                <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
+                <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
+            </a>
+            <a href="https://g4scumilla.github.io/Projects/Television/index" rel="noopener noreferrer" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
+                <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>
+                <div class="card-text"><div class="card-title">Sports</div><div class="card-sub">Live TV Stream</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-cv" data-cat="work" style="--c1:#8b5cf6; --c2:#6d28d9; --c-rgb:139,92,246;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
+                <div class="card-text"><div class="card-title">CV</div><div class="card-sub">Resume & Bio</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-links" data-cat="work" style="--c1:#0ea5e9; --c2:#0284c7; --c-rgb:14,165,233;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
+                <div class="card-text"><div class="card-title">Links</div><div class="card-sub">Bookmarks</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-media" data-cat="life" style="--c1:#ec4899; --c2:#db2777; --c-rgb:236,72,153;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
+                <div class="card-text"><div class="card-title">Media</div><div class="card-sub">Photos & Clips</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-social" data-cat="life" style="--c1:#6366f1; --c2:#a855f7; --c-rgb:99,102,241;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
+                <div class="card-text"><div class="card-title">Social</div><div class="card-sub">Feeds & Connect</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-docs" data-cat="work" style="--c1:#ef4444; --c2:#dc2626; --c-rgb:239,68,68;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
+                <div class="card-text"><div class="card-title">Docs</div><div class="card-sub">PDFs & Papers</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-blog" data-cat="life" style="--c1:#14b8a6; --c2:#0d9488; --c-rgb:20,184,166;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="card-text"><div class="card-title">Blog</div><div class="card-sub">Notes & Stories</div></div>
+            </a>
+            <a href="javascript:void(0)" onclick="handleSecureCardClick()" class="service-item" data-id="app-secure" data-cat="work" style="--c1:#eab308; --c2:#ca8a04; --c-rgb:234,179,8;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="card-text"><div class="card-title">Admin</div><div class="card-sub" id="secure-card-sub">Login / Lock</div></div>
+            </a>
+            <a href="https://g4scumilla.github.io/Projects/finance/main" rel="noopener noreferrer" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
+                <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
+                <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-growth" data-cat="work" style="--c1:#22c55e; --c2:#16a34a; --c-rgb:34,197,94;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="card-text"><div class="card-title">Growth</div><div class="card-sub">Goals & Stats</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-awards" data-cat="life" style="--c1:#f59e0b; --c2:#d97706; --c-rgb:245,158,11;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
+                <div class="card-text"><div class="card-title">Awards</div><div class="card-sub">Honors & Wins</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-travel" data-cat="life" style="--c1:#06b6d4; --c2:#0891b2; --c-rgb:6,182,212;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-text"><div class="card-title">Travel</div><div class="card-sub">Trips & Maps</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-scan" data-cat="work" style="--c1:#a855f7; --c2:#7e22ce; --c-rgb:168,85,247;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
+                <div class="card-text"><div class="card-title">Scan</div><div class="card-sub">QR & Lens</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-health" data-cat="life" style="--c1:#fb7185; --c2:#e11d48; --c-rgb:251,113,133;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>
+                <div class="card-text"><div class="card-title">Health</div><div class="card-sub">Care & Fitness</div></div>
+            </a>
+            <a href="#" class="service-item" data-id="app-home" data-cat="life" style="--c1:#f97316; --c2:#ea580c; --c-rgb:249,115,22;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
+                <div class="card-text"><div class="card-title">Home</div><div class="card-sub">Personal Space</div></div>
+            </a>
+            <a href="javascript:void(0)" onclick="handleSettingsCardClick()" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>
+                <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
+            </a>
+            <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData()" style="--c1:#3ded97; --c2:#2563eb; --c-rgb:61,237,151;">
+                <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div></div>
+                <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
+                <div class="card-text"><div class="card-title">Sync</div><div class="card-sub">Fetch Live Data</div></div>
+            </a>
+
+            <div class="empty-fav-msg" id="empty-fav-msg">
+                <i class="fa-regular fa-star" style="font-size: 24px; margin-bottom: 8px; display: block; color: #f59e0b;"></i>
+                No favourite apps pinned in Cloud yet.
+                <br>
+                <button class="browse-all-btn" onclick="filterApps('all', document.getElementById('pill-all'))">
+                    Browse All Apps
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-safe-spacer"></div>
+    </div>
+
+    <!-- ==================== NOTICES PAGE ==================== -->
+    <div id="page-notices" class="page-view">
+        <div class="tools-header">
+            <div class="tools-header-left">
+                <button class="back-btn" onclick="goHomeWithFav()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <div class="tools-title">Cloud Notice Board</div>
+                    <div class="tools-subtitle">Live Broadcasts & Announcements</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section-card admin-only">
+            <div class="section-label">
+                <span><i class="fa-solid fa-plus-circle"></i> Post / Edit Global Notice (Admin)</span>
+            </div>
+            <div class="notice-form">
+                <input type="hidden" id="edit-notice-idx" value="">
+                <textarea id="notice-input" class="notice-input" maxlength="400" placeholder="Write a notice for all visitors (English or Bengali)..."></textarea>
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+                    <label style="font-size:11px; color:var(--text-secondary);">Priority:</label>
+                    <select id="notice-priority-input" class="form-select" style="max-width:140px; padding:4px 8px; font-size:11px;">
+                        <option value="normal">Normal</option>
+                        <option value="urgent">High / Urgent</option>
+                    </select>
+                </div>
+                <div class="notice-form-footer">
+                    <span class="notice-limit-hint">Max 30 Notices stored in Cloud</span>
+                    <button class="btn-action" onclick="saveNoticeItem()">
+                        <i class="fa-solid fa-paper-plane"></i> <span id="notice-btn-text">Publish Notice</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section-card">
+            <div class="section-label">
+                <span><i class="fa-solid fa-bullhorn"></i> Recent Notices (Max 30)</span>
+                <span id="notice-count-pill" style="color: var(--text-secondary); font-size: 10px;">0 / 30</span>
+            </div>
+            <div id="notices-list" class="notices-list"></div>
+        </div>
+
+        <div class="bottom-safe-spacer"></div>
+    </div>
+
+    <!-- ==================== TOOLS & SETTINGS PAGE ==================== -->
+    <div id="page-tools" class="page-view">
+        <div class="tools-header">
+            <div class="tools-header-left">
+                <button class="back-btn" onclick="goHomeWithFav()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div>
+                    <div class="tools-title">Tools & Settings</div>
+                    <div class="tools-subtitle">Account Login & Preferences</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google User Authentication Section -->
+        <div class="tools-section-card" id="google-auth-card">
+            <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
+
+            <div class="setting-row" id="google-logged-out-view">
+                <div class="setting-info">
+                    <h4>Google Account Sign-In</h4>
+                    <p>Sign in with your Google account to verify your session.</p>
+                </div>
+                <button class="btn-action btn-google" id="google-login-btn" onclick="loginWithGoogle()">
+                    <i class="fa-brands fa-google" style="color: #4285F4;"></i> <span id="google-login-btn-text">Sign in with Google</span>
+                </button>
+            </div>
+
+            <div class="setting-row" id="google-logged-in-view" style="display: none;">
+                <div class="user-profile-row">
+                    <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
+                    <div class="setting-info" style="min-width: 0;">
+                        <h4 id="google-user-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome!</h4>
+                        <p id="google-user-email" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></p>
+                        <span class="user-status-pill"><i class="fa-solid fa-circle-check"></i> Signed in with Google</span>
+                    </div>
+                </div>
+                <button class="btn-action btn-danger" onclick="logoutGoogle()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
+            </div>
+        </div>
+
+        <!-- "My Profile" Section for Google Logged-In Users -->
+        <div class="tools-section-card google-user-only" id="google-my-profile-section">
+            <div class="section-label"><span><i class="fa-solid fa-id-card"></i> My Profile & Custom Details</span></div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Profile Information</h4>
+                    <p id="profile-details-preview">Edit your name, phone, district & contact info</p>
+                </div>
+                <button class="btn-action" onclick="openProfileModal()">
+                    <i class="fa-solid fa-user-pen"></i> Edit Profile
+                </button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Personal Cloud Notes</h4>
+                    <p>Store your private notes locally tied to your Google session</p>
+                </div>
+                <button class="btn-action" onclick="openUserNotesModal()">
+                    <i class="fa-solid fa-note-sticky"></i> Open Notes
+                </button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Export Personal Backup</h4>
+                    <p>Download your private app favorites and profile settings as JSON</p>
+                </div>
+                <button class="btn-action" onclick="exportUserPersonalData()">
+                    <i class="fa-solid fa-download"></i> Export JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Login Section -->
+        <div class="tools-section-card visitor-only" id="admin-access-section">
+            <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Access</span></div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Are you Abdullahil Kuafi?</h4>
+                    <p>Enter your Admin PIN to manage layout and publish notices.</p>
+                </div>
+                <button class="btn-action" onclick="openAdminModal()">
+                    <i class="fa-solid fa-user-shield"></i> Admin Login
+                </button>
+            </div>
+        </div>
+
+        <!-- Appearance & Access Mode Section -->
+        <div class="tools-section-card">
+            <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Display Theme</h4>
+                    <p>Switch between Dark and Light mode (Saved on refresh)</p>
+                </div>
+                <button class="btn-action" id="theme-toggle" onclick="toggleTheme()">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
+                <div class="setting-info">
+                    <h4>Access Mode</h4>
+                    <p>Switch interface layout for Android, Tab, Laptop, Desktop, or Auto</p>
+                </div>
+                <div class="access-mode-pills" id="access-mode-pills">
+                    <button class="access-pill active" data-mode="auto" onclick="setAccessMode('auto')"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto</button>
+                    <button class="access-pill" data-mode="android" onclick="setAccessMode('android')"><i class="fa-brands fa-android"></i> Android</button>
+                    <button class="access-pill" data-mode="tab" onclick="setAccessMode('tab')"><i class="fa-solid fa-tablet-screen-button"></i> Tab</button>
+                    <button class="access-pill" data-mode="laptop" onclick="setAccessMode('laptop')"><i class="fa-solid fa-laptop"></i> Laptop</button>
+                    <button class="access-pill" data-mode="desktop" onclick="setAccessMode('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grouped Admin Live Grid Customizer (Columns, Style, Layout) -->
+        <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
+            <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
+            
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>1. Card Grid Columns</h4>
+                    <p>Select number of columns (2, 3, or 4)</p>
+                </div>
+                <select id="grid-cols-select" class="form-select" style="max-width:140px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="2">2 Columns</option>
+                    <option value="3" selected>3 Columns</option>
+                    <option value="4">4 Columns</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>2. Card UI Style</h4>
+                    <p>Choose visual theme look for service cards</p>
+                </div>
+                <select id="grid-style-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Modern Glass</option>
+                    <option value="2">2. Neon Glow</option>
+                    <option value="3">3. Ultra Rounded</option>
+                    <option value="4">4. Gradient Border</option>
+                    <option value="5">5. Minimal Flat</option>
+                    <option value="6">6. Deep Floating</option>
+                    <option value="7">7. Executive</option>
+                    <option value="8">8. Cyberpunk</option>
+                    <option value="9">9. Soft Pastel</option>
+                    <option value="10">10. Frosted Tile</option>
+                    <option value="11">11. High Contrast</option>
+                    <option value="12">12. Outline Modern</option>
+                    <option value="13">13. Pill Shaped</option>
+                    <option value="14">14. Velvet Dark</option>
+                    <option value="15">15. Classic Grid</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>3. Card Grid Layout (15 Options)</h4>
+                    <p>Choose structural padding and alignment</p>
+                </div>
+                <select id="grid-layout-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Standard Balanced</option>
+                    <option value="2">2. Compact Dense</option>
+                    <option value="3">3. Spaced Airy</option>
+                    <option value="4">4. Centered Alignment</option>
+                    <option value="5">5. Border-Framed</option>
+                    <option value="6">6. Shadow-Lifted</option>
+                    <option value="7">7. Floating Island</option>
+                    <option value="8">8. Rounded Capsule</option>
+                    <option value="9">9. Minimal Flat</option>
+                    <option value="10">10. Glowing Accent</option>
+                    <option value="11">11. Dual Gradient</option>
+                    <option value="12">12. Borderless Clean</option>
+                    <option value="13">13. Elevated Card</option>
+                    <option value="14">14. Sharp Geometric</option>
+                    <option value="15">15. Fluid Auto-Fit</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tools-section-card admin-only">
+            <div class="section-label"><span><i class="fa-solid fa-palette"></i> Accent Colors</span></div>
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
+                <div class="setting-info" style="margin-bottom: 8px;">
+                    <h4>Accent Color (12 Popular Choices)</h4>
+                    <p>Customize highlight tones for everyone</p>
+                </div>
+                <div class="color-swatches-grid">
+                    <div class="swatch active" data-primary="#3ded97" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)" title="Emerald Mint"></div>
+                    <div class="swatch" data-primary="#10b981" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)" title="Emerald Green"></div>
+                    <div class="swatch" data-primary="#3b82f6" style="background: #3b82f6;" onclick="setAccent('#3b82f6', '#6366f1', this)" title="Royal Blue"></div>
+                    <div class="swatch" data-primary="#06b6d4" style="background: #06b6d4;" onclick="setAccent('#06b6d4', '#3b82f6', this)" title="Cyan Glow"></div>
+                    <div class="swatch" data-primary="#8b5cf6" style="background: #8b5cf6;" onclick="setAccent('#8b5cf6', '#ec4899', this)" title="Electric Violet"></div>
+                    <div class="swatch" data-primary="#ec4899" style="background: #ec4899;" onclick="setAccent('#ec4899', '#f43f5e', this)" title="Hot Pink"></div>
+                    <div class="swatch" data-primary="#f43f5e" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)" title="Crimson Red"></div>
+                    <div class="swatch" data-primary="#f59e0b" style="background: #f59e0b;" onclick="setAccent('#f59e0b', '#ef4444', this)" title="Amber Gold"></div>
+                    <div class="swatch" data-primary="#eab308" style="background: #eab308;" onclick="setAccent('#eab308', '#22c55e', this)" title="Sun Yellow"></div>
+                    <div class="swatch" data-primary="#22c55e" style="background: #22c55e;" onclick="setAccent('#22c55e', '#06b6d4', this)" title="Neon Green"></div>
+                    <div class="swatch" data-primary="#f97316" style="background: #f97316;" onclick="setAccent('#f97316', '#eab308', this)" title="Sunset Orange"></div>
+                    <div class="swatch" data-primary="#64748b" style="background: #64748b;" onclick="setAccent('#64748b', '#0f172a', this)" title="Slate Charcoal"></div>
+                </div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Rearrange Link Cards (Cloud)</h4>
+                    <p>Reorder cards in Cloud for all visitors</p>
+                </div>
+                <button class="btn-action" onclick="openRearrangeFromTools()">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
+                </button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Service Cards & Recycle Bin (Cloud)</h4>
+                    <p>Add new cards or restore removed cards from Recycle Bin</p>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn-action" onclick="openCardModal()"><i class="fa-solid fa-plus"></i> Add</button>
+                    <button class="btn-action" onclick="openRecycleBinModal()"><i class="fa-solid fa-trash-can"></i> Bin (<span id="tools-bin-count">0</span>)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expanded Admin Management & All-User Sync Features -->
+        <div class="tools-section-card admin-only">
+            <div class="section-label">
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & All-User Sync</span>
+                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Firebase Cloud Active ✓</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Force Broadcast Sync</h4>
+                    <p>Instantly broadcast current layout to all active visitors</p>
+                </div>
+                <button class="btn-action" onclick="pushStateToCloud(true)">
+                    <i class="fa-solid fa-satellite-dish"></i> Broadcast Now
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Global Notice Board Clear</h4>
+                    <p>Erase all published notices from Cloud for all users</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearAllNotices()">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Clear Notices
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Export Global Cloud Backup</h4>
+                    <p>Download complete system state JSON for archiving</p>
+                </div>
+                <button class="btn-action" onclick="exportGlobalBackup()">
+                    <i class="fa-solid fa-file-arrow-down"></i> Export System
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Change Admin PIN</h4>
+                    <p>Update the PIN stored in Cloud for Admin Mode</p>
+                </div>
+                <button class="btn-action" onclick="changeAdminPin()">
+                    <i class="fa-solid fa-key"></i> Change PIN
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Exit Admin Mode</h4>
+                    <p>Switch back to General Visitor view</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="logoutAdmin()">
+                    <i class="fa-solid fa-lock"></i> Lock Admin
+                </button>
+            </div>
+        </div>
+
+        <!-- Built-in Quick Utilities & Focus Pomodoro Timer -->
+        <div class="tools-section-card">
+            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities & Focus Timer</span></div>
+            <div class="mini-tools-grid">
+                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/finance/main')">
+                    <i class="fa-solid fa-wallet"></i>
+                    <div>Finance App</div>
+                </button>
+                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index')">
+                    <i class="fa-solid fa-code"></i>
+                    <div>Dev Console</div>
+                </button>
+                <button class="mini-tool-btn" onclick="copyPageUrl()">
+                    <i class="fa-solid fa-share-from-square"></i>
+                    <div>Copy Hub Link</div>
+                </button>
+                <button class="mini-tool-btn" onclick="syncData(true)">
+                    <i class="fa-solid fa-rotate"></i>
+                    <div>Sync Latest</div>
+                </button>
+            </div>
+
+            <!-- Focus Pomodoro Timer Widget -->
+            <div class="pomodoro-box">
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary);">POMODORO FOCUS TIMER</div>
+                <div class="pomodoro-display" id="pomodoro-timer">25:00</div>
+                <div style="display:flex; justify-content:center; gap:6px;">
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="startPomodoro()">Start</button>
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="resetPomodoro()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Scratchpad -->
+        <div class="tools-section-card admin-only">
+            <div class="section-label">
+                <span><i class="fa-solid fa-note-sticky"></i> Admin Cloud Scratchpad</span>
+                <button class="btn-action" style="padding: 4px 10px; font-size: 10px;" onclick="pushStateToCloud(true)">Save Note</button>
+            </div>
+            <textarea id="quick-notes" class="quick-note-area" placeholder="Write admin notes here and tap Save Note to store in Cloud..."></textarea>
+        </div>
+
+        <!-- Global Data Reset -->
+        <div class="tools-section-card admin-only">
+            <div class="section-label"><span><i class="fa-solid fa-database"></i> Global Cloud Data Reset (Admin)</span></div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Card Arrangement Order</h4>
+                    <p>Restore default 20-card sequence in Cloud</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="resetCardOrder()">
+                    <i class="fa-solid fa-rotate-left"></i> Default
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Saved Favourites</h4>
+                    <p id="fav-count-label">0 apps pinned to Favourites</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearFavorites()">
+                    <i class="fa-solid fa-trash"></i> Reset
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Clear Scratchpad</h4>
+                    <p>Erase admin notes from Cloud</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearNotes()">
+                    <i class="fa-solid fa-eraser"></i> Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-safe-spacer"></div>
+    </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-item" id="nav-notices" onclick="switchPage('notices')">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Notices</span>
+    </button>
+    <button class="nav-item" id="nav-tools" onclick="switchPage('tools')">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Settings</span>
+    </button>
+</nav>
+
+<!-- MODAL 1: ADMIN PIN LOGIN -->
+<div class="modal-backdrop" id="admin-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-user-shield" style="color:var(--accent);"></i> Admin Access</span>
+            <button class="card-ctrl-btn" onclick="closeModal('admin-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Enter Admin PIN</label>
+            <input type="password" id="admin-pin-input" class="form-input" placeholder="••••">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('admin-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="verifyAdminPin()">Unlock Admin</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2: ADD / EDIT SERVICE CARD -->
+<div class="modal-backdrop" id="card-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span id="card-modal-title">Add Service Card</span>
+            <button class="card-ctrl-btn" onclick="closeModal('card-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="edit-card-id">
+        <div class="form-group">
+            <label>Card Title</label>
+            <input type="text" id="card-title-input" class="form-input" placeholder="e.g. Portfolio">
+        </div>
+        <div class="form-group">
+            <label>Subtitle</label>
+            <input type="text" id="card-sub-input" class="form-input" placeholder="e.g. Projects & Case Studies">
+        </div>
+        <div class="form-group">
+            <label>Target Link (URL)</label>
+            <input type="text" id="card-href-input" class="form-input" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <select id="card-cat-input" class="form-select"></select>
+        </div>
+        <div class="form-group">
+            <label>FontAwesome Icon Class</label>
+            <input type="text" id="card-icon-input" class="form-input" placeholder="fa-solid fa-rocket">
+        </div>
+        <div class="form-group" style="display:flex; gap:10px; align-items:center;">
+            <div style="flex:1;">
+                <label>Primary Color</label>
+                <input type="color" id="card-c1-input" class="form-input" value="#3ded97" style="height:36px; padding:2px;">
+            </div>
+            <div style="flex:1;">
+                <label>Secondary Color</label>
+                <input type="color" id="card-c2-input" class="form-input" value="#06b6d4" style="height:36px; padding:2px;">
+            </div>
+            <div style="padding-top:14px;">
+                <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-primary);">
+                    <input type="checkbox" id="card-live-input"> Mark as Live
+                </label>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('card-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveServiceCard()">Save & Sync</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 3: RECYCLE BIN -->
+<div class="modal-backdrop" id="recycle-bin-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Cloud Recycle Bin</span>
+            <button class="card-ctrl-btn" onclick="closeModal('recycle-bin-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="recycle-bin-list"></div>
+        <div class="modal-actions">
+            <button class="btn-action btn-danger" onclick="emptyRecycleBin()"><i class="fa-solid fa-fire"></i> Empty Bin</button>
+            <button class="btn-action" onclick="closeModal('recycle-bin-modal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 4: MANAGE / ADD CATEGORIES -->
+<div class="modal-backdrop" id="category-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-tags" style="color:var(--accent);"></i> Manage Filter Categories</span>
+            <button class="card-ctrl-btn" onclick="closeModal('category-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="category-manager-list" style="margin-bottom:12px;"></div>
+        <div style="border-top:1px solid var(--border-color); padding-top:10px;">
+            <div class="form-group">
+                <label>Add or Edit Category Name</label>
+                <input type="text" id="cat-label-input" class="form-input" placeholder="e.g. Cloud Tools">
+                <input type="hidden" id="cat-edit-key">
+            </div>
+            <div class="form-group">
+                <label>Category Filter Key (lowercase)</label>
+                <input type="text" id="cat-key-input" class="form-input" placeholder="e.g. cloud">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="resetDefaultCategories()">Restore Defaults</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveCategoryItem()">Save Category</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 5: PERSONAL USER NOTES -->
+<div class="modal-backdrop" id="user-notes-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-note-sticky" style="color:var(--accent);"></i> My Private Google Notes</span>
+            <button class="card-ctrl-btn" onclick="closeModal('user-notes-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Private Notes (Saved only on your browser)</label>
+            <textarea id="user-private-notes-textarea" class="quick-note-area" placeholder="Write your private tasks or reminders here..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('user-notes-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserPrivateNotes()">Save Notes</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 6: MY PROFILE CUSTOMIZATION -->
+<div class="modal-backdrop" id="user-profile-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile Details</span>
+            <button class="card-ctrl-btn" onclick="closeModal('user-profile-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profile-name-input" class="form-input" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="profile-phone-input" class="form-input" placeholder="+8801...">
+        </div>
+        <div class="form-group">
+            <label>District / Location</label>
+            <input type="text" id="profile-district-input" class="form-input" placeholder="e.g. Comilla">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('user-profile-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save Details</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sync Toast Confirmation Element -->
+<div class="sync-toast" id="sync-toast">✓ Successfully Synced to Cloud!</div>
+
+<script type="module">
+    import { initializeApp } from "firebase/app";
+    import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signInWithRedirect,
+        signOut,
+        onAuthStateChanged
+    } from "firebase/auth";
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        onSnapshot
+    } from "firebase/firestore";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+        authDomain: "my-project-1-13e18.firebaseapp.com",
+        projectId: "my-project-1-13e18",
+        storageBucket: "my-project-1-13e18.firebasestorage.app",
+        messagingSenderId: "628695847732",
+        appId: "1:628695847732:web:03af3d8569762d29ce0b61"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    let db = null;
+    let hubDocRef = null;
+    try {
+        db = getFirestore(app);
+        hubDocRef = doc(db, "kuafi_hub", "global_state");
+    } catch (e) {
+        console.warn("Firestore initialization warning:", e);
+    }
+
+    const FIREBASE_RTDB_REST_URL = `https://${firebaseConfig.projectId}-default-rtdb.firebaseio.com/kuafi_hub_global.json`;
+    const AUTO_POLL_INTERVAL_MS = 4500;
+
+    const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
+    const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
+    const THEME_STORAGE_KEY = 'kuafi_theme_mode';
+
+    let isAdmin = false;
+    let isGoogleLoggedIn = false;
+    let isPreviewMode = false;
+    let isPushing = false;
+    let currentFilter = 'fav';
+    let homeNoticeIdx = 0;
+    let pomodoroInterval = null;
+    let pomodoroSeconds = 1500;
+
+    const DEFAULT_CATEGORIES = [
+        { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
+        { key: 'all', label: 'All Apps', icon: '', iconColor: '' },
+        { key: 'live', label: 'Active Links', icon: '', iconColor: '' },
+        { key: 'work', label: 'Work & Dev', icon: '', iconColor: '' },
+        { key: 'life', label: 'Lifestyle', icon: '', iconColor: '' }
+    ];
+
+    let appState = {
+        updatedAt: 0,
+        adminPin: '1234',
+        favorites: ['app-dev', 'app-finance', 'app-sports'],
+        cardOrder: [],
+        cardsData: [],
+        recycleBin: [],
+        categories: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
+        notices: [
+            { text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }
+        ],
+        gridCols: 3,
+        gridStyleChoice: '1',
+        gridLayoutChoice: '1',
+        accentPrimary: '#3ded97',
+        accentSecondary: '#06b6d4',
+        scratchpad: '',
+        accessMode: 'auto'
+    };
+
+    function extractInitialDomCards() {
+        const els = Array.from(document.querySelectorAll('#app-grid .service-item'));
+        return els.map(el => {
+            const id = el.getAttribute('data-id');
+            const cat = el.getAttribute('data-cat') || 'work';
+            const live = el.getAttribute('data-live') === 'true';
+            const href = el.getAttribute('href') || '#';
+            const onclickAttr = el.getAttribute('onclick') || '';
+            const title = el.querySelector('.card-title')?.innerText || '';
+            const sub = el.querySelector('.card-sub')?.innerText || '';
+            const icon = el.querySelector('.icon-circle i')?.className || 'fa-solid fa-cube';
+            const style = el.getAttribute('style') || '';
+            const c1Match = style.match(/--c1:\s*([^;]+)/);
+            const c2Match = style.match(/--c2:\s*([^;]+)/);
+            const rgbMatch = style.match(/--c-rgb:\s*([^;]+)/);
+            return {
+                id, title, sub, href, cat, live, icon, onclickAttr,
+                c1: c1Match ? c1Match[1].trim() : '#3b82f6',
+                c2: c2Match ? c2Match[1].trim() : '#6366f1',
+                cRgb: rgbMatch ? rgbMatch[1].trim() : '59,130,246'
+            };
+        });
+    }
+
+    const INITIAL_20_CARDS = extractInitialDomCards();
+
+    function isUserActivelyEditingForm() {
+        const anyModalOpen = document.querySelector('.modal-backdrop.open') !== null;
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        const isTyping = (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT');
+        return anyModalOpen || isTyping || isPreviewMode || isPushing;
+    }
+
+    function showSyncToast(message = '✓ Successfully Synced to Cloud!') {
+        const toast = document.getElementById('sync-toast');
+        if (!toast) return;
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2800);
+    }
+
+    function applyCloudStateToUI(incomingState, forceRender = false) {
+        if (!incomingState || typeof incomingState !== 'object') return;
+        const incomingTime = Number(incomingState.updatedAt || 0);
+        const localTime = Number(appState.updatedAt || 0);
+        if (!forceRender && incomingTime > 0 && incomingTime <= localTime) {
+            return;
+        }
+
+        appState = { ...appState, ...incomingState };
+        if (!appState.cardsData || appState.cardsData.length === 0) {
+            appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
+        }
+        if (!appState.categories || appState.categories.length === 0) {
+            appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+        }
+
+        if (appState.gridCols) {
+            document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+            const gridSelect = document.getElementById('grid-cols-select');
+            if (gridSelect) gridSelect.value = String(appState.gridCols);
+        }
+        if (appState.gridStyleChoice) {
+            const styleSelect = document.getElementById('grid-style-select');
+            if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
+            applyCardGridStyleVars(appState.gridStyleChoice);
+        }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
+        }
+        if (appState.accentPrimary && appState.accentSecondary) {
+            document.documentElement.style.setProperty('--accent', appState.accentPrimary);
+            document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
+            document.querySelectorAll('.swatch').forEach(s => {
+                s.classList.toggle('active', s.getAttribute('data-primary') === appState.accentPrimary);
+            });
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+    }
+
+    function pulseSyncBadge(label = 'Live') {
+        const dot = document.getElementById('live-sync-dot');
+        const txt = document.getElementById('live-sync-text');
+        if (txt) txt.innerText = label;
+        if (dot) {
+            dot.classList.add('polling');
+            setTimeout(() => dot.classList.remove('polling'), 600);
+        }
+    }
+
+    function initApp() {
+        applySavedThemeOnLoad();
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                appState = { ...appState, ...parsed };
+            } catch (e) {}
+        }
+        if (!appState.cardsData || appState.cardsData.length === 0) {
+            appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
+        }
+        if (!appState.categories || appState.categories.length === 0) {
+            appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+        }
+
+        if (localStorage.getItem('kuafi_admin_unlocked') === 'true') {
+            isAdmin = true;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                applyGoogleUser({
+                    name: user.displayName || 'Google User',
+                    email: user.email || '',
+                    avatar: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=3ded97&color=0b0f19`
+                });
+            } else {
+                isGoogleLoggedIn = false;
+                document.getElementById('google-logged-out-view').style.display = 'flex';
+                document.getElementById('google-logged-in-view').style.display = 'none';
+                updateAuthAndAdminUI();
+                filterApps(currentFilter);
+            }
+        });
+
+        if (hubDocRef) {
+            onSnapshot(hubDocRef, (snap) => {
+                if (snap.exists() && !isUserActivelyEditingForm()) {
+                    applyCloudStateToUI(snap.data());
+                    pulseSyncBadge('Live');
+                }
+            }, (err) => {
+                console.warn("Firestore live listener standby:", err.message);
+            });
+        }
+
+        syncData(true);
+        setInterval(() => {
+            if (!document.hidden && !isUserActivelyEditingForm()) {
+                syncData(false);
+            }
+        }, AUTO_POLL_INTERVAL_MS);
+
+        if (appState.gridCols) {
+            document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+            const gridSelect = document.getElementById('grid-cols-select');
+            if (gridSelect) gridSelect.value = String(appState.gridCols);
+        }
+        if (appState.gridStyleChoice) {
+            const styleSelect = document.getElementById('grid-style-select');
+            if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
+            applyCardGridStyleVars(appState.gridStyleChoice);
+        }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
+        }
+        if (appState.accentPrimary && appState.accentSecondary) {
+            document.documentElement.style.setProperty('--accent', appState.accentPrimary);
+            document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
+        }
+
+        setAccessMode(appState.accessMode || 'auto', false);
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+
+        goHomeWithFav();
+    }
+
+    function applySavedThemeOnLoad() {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+        const isLight = (savedTheme === 'light');
+        document.body.classList.toggle('light-mode', isLight);
+        updateThemeButtonUI(isLight);
+    }
+
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-mode');
+        localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+        updateThemeButtonUI(isLight);
+        applyCardGridStyleVars(appState.gridStyleChoice || '1');
+    }
+
+    function updateThemeButtonUI(isLight) {
+        const themeText = document.getElementById('theme-text');
+        const themeIcon = document.getElementById('theme-icon');
+        if (themeText) themeText.innerText = isLight ? 'Light Mode' : 'Dark Mode';
+        if (themeIcon) {
+            themeIcon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    }
+
+    async function loginWithGoogle() {
+        const btnText = document.getElementById('google-login-btn-text');
+        if (btnText) btnText.innerText = 'Signing in...';
+
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            if (result && result.user) {
+                applyGoogleUser({
+                    name: result.user.displayName || 'Google User',
+                    email: result.user.email || '',
+                    avatar: result.user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(result.user.displayName || 'U')}&background=3ded97&color=0b0f19`
+                });
+            }
+        } catch (error) {
+            console.error('Firebase Google Sign-In Error:', error);
+            if (error.code === 'auth/popup-blocked') {
+                await signInWithRedirect(auth, googleProvider);
+                return;
+            } else if (error.code !== 'auth/popup-closed-by-user') {
+                alert('Google Sign-In Error: ' + (error.message || error.code));
+            }
+        } finally {
+            if (btnText) btnText.innerText = 'Sign in with Google';
+        }
+    }
+
+    function applyGoogleUser(user) {
+        isGoogleLoggedIn = true;
+        document.getElementById('google-logged-out-view').style.display = 'none';
+        document.getElementById('google-logged-in-view').style.display = 'flex';
+        
+        const emailKey = user.email || 'default';
+        const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${emailKey}`) || '{}');
+
+        const finalName = customProfile.name || user.name || 'Welcome!';
+        const finalEmail = user.email || '';
+
+        document.getElementById('google-user-name').innerText = finalName;
+        document.getElementById('google-user-email').innerText = finalEmail;
+        document.getElementById('google-user-avatar').src = user.avatar || 'https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19';
+
+        const previewEl = document.getElementById('profile-details-preview');
+        if (previewEl) {
+            previewEl.innerText = `${finalName} • ${customProfile.phone || 'No phone'} • ${customProfile.district || 'No district'}`;
+        }
+
+        if (user.email && ADMIN_GOOGLE_EMAILS.includes(user.email.toLowerCase())) {
+            isAdmin = true;
+            localStorage.setItem('kuafi_admin_unlocked', 'true');
+        }
+
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+    }
+
+    async function logoutGoogle() {
+        try {
+            await signOut(auth);
+        } catch (e) {}
+        isGoogleLoggedIn = false;
+        localStorage.removeItem('kuafi_google_user');
+        document.getElementById('google-logged-out-view').style.display = 'flex';
+        document.getElementById('google-logged-in-view').style.display = 'none';
+        updateAuthAndAdminUI();
+        filterApps(currentFilter);
+    }
+
+    function updateAuthAndAdminUI() {
+        document.body.classList.toggle('is-admin', isAdmin);
+        document.body.classList.toggle('is-google-auth', isGoogleLoggedIn);
+
+        const adminAccessSection = document.getElementById('admin-access-section');
+        if (adminAccessSection) {
+            adminAccessSection.style.display = (isAdmin || isGoogleLoggedIn) ? 'none' : 'block';
+        }
+
+        const googleAuthCard = document.getElementById('google-auth-card');
+        if (googleAuthCard) {
+            googleAuthCard.style.display = (isAdmin && !isGoogleLoggedIn) ? 'none' : 'block';
+        }
+
+        const secureCard = document.querySelector('.service-item[data-id="app-secure"]');
+        if (secureCard) {
+            secureCard.style.display = (isAdmin || isGoogleLoggedIn) ? 'none' : 'flex';
+        }
+
+        const binCount = (appState.recycleBin || []).length;
+        const gridBinBadge = document.getElementById('grid-bin-count');
+        const toolsBinBadge = document.getElementById('tools-bin-count');
+        if (gridBinBadge) gridBinBadge.innerText = binCount;
+        if (toolsBinBadge) toolsBinBadge.innerText = binCount;
+
+        const favLabel = document.getElementById('fav-count-label');
+        if (favLabel) favLabel.innerText = `${(appState.favorites || []).length} apps pinned to Favourites`;
+
+        const notesArea = document.getElementById('quick-notes');
+        if (notesArea && document.activeElement !== notesArea) {
+            notesArea.value = appState.scratchpad || '';
+        }
+    }
+
+    function setAccessMode(mode, save = true) {
+        document.body.classList.remove('access-auto', 'access-android', 'access-tab', 'access-laptop', 'access-desktop');
+        document.body.classList.add('access-' + mode);
+        appState.accessMode = mode;
+
+        document.querySelectorAll('#access-mode-pills .access-pill').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+        });
+
+        if (save) pushStateToCloud(false);
+    }
+
+    function renderCategories() {
+        const container = document.getElementById('filter-pills-container');
+        container.innerHTML = '';
+
+        appState.categories.forEach((cat, idx) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'pill-wrapper';
+
+            const btn = document.createElement('button');
+            btn.className = 'pill' + (currentFilter === cat.key ? ' active' : '');
+            btn.id = 'pill-' + cat.key;
+            btn.setAttribute('data-filter', cat.key);
+            btn.onclick = () => filterApps(cat.key, btn);
+
+            const iconHtml = cat.icon ? `<i class="${cat.icon}" style="color: ${cat.iconColor || 'inherit'}; margin-right: 4px;"></i>` : '';
+            btn.innerHTML = `${iconHtml}${cat.label}`;
+            wrap.appendChild(btn);
+
+            if (isAdmin) {
+                const adminBar = document.createElement('div');
+                adminBar.className = 'pill-admin-actions';
+                adminBar.innerHTML = `
+                    <button class="pill-mini-btn" title="Move Left" onclick="moveCategory(${idx}, -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="pill-mini-btn" title="Edit" onclick="editCategoryPrompt('${cat.key}')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="pill-mini-btn del" title="Delete" onclick="deleteCategory('${cat.key}')"><i class="fa-solid fa-trash"></i></button>
+                    <button class="pill-mini-btn" title="Move Right" onclick="moveCategory(${idx}, 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                `;
+                wrap.appendChild(adminBar);
+            }
+
+            container.appendChild(wrap);
+        });
+
+        const catSelect = document.getElementById('card-cat-input');
+        if (catSelect) {
+            catSelect.innerHTML = appState.categories
+                .filter(c => c.key !== 'fav' && c.key !== 'all' && c.key !== 'live')
+                .map(c => `<option value="${c.key}">${c.label}</option>`)
+                .join('');
+        }
+    }
+
+    function moveCategory(idx, dir) {
+        const target = idx + dir;
+        if (target < 0 || target >= appState.categories.length) return;
+        const temp = appState.categories[idx];
+        appState.categories[idx] = appState.categories[target];
+        appState.categories[target] = temp;
+        renderCategories();
+        pushStateToCloud(false);
+    }
+
+    function editCategoryPrompt(key) {
+        const cat = appState.categories.find(c => c.key === key);
+        if (!cat) return;
+        const newName = prompt('Edit Category Title:', cat.label);
+        if (newName && newName.trim()) {
+            cat.label = newName.trim();
+            renderCategories();
+            pushStateToCloud(false);
+        }
+    }
+
+    function deleteCategory(key) {
+        if (key === 'fav' || key === 'all') {
+            alert('Favourites and All Apps are core tabs and cannot be removed.');
+            return;
+        }
+        if (!confirm(`Delete category "${key}" and sync to all users?`)) return;
+        appState.categories = appState.categories.filter(c => c.key !== key);
+        if (currentFilter === key) currentFilter = 'fav';
+        renderCategories();
+        filterApps(currentFilter, document.getElementById('pill-' + currentFilter));
+        pushStateToCloud(false);
+    }
+
+    function openCategoryModal() {
+        const list = document.getElementById('category-manager-list');
+        list.innerHTML = appState.categories.map((c, i) => `
+            <div class="bin-item">
+                <span style="font-size:12.5px; font-weight:600;">${c.label} <small style="color:var(--text-secondary);">(${c.key})</small></span>
+                <div style="display:flex; gap:4px;">
+                    <button class="card-ctrl-btn" onclick="moveCategory(${i}, -1); openCategoryModal();"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="card-ctrl-btn" onclick="moveCategory(${i}, 1); openCategoryModal();"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="card-ctrl-btn" onclick="editCategoryPrompt('${c.key}'); openCategoryModal();"><i class="fa-solid fa-pen"></i></button>
+                    ${(c.key !== 'fav' && c.key !== 'all') ? `<button class="card-ctrl-btn danger" onclick="deleteCategory('${c.key}'); openCategoryModal();"><i class="fa-solid fa-trash"></i></button>` : ''}
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('cat-label-input').value = '';
+        document.getElementById('cat-key-input').value = '';
+        openModal('category-modal');
+    }
+
+    function saveCategoryItem() {
+        const label = document.getElementById('cat-label-input').value.trim();
+        const key = document.getElementById('cat-key-input').value.trim().toLowerCase().replace(/\s+/g, '-');
+        if (!label || !key) return alert('Please enter both a category name and key.');
+        const existing = appState.categories.find(c => c.key === key);
+        if (existing) {
+            existing.label = label;
+        } else {
+            appState.categories.push({ key, label, icon: '', iconColor: '' });
+        }
+        renderCategories();
+        openCategoryModal();
+        pushStateToCloud(false);
+    }
+
+    function resetDefaultCategories() {
+        appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+        renderCategories();
+        openCategoryModal();
+        pushStateToCloud(false);
+    }
+
+    function renderServiceGrid() {
+        const grid = document.getElementById('app-grid');
+        const emptyMsg = document.getElementById('empty-fav-msg');
+        grid.querySelectorAll('.service-item').forEach(el => el.remove());
+
+        appState.cardsData.forEach(card => {
+            const isFav = (appState.favorites || []).includes(card.id);
+            const a = document.createElement('a');
+            a.className = 'service-item';
+            a.setAttribute('href', card.href || '#');
+            a.setAttribute('data-id', card.id);
+            a.setAttribute('data-cat', card.cat || 'work');
+            if (card.live) a.setAttribute('data-live', 'true');
+            if (card.href && card.href.startsWith('http')) {
+                a.setAttribute('rel', 'noopener noreferrer');
+            }
+            if (card.onclickAttr) {
+                a.setAttribute('onclick', card.onclickAttr);
+            }
+            a.setAttribute('style', `--c1:${card.c1}; --c2:${card.c2}; --c-rgb:${card.cRgb};`);
+
+            a.innerHTML = `
+                <div class="card-top-bar">
+                    ${card.live ? '<span class="live-pill">Live</span>' : '<span class="dot-placeholder"></span>'}
+                    <div class="fav-badge ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${card.id}')">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+                <div class="icon-circle"><i class="${card.icon}"></i></div>
+                <div class="card-text">
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-sub">${card.sub}</div>
+                </div>
+                <div class="card-admin-bar" onclick="event.preventDefault(); event.stopPropagation();">
+                    <button class="card-ctrl-btn" title="Move Back" onclick="moveCardInCurrentView('${card.id}', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="card-ctrl-btn" title="Edit Card" onclick="openCardModal('${card.id}')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="card-ctrl-btn danger" title="Move to Recycle Bin" onclick="removeCardToBin('${card.id}')"><i class="fa-solid fa-trash"></i></button>
+                    <button class="card-ctrl-btn" title="Move Forward" onclick="moveCardInCurrentView('${card.id}', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            `;
+            grid.insertBefore(a, emptyMsg);
+        });
+
+        updateAuthAndAdminUI();
+        filterApps(currentFilter, document.getElementById('pill-' + currentFilter));
+    }
+
+    function filterApps(filterKey, pillEl) {
+        currentFilter = filterKey;
+        document.querySelectorAll('#filter-pills-container .pill').forEach(p => p.classList.remove('active'));
+        const activePill = pillEl || document.getElementById('pill-' + filterKey);
+        if (activePill) activePill.classList.add('active');
+
+        const items = Array.from(document.querySelectorAll('#app-grid .service-item'));
+        let visibleCount = 0;
+
+        items.forEach(item => {
+            const id = item.getAttribute('data-id');
+            if (id === 'app-secure' && (isAdmin || isGoogleLoggedIn)) {
+                item.style.display = 'none';
+                return;
+            }
+
+            const cat = item.getAttribute('data-cat');
+            const isLive = item.getAttribute('data-live') === 'true';
+            const isFav = (appState.favorites || []).includes(id);
+
+            let show = false;
+            if (filterKey === 'all') show = true;
+            else if (filterKey === 'fav') show = isFav;
+            else if (filterKey === 'live') show = isLive;
+            else show = (cat === filterKey);
+
+            item.style.display = show ? 'flex' : 'none';
+            if (show) visibleCount++;
+        });
+
+        const emptyFavMsg = document.getElementById('empty-fav-msg');
+        if (emptyFavMsg) {
+            emptyFavMsg.style.display = (filterKey === 'fav' && visibleCount === 0) ? 'block' : 'none';
+        }
+    }
+
+    function moveCardInCurrentView(cardId, direction) {
+        const visibleIds = Array.from(document.querySelectorAll('#app-grid .service-item'))
+            .filter(el => el.style.display !== 'none')
+            .map(el => el.getAttribute('data-id'));
+
+        const posInVisible = visibleIds.indexOf(cardId);
+        const targetVisiblePos = posInVisible + direction;
+        if (posInVisible === -1 || targetVisiblePos < 0 || targetVisiblePos >= visibleIds.length) return;
+
+        const swapId = visibleIds[targetVisiblePos];
+        const idxA = appState.cardsData.findIndex(c => c.id === cardId);
+        const idxB = appState.cardsData.findIndex(c => c.id === swapId);
+        if (idxA === -1 || idxB === -1) return;
+
+        const temp = appState.cardsData[idxA];
+        appState.cardsData[idxA] = appState.cardsData[idxB];
+        appState.cardsData[idxB] = temp;
+
+        if (currentFilter === 'fav') {
+            const favA = appState.favorites.indexOf(cardId);
+            const favB = appState.favorites.indexOf(swapId);
+            if (favA !== -1 && favB !== -1) {
+                const tFav = appState.favorites[favA];
+                appState.favorites[favA] = appState.favorites[favB];
+                appState.favorites[favB] = tFav;
+            }
+        }
+
+        renderServiceGrid();
+        pushStateToCloud(false);
+    }
+
+    function hexToRgbString(hex) {
+        const clean = hex.replace('#', '');
+        const num = parseInt(clean, 16);
+        return `${(num >> 16) & 255},${(num >> 8) & 255},${num & 255}`;
+    }
+
+    function openCardModal(cardId = '') {
+        renderCategories();
+        const modalTitle = document.getElementById('card-modal-title');
+        document.getElementById('edit-card-id').value = cardId;
+
+        if (cardId) {
+            const card = appState.cardsData.find(c => c.id === cardId);
+            if (!card) return;
+            modalTitle.innerText = 'Edit Service Card';
+            document.getElementById('card-title-input').value = card.title;
+            document.getElementById('card-sub-input').value = card.sub;
+            document.getElementById('card-href-input').value = card.href;
+            document.getElementById('card-cat-input').value = card.cat;
+            document.getElementById('card-icon-input').value = card.icon;
+            document.getElementById('card-c1-input').value = card.c1.startsWith('#') ? card.c1 : '#3ded97';
+            document.getElementById('card-c2-input').value = card.c2.startsWith('#') ? card.c2 : '#06b6d4';
+            document.getElementById('card-live-input').checked = !!card.live;
+        } else {
+            modalTitle.innerText = 'Add New Service Card';
+            document.getElementById('card-title-input').value = '';
+            document.getElementById('card-sub-input').value = '';
+            document.getElementById('card-href-input').value = 'https://';
+            document.getElementById('card-icon-input').value = 'fa-solid fa-layer-group';
+            document.getElementById('card-c1-input').value = '#3ded97';
+            document.getElementById('card-c2-input').value = '#06b6d4';
+            document.getElementById('card-live-input').checked = false;
+        }
+        openModal('card-modal');
+    }
+
+    function saveServiceCard() {
+        const editId = document.getElementById('edit-card-id').value;
+        const title = document.getElementById('card-title-input').value.trim();
+        const sub = document.getElementById('card-sub-input').value.trim();
+        const href = document.getElementById('card-href-input').value.trim() || '#';
+        const cat = document.getElementById('card-cat-input').value || 'work';
+        const icon = document.getElementById('card-icon-input').value.trim() || 'fa-solid fa-cube';
+        const c1 = document.getElementById('card-c1-input').value;
+        const c2 = document.getElementById('card-c2-input').value;
+        const live = document.getElementById('card-live-input').checked;
+
+        if (!title) return alert('Card Title is required.');
+
+        if (editId) {
+            const idx = appState.cardsData.findIndex(c => c.id === editId);
+            if (idx !== -1) {
+                appState.cardsData[idx] = {
+                    ...appState.cardsData[idx],
+                    title, sub, href, cat, icon, c1, c2,
+                    cRgb: hexToRgbString(c1),
+                    live
+                };
+            }
+        } else {
+            const newId = 'app-custom-' + Date.now();
+            appState.cardsData.push({
+                id: newId,
+                title, sub, href, cat, icon, c1, c2,
+                cRgb: hexToRgbString(c1),
+                live,
+                onclickAttr: ''
+            });
+            if (currentFilter === 'fav') {
+                appState.favorites.push(newId);
+            }
+        }
+
+        closeModal('card-modal');
+        renderServiceGrid();
+        pushStateToCloud(false);
+    }
+
+    function removeCardToBin(cardId) {
+        const idx = appState.cardsData.findIndex(c => c.id === cardId);
+        if (idx === -1) return;
+        const [removed] = appState.cardsData.splice(idx, 1);
+        removed.deletedAt = new Date().toLocaleString();
+        appState.recycleBin = appState.recycleBin || [];
+        appState.recycleBin.unshift(removed);
+
+        renderServiceGrid();
+        pushStateToCloud(false);
+    }
+
+    function openRecycleBinModal() {
+        const list = document.getElementById('recycle-bin-list');
+        const bin = appState.recycleBin || [];
+        if (bin.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-secondary); font-size:12.5px;">Recycle Bin is empty.</div>`;
+        } else {
+            list.innerHTML = bin.map(item => `
+                <div class="bin-item">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="icon-circle" style="width:32px; height:32px; font-size:13px; margin:0; --c1:${item.c1}; --c2:${item.c2};">
+                            <i class="${item.icon}"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:12.5px; font-weight:700;">${item.title}</div>
+                            <div style="font-size:10px; color:var(--text-secondary);">${item.sub} • ${item.deletedAt || ''}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="restoreFromBin('${item.id}')">
+                            <i class="fa-solid fa-rotate-left"></i> Restore
+                        </button>
+                        <button class="btn-action btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deletePermanentlyFromBin('${item.id}')">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        openModal('recycle-bin-modal');
+    }
+
+    function restoreFromBin(cardId) {
+        const idx = (appState.recycleBin || []).findIndex(c => c.id === cardId);
+        if (idx === -1) return;
+        const [restored] = appState.recycleBin.splice(idx, 1);
+        delete restored.deletedAt;
+        appState.cardsData.push(restored);
+        renderServiceGrid();
+        openRecycleBinModal();
+        pushStateToCloud(false);
+    }
+
+    function deletePermanentlyFromBin(cardId) {
+        appState.recycleBin = (appState.recycleBin || []).filter(c => c.id !== cardId);
+        appState.favorites = (appState.favorites || []).filter(id => id !== cardId);
+        updateAuthAndAdminUI();
+        openRecycleBinModal();
+        pushStateToCloud(false);
+    }
+
+    function emptyRecycleBin() {
+        if (!appState.recycleBin || appState.recycleBin.length === 0) return;
+        if (!confirm('Permanently empty all items in the Cloud Recycle Bin?')) return;
+        appState.recycleBin = [];
+        updateAuthAndAdminUI();
+        openRecycleBinModal();
+        pushStateToCloud(false);
+    }
+
+    function goHomeWithFav() {
+        switchPage('home');
+        const favPill = document.getElementById('pill-fav');
+        filterApps('fav', favPill);
+    }
+
+    function switchPage(pageId) {
+        document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('page-' + pageId);
+        if (target) target.classList.add('active');
+
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+        const navBtn = document.getElementById('nav-' + pageId);
+        if (navBtn) navBtn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleFav(e, cardId) {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = appState.favorites.indexOf(cardId);
+        if (idx === -1) appState.favorites.push(cardId);
+        else appState.favorites.splice(idx, 1);
+        renderServiceGrid();
+        pushStateToCloud(false);
+    }
+
+    // ==================== ADVANCED NOTICE BOARD ====================
+    function renderNotices() {
+        const notices = appState.notices || [];
+        const listEl = document.getElementById('notices-list');
+        const countPill = document.getElementById('notice-count-pill');
+        if (countPill) countPill.innerText = `${notices.length} / 30`;
+
+        if (listEl) {
+            if (notices.length === 0) {
+                listEl.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-secondary); font-size:12px;">No active notices posted yet.</div>`;
+            } else {
+                listEl.innerHTML = notices.map((n, idx) => {
+                    const isUrgent = n.priority === 'urgent';
+                    return `
+                        <div class="attractive-notice-card ${isUrgent ? 'urgent' : ''}" id="notice-card-${idx}">
+                            <div class="attractive-notice-header">
+                                <div class="notice-badges-group">
+                                    <span class="notice-rank-pill ${isUrgent ? 'urgent' : ''}">
+                                        <i class="fa-solid ${isUrgent ? 'fa-triangle-exclamation' : 'fa-bolt'}"></i> ${isUrgent ? 'Urgent' : 'Notice #' + (idx + 1)}
+                                    </span>
+                                    <span class="admin-posted-badge"><i class="fa-solid fa-shield-halved"></i> Admin (As posted by Admin)</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <span class="notice-time-badge"><i class="fa-regular fa-clock"></i> ${n.time || 'Live'}</span>
+                                    ${isAdmin ? `
+                                        <button class="card-ctrl-btn" onclick="editNoticePrompt(${idx})" title="Edit Notice"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="card-ctrl-btn danger" onclick="deleteNotice(${idx})" title="Delete Notice"><i class="fa-solid fa-trash"></i></button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div class="attractive-notice-text" id="notice-text-${idx}">${n.text}</div>
+                            <button class="notice-expand-btn" id="notice-exp-btn-${idx}" style="display: none;" onclick="toggleNoticeExpand(${idx})">Expand</button>
+                        </div>
+                    `;
+                }).join('');
+
+                setTimeout(() => {
+                    notices.forEach((_, idx) => {
+                        const txtEl = document.getElementById(`notice-text-${idx}`);
+                        const btnEl = document.getElementById(`notice-exp-btn-${idx}`);
+                        if (txtEl && btnEl) {
+                            if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 120) {
+                                btnEl.style.display = 'inline-block';
+                            }
+                        }
+                    });
+                }, 50);
+            }
+        }
+
+        updateHomeNoticeShowcase();
+    }
+
+    function toggleNoticeExpand(idx) {
+        const txtEl = document.getElementById(`notice-text-${idx}`);
+        const btnEl = document.getElementById(`notice-exp-btn-${idx}`);
+        if (!txtEl || !btnEl) return;
+        const isExpanded = txtEl.classList.toggle('expanded');
+        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+    }
+
+    function toggleHomeNoticeBannerExpand(e) {
+        if (e && e.target.closest('button')) return;
+        const txtEl = document.getElementById('home-notice-text');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (!txtEl || !btnEl) return;
+        const isExpanded = txtEl.classList.toggle('expanded');
+        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+        btnEl.style.display = isExpanded ? 'inline-block' : (txtEl.scrollHeight > txtEl.clientHeight ? 'inline-block' : 'none');
+    }
+
+    function updateHomeNoticeShowcase() {
+        const notices = appState.notices || [];
+        const showcase = document.getElementById('home-notice-showcase');
+        if (!showcase) return;
+
+        if (notices.length === 0) {
+            document.getElementById('home-notice-text').innerText = 'No global announcements right now.';
+            document.getElementById('home-notice-counter').innerText = '0 / 0';
+            document.getElementById('home-notice-time').innerHTML = '<i class="fa-regular fa-clock"></i> Standby';
+            showcase.classList.remove('urgent');
+            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice Board';
+            return;
+        }
+
+        if (homeNoticeIdx >= notices.length) homeNoticeIdx = 0;
+        if (homeNoticeIdx < 0) homeNoticeIdx = notices.length - 1;
+        const item = notices[homeNoticeIdx];
+        const isUrgent = item.priority === 'urgent';
+
+        showcase.classList.toggle('urgent', isUrgent);
+        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent Notice' : 'Notice Board'}`;
+        document.getElementById('home-notice-text').innerText = item.text;
+        document.getElementById('home-notice-counter').innerText = `${homeNoticeIdx + 1} / ${notices.length}`;
+        document.getElementById('home-notice-time').innerHTML = `<i class="fa-regular fa-clock"></i> ${item.time || 'Synced Live'}`;
+
+        setTimeout(() => {
+            const txtEl = document.getElementById('home-notice-text');
+            const btnEl = document.getElementById('home-notice-exp-btn');
+            if (txtEl && btnEl) {
+                if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 100) {
+                    btnEl.style.display = 'inline-block';
+                } else {
+                    btnEl.style.display = 'none';
+                    txtEl.classList.remove('expanded');
+                    btnEl.innerText = 'Expand';
+                }
+            }
+        }, 50);
+    }
+
+    function cycleHomeNotice(step) {
+        homeNoticeIdx += step;
+        const txtEl = document.getElementById('home-notice-text');
+        if (txtEl) txtEl.classList.remove('expanded');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (btnEl) btnEl.innerText = 'Expand';
+        updateHomeNoticeShowcase();
+    }
+
+    function saveNoticeItem() {
+        const input = document.getElementById('notice-input');
+        const prioritySel = document.getElementById('notice-priority-input');
+        const editIdxInput = document.getElementById('edit-notice-idx');
+        const text = input.value.trim();
+        const priority = prioritySel.value;
+        if (!text) return;
+
+        appState.notices = appState.notices || [];
+        const editIdx = editIdxInput.value !== '' ? Number(editIdxInput.value) : -1;
+
+        if (editIdx >= 0 && editIdx < appState.notices.length) {
+            appState.notices[editIdx].text = text;
+            appState.notices[editIdx].priority = priority;
+            appState.notices[editIdx].time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString() + ' (Edited)';
+        } else {
+            appState.notices.unshift({
+                text,
+                priority,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString()
+            });
+            if (appState.notices.length > 30) appState.notices = appState.notices.slice(0, 30);
+        }
+
+        input.value = '';
+        editIdxInput.value = '';
+        document.getElementById('notice-btn-text').innerText = 'Publish Notice';
+        homeNoticeIdx = 0;
+        renderNotices();
+        pushStateToCloud(true);
+    }
+
+    function editNoticePrompt(idx) {
+        const item = appState.notices[idx];
+        if (!item) return;
+        document.getElementById('notice-input').value = item.text;
+        document.getElementById('notice-priority-input').value = item.priority || 'normal';
+        document.getElementById('edit-notice-idx').value = idx;
+        document.getElementById('notice-btn-text').innerText = 'Update Notice';
+        switchPage('notices');
+        document.getElementById('notice-input').focus();
+    }
+
+    function deleteNotice(idx) {
+        appState.notices.splice(idx, 1);
+        renderNotices();
+        pushStateToCloud(false);
+    }
+
+    function clearAllNotices() {
+        if (!confirm('Clear all global notices for all users?')) return;
+        appState.notices = [];
+        renderNotices();
+        pushStateToCloud(true);
+    }
+
+    function openAdminModal() {
+        document.getElementById('admin-pin-input').value = '';
+        openModal('admin-modal');
+    }
+
+    function verifyAdminPin() {
+        const entered = document.getElementById('admin-pin-input').value.trim();
+        if (entered === appState.adminPin) {
+            isAdmin = true;
+            localStorage.setItem('kuafi_admin_unlocked', 'true');
+            closeModal('admin-modal');
+            renderCategories();
+            renderServiceGrid();
+            renderNotices();
+            updateAuthAndAdminUI();
+            showSyncToast('✓ Admin Mode Unlocked Successfully!');
+        } else {
+            alert('Invalid Admin PIN!');
+        }
+    }
+
+    function logoutAdmin() {
+        isAdmin = false;
+        isRearrangeMode = false;
+        isPreviewMode = false;
+        localStorage.removeItem('kuafi_admin_unlocked');
+        
+        document.body.classList.remove('is-admin');
+        document.body.classList.remove('rearrange-active');
+        
+        const rBanner = document.getElementById('rearrange-banner');
+        if (rBanner) rBanner.classList.remove('active');
+        const pBanner = document.getElementById('preview-banner');
+        if (pBanner) pBanner.classList.remove('active');
+
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+        showSyncToast('🔒 Admin Mode Locked');
+        goHomeWithFav();
+    }
+
+    function handleSecureCardClick() {
+        if (isAdmin) {
+            switchPage('tools');
+        } else {
+            openAdminModal();
+        }
+    }
+
+    function handleSettingsCardClick() {
+        switchPage('tools');
+    }
+
+    function toggleRearrangeMode(forceState) {
+        isRearrangeMode = typeof forceState === 'boolean' ? forceState : !isRearrangeMode;
+        document.body.classList.toggle('rearrange-active', isRearrangeMode);
+        document.getElementById('rearrange-banner').classList.toggle('active', isRearrangeMode);
+        if (isRearrangeMode) {
+            document.getElementById('preview-banner').classList.remove('active');
+            isPreviewMode = false;
+        }
+    }
+
+    function saveRearrangeAndSync() {
+        isRearrangeMode = false;
+        document.body.classList.remove('rearrange-active');
+        document.getElementById('rearrange-banner').classList.remove('active');
+        pushStateToCloud(true);
+    }
+
+    function savePreviewAndSync() {
+        isPreviewMode = false;
+        document.getElementById('preview-banner').classList.remove('active');
+        pushStateToCloud(true);
+    }
+
+    function openRearrangeFromTools() {
+        switchPage('home');
+        toggleRearrangeMode(true);
+    }
+
+    function previewAndSaveGridCustomizer() {
+        const cols = document.getElementById('grid-cols-select').value;
+        const style = document.getElementById('grid-style-select').value;
+        const layout = document.getElementById('grid-layout-select').value;
+
+        appState.gridCols = parseInt(cols, 10) || 3;
+        appState.gridStyleChoice = style;
+        appState.gridLayoutChoice = layout;
+
+        document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+        applyCardGridStyleVars(style);
+        applyCardGridLayoutVars(layout);
+
+        isPreviewMode = true;
+        isRearrangeMode = false;
+        document.body.classList.remove('rearrange-active');
+        document.getElementById('rearrange-banner').classList.remove('active');
+        document.getElementById('preview-banner').classList.add('active');
+
+        goHomeWithFav();
+        showSyncToast('👁️ Live Preview Active! Tap "Apply to Cloud" to Save.');
+    }
+
+    function applyCardGridStyleVars(styleKey) {
+        let radius = '16px';
+        let border = '1px solid var(--border-color)';
+        let bg = 'var(--card-bg)';
+        let shadow = 'var(--card-shadow)';
+        let gap = '10px';
+        let padding = '10px 8px 12px';
+
+        const isLight = document.body.classList.contains('light-mode');
+
+        switch (styleKey) {
+            case '1': radius = '20px'; border = '1px solid rgba(120,120,120,0.18)'; bg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(25,35,55,0.7)'; shadow = '0 12px 30px rgba(0,0,0,0.15)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '2': radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '3': radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
+            case '4': radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '5': radius = '10px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
+            case '6': radius = '20px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '7': radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--card-bg)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '8': radius = '4px'; border = '1px dashed var(--accent)'; bg = isLight ? 'rgba(61,237,151,0.05)' : 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.15)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '9': radius = '22px'; border = '1px solid var(--border-color)'; bg = isLight ? '#ffffff' : 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--card-bg))'; shadow = '0 8px 22px rgba(0,0,0,0.12)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '10': radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; shadow = '0 10px 25px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '11': radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--card-bg)'; shadow = '0 6px 16px rgba(0,0,0,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '12': radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '13': radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 8px 20px rgba(0,0,0,0.12)'; gap = '10px'; padding = '16px 10px 18px'; break;
+            case '14': radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '15':
+            default:
+                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'var(--card-shadow)'; gap = '10px'; padding = '10px 8px 12px';
+        }
+
+        document.documentElement.style.setProperty('--card-radius', radius);
+        document.documentElement.style.setProperty('--card-border', border);
+        document.documentElement.style.setProperty('--card-bg', bg);
+        document.documentElement.style.setProperty('--card-shadow', shadow);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+        document.documentElement.style.setProperty('--card-padding', padding);
+    }
+
+    function applyCardGridLayoutVars(layoutKey) {
+        let align = 'center';
+        let padding = '10px 8px 12px';
+        let gap = '10px';
+
+        switch (layoutKey) {
+            case '1': align = 'center'; padding = '10px 8px 12px'; gap = '10px'; break;
+            case '2': align = 'center'; padding = '6px 4px 8px';   gap = '6px';  break;
+            case '3': align = 'center'; padding = '16px 12px 18px';gap = '16px'; break;
+            case '4': align = 'center'; padding = '12px 10px 14px';gap = '10px'; break;
+            case '5': align = 'flex-start'; padding = '12px 10px 14px'; gap = '10px'; break;
+            case '6': align = 'center'; padding = '14px 10px 16px'; gap = '12px'; break;
+            case '7': align = 'center'; padding = '15px 12px 18px'; gap = '14px'; break;
+            case '8': align = 'center'; padding = '18px 12px 20px'; gap = '10px'; break;
+            case '9': align = 'flex-start'; padding = '8px 8px 10px';   gap = '8px';  break;
+            case '10': align = 'center'; padding = '12px 10px 14px'; gap = '12px'; break;
+            case '11': align = 'center'; padding = '14px 10px 16px'; gap = '10px'; break;
+            case '12': align = 'center'; padding = '10px 8px 12px';  gap = '10px'; break;
+            case '13': align = 'center'; padding = '16px 12px 18px'; gap = '14px'; break;
+            case '14': align = 'flex-start'; padding = '10px 8px 12px'; gap = '8px';  break;
+            case '15':
+            default:
+                align = 'center'; padding = '10px 8px 12px'; gap = '10px';
+        }
+
+        document.documentElement.style.setProperty('--card-align', align);
+        document.documentElement.style.setProperty('--card-padding', padding);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+    }
+
+    function startPomodoro() {
+        if (pomodoroInterval) return;
+        pomodoroInterval = setInterval(() => {
+            if (pomodoroSeconds > 0) {
+                pomodoroSeconds--;
+                updatePomodoroDisplay();
+            } else {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+                alert('Pomodoro session completed! Take a break.');
+            }
+        }, 1000);
+    }
+
+    function resetPomodoro() {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        pomodoroSeconds = 1500;
+        updatePomodoroDisplay();
+    }
+
+    function updatePomodoroDisplay() {
+        const m = Math.floor(pomodoroSeconds / 60);
+        const s = pomodoroSeconds % 60;
+        const disp = document.getElementById('pomodoro-timer');
+        if (disp) {
+            disp.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+    }
+
+    function openProfileModal() {
+        const email = auth.currentUser?.email || 'default';
+        const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${email}`) || '{}');
+        document.getElementById('profile-name-input').value = customProfile.name || auth.currentUser?.displayName || '';
+        document.getElementById('profile-phone-input').value = customProfile.phone || '';
+        document.getElementById('profile-district-input').value = customProfile.district || '';
+        openModal('user-profile-modal');
+    }
+
+    function saveUserProfileDetails() {
+        const email = auth.currentUser?.email || 'default';
+        const name = document.getElementById('profile-name-input').value.trim();
+        const phone = document.getElementById('profile-phone-input').value.trim();
+        const district = document.getElementById('profile-district-input').value.trim();
+
+        const profileData = { name, phone, district };
+        localStorage.setItem(`kuafi_user_profile_${email}`, JSON.stringify(profileData));
+
+        if (name) {
+            document.getElementById('google-user-name').innerText = name;
+        }
+        document.getElementById('profile-details-preview').innerText = `${name || 'User'} • ${phone || 'No phone'} • ${district || 'No district'}`;
+
+        closeModal('user-profile-modal');
+        showSyncToast('✓ Profile details saved successfully!');
+    }
+
+    function setAccent(primary, secondary, el) {
+        appState.accentPrimary = primary;
+        appState.accentSecondary = secondary;
+        document.documentElement.style.setProperty('--accent', primary);
+        document.documentElement.style.setProperty('--accent-secondary', secondary);
+        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        if (el) el.classList.add('active');
+        pushStateToCloud(false);
+    }
+
+    function changeAdminPin() {
+        const nextPin = prompt('Enter new Admin PIN:', appState.adminPin);
+        if (nextPin && nextPin.trim()) {
+            appState.adminPin = nextPin.trim();
+            pushStateToCloud(true);
+        }
+    }
+
+    function resetCardOrder() {
+        if (!confirm('Restore original 20 default cards and order?')) return;
+        appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
+        renderServiceGrid();
+        pushStateToCloud(true);
+    }
+
+    function clearFavorites() {
+        appState.favorites = [];
+        renderServiceGrid();
+        pushStateToCloud(true);
+        showSyncToast('✓ Favourites reset successfully!');
+    }
+
+    function clearNotes() {
+        appState.scratchpad = '';
+        document.getElementById('quick-notes').value = '';
+        pushStateToCloud(true);
+    }
+
+    function openUserNotesModal() {
+        const email = auth.currentUser?.email || 'guest';
+        const savedNotes = localStorage.getItem(`kuafi_user_notes_${email}`) || '';
+        document.getElementById('user-private-notes-textarea').value = savedNotes;
+        openModal('user-notes-modal');
+    }
+
+    function saveUserPrivateNotes() {
+        const email = auth.currentUser?.email || 'guest';
+        const notes = document.getElementById('user-private-notes-textarea').value;
+        localStorage.setItem(`kuafi_user_notes_${email}`, notes);
+        closeModal('user-notes-modal');
+        showSyncToast('✓ Private notes saved locally!');
+    }
+
+    function exportUserPersonalData() {
+        const data = {
+            favorites: appState.favorites,
+            theme: localStorage.getItem(THEME_STORAGE_KEY),
+            accessMode: appState.accessMode,
+            exportedAt: new Date().toLocaleString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kuafi_user_backup_${Date.now()}.json`;
+        a.click();
+        showSyncToast('✓ Personal backup downloaded!');
+    }
+
+    function exportGlobalBackup() {
+        const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kuafi_global_system_backup_${Date.now()}.json`;
+        a.click();
+        showSyncToast('✓ Global system state exported!');
+    }
+
+    function toggleHeaderSearch() {
+        const c = document.getElementById('header-search-container');
+        c.classList.toggle('open');
+        if (c.classList.contains('open')) document.getElementById('search-input').focus();
+    }
+
+    function handleSearch(query) {
+        const q = query.trim().toLowerCase();
+        document.querySelectorAll('#app-grid .service-item').forEach(item => {
+            const id = item.getAttribute('data-id');
+            if (id === 'app-secure' && (isAdmin || isGoogleLoggedIn)) {
+                item.style.display = 'none';
+                return;
+            }
+            const t = item.querySelector('.card-title')?.innerText.toLowerCase() || '';
+            const s = item.querySelector('.card-sub')?.innerText.toLowerCase() || '';
+            item.style.display = (t.includes(q) || s.includes(q)) ? 'flex' : 'none';
+        });
+    }
+
+    function openSafeUrl(url) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyPageUrl() {
+        navigator.clipboard?.writeText(window.location.href);
+        alert('Hub Link copied to clipboard!');
+    }
+
+    async function pushStateToCloud(showAlert = false) {
+        isPushing = true;
+        const notesEl = document.getElementById('quick-notes');
+        if (notesEl) appState.scratchpad = notesEl.value;
+
+        appState.updatedAt = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        pulseSyncBadge('Saving...');
+
+        let syncedOk = false;
+
+        if (hubDocRef) {
+            try {
+                await setDoc(hubDocRef, appState, { merge: true });
+                syncedOk = true;
+            } catch (e) {
+                console.warn("Firestore write note:", e.message);
+            }
+        }
+
+        try {
+            const res = await fetch(FIREBASE_RTDB_REST_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(appState)
+            });
+            if (res.ok) syncedOk = true;
+        } catch (e) {}
+
+        isPushing = false;
+        pulseSyncBadge('Live');
+
+        const pill = document.getElementById('cloud-status-pill');
+        if (pill) {
+            pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally';
+        }
+        if (showAlert) {
+            showSyncToast('✓ Successfully Synced to Cloud for all users!');
+        }
+    }
+
+    async function syncData(manual = false) {
+        const icon = document.getElementById('sync-icon');
+        if (manual && icon) icon.classList.add('fa-spin');
+        pulseSyncBadge('Sync');
+
+        let latestCloudData = null;
+
+        if (hubDocRef) {
+            try {
+                const snap = await getDoc(hubDocRef);
+                if (snap.exists()) {
+                    latestCloudData = snap.data();
+                }
+            } catch (e) {}
+        }
+
+        try {
+            const res = await fetch(FIREBASE_RTDB_REST_URL, { cache: 'no-store' });
+            if (res.ok) {
+                const rtdbData = await res.json();
+                if (rtdbData && typeof rtdbData === 'object') {
+                    const rtdbTime = Number(rtdbData.updatedAt || 0);
+                    const fsTime = Number(latestCloudData?.updatedAt || 0);
+                    if (rtdbTime > fsTime) {
+                        latestCloudData = rtdbData;
+                    }
+                }
+            }
+        } catch (e) {}
+
+        if (latestCloudData) {
+            applyCloudStateToUI(latestCloudData, manual);
+        }
+
+        setTimeout(() => {
+            if (manual && icon) icon.classList.remove('fa-spin');
+            pulseSyncBadge('Live');
+        }, 350);
+    }
+
+    function openModal(id) {
+        document.getElementById(id)?.classList.add('open');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id)?.classList.remove('open');
+    }
+
+    Object.assign(window, {
+        toggleHeaderSearch,
+        handleSearch,
+        cycleHomeNotice,
+        switchPage,
+        toggleRearrangeMode,
+        saveRearrangeAndSync,
+        savePreviewAndSync,
+        openCardModal,
+        openCategoryModal,
+        openRecycleBinModal,
+        filterApps,
+        toggleFav,
+        handleSecureCardClick,
+        handleSettingsCardClick,
+        syncData,
+        goHomeWithFav,
+        saveNoticeItem,
+        editNoticePrompt,
+        deleteNotice,
+        clearAllNotices,
+        toggleNoticeExpand,
+        toggleHomeNoticeBannerExpand,
+        loginWithGoogle,
+        logoutGoogle,
+        openAdminModal,
+        verifyAdminPin,
+        logoutAdmin,
+        toggleTheme,
+        setAccessMode,
+        previewAndSaveGridCustomizer,
+        openRearrangeFromTools,
+        setAccent,
+        changeAdminPin,
+        openSafeUrl,
+        copyPageUrl,
+        pushStateToCloud,
+        resetCardOrder,
+        clearFavorites,
+        clearNotes,
+        openUserNotesModal,
+        saveUserPrivateNotes,
+        exportUserPersonalData,
+        exportGlobalBackup,
+        openProfileModal,
+        saveUserProfileDetails,
+        startPomodoro,
+        resetPomodoro,
+        closeModal,
+        saveServiceCard,
+        removeCardToBin,
+        restoreFromBin,
+        deletePermanentlyFromBin,
+        emptyRecycleBin,
+        moveCategory,
+        editCategoryPrompt,
+        deleteCategory,
+        saveCategoryItem,
+        resetDefaultCategories,
+        moveCardInCurrentView
+    });
+
+    initApp();
+</script>
+</body>
+</html>
