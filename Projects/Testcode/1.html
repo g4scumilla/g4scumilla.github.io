@@ -332,6 +332,33 @@
             color: var(--text-secondary);
         }
 
+        /* Live Preview Customizer Banner */
+        .preview-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(6, 182, 212, 0.16);
+            border: 1px solid var(--accent-secondary);
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .preview-banner.active {
+            display: flex;
+        }
+        .preview-save-btn {
+            background: var(--accent);
+            color: #0b0f19;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
         /* Rearrange Banner & Admin Grid Bar */
         .rearrange-banner {
             display: none;
@@ -1114,10 +1141,10 @@
             </div>
         </div>
 
-        <!-- Active Rearrange Mode Banner (Admin Only) -->
-        <div class="rearrange-banner admin-only" id="rearrange-banner">
-            <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
-            <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
+        <!-- Live Preview Active Banner (Admin Only) -->
+        <div class="preview-banner admin-only" id="preview-banner">
+            <span><i class="fa-solid fa-eye" style="color: var(--accent-secondary); margin-right: 6px;"></i>🎨 Live Grid Preview Active</span>
+            <button class="preview-save-btn" onclick="savePreviewAndSync()">Apply to Cloud</button>
         </div>
 
         <!-- Admin App Grid & Category Management Toolbar -->
@@ -1431,7 +1458,7 @@
             </div>
         </div>
 
-        <!-- NEW: Grouped Admin Live Grid Customizer (Columns, Style, Layout) -->
+        <!-- Grouped Admin Live Grid Customizer (Columns, Style, Layout) -->
         <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
             <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
             
@@ -1900,7 +1927,7 @@
 
     let isAdmin = false;
     let isGoogleLoggedIn = false;
-    let isRearrangeMode = false;
+    let isPreviewMode = false;
     let isPushing = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
@@ -1965,7 +1992,7 @@
         const anyModalOpen = document.querySelector('.modal-backdrop.open') !== null;
         const activeTag = document.activeElement ? document.activeElement.tagName : '';
         const isTyping = (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT');
-        return anyModalOpen || isTyping || isRearrangeMode || isPushing;
+        return anyModalOpen || isTyping || isPreviewMode || isPushing;
     }
 
     function showSyncToast(message = '✓ Successfully Synced to Cloud!') {
@@ -2866,6 +2893,8 @@
         localStorage.removeItem('kuafi_admin_unlocked');
         document.body.classList.remove('rearrange-active');
         document.getElementById('rearrange-banner').classList.remove('active');
+        document.getElementById('preview-banner').classList.remove('active');
+        isPreviewMode = false;
         renderCategories();
         renderServiceGrid();
         renderNotices();
@@ -2888,6 +2917,10 @@
         isRearrangeMode = typeof forceState === 'boolean' ? forceState : !isRearrangeMode;
         document.body.classList.toggle('rearrange-active', isRearrangeMode);
         document.getElementById('rearrange-banner').classList.toggle('active', isRearrangeMode);
+        if (isRearrangeMode) {
+            document.getElementById('preview-banner').classList.remove('active');
+            isPreviewMode = false;
+        }
     }
 
     function saveRearrangeAndSync() {
@@ -2897,12 +2930,18 @@
         pushStateToCloud(true);
     }
 
+    function savePreviewAndSync() {
+        isPreviewMode = false;
+        document.getElementById('preview-banner').classList.remove('active');
+        pushStateToCloud(true);
+    }
+
     function openRearrangeFromTools() {
         switchPage('home');
         toggleRearrangeMode(true);
     }
 
-    // Live Preview & Jump to Main Page on any Customizer change
+    // Live Preview & Jump to Main Page on any Customizer change (Without default rearrange)
     function previewAndSaveGridCustomizer() {
         const cols = document.getElementById('grid-cols-select').value;
         const style = document.getElementById('grid-style-select').value;
@@ -2916,10 +2955,15 @@
         applyCardGridStyleVars(style);
         applyCardGridLayoutVars(layout);
 
-        // Jump to main page with live preview and trigger save banner
+        // Jump to main page with live preview banner active (no rearrange menu)
+        isPreviewMode = true;
+        isRearrangeMode = false;
+        document.body.classList.remove('rearrange-active');
+        document.getElementById('rearrange-banner').classList.remove('active');
+        document.getElementById('preview-banner').classList.add('active');
+
         goHomeWithFav();
-        toggleRearrangeMode(true);
-        showSyncToast('👁️ Live Preview Active! Tap "Save to Cloud" when ready.');
+        showSyncToast('👁️ Live Preview Active! Tap "Apply to Cloud" to Save.');
     }
 
     function applyCardGridStyleVars(styleKey) {
@@ -3253,6 +3297,7 @@
         switchPage,
         toggleRearrangeMode,
         saveRearrangeAndSync,
+        savePreviewAndSync,
         openCardModal,
         openCategoryModal,
         openRecycleBinModal,
