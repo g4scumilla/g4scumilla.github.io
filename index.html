@@ -32,6 +32,8 @@
             --warning: #f59e0b;
             --app-max-width: 440px;
             --grid-cols: 3;
+            --grid-gap: 10px;
+            --card-padding: 10px 8px 12px;
         }
 
         body.light-mode {
@@ -164,9 +166,9 @@
             color: var(--accent);
         }
 
-        /* Live Sync Status Pill in Header */
+        /* Live Sync Status Pill in Header (Admin Only) */
         .live-sync-indicator {
-            display: inline-flex;
+            display: none;
             align-items: center;
             gap: 5px;
             padding: 4px 8px;
@@ -176,6 +178,9 @@
             background: rgba(61, 237, 151, 0.1);
             color: var(--accent);
             border: 1px solid rgba(61, 237, 151, 0.25);
+        }
+        body.is-admin .live-sync-indicator {
+            display: inline-flex;
         }
         .sync-dot {
             width: 6px;
@@ -189,7 +194,7 @@
             box-shadow: 0 0 8px var(--accent);
         }
 
-        /* Access Mode Pills (Inside Tools & Settings Only) */
+        /* Access Mode Pills */
         .access-mode-pills {
             display: flex;
             flex-wrap: wrap;
@@ -217,7 +222,7 @@
             border-color: var(--accent);
         }
 
-        /* Attractive Notice Showcase Banner (Home) */
+        /* Attractive Notice Showcase Banner (Home) with Expandable Body */
         .notice-showcase {
             position: relative;
             border-radius: 16px;
@@ -229,6 +234,10 @@
             overflow: hidden;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
+        .notice-showcase.urgent {
+            border-color: rgba(244, 63, 94, 0.5);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.14) 0%, rgba(6, 182, 212, 0.05) 50%, var(--bg-card) 100%);
+        }
         .notice-showcase::before {
             content: '';
             position: absolute;
@@ -237,6 +246,9 @@
             width: 4px;
             height: 100%;
             background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+        }
+        .notice-showcase.urgent::before {
+            background: linear-gradient(180deg, var(--danger), var(--warning));
         }
         .notice-showcase-top {
             display: flex;
@@ -258,6 +270,11 @@
             color: var(--accent);
             border: 1px solid rgba(61, 237, 151, 0.4);
         }
+        .notice-showcase.urgent .notice-live-badge {
+            background: rgba(244, 63, 94, 0.2);
+            color: var(--danger);
+            border-color: rgba(244, 63, 94, 0.4);
+        }
         .pulse-dot {
             width: 6px;
             height: 6px;
@@ -265,6 +282,10 @@
             background: var(--accent);
             box-shadow: 0 0 8px var(--accent);
             animation: pulseGlow 1.5s infinite;
+        }
+        .notice-showcase.urgent .pulse-dot {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
         }
         @keyframes pulseGlow {
             0%, 100% { transform: scale(1); opacity: 1; }
@@ -295,6 +316,13 @@
             color: var(--text-primary);
             margin-bottom: 6px;
             word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .notice-showcase-body.expanded {
+            -webkit-line-clamp: unset;
         }
         .notice-showcase-footer {
             display: flex;
@@ -440,7 +468,7 @@
         .service-grid {
             display: grid;
             grid-template-columns: repeat(var(--grid-cols, 3), minmax(0, 1fr));
-            gap: 10px;
+            gap: var(--grid-gap, 10px);
         }
         body.access-tab .service-grid {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -459,7 +487,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 10px 8px 12px;
+            padding: var(--card-padding, 10px 8px 12px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -696,7 +724,7 @@
             color: var(--danger);
         }
 
-        /* Attractive Notices Page Cards */
+        /* Attractive Notices Page Cards & Expandable Text */
         .notice-input, .quick-note-area {
             width: 100%;
             min-height: 80px;
@@ -734,14 +762,22 @@
             box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.2);
             transition: transform 0.2s ease;
         }
-        .attractive-notice-card:hover {
-            transform: translateY(-2px);
+        .attractive-notice-card.urgent {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), var(--bg-elevated));
+            border-color: rgba(244, 63, 94, 0.35);
         }
         .attractive-notice-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 6px;
+        }
+        .notice-badges-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
         }
         .notice-rank-pill {
             display: inline-flex;
@@ -754,6 +790,18 @@
             padding: 2px 8px;
             border-radius: 999px;
         }
+        .notice-rank-pill.urgent {
+            color: var(--danger);
+            background: rgba(244, 63, 94, 0.16);
+        }
+        .admin-posted-badge {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            padding: 2px 7px;
+            border-radius: 999px;
+        }
         .notice-time-badge {
             font-size: 10.5px;
             color: var(--text-secondary);
@@ -763,12 +811,30 @@
         }
         .attractive-notice-text {
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.45;
             color: var(--text-primary);
             font-weight: 500;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            transition: max-height 0.3s ease;
+        }
+        .attractive-notice-text.expanded {
+            -webkit-line-clamp: unset;
+        }
+        .notice-expand-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            display: inline-block;
         }
 
-        /* User Profile & Swatches */
+        /* User Profile & Expanded Swatches */
         .user-profile-row {
             display: flex;
             align-items: center;
@@ -786,20 +852,23 @@
             color: var(--accent);
             margin-top: 2px;
         }
-        .color-swatches {
-            display: flex;
-            gap: 8px;
+        .color-swatches-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            max-width: 100%;
         }
         .swatch {
-            width: 22px;
-            height: 22px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
+            transition: transform 0.2s ease;
         }
         .swatch.active {
             border-color: var(--text-primary);
-            transform: scale(1.12);
+            transform: scale(1.15);
         }
         .mini-tools-grid {
             display: grid;
@@ -820,12 +889,35 @@
             font-weight: 600;
         }
 
+        /* Toast Confirmation Notification */
+        .sync-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: var(--bg-elevated);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .sync-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         /* Admin Visibility & Mutual Login Exclusivity Rules */
         .admin-only { display: none !important; }
         body.is-admin .admin-only { display: block !important; }
         body.is-admin .setting-row.admin-only { display: flex !important; }
 
-        /* Any login hides all other login options */
         body.is-admin .visitor-only,
         body.is-google-auth .visitor-only,
         body.is-admin .service-item[data-id="app-secure"],
@@ -951,7 +1043,6 @@
 </head>
 <body class="access-auto">
 <script>
-    // Apply saved Light/Dark theme immediately before page paint so refresh never resets to dark mode
     (function() {
         const savedTheme = localStorage.getItem('kuafi_theme_mode');
         if (savedTheme === 'light') {
@@ -971,6 +1062,7 @@
             <span class="android-header-title">Abdullahil Kuafi</span>
         </div>
         <div class="header-actions-right">
+            <!-- Sync Indicator Appears ONLY in Admin Mode -->
             <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
                 <span class="sync-dot" id="live-sync-dot"></span>
                 <span id="live-sync-text">Live</span>
@@ -990,7 +1082,7 @@
         <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
         <div class="notice-showcase" id="home-notice-showcase">
             <div class="notice-showcase-top">
-                <span class="notice-live-badge"><span class="pulse-dot"></span> Notice Board</span>
+                <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
                 <div class="notice-showcase-controls">
                     <span id="home-notice-counter" style="font-size:10px; color:var(--text-secondary);">1 / 1</span>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1001,6 +1093,7 @@
             <div class="notice-showcase-body" id="home-notice-text">
                 Welcome to Abdullahil Kuafi's Smart Cloud Hub!
             </div>
+            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;" onclick="toggleHomeNoticeBannerExpand()">Expand</button>
             <div class="notice-showcase-footer">
                 <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
                 <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices')">View Board →</span>
@@ -1010,7 +1103,7 @@
         <!-- Active Rearrange Mode Banner (Admin Only) -->
         <div class="rearrange-banner admin-only" id="rearrange-banner">
             <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
-            <button class="rearrange-done-btn" onclick="toggleRearrangeMode(false)">Save to Cloud</button>
+            <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
         </div>
 
         <!-- Admin App Grid & Category Management Toolbar -->
@@ -1043,121 +1136,101 @@
 
         <!-- 20-Item Link Cards Grid -->
         <div class="service-grid" id="app-grid">
-
             <a href="#" class="service-item" data-id="app-work" data-cat="work" style="--c1:#3b82f6; --c2:#6366f1; --c-rgb:59,130,246;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-work')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
                 <div class="card-text"><div class="card-title">Work</div><div class="card-sub">Office & Tasks</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-edu" data-cat="work" style="--c1:#f59e0b; --c2:#ea580c; --c-rgb:245,158,11;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-edu')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
             </a>
-
             <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" rel="noopener noreferrer" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
                 <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-dev')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
                 <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
             </a>
-
             <a href="https://g4scumilla.github.io/Projects/Television/index" rel="noopener noreferrer" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
                 <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-sports')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>
                 <div class="card-text"><div class="card-title">Sports</div><div class="card-sub">Live TV Stream</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-cv" data-cat="work" style="--c1:#8b5cf6; --c2:#6d28d9; --c-rgb:139,92,246;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-cv')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
                 <div class="card-text"><div class="card-title">CV</div><div class="card-sub">Resume & Bio</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-links" data-cat="work" style="--c1:#0ea5e9; --c2:#0284c7; --c-rgb:14,165,233;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-links')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
                 <div class="card-text"><div class="card-title">Links</div><div class="card-sub">Bookmarks</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-media" data-cat="life" style="--c1:#ec4899; --c2:#db2777; --c-rgb:236,72,153;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-media')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
                 <div class="card-text"><div class="card-title">Media</div><div class="card-sub">Photos & Clips</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-social" data-cat="life" style="--c1:#6366f1; --c2:#a855f7; --c-rgb:99,102,241;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-social')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
                 <div class="card-text"><div class="card-title">Social</div><div class="card-sub">Feeds & Connect</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-docs" data-cat="work" style="--c1:#ef4444; --c2:#dc2626; --c-rgb:239,68,68;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-docs')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
                 <div class="card-text"><div class="card-title">Docs</div><div class="card-sub">PDFs & Papers</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-blog" data-cat="life" style="--c1:#14b8a6; --c2:#0d9488; --c-rgb:20,184,166;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-blog')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
                 <div class="card-text"><div class="card-title">Blog</div><div class="card-sub">Notes & Stories</div></div>
             </a>
-
             <a href="javascript:void(0)" onclick="handleSecureCardClick()" class="service-item" data-id="app-secure" data-cat="work" style="--c1:#eab308; --c2:#ca8a04; --c-rgb:234,179,8;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-secure')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="card-text"><div class="card-title">Admin</div><div class="card-sub" id="secure-card-sub">Login / Lock</div></div>
             </a>
-
             <a href="https://g4scumilla.github.io/Projects/finance/main" rel="noopener noreferrer" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
                 <div class="card-top-bar"><span class="live-pill">Live</span><div class="fav-badge" onclick="toggleFav(event, 'app-finance')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
                 <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-growth" data-cat="work" style="--c1:#22c55e; --c2:#16a34a; --c-rgb:34,197,94;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-growth')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
                 <div class="card-text"><div class="card-title">Growth</div><div class="card-sub">Goals & Stats</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-awards" data-cat="life" style="--c1:#f59e0b; --c2:#d97706; --c-rgb:245,158,11;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-awards')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
                 <div class="card-text"><div class="card-title">Awards</div><div class="card-sub">Honors & Wins</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-travel" data-cat="life" style="--c1:#06b6d4; --c2:#0891b2; --c-rgb:6,182,212;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-travel')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
                 <div class="card-text"><div class="card-title">Travel</div><div class="card-sub">Trips & Maps</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-scan" data-cat="work" style="--c1:#a855f7; --c2:#7e22ce; --c-rgb:168,85,247;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-scan')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
                 <div class="card-text"><div class="card-title">Scan</div><div class="card-sub">QR & Lens</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-health" data-cat="life" style="--c1:#fb7185; --c2:#e11d48; --c-rgb:251,113,133;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-health')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>
                 <div class="card-text"><div class="card-title">Health</div><div class="card-sub">Care & Fitness</div></div>
             </a>
-
             <a href="#" class="service-item" data-id="app-home" data-cat="life" style="--c1:#f97316; --c2:#ea580c; --c-rgb:249,115,22;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-home')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
                 <div class="card-text"><div class="card-title">Home</div><div class="card-sub">Personal Space</div></div>
             </a>
-
             <a href="javascript:void(0)" onclick="handleSettingsCardClick()" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-settings')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>
                 <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
             </a>
-
             <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData()" style="--c1:#3ded97; --c2:#2563eb; --c-rgb:61,237,151;">
                 <div class="card-top-bar"><span class="dot-placeholder"></span><div class="fav-badge" onclick="toggleFav(event, 'app-sync')"><i class="fa-solid fa-star"></i></div></div>
                 <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
@@ -1193,14 +1266,22 @@
 
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-plus-circle"></i> Post Global Cloud Notice (Admin)</span>
+                <span><i class="fa-solid fa-plus-circle"></i> Post / Edit Global Notice (Admin)</span>
             </div>
             <div class="notice-form">
-                <textarea id="notice-input" class="notice-input" maxlength="280" placeholder="Write a notice for all visitors..."></textarea>
+                <input type="hidden" id="edit-notice-idx" value="">
+                <textarea id="notice-input" class="notice-input" maxlength="400" placeholder="Write a notice for all visitors (English or Bengali)..."></textarea>
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+                    <label style="font-size:11px; color:var(--text-secondary);">Priority:</label>
+                    <select id="notice-priority-input" class="form-select" style="max-width:140px; padding:4px 8px; font-size:11px;">
+                        <option value="normal">Normal</option>
+                        <option value="urgent">High / Urgent</option>
+                    </select>
+                </div>
                 <div class="notice-form-footer">
-                    <span class="notice-limit-hint">Syncs to all users within 4.5s</span>
-                    <button class="btn-action" onclick="addNotice()">
-                        <i class="fa-solid fa-paper-plane"></i> Publish Notice
+                    <span class="notice-limit-hint">Max 30 Notices stored in Cloud</span>
+                    <button class="btn-action" onclick="saveNoticeItem()">
+                        <i class="fa-solid fa-paper-plane"></i> <span id="notice-btn-text">Publish Notice</span>
                     </button>
                 </div>
             </div>
@@ -1208,8 +1289,8 @@
 
         <div class="tools-section-card">
             <div class="section-label">
-                <span><i class="fa-solid fa-bullhorn"></i> Recent Notices (Max 4)</span>
-                <span id="notice-count-pill" style="color: var(--text-secondary); font-size: 10px;">0 / 4</span>
+                <span><i class="fa-solid fa-bullhorn"></i> Recent Notices (Max 30)</span>
+                <span id="notice-count-pill" style="color: var(--text-secondary); font-size: 10px;">0 / 30</span>
             </div>
             <div id="notices-list" class="notices-list"></div>
         </div>
@@ -1235,7 +1316,6 @@
         <div class="tools-section-card" id="google-auth-card">
             <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
 
-            <!-- State 1: Logged Out View -->
             <div class="setting-row" id="google-logged-out-view">
                 <div class="setting-info">
                     <h4>Google Account Sign-In</h4>
@@ -1246,7 +1326,6 @@
                 </button>
             </div>
 
-            <!-- State 2: Logged In View -->
             <div class="setting-row" id="google-logged-in-view" style="display: none;">
                 <div class="user-profile-row">
                     <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
@@ -1291,7 +1370,6 @@
                 </button>
             </div>
 
-            <!-- Access Mode Selector -->
             <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info">
                     <h4>Access Mode</h4>
@@ -1306,15 +1384,26 @@
                 </div>
             </div>
 
+            <!-- 12 Grid Layout Styles (Restricted to 2/3/4/5 columns) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Card Grid Style (Cloud)</h4>
-                    <p>Set 3-Column, 2-Column, or 4-Column for all visitors</p>
+                    <h4>Card Grid Layout (12 Styles)</h4>
+                    <p>Choose among 12 styles (2, 3, 4, or 5 columns)</p>
                 </div>
-                <button class="btn-action" onclick="cycleGridLayout()">
-                    <span id="tools-layout-icon-holder"></span>
-                    <span id="grid-style-label">3 Columns</span>
-                </button>
+                <select id="grid-style-select" class="form-select" style="max-width:180px; padding:6px; font-size:11.5px;" onchange="setGridLayoutStyle(this.value)">
+                    <option value="1">1. Modern 2-Col (Spacious)</option>
+                    <option value="2">2. Compact 2-Col (Dense)</option>
+                    <option value="3">3. Classic 3-Col (Balanced)</option>
+                    <option value="4">4. Sleek 3-Col (Modern)</option>
+                    <option value="5">5. Wide 3-Col (Airy)</option>
+                    <option value="6">6. Executive 3-Col (Padded)</option>
+                    <option value="7">7. Standard 4-Col (Grid)</option>
+                    <option value="8">8. Dense 4-Col (Compact)</option>
+                    <option value="9">9. Spacious 4-Col (Wide)</option>
+                    <option value="10">10. Fluid 4-Col (Flexible)</option>
+                    <option value="11">11. Pro 5-Col (Dashboard)</option>
+                    <option value="12">12. Compact 5-Col (Ultra)</option>
+                </select>
             </div>
 
             <div class="setting-row admin-only">
@@ -1338,16 +1427,25 @@
                 </div>
             </div>
 
-            <div class="setting-row admin-only">
-                <div class="setting-info">
-                    <h4>Accent Color (Cloud)</h4>
-                    <p>Customize highlight & button tones for everyone</p>
+            <!-- Expanded Accent Color Choices (12 Swatches) -->
+            <div class="setting-row admin-only" style="flex-direction: column; align-items: flex-start;">
+                <div class="setting-info" style="margin-bottom: 8px;">
+                    <h4>Accent Color (12 Popular Choices)</h4>
+                    <p>Customize highlight tones for everyone</p>
                 </div>
-                <div class="color-swatches">
-                    <div class="swatch active" data-primary="#3ded97" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)"></div>
-                    <div class="swatch" data-primary="#10b981" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)"></div>
-                    <div class="swatch" data-primary="#f43f5e" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)"></div>
-                    <div class="swatch" data-primary="#0ea5e9" style="background: #0ea5e9;" onclick="setAccent('#0ea5e9', '#3ded97', this)"></div>
+                <div class="color-swatches-grid">
+                    <div class="swatch active" data-primary="#3ded97" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)" title="Emerald Mint"></div>
+                    <div class="swatch" data-primary="#10b981" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)" title="Emerald Green"></div>
+                    <div class="swatch" data-primary="#3b82f6" style="background: #3b82f6;" onclick="setAccent('#3b82f6', '#6366f1', this)" title="Royal Blue"></div>
+                    <div class="swatch" data-primary="#06b6d4" style="background: #06b6d4;" onclick="setAccent('#06b6d4', '#3b82f6', this)" title="Cyan Glow"></div>
+                    <div class="swatch" data-primary="#8b5cf6" style="background: #8b5cf6;" onclick="setAccent('#8b5cf6', '#ec4899', this)" title="Electric Violet"></div>
+                    <div class="swatch" data-primary="#ec4899" style="background: #ec4899;" onclick="setAccent('#ec4899', '#f43f5e', this)" title="Hot Pink"></div>
+                    <div class="swatch" data-primary="#f43f5e" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)" title="Crimson Red"></div>
+                    <div class="swatch" data-primary="#f59e0b" style="background: #f59e0b;" onclick="setAccent('#f59e0b', '#ef4444', this)" title="Amber Gold"></div>
+                    <div class="swatch" data-primary="#eab308" style="background: #eab308;" onclick="setAccent('#eab308', '#22c55e', this)" title="Sun Yellow"></div>
+                    <div class="swatch" data-primary="#22c55e" style="background: #22c55e;" onclick="setAccent('#22c55e', '#06b6d4', this)" title="Neon Green"></div>
+                    <div class="swatch" data-primary="#f97316" style="background: #f97316;" onclick="setAccent('#f97316', '#eab308', this)" title="Sunset Orange"></div>
+                    <div class="swatch" data-primary="#64748b" style="background: #64748b;" onclick="setAccent('#64748b', '#0f172a', this)" title="Slate Charcoal"></div>
                 </div>
             </div>
         </div>
@@ -1355,7 +1453,7 @@
         <!-- Admin Controls Section -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management (4.5s Auto-Sync)</span>
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management</span>
                 <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Firebase Cloud Active ✓</span>
             </div>
 
@@ -1576,8 +1674,10 @@
     </div>
 </div>
 
+<!-- Sync Toast Confirmation Element -->
+<div class="sync-toast" id="sync-toast">✓ Successfully Synced to Cloud!</div>
+
 <script type="module">
-    // ==================== FIREBASE SDK IMPORTS & INITIALIZATION ====================
     import { initializeApp } from "firebase/app";
     import {
         getAuth,
@@ -1618,9 +1718,8 @@
         console.warn("Firestore initialization warning:", e);
     }
 
-    // Secondary Firebase Realtime DB REST endpoint (no Apps Script needed)
     const FIREBASE_RTDB_REST_URL = `https://${firebaseConfig.projectId}-default-rtdb.firebaseio.com/kuafi_hub_global.json`;
-    const AUTO_POLL_INTERVAL_MS = 4500; // Sync every 4.5 seconds across all users
+    const AUTO_POLL_INTERVAL_MS = 4500;
 
     const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
     const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
@@ -1650,9 +1749,10 @@
         recycleBin: [],
         categories: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
         notices: [
-            { text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now' }
+            { text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }
         ],
         gridCols: 3,
+        gridStyleChoice: '3',
         accentPrimary: '#3ded97',
         accentSecondary: '#06b6d4',
         scratchpad: '',
@@ -1692,10 +1792,18 @@
         return anyModalOpen || isTyping || isRearrangeMode || isPushing;
     }
 
+    function showSyncToast(message = '✓ Successfully Synced to Cloud!') {
+        const toast = document.getElementById('sync-toast');
+        if (!toast) return;
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2800);
+    }
+
     function applyCloudStateToUI(incomingState, forceRender = false) {
         if (!incomingState || typeof incomingState !== 'object') return;
-
-        // Only apply if incoming state is newer than local state (or when forced)
         const incomingTime = Number(incomingState.updatedAt || 0);
         const localTime = Number(appState.updatedAt || 0);
         if (!forceRender && incomingTime > 0 && incomingTime <= localTime) {
@@ -1712,8 +1820,8 @@
 
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridLbl = document.getElementById('grid-style-label');
-            if (gridLbl) gridLbl.innerText = `${appState.gridCols} Columns`;
+            const gridSelect = document.getElementById('grid-style-select');
+            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -1741,10 +1849,8 @@
     }
 
     function initApp() {
-        // 1. Restore saved Light/Dark theme preference
         applySavedThemeOnLoad();
 
-        // 2. Load Local App State cache first for instant paint
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
@@ -1759,12 +1865,10 @@
             appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
         }
 
-        // 3. Restore Admin Session if unlocked
         if (localStorage.getItem('kuafi_admin_unlocked') === 'true') {
             isAdmin = true;
         }
 
-        // 4. Listen for Firebase Auth State Changes
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 applyGoogleUser({
@@ -1781,7 +1885,6 @@
             }
         });
 
-        // 5. Real-Time Instant WebSocket Listener (Firestore onSnapshot)
         if (hubDocRef) {
             onSnapshot(hubDocRef, (snap) => {
                 if (snap.exists() && !isUserActivelyEditingForm()) {
@@ -1793,7 +1896,6 @@
             });
         }
 
-        // 6. 4.5-Second Continuous Cloud Sync Polling Loop (Guaranteed Every 4-5s Sync)
         syncData(true);
         setInterval(() => {
             if (!document.hidden && !isUserActivelyEditingForm()) {
@@ -1801,11 +1903,10 @@
             }
         }, AUTO_POLL_INTERVAL_MS);
 
-        // 7. Apply saved Grid, Accent & Access Mode
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridLbl = document.getElementById('grid-style-label');
-            if (gridLbl) gridLbl.innerText = `${appState.gridCols} Columns`;
+            const gridSelect = document.getElementById('grid-style-select');
+            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -1821,7 +1922,6 @@
         goHomeWithFav();
     }
 
-    // ==================== PERSISTENT THEME (DARK / LIGHT) ====================
     function applySavedThemeOnLoad() {
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
         const isLight = (savedTheme === 'light');
@@ -1844,7 +1944,6 @@
         }
     }
 
-    // ==================== FIREBASE GOOGLE AUTHENTICATION ====================
     async function loginWithGoogle() {
         const btnText = document.getElementById('google-login-btn-text');
         if (btnText) btnText.innerText = 'Signing in...';
@@ -1863,10 +1962,6 @@
             if (error.code === 'auth/popup-blocked') {
                 await signInWithRedirect(auth, googleProvider);
                 return;
-            } else if (error.code === 'auth/unauthorized-domain') {
-                alert(`Domain Not Authorized in Firebase:\nPlease add "${window.location.hostname}" in Firebase Console -> Authentication -> Settings -> Authorized domains.`);
-            } else if (error.code === 'auth/operation-not-allowed') {
-                alert('Google Sign-In is not enabled yet in Firebase Console.\nGo to Authentication -> Sign-in method -> Enable Google.');
             } else if (error.code !== 'auth/popup-closed-by-user') {
                 alert('Google Sign-In Error: ' + (error.message || error.code));
             }
@@ -1897,9 +1992,7 @@
     async function logoutGoogle() {
         try {
             await signOut(auth);
-        } catch (e) {
-            console.error('Sign out error:', e);
-        }
+        } catch (e) {}
         isGoogleLoggedIn = false;
         localStorage.removeItem('kuafi_google_user');
         document.getElementById('google-logged-out-view').style.display = 'flex';
@@ -1908,7 +2001,6 @@
         filterApps(currentFilter);
     }
 
-    // ==================== MUTUAL EXCLUSIVITY: ANY LOGIN HIDES ALL OTHER LOGINS ====================
     function updateAuthAndAdminUI() {
         document.body.classList.toggle('is-admin', isAdmin);
         document.body.classList.toggle('is-google-auth', isGoogleLoggedIn);
@@ -2264,7 +2356,6 @@
         pushStateToCloud(false);
     }
 
-    // Recycle Bin Operations
     function removeCardToBin(cardId) {
         const idx = appState.cardsData.findIndex(c => c.id === cardId);
         if (idx === -1) return;
@@ -2363,71 +2454,166 @@
         pushStateToCloud(false);
     }
 
+    // ==================== ADVANCED NOTICE BOARD (PRIORITY FOR ALL, EXPAND, 30 MAX) ====================
     function renderNotices() {
         const notices = appState.notices || [];
         const listEl = document.getElementById('notices-list');
         const countPill = document.getElementById('notice-count-pill');
-        if (countPill) countPill.innerText = `${notices.length} / 4`;
+        if (countPill) countPill.innerText = `${notices.length} / 30`;
 
         if (listEl) {
             if (notices.length === 0) {
                 listEl.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-secondary); font-size:12px;">No active notices posted yet.</div>`;
             } else {
-                listEl.innerHTML = notices.map((n, idx) => `
-                    <div class="attractive-notice-card">
-                        <div class="attractive-notice-header">
-                            <span class="notice-rank-pill"><i class="fa-solid fa-bolt"></i> Notice #${idx + 1}</span>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <span class="notice-time-badge"><i class="fa-regular fa-clock"></i> ${n.time || 'Live'}</span>
-                                ${isAdmin ? `<button class="card-ctrl-btn danger" onclick="deleteNotice(${idx})" title="Delete Notice"><i class="fa-solid fa-trash"></i></button>` : ''}
+                listEl.innerHTML = notices.map((n, idx) => {
+                    const isUrgent = n.priority === 'urgent';
+                    return `
+                        <div class="attractive-notice-card ${isUrgent ? 'urgent' : ''}" id="notice-card-${idx}">
+                            <div class="attractive-notice-header">
+                                <div class="notice-badges-group">
+                                    <span class="notice-rank-pill ${isUrgent ? 'urgent' : ''}">
+                                        <i class="fa-solid ${isUrgent ? 'fa-triangle-exclamation' : 'fa-bolt'}"></i> ${isUrgent ? 'Urgent' : 'Notice #' + (idx + 1)}
+                                    </span>
+                                    <span class="admin-posted-badge"><i class="fa-solid fa-shield-halved"></i> Admin (As posted by Admin)</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <span class="notice-time-badge"><i class="fa-regular fa-clock"></i> ${n.time || 'Live'}</span>
+                                    ${isAdmin ? `
+                                        <button class="card-ctrl-btn" onclick="editNoticePrompt(${idx})" title="Edit Notice"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="card-ctrl-btn danger" onclick="deleteNotice(${idx})" title="Delete Notice"><i class="fa-solid fa-trash"></i></button>
+                                    ` : ''}
+                                </div>
                             </div>
+                            <div class="attractive-notice-text" id="notice-text-${idx}">${n.text}</div>
+                            <button class="notice-expand-btn" id="notice-exp-btn-${idx}" style="display: none;" onclick="toggleNoticeExpand(${idx})">Expand</button>
                         </div>
-                        <div class="attractive-notice-text">${n.text}</div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
+
+                setTimeout(() => {
+                    notices.forEach((_, idx) => {
+                        const txtEl = document.getElementById(`notice-text-${idx}`);
+                        const btnEl = document.getElementById(`notice-exp-btn-${idx}`);
+                        if (txtEl && btnEl) {
+                            if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 120) {
+                                btnEl.style.display = 'inline-block';
+                            }
+                        }
+                    });
+                }, 50);
             }
         }
 
         updateHomeNoticeShowcase();
     }
 
+    function toggleNoticeExpand(idx) {
+        const txtEl = document.getElementById(`notice-text-${idx}`);
+        const btnEl = document.getElementById(`notice-exp-btn-${idx}`);
+        if (!txtEl || !btnEl) return;
+        const isExpanded = txtEl.classList.toggle('expanded');
+        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+    }
+
+    function toggleHomeNoticeBannerExpand() {
+        const txtEl = document.getElementById('home-notice-text');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (!txtEl || !btnEl) return;
+        const isExpanded = txtEl.classList.toggle('expanded');
+        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+    }
+
     function updateHomeNoticeShowcase() {
         const notices = appState.notices || [];
         const showcase = document.getElementById('home-notice-showcase');
         if (!showcase) return;
+
         if (notices.length === 0) {
             document.getElementById('home-notice-text').innerText = 'No global announcements right now.';
             document.getElementById('home-notice-counter').innerText = '0 / 0';
             document.getElementById('home-notice-time').innerHTML = '<i class="fa-regular fa-clock"></i> Standby';
+            showcase.classList.remove('urgent');
+            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice Board';
             return;
         }
+
         if (homeNoticeIdx >= notices.length) homeNoticeIdx = 0;
         if (homeNoticeIdx < 0) homeNoticeIdx = notices.length - 1;
         const item = notices[homeNoticeIdx];
+        const isUrgent = item.priority === 'urgent';
+
+        showcase.classList.toggle('urgent', isUrgent);
+        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent Notice' : 'Notice Board'}`;
         document.getElementById('home-notice-text').innerText = item.text;
         document.getElementById('home-notice-counter').innerText = `${homeNoticeIdx + 1} / ${notices.length}`;
         document.getElementById('home-notice-time').innerHTML = `<i class="fa-regular fa-clock"></i> ${item.time || 'Synced Live'}`;
+
+        // Check if banner text overflows 2 lines
+        setTimeout(() => {
+            const txtEl = document.getElementById('home-notice-text');
+            const btnEl = document.getElementById('home-notice-exp-btn');
+            if (txtEl && btnEl) {
+                if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 100) {
+                    btnEl.style.display = 'inline-block';
+                } else {
+                    btnEl.style.display = 'none';
+                    txtEl.classList.remove('expanded');
+                    btnEl.innerText = 'Expand';
+                }
+            }
+        }, 50);
     }
 
     function cycleHomeNotice(step) {
         homeNoticeIdx += step;
+        const txtEl = document.getElementById('home-notice-text');
+        if (txtEl) txtEl.classList.remove('expanded');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (btnEl) btnEl.innerText = 'Expand';
         updateHomeNoticeShowcase();
     }
 
-    function addNotice() {
+    function saveNoticeItem() {
         const input = document.getElementById('notice-input');
+        const prioritySel = document.getElementById('notice-priority-input');
+        const editIdxInput = document.getElementById('edit-notice-idx');
         const text = input.value.trim();
+        const priority = prioritySel.value;
         if (!text) return;
+
         appState.notices = appState.notices || [];
-        appState.notices.unshift({
-            text,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString()
-        });
-        if (appState.notices.length > 4) appState.notices = appState.notices.slice(0, 4);
+        const editIdx = editIdxInput.value !== '' ? Number(editIdxInput.value) : -1;
+
+        if (editIdx >= 0 && editIdx < appState.notices.length) {
+            appState.notices[editIdx].text = text;
+            appState.notices[editIdx].priority = priority;
+            appState.notices[editIdx].time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString() + ' (Edited)';
+        } else {
+            appState.notices.unshift({
+                text,
+                priority,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' • ' + new Date().toLocaleDateString()
+            });
+            if (appState.notices.length > 30) appState.notices = appState.notices.slice(0, 30);
+        }
+
         input.value = '';
+        editIdxInput.value = '';
+        document.getElementById('notice-btn-text').innerText = 'Publish Notice';
         homeNoticeIdx = 0;
         renderNotices();
-        pushStateToCloud(false);
+        pushStateToCloud(true);
+    }
+
+    function editNoticePrompt(idx) {
+        const item = appState.notices[idx];
+        if (!item) return;
+        document.getElementById('notice-input').value = item.text;
+        document.getElementById('notice-priority-input').value = item.priority || 'normal';
+        document.getElementById('edit-notice-idx').value = idx;
+        document.getElementById('notice-btn-text').innerText = 'Update Notice';
+        switchPage('notices');
+        document.getElementById('notice-input').focus();
     }
 
     function deleteNotice(idx) {
@@ -2436,7 +2622,6 @@
         pushStateToCloud(false);
     }
 
-    // Admin PIN Login / Logout
     function openAdminModal() {
         document.getElementById('admin-pin-input').value = '';
         openModal('admin-modal');
@@ -2452,6 +2637,7 @@
             renderServiceGrid();
             renderNotices();
             updateAuthAndAdminUI();
+            showSyncToast('✓ Admin Mode Unlocked Successfully!');
         } else {
             alert('Invalid Admin PIN!');
         }
@@ -2485,7 +2671,13 @@
         isRearrangeMode = typeof forceState === 'boolean' ? forceState : !isRearrangeMode;
         document.body.classList.toggle('rearrange-active', isRearrangeMode);
         document.getElementById('rearrange-banner').classList.toggle('active', isRearrangeMode);
-        if (!isRearrangeMode) pushStateToCloud(false);
+    }
+
+    function saveRearrangeAndSync() {
+        isRearrangeMode = false;
+        document.body.classList.remove('rearrange-active');
+        document.getElementById('rearrange-banner').classList.remove('active');
+        pushStateToCloud(true);
     }
 
     function openRearrangeFromTools() {
@@ -2493,11 +2685,33 @@
         toggleRearrangeMode(true);
     }
 
-    function cycleGridLayout() {
-        const next = appState.gridCols === 3 ? 4 : (appState.gridCols === 4 ? 2 : 3);
-        appState.gridCols = next;
-        document.documentElement.style.setProperty('--grid-cols', next);
-        document.getElementById('grid-style-label').innerText = `${next} Columns`;
+    // 12 Grid Layout Styles (Restricted to 2, 3, 4, 5 columns with unique layout styling)
+    function setGridLayoutStyle(styleKey) {
+        appState.gridStyleChoice = styleKey;
+        let cols = 3;
+        let gap = '10px';
+        let padding = '10px 8px 12px';
+
+        switch (styleKey) {
+            case '1': cols = 2; gap = '14px'; padding = '14px 10px 16px'; break; // Modern 2-Col
+            case '2': cols = 2; gap = '8px';  padding = '8px 6px 10px';   break; // Compact 2-Col
+            case '3': cols = 3; gap = '10px'; padding = '10px 8px 12px';  break; // Classic 3-Col
+            case '4': cols = 3; gap = '8px';  padding = '9px 7px 11px';   break; // Sleek 3-Col
+            case '5': cols = 3; gap = '14px'; padding = '14px 10px 16px'; break; // Wide 3-Col
+            case '6': cols = 3; gap = '12px'; padding = '12px 10px 14px'; break; // Executive 3-Col
+            case '7': cols = 4; gap = '8px';  padding = '8px 6px 10px';   break; // Standard 4-Col
+            case '8': cols = 4; gap = '6px';  padding = '6px 4px 8px';    break; // Dense 4-Col
+            case '9': cols = 4; gap = '12px'; padding = '12px 8px 14px';  break; // Spacious 4-Col
+            case '10': cols = 4; gap = '10px'; padding = '10px 8px 12px'; break; // Fluid 4-Col
+            case '11': cols = 5; gap = '6px';  padding = '6px 4px 8px';    break; // Pro 5-Col
+            case '12': cols = 5; gap = '4px';  padding = '5px 3px 6px';    break; // Compact 5-Col
+            default: cols = 3; gap = '10px'; padding = '10px 8px 12px';
+        }
+
+        appState.gridCols = cols;
+        document.documentElement.style.setProperty('--grid-cols', cols);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+        document.documentElement.style.setProperty('--card-padding', padding);
         pushStateToCloud(false);
     }
 
@@ -2523,19 +2737,19 @@
         if (!confirm('Restore original 20 default cards and order?')) return;
         appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
         renderServiceGrid();
-        pushStateToCloud(false);
+        pushStateToCloud(true);
     }
 
     function clearFavorites() {
         appState.favorites = [];
         renderServiceGrid();
-        pushStateToCloud(false);
+        pushStateToCloud(true);
     }
 
     function clearNotes() {
         appState.scratchpad = '';
         document.getElementById('quick-notes').value = '';
-        pushStateToCloud(false);
+        pushStateToCloud(true);
     }
 
     function toggleHeaderSearch() {
@@ -2567,7 +2781,6 @@
         alert('Hub Link copied to clipboard!');
     }
 
-    // ==================== DUAL-ENGINE CLOUD PUSH & 4.5s AUTO-POLL ====================
     async function pushStateToCloud(showAlert = false) {
         isPushing = true;
         const notesEl = document.getElementById('quick-notes');
@@ -2579,7 +2792,6 @@
 
         let syncedOk = false;
 
-        // Engine 1: Firebase Firestore
         if (hubDocRef) {
             try {
                 await setDoc(hubDocRef, appState, { merge: true });
@@ -2589,7 +2801,6 @@
             }
         }
 
-        // Engine 2: Firebase Realtime Database REST Fallback (No Apps Script)
         try {
             const res = await fetch(FIREBASE_RTDB_REST_URL, {
                 method: 'PUT',
@@ -2604,10 +2815,10 @@
 
         const pill = document.getElementById('cloud-status-pill');
         if (pill) {
-            pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally (Check Firebase Rules)';
+            pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally';
         }
         if (showAlert) {
-            alert('Saved and synced to Cloud! All users will see this within 4.5 seconds.');
+            showSyncToast('✓ Successfully Synced to Cloud for all users!');
         }
     }
 
@@ -2618,19 +2829,15 @@
 
         let latestCloudData = null;
 
-        // 1. Check Firestore
         if (hubDocRef) {
             try {
                 const snap = await getDoc(hubDocRef);
                 if (snap.exists()) {
                     latestCloudData = snap.data();
                 }
-            } catch (e) {
-                console.warn("Firestore poll note:", e.message);
-            }
+            } catch (e) {}
         }
 
-        // 2. Check Firebase Realtime DB REST Fallback if newer or Firestore unavailable
         try {
             const res = await fetch(FIREBASE_RTDB_REST_URL, { cache: 'no-store' });
             if (res.ok) {
@@ -2663,13 +2870,13 @@
         document.getElementById(id)?.classList.remove('open');
     }
 
-    // Expose functions globally for inline HTML onclick handlers
     Object.assign(window, {
         toggleHeaderSearch,
         handleSearch,
         cycleHomeNotice,
         switchPage,
         toggleRearrangeMode,
+        saveRearrangeAndSync,
         openCardModal,
         openCategoryModal,
         openRecycleBinModal,
@@ -2679,8 +2886,11 @@
         handleSettingsCardClick,
         syncData,
         goHomeWithFav,
-        addNotice,
+        saveNoticeItem,
+        editNoticePrompt,
         deleteNotice,
+        toggleNoticeExpand,
+        toggleHomeNoticeBannerExpand,
         loginWithGoogle,
         logoutGoogle,
         openAdminModal,
@@ -2688,7 +2898,7 @@
         logoutAdmin,
         toggleTheme,
         setAccessMode,
-        cycleGridLayout,
+        setGridLayoutStyle,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
