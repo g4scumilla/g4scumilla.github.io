@@ -1141,7 +1141,7 @@
             </div>
         </div>
 
-        <!-- Live Preview Active Banner -->
+        <!-- Live Preview Banner -->
         <div class="preview-banner admin-only" id="preview-banner">
             <span><i class="fa-solid fa-eye" style="color: var(--accent-secondary); margin-right: 6px;"></i>🎨 Live Grid Preview Active</span>
             <button class="preview-save-btn" onclick="savePreviewAndSync()">Apply to Cloud</button>
@@ -2906,6 +2906,7 @@
         renderNotices();
         updateAuthAndAdminUI();
         showSyncToast('🔒 Admin Mode Locked');
+        goHomeWithFav();
     }
 
     function handleSecureCardClick() {
