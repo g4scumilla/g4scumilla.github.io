@@ -32,6 +32,8 @@
             --warning: #f59e0b;
             --app-max-width: 440px;
             --grid-cols: 3;
+            --grid-gap: 10px;
+            --card-padding: 10px 8px 12px;
         }
 
         body.light-mode {
@@ -220,7 +222,7 @@
             border-color: var(--accent);
         }
 
-        /* Attractive Notice Showcase Banner (Home) */
+        /* Attractive Notice Showcase Banner (Home) with Expandable Body */
         .notice-showcase {
             position: relative;
             border-radius: 16px;
@@ -232,6 +234,10 @@
             overflow: hidden;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
+        .notice-showcase.urgent {
+            border-color: rgba(244, 63, 94, 0.5);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.14) 0%, rgba(6, 182, 212, 0.05) 50%, var(--bg-card) 100%);
+        }
         .notice-showcase::before {
             content: '';
             position: absolute;
@@ -240,6 +246,9 @@
             width: 4px;
             height: 100%;
             background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+        }
+        .notice-showcase.urgent::before {
+            background: linear-gradient(180deg, var(--danger), var(--warning));
         }
         .notice-showcase-top {
             display: flex;
@@ -261,6 +270,11 @@
             color: var(--accent);
             border: 1px solid rgba(61, 237, 151, 0.4);
         }
+        .notice-showcase.urgent .notice-live-badge {
+            background: rgba(244, 63, 94, 0.2);
+            color: var(--danger);
+            border-color: rgba(244, 63, 94, 0.4);
+        }
         .pulse-dot {
             width: 6px;
             height: 6px;
@@ -268,6 +282,10 @@
             background: var(--accent);
             box-shadow: 0 0 8px var(--accent);
             animation: pulseGlow 1.5s infinite;
+        }
+        .notice-showcase.urgent .pulse-dot {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
         }
         @keyframes pulseGlow {
             0%, 100% { transform: scale(1); opacity: 1; }
@@ -298,6 +316,13 @@
             color: var(--text-primary);
             margin-bottom: 6px;
             word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .notice-showcase-body.expanded {
+            -webkit-line-clamp: unset;
         }
         .notice-showcase-footer {
             display: flex;
@@ -443,7 +468,7 @@
         .service-grid {
             display: grid;
             grid-template-columns: repeat(var(--grid-cols, 3), minmax(0, 1fr));
-            gap: 10px;
+            gap: var(--grid-gap, 10px);
         }
         body.access-tab .service-grid {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -462,7 +487,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 10px 8px 12px;
+            padding: var(--card-padding, 10px 8px 12px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1057,7 +1082,7 @@
         <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
         <div class="notice-showcase" id="home-notice-showcase">
             <div class="notice-showcase-top">
-                <span class="notice-live-badge"><span class="pulse-dot"></span> Notice Board</span>
+                <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
                 <div class="notice-showcase-controls">
                     <span id="home-notice-counter" style="font-size:10px; color:var(--text-secondary);">1 / 1</span>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1068,13 +1093,14 @@
             <div class="notice-showcase-body" id="home-notice-text">
                 Welcome to Abdullahil Kuafi's Smart Cloud Hub!
             </div>
+            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;" onclick="toggleHomeNoticeBannerExpand()">Expand</button>
             <div class="notice-showcase-footer">
                 <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
                 <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices')">View Board →</span>
             </div>
         </div>
 
-        <!-- Active Rearrange Mode Banner (Admin Only) with Clear Feedback Save -->
+        <!-- Active Rearrange Mode Banner (Admin Only) -->
         <div class="rearrange-banner admin-only" id="rearrange-banner">
             <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
             <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
@@ -1358,25 +1384,25 @@
                 </div>
             </div>
 
-            <!-- 12 Popular Card Grid Choices -->
+            <!-- 12 Grid Layout Styles (Restricted to 2/3/4/5 columns) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Card Grid Column Layout (12 Choices)</h4>
-                    <p>Select grid columns for all users</p>
+                    <h4>Card Grid Layout (12 Styles)</h4>
+                    <p>Choose among 12 styles (2, 3, 4, or 5 columns)</p>
                 </div>
-                <select id="grid-cols-select" class="form-select" style="max-width:140px; padding:6px; font-size:11.5px;" onchange="setGridColumnsChoice(this.value)">
-                    <option value="1">1 Column</option>
-                    <option value="2">2 Columns</option>
-                    <option value="3" selected>3 Columns</option>
-                    <option value="4">4 Columns</option>
-                    <option value="5">5 Columns</option>
-                    <option value="6">6 Columns</option>
-                    <option value="7">7 Columns</option>
-                    <option value="8">8 Columns</option>
-                    <option value="9">9 Columns</option>
-                    <option value="10">10 Columns</option>
-                    <option value="11">11 Columns</option>
-                    <option value="12">12 Columns</option>
+                <select id="grid-style-select" class="form-select" style="max-width:180px; padding:6px; font-size:11.5px;" onchange="setGridLayoutStyle(this.value)">
+                    <option value="1">1. Modern 2-Col (Spacious)</option>
+                    <option value="2">2. Compact 2-Col (Dense)</option>
+                    <option value="3">3. Classic 3-Col (Balanced)</option>
+                    <option value="4">4. Sleek 3-Col (Modern)</option>
+                    <option value="5">5. Wide 3-Col (Airy)</option>
+                    <option value="6">6. Executive 3-Col (Padded)</option>
+                    <option value="7">7. Standard 4-Col (Grid)</option>
+                    <option value="8">8. Dense 4-Col (Compact)</option>
+                    <option value="9">9. Spacious 4-Col (Wide)</option>
+                    <option value="10">10. Fluid 4-Col (Flexible)</option>
+                    <option value="11">11. Pro 5-Col (Dashboard)</option>
+                    <option value="12">12. Compact 5-Col (Ultra)</option>
                 </select>
             </div>
 
@@ -1726,6 +1752,7 @@
             { text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }
         ],
         gridCols: 3,
+        gridStyleChoice: '3',
         accentPrimary: '#3ded97',
         accentSecondary: '#06b6d4',
         scratchpad: '',
@@ -1793,10 +1820,8 @@
 
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridSelect = document.getElementById('grid-cols-select');
-            if (gridSelect) gridSelect.value = String(appState.gridCols);
-            const gridLbl = document.getElementById('grid-style-label');
-            if (gridLbl) gridLbl.innerText = `${appState.gridCols} Columns`;
+            const gridSelect = document.getElementById('grid-style-select');
+            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -1880,8 +1905,8 @@
 
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridSelect = document.getElementById('grid-cols-select');
-            if (gridSelect) gridSelect.value = String(appState.gridCols);
+            const gridSelect = document.getElementById('grid-style-select');
+            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -2429,7 +2454,7 @@
         pushStateToCloud(false);
     }
 
-    // ==================== ADVANCED NOTICE BOARD (MAX 30, PRIORITY, EDIT, EXPAND) ====================
+    // ==================== ADVANCED NOTICE BOARD (PRIORITY FOR ALL, EXPAND, 30 MAX) ====================
     function renderNotices() {
         const notices = appState.notices || [];
         const listEl = document.getElementById('notices-list');
@@ -2465,7 +2490,6 @@
                     `;
                 }).join('');
 
-                // Check text line overflow to toggle expand button visibility
                 setTimeout(() => {
                     notices.forEach((_, idx) => {
                         const txtEl = document.getElementById(`notice-text-${idx}`);
@@ -2491,26 +2515,61 @@
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
     }
 
+    function toggleHomeNoticeBannerExpand() {
+        const txtEl = document.getElementById('home-notice-text');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (!txtEl || !btnEl) return;
+        const isExpanded = txtEl.classList.toggle('expanded');
+        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+    }
+
     function updateHomeNoticeShowcase() {
         const notices = appState.notices || [];
         const showcase = document.getElementById('home-notice-showcase');
         if (!showcase) return;
+
         if (notices.length === 0) {
             document.getElementById('home-notice-text').innerText = 'No global announcements right now.';
             document.getElementById('home-notice-counter').innerText = '0 / 0';
             document.getElementById('home-notice-time').innerHTML = '<i class="fa-regular fa-clock"></i> Standby';
+            showcase.classList.remove('urgent');
+            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice Board';
             return;
         }
+
         if (homeNoticeIdx >= notices.length) homeNoticeIdx = 0;
         if (homeNoticeIdx < 0) homeNoticeIdx = notices.length - 1;
         const item = notices[homeNoticeIdx];
+        const isUrgent = item.priority === 'urgent';
+
+        showcase.classList.toggle('urgent', isUrgent);
+        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent Notice' : 'Notice Board'}`;
         document.getElementById('home-notice-text').innerText = item.text;
         document.getElementById('home-notice-counter').innerText = `${homeNoticeIdx + 1} / ${notices.length}`;
         document.getElementById('home-notice-time').innerHTML = `<i class="fa-regular fa-clock"></i> ${item.time || 'Synced Live'}`;
+
+        // Check if banner text overflows 2 lines
+        setTimeout(() => {
+            const txtEl = document.getElementById('home-notice-text');
+            const btnEl = document.getElementById('home-notice-exp-btn');
+            if (txtEl && btnEl) {
+                if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 100) {
+                    btnEl.style.display = 'inline-block';
+                } else {
+                    btnEl.style.display = 'none';
+                    txtEl.classList.remove('expanded');
+                    btnEl.innerText = 'Expand';
+                }
+            }
+        }, 50);
     }
 
     function cycleHomeNotice(step) {
         homeNoticeIdx += step;
+        const txtEl = document.getElementById('home-notice-text');
+        if (txtEl) txtEl.classList.remove('expanded');
+        const btnEl = document.getElementById('home-notice-exp-btn');
+        if (btnEl) btnEl.innerText = 'Expand';
         updateHomeNoticeShowcase();
     }
 
@@ -2626,12 +2685,33 @@
         toggleRearrangeMode(true);
     }
 
-    function setGridColumnsChoice(cols) {
-        const num = parseInt(cols, 10) || 3;
-        appState.gridCols = num;
-        document.documentElement.style.setProperty('--grid-cols', num);
-        const gridLbl = document.getElementById('grid-style-label');
-        if (gridLbl) gridLbl.innerText = `${num} Columns`;
+    // 12 Grid Layout Styles (Restricted to 2, 3, 4, 5 columns with unique layout styling)
+    function setGridLayoutStyle(styleKey) {
+        appState.gridStyleChoice = styleKey;
+        let cols = 3;
+        let gap = '10px';
+        let padding = '10px 8px 12px';
+
+        switch (styleKey) {
+            case '1': cols = 2; gap = '14px'; padding = '14px 10px 16px'; break; // Modern 2-Col
+            case '2': cols = 2; gap = '8px';  padding = '8px 6px 10px';   break; // Compact 2-Col
+            case '3': cols = 3; gap = '10px'; padding = '10px 8px 12px';  break; // Classic 3-Col
+            case '4': cols = 3; gap = '8px';  padding = '9px 7px 11px';   break; // Sleek 3-Col
+            case '5': cols = 3; gap = '14px'; padding = '14px 10px 16px'; break; // Wide 3-Col
+            case '6': cols = 3; gap = '12px'; padding = '12px 10px 14px'; break; // Executive 3-Col
+            case '7': cols = 4; gap = '8px';  padding = '8px 6px 10px';   break; // Standard 4-Col
+            case '8': cols = 4; gap = '6px';  padding = '6px 4px 8px';    break; // Dense 4-Col
+            case '9': cols = 4; gap = '12px'; padding = '12px 8px 14px';  break; // Spacious 4-Col
+            case '10': cols = 4; gap = '10px'; padding = '10px 8px 12px'; break; // Fluid 4-Col
+            case '11': cols = 5; gap = '6px';  padding = '6px 4px 8px';    break; // Pro 5-Col
+            case '12': cols = 5; gap = '4px';  padding = '5px 3px 6px';    break; // Compact 5-Col
+            default: cols = 3; gap = '10px'; padding = '10px 8px 12px';
+        }
+
+        appState.gridCols = cols;
+        document.documentElement.style.setProperty('--grid-cols', cols);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+        document.documentElement.style.setProperty('--card-padding', padding);
         pushStateToCloud(false);
     }
 
@@ -2810,6 +2890,7 @@
         editNoticePrompt,
         deleteNotice,
         toggleNoticeExpand,
+        toggleHomeNoticeBannerExpand,
         loginWithGoogle,
         logoutGoogle,
         openAdminModal,
@@ -2817,7 +2898,7 @@
         logoutAdmin,
         toggleTheme,
         setAccessMode,
-        setGridColumnsChoice,
+        setGridLayoutStyle,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
