@@ -1355,7 +1355,7 @@
             </div>
         </div>
 
-        <!-- NEW: "My Profile" Section for Google Logged-In Users -->
+        <!-- "My Profile" Section for Google Logged-In Users -->
         <div class="tools-section-card google-user-only" id="google-my-profile-section">
             <div class="section-label"><span><i class="fa-solid fa-id-card"></i> My Profile & Custom Details</span></div>
             <div class="setting-row">
@@ -1429,92 +1429,76 @@
                     <button class="access-pill" data-mode="desktop" onclick="setAccessMode('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Card Grid Column Option (2, 3, or 4) -->
-            <div class="setting-row admin-only">
+        <!-- NEW: Grouped Admin Live Grid Customizer (Columns, Style, Layout) -->
+        <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
+            <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
+            
+            <div class="setting-row">
                 <div class="setting-info">
-                    <h4>Card Grid Columns (2, 3, or 4)</h4>
-                    <p>Set number of grid columns for visitors</p>
+                    <h4>1. Card Grid Columns</h4>
+                    <p>Select number of columns (2, 3, or 4)</p>
                 </div>
-                <select id="grid-cols-select" class="form-select" style="max-width:130px; padding:6px; font-size:11.5px;" onchange="setGridColumns(this.value)">
+                <select id="grid-cols-select" class="form-select" style="max-width:140px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
                     <option value="2">2 Columns</option>
                     <option value="3" selected>3 Columns</option>
                     <option value="4">4 Columns</option>
                 </select>
             </div>
 
-            <!-- Card Grid UI Style (15 Popular Styles) -->
-            <div class="setting-row admin-only">
+            <div class="setting-row">
                 <div class="setting-info">
-                    <h4>Card Grid UI Style (15 Popular Styles)</h4>
-                    <p>Choose visual look and feel for all cards</p>
+                    <h4>2. Card UI Style</h4>
+                    <p>Choose visual theme look for service cards</p>
                 </div>
-                <select id="grid-style-select" class="form-select" style="max-width:190px; padding:6px; font-size:11.5px;" onchange="setCardGridStyle(this.value)">
-                    <option value="1">1. Modern Glassmorphism</option>
-                    <option value="2">2. Neon Glow Border</option>
-                    <option value="3">3. Ultra Rounded Cards</option>
-                    <option value="4">4. Sleek Gradient Border</option>
-                    <option value="5">5. Minimalist Flat Dark</option>
-                    <option value="6">6. Deep Floating Shadow</option>
-                    <option value="7">7. Executive Bordered</option>
-                    <option value="8">8. Cyberpunk Tech Box</option>
-                    <option value="9">9. Soft Pastel Elegance</option>
-                    <option value="10">10. Frosted Glass Tile</option>
-                    <option value="11">11. High Contrast Bold</option>
-                    <option value="12">12. Clean Outline Modern</option>
-                    <option value="13">13. Pill Shaped Accent</option>
-                    <option value="14">14. Velvet Dark Elevation</option>
-                    <option value="15">15. Classic Standard Grid</option>
+                <select id="grid-style-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Modern Glass</option>
+                    <option value="2">2. Neon Glow</option>
+                    <option value="3">3. Ultra Rounded</option>
+                    <option value="4">4. Gradient Border</option>
+                    <option value="5">5. Minimal Flat</option>
+                    <option value="6">6. Deep Floating</option>
+                    <option value="7">7. Executive</option>
+                    <option value="8">8. Cyberpunk</option>
+                    <option value="9">9. Soft Pastel</option>
+                    <option value="10">10. Frosted Tile</option>
+                    <option value="11">11. High Contrast</option>
+                    <option value="12">12. Outline Modern</option>
+                    <option value="13">13. Pill Shaped</option>
+                    <option value="14">14. Velvet Dark</option>
+                    <option value="15">15. Classic Grid</option>
                 </select>
             </div>
 
-            <!-- Separate Option: 15 Distinct Card Grid Layout Options -->
-            <div class="setting-row admin-only">
+            <div class="setting-row">
                 <div class="setting-info">
-                    <h4>Card Grid Layout (15 Layout Options)</h4>
-                    <p>Choose structure and spacing layout for cards</p>
+                    <h4>3. Card Grid Layout (15 Options)</h4>
+                    <p>Choose structural padding and alignment</p>
                 </div>
-                <select id="grid-layout-select" class="form-select" style="max-width:190px; padding:6px; font-size:11.5px;" onchange="setCardGridLayoutChoice(this.value)">
-                    <option value="1">1. Standard Balanced Grid</option>
-                    <option value="2">2. Compact Dense Grid</option>
-                    <option value="3">3. Spaced Airy Grid</option>
-                    <option value="4">4. Centered Alignment Grid</option>
-                    <option value="5">5. Border-Framed Grid</option>
-                    <option value="6">6. Shadow-Lifted Grid</option>
-                    <option value="7">7. Floating Island Grid</option>
-                    <option value="8">8. Rounded Capsule Grid</option>
-                    <option value="9">9. Minimal Flat Grid</option>
-                    <option value="10">10. Glowing Accent Grid</option>
-                    <option value="11">11. Dual-Tone Gradient Grid</option>
-                    <option value="12">12. Borderless Clean Grid</option>
-                    <option value="13">13. Elevated Card Grid</option>
-                    <option value="14">14. Sharp Geometric Grid</option>
-                    <option value="15">15. Fluid Auto-Fit Grid</option>
+                <select id="grid-layout-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Standard Balanced</option>
+                    <option value="2">2. Compact Dense</option>
+                    <option value="3">3. Spaced Airy</option>
+                    <option value="4">4. Centered Alignment</option>
+                    <option value="5">5. Border-Framed</option>
+                    <option value="6">6. Shadow-Lifted</option>
+                    <option value="7">7. Floating Island</option>
+                    <option value="8">8. Rounded Capsule</option>
+                    <option value="9">9. Minimal Flat</option>
+                    <option value="10">10. Glowing Accent</option>
+                    <option value="11">11. Dual Gradient</option>
+                    <option value="12">12. Borderless Clean</option>
+                    <option value="13">13. Elevated Card</option>
+                    <option value="14">14. Sharp Geometric</option>
+                    <option value="15">15. Fluid Auto-Fit</option>
                 </select>
             </div>
+        </div>
 
-            <div class="setting-row admin-only">
-                <div class="setting-info">
-                    <h4>Rearrange Link Cards (Cloud)</h4>
-                    <p>Reorder cards in Cloud for all visitors</p>
-                </div>
-                <button class="btn-action" onclick="openRearrangeFromTools()">
-                    <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
-                </button>
-            </div>
-
-            <div class="setting-row admin-only">
-                <div class="setting-info">
-                    <h4>Service Cards & Recycle Bin (Cloud)</h4>
-                    <p>Add new cards or restore removed cards from Recycle Bin</p>
-                </div>
-                <div style="display:flex; gap:6px;">
-                    <button class="btn-action" onclick="openCardModal()"><i class="fa-solid fa-plus"></i> Add</button>
-                    <button class="btn-action" onclick="openRecycleBinModal()"><i class="fa-solid fa-trash-can"></i> Bin (<span id="tools-bin-count">0</span>)</button>
-                </div>
-            </div>
-
-            <div class="setting-row admin-only" style="flex-direction: column; align-items: flex-start;">
+        <div class="tools-section-card admin-only">
+            <div class="section-label"><span><i class="fa-solid fa-palette"></i> Accent Colors</span></div>
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info" style="margin-bottom: 8px;">
                     <h4>Accent Color (12 Popular Choices)</h4>
                     <p>Customize highlight tones for everyone</p>
@@ -1532,6 +1516,25 @@
                     <div class="swatch" data-primary="#22c55e" style="background: #22c55e;" onclick="setAccent('#22c55e', '#06b6d4', this)" title="Neon Green"></div>
                     <div class="swatch" data-primary="#f97316" style="background: #f97316;" onclick="setAccent('#f97316', '#eab308', this)" title="Sunset Orange"></div>
                     <div class="swatch" data-primary="#64748b" style="background: #64748b;" onclick="setAccent('#64748b', '#0f172a', this)" title="Slate Charcoal"></div>
+                </div>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Rearrange Link Cards (Cloud)</h4>
+                    <p>Reorder cards in Cloud for all visitors</p>
+                </div>
+                <button class="btn-action" onclick="openRearrangeFromTools()">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
+                </button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Service Cards & Recycle Bin (Cloud)</h4>
+                    <p>Add new cards or restore removed cards from Recycle Bin</p>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn-action" onclick="openCardModal()"><i class="fa-solid fa-plus"></i> Add</button>
+                    <button class="btn-action" onclick="openRecycleBinModal()"><i class="fa-solid fa-trash-can"></i> Bin (<span id="tools-bin-count">0</span>)</button>
                 </div>
             </div>
         </div>
@@ -2899,17 +2902,24 @@
         toggleRearrangeMode(true);
     }
 
-    function setGridColumns(cols) {
-        const num = parseInt(cols, 10) || 3;
-        appState.gridCols = num;
-        document.documentElement.style.setProperty('--grid-cols', num);
-        pushStateToCloud(false);
-    }
+    // Live Preview & Jump to Main Page on any Customizer change
+    function previewAndSaveGridCustomizer() {
+        const cols = document.getElementById('grid-cols-select').value;
+        const style = document.getElementById('grid-style-select').value;
+        const layout = document.getElementById('grid-layout-select').value;
 
-    function setCardGridStyle(styleKey) {
-        appState.gridStyleChoice = styleKey;
-        applyCardGridStyleVars(styleKey);
-        pushStateToCloud(false);
+        appState.gridCols = parseInt(cols, 10) || 3;
+        appState.gridStyleChoice = style;
+        appState.gridLayoutChoice = layout;
+
+        document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+        applyCardGridStyleVars(style);
+        applyCardGridLayoutVars(layout);
+
+        // Jump to main page with live preview and trigger save banner
+        goHomeWithFav();
+        toggleRearrangeMode(true);
+        showSyncToast('👁️ Live Preview Active! Tap "Save to Cloud" when ready.');
     }
 
     function applyCardGridStyleVars(styleKey) {
@@ -2948,12 +2958,6 @@
         document.documentElement.style.setProperty('--card-shadow', shadow);
         document.documentElement.style.setProperty('--grid-gap', gap);
         document.documentElement.style.setProperty('--card-padding', padding);
-    }
-
-    function setCardGridLayoutChoice(layoutKey) {
-        appState.gridLayoutChoice = layoutKey;
-        applyCardGridLayoutVars(layoutKey);
-        pushStateToCloud(false);
     }
 
     function applyCardGridLayoutVars(layoutKey) {
@@ -3271,9 +3275,7 @@
         logoutAdmin,
         toggleTheme,
         setAccessMode,
-        setGridColumns,
-        setCardGridStyle,
-        setCardGridLayoutChoice,
+        previewAndSaveGridCustomizer,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
