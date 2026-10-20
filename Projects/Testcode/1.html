@@ -47,6 +47,8 @@
             --text-primary: #0f172a;
             --text-secondary: #64748b;
             --border-color: rgba(15, 23, 42, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
         }
 
         /* Access Modes */
@@ -545,6 +547,7 @@
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 2px;
+            color: var(--text-primary);
         }
         .card-sub {
             font-size: 10px;
@@ -711,6 +714,11 @@
             border-color: rgba(244, 63, 94, 0.4);
             color: var(--danger);
         }
+
+        /* User Authenticated Only Section */
+        .google-user-only { display: none !important; }
+        body.is-google-auth .google-user-only { display: block !important; }
+        body.is-google-auth .setting-row.google-user-only { display: flex !important; }
 
         /* Attractive Notices Page Cards & Expandable Text */
         .notice-input, .quick-note-area {
@@ -1050,7 +1058,6 @@
             <span class="android-header-title">Abdullahil Kuafi</span>
         </div>
         <div class="header-actions-right">
-            <!-- Sync Indicator Appears ONLY in Admin Mode -->
             <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
                 <span class="sync-dot" id="live-sync-dot"></span>
                 <span id="live-sync-text">Live</span>
@@ -1329,6 +1336,41 @@
             </div>
         </div>
 
+        <!-- NEW: Individual Google User Tools & Settings Section -->
+        <div class="tools-section-card google-user-only" id="google-user-tools-section">
+            <div class="section-label"><span><i class="fa-solid fa-user-gear"></i> My Personal Hub Controls</span></div>
+            
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Personal Cloud Notes</h4>
+                    <p>Store your private notes locally tied to your Google session</p>
+                </div>
+                <button class="btn-action" onclick="openUserNotesModal()">
+                    <i class="fa-solid fa-note-sticky"></i> Open Notes
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Export Personal Backup</h4>
+                    <p>Download your private app favorites and settings as JSON</p>
+                </div>
+                <button class="btn-action" onclick="exportUserPersonalData()">
+                    <i class="fa-solid fa-download"></i> Export JSON
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Reset Personal Favourites</h4>
+                    <p>Clear your personal home pinned cards</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearFavorites()">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
         <!-- Admin Login Section -->
         <div class="tools-section-card visitor-only" id="admin-access-section">
             <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Access</span></div>
@@ -1372,7 +1414,6 @@
                 </div>
             </div>
 
-            <!-- Card Grid Column Option (Restricted to 2 / 3 / 4) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid Columns (2, 3, or 4)</h4>
@@ -1385,7 +1426,6 @@
                 </select>
             </div>
 
-            <!-- Separate Option for 15 Most Popular & Attractive Card Styles -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid UI Style (15 Popular Styles)</h4>
@@ -1431,7 +1471,6 @@
                 </div>
             </div>
 
-            <!-- Accent Color Choices (12 Swatches) -->
             <div class="setting-row admin-only" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info" style="margin-bottom: 8px;">
                     <h4>Accent Color (12 Popular Choices)</h4>
@@ -1454,11 +1493,41 @@
             </div>
         </div>
 
-        <!-- Admin Controls Section -->
+        <!-- NEW: Expanded Admin Management & All-User Sync Features -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management</span>
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & All-User Sync</span>
                 <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Firebase Cloud Active ✓</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Force Broadcast Sync</h4>
+                    <p>Instantly broadcast current layout to all active visitors</p>
+                </div>
+                <button class="btn-action" onclick="pushStateToCloud(true)">
+                    <i class="fa-solid fa-satellite-dish"></i> Broadcast Now
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Global Notice Board Clear</h4>
+                    <p>Erase all published notices from Cloud for all users</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="clearAllNotices()">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Clear Notices
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Export Global Cloud Backup</h4>
+                    <p>Download complete system state JSON for archiving</p>
+                </div>
+                <button class="btn-action" onclick="exportGlobalBackup()">
+                    <i class="fa-solid fa-file-arrow-down"></i> Export System
+                </button>
             </div>
 
             <div class="setting-row">
@@ -1674,6 +1743,24 @@
         <div class="modal-actions">
             <button class="btn-action" onclick="resetDefaultCategories()">Restore Defaults</button>
             <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveCategoryItem()">Save Category</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 5: PERSONAL USER NOTES -->
+<div class="modal-backdrop" id="user-notes-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-note-sticky" style="color:var(--accent);"></i> My Private Google Notes</span>
+            <button class="card-ctrl-btn" onclick="closeModal('user-notes-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Private Notes (Saved only on your browser)</label>
+            <textarea id="user-private-notes-textarea" class="quick-note-area" placeholder="Write your private tasks or reminders here..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('user-notes-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserPrivateNotes()">Save Notes</button>
         </div>
     </div>
 </div>
@@ -2635,6 +2722,13 @@
         pushStateToCloud(false);
     }
 
+    function clearAllNotices() {
+        if (!confirm('Clear all global notices for all users?')) return;
+        appState.notices = [];
+        renderNotices();
+        pushStateToCloud(true);
+    }
+
     function openAdminModal() {
         document.getElementById('admin-pin-input').value = '';
         openModal('admin-modal');
@@ -2698,7 +2792,6 @@
         toggleRearrangeMode(true);
     }
 
-    // Set Grid Columns to 2, 3, or 4
     function setGridColumns(cols) {
         const num = parseInt(cols, 10) || 3;
         appState.gridCols = num;
@@ -2706,7 +2799,7 @@
         pushStateToCloud(false);
     }
 
-    // 15 Popular & Attractive Card Grid Styles
+    // 15 Popular Card Styles Harmonized for Both Dark & Light Modes
     function setCardGridStyle(styleKey) {
         appState.gridStyleChoice = styleKey;
         applyCardGridStyleVars(styleKey);
@@ -2716,43 +2809,45 @@
     function applyCardGridStyleVars(styleKey) {
         let radius = '16px';
         let border = '1px solid var(--border-color)';
-        let bg = 'var(--bg-card)';
-        let shadow = '0 8px 20px -6px rgba(0,0,0,0.2)';
+        let bg = 'var(--card-bg)';
+        let shadow = 'var(--card-shadow)';
         let gap = '10px';
         let padding = '10px 8px 12px';
 
+        const isLight = document.body.classList.contains('light-mode');
+
         switch (styleKey) {
             case '1': // Modern Glassmorphism
-                radius = '20px'; border = '1px solid rgba(255,255,255,0.15)'; bg = 'rgba(255,255,255,0.05)'; shadow = '0 12px 30px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
+                radius = '20px'; border = '1px solid rgba(120,120,120,0.18)'; bg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(25,35,55,0.7)'; shadow = '0 12px 30px rgba(0,0,0,0.15)'; gap = '12px'; padding = '14px 10px 16px'; break;
             case '2': // Neon Glow Border
-                radius = '16px'; border = '1px solid var(--accent)'; bg = 'var(--bg-card)'; shadow = '0 0 15px rgba(61,237,151,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
+                radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '3': // Ultra Rounded Cards
-                radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-elevated)'; shadow = '0 6px 18px rgba(0,0,0,0.15)'; gap = '12px'; padding = '16px 10px 18px'; break;
+                radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
             case '4': // Sleek Gradient Border
-                radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--bg-card), var(--bg-card)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+                radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '5': // Minimalist Flat Dark
-                radius = '10px'; border = '1px solid rgba(255,255,255,0.05)'; bg = 'var(--bg-elevated)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
+                radius = '10px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
             case '6': // Deep Floating Shadow
-                radius = '20px'; border = 'none'; bg = 'var(--bg-card)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.4)'; gap = '12px'; padding = '14px 10px 16px'; break;
+                radius = '20px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; gap = '12px'; padding = '14px 10px 16px'; break;
             case '7': // Executive Bordered
-                radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--bg-main)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
+                radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--card-bg)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
             case '8': // Cyberpunk Tech Box
-                radius = '4px'; border = '1px dashed var(--accent)'; bg = 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.3)'; gap = '10px'; padding = '12px 8px 14px'; break;
+                radius = '4px'; border = '1px dashed var(--accent)'; bg = isLight ? 'rgba(61,237,151,0.05)' : 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.15)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '9': // Soft Pastel Elegance
-                radius = '22px'; border = '1px solid rgba(255,255,255,0.08)'; bg = 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--bg-card))'; shadow = '0 8px 22px rgba(0,0,0,0.18)'; gap = '12px'; padding = '14px 10px 16px'; break;
+                radius = '22px'; border = '1px solid var(--border-color)'; bg = isLight ? '#ffffff' : 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--card-bg))'; shadow = '0 8px 22px rgba(0,0,0,0.12)'; gap = '12px'; padding = '14px 10px 16px'; break;
             case '10': // Frosted Glass Tile
-                radius = '18px'; border = '1px solid rgba(255,255,255,0.12)'; bg = 'rgba(255,255,255,0.07)'; shadow = '0 10px 25px rgba(0,0,0,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+                radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; shadow = '0 10px 25px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '11': // High Contrast Bold
-                radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--bg-elevated)'; shadow = '0 6px 16px rgba(0,0,0,0.3)'; gap = '10px'; padding = '12px 8px 14px'; break;
+                radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--card-bg)'; shadow = '0 6px 16px rgba(0,0,0,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '12': // Clean Outline Modern
                 radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
             case '13': // Pill Shaped Accent
-                radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-card)'; shadow = '0 8px 20px rgba(0,0,0,0.2)'; gap = '10px'; padding = '16px 10px 18px'; break;
+                radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 8px 20px rgba(0,0,0,0.12)'; gap = '10px'; padding = '16px 10px 18px'; break;
             case '14': // Velvet Dark Elevation
-                radius = '24px'; border = '1px solid rgba(255,255,255,0.06)'; bg = '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.45)'; gap = '12px'; padding = '14px 10px 16px'; break;
+                radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
             case '15': // Classic Standard Grid
             default:
-                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-card)'; shadow = '0 8px 20px -6px rgba(0,0,0,0.2)'; gap = '10px'; padding = '10px 8px 12px';
+                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'var(--card-shadow)'; gap = '10px'; padding = '10px 8px 12px';
         }
 
         document.documentElement.style.setProperty('--card-radius', radius);
@@ -2792,12 +2887,55 @@
         appState.favorites = [];
         renderServiceGrid();
         pushStateToCloud(true);
+        showSyncToast('✓ Favourites reset successfully!');
     }
 
     function clearNotes() {
         appState.scratchpad = '';
         document.getElementById('quick-notes').value = '';
         pushStateToCloud(true);
+    }
+
+    // Individual Google User Private Notes & Backup
+    function openUserNotesModal() {
+        const email = auth.currentUser?.email || 'guest';
+        const savedNotes = localStorage.getItem(`kuafi_user_notes_${email}`) || '';
+        document.getElementById('user-private-notes-textarea').value = savedNotes;
+        openModal('user-notes-modal');
+    }
+
+    function saveUserPrivateNotes() {
+        const email = auth.currentUser?.email || 'guest';
+        const notes = document.getElementById('user-private-notes-textarea').value;
+        localStorage.setItem(`kuafi_user_notes_${email}`, notes);
+        closeModal('user-notes-modal');
+        showSyncToast('✓ Private notes saved locally!');
+    }
+
+    function exportUserPersonalData() {
+        const data = {
+            favorites: appState.favorites,
+            theme: localStorage.getItem(THEME_STORAGE_KEY),
+            accessMode: appState.accessMode,
+            exportedAt: new Date().toLocaleString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kuafi_user_backup_${Date.now()}.json`;
+        a.click();
+        showSyncToast('✓ Personal backup downloaded!');
+    }
+
+    function exportGlobalBackup() {
+        const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kuafi_global_system_backup_${Date.now()}.json`;
+        a.click();
+        showSyncToast('✓ Global system state exported!');
     }
 
     function toggleHeaderSearch() {
@@ -2937,6 +3075,7 @@
         saveNoticeItem,
         editNoticePrompt,
         deleteNotice,
+        clearAllNotices,
         toggleNoticeExpand,
         toggleHomeNoticeBannerExpand,
         loginWithGoogle,
@@ -2957,6 +3096,10 @@
         resetCardOrder,
         clearFavorites,
         clearNotes,
+        openUserNotesModal,
+        saveUserPrivateNotes,
+        exportUserPersonalData,
+        exportGlobalBackup,
         closeModal,
         saveServiceCard,
         removeCardToBin,
