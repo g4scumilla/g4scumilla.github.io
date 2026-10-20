@@ -89,7 +89,7 @@
             background: rgba(11, 15, 25, 0.82);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         body.light-mode .android-top-header {
             background: rgba(241, 245, 249, 0.85);
@@ -154,53 +154,32 @@
             color: var(--accent);
         }
 
-        /* Access Mode Quick Bar */
-        .access-mode-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 6px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px 10px;
-            margin-bottom: 10px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .access-mode-bar::-webkit-scrollbar { display: none; }
-        .access-mode-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+        /* Access Mode Pills (Inside Tools & Settings Only) */
         .access-mode-pills {
             display: flex;
-            gap: 4px;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
         }
         .access-pill {
-            padding: 4px 9px;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            background: transparent;
+            padding: 6px 11px;
+            border-radius: 9px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-elevated);
             color: var(--text-secondary);
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             transition: 0.2s;
         }
         .access-pill.active {
-            background: rgba(61, 237, 151, 0.14);
+            background: rgba(61, 237, 151, 0.15);
             color: var(--accent);
-            border-color: rgba(61, 237, 151, 0.35);
+            border-color: var(--accent);
         }
 
         /* Attractive Notice Showcase Banner (Home) */
@@ -764,6 +743,7 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
+            object-fit: cover;
         }
         .user-status-pill {
             display: inline-block;
@@ -805,16 +785,19 @@
             font-weight: 600;
         }
 
-        /* Admin Visibility Rules */
+        /* Admin Visibility & Mutual Login Exclusivity Rules */
         .admin-only { display: none !important; }
         body.is-admin .admin-only { display: block !important; }
         body.is-admin .setting-row.admin-only { display: flex !important; }
 
-        /* Disappear Admin Access Login when signed in via Google OR signed in to Admin */
+        /* Any login hides all other login options */
         body.is-admin .visitor-only,
         body.is-google-auth .visitor-only,
         body.is-admin .service-item[data-id="app-secure"],
         body.is-google-auth .service-item[data-id="app-secure"] {
+            display: none !important;
+        }
+        body.is-admin:not(.is-google-auth) #google-auth-card {
             display: none !important;
         }
 
@@ -934,7 +917,7 @@
 <body class="access-auto">
 
 <div class="app-shell">
-    <!-- TOP HEADER -->
+    <!-- TOP HEADER (Access Mode Removed From Below Header) -->
     <header class="android-top-header">
         <div class="header-left-group">
             <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
@@ -952,18 +935,6 @@
             </button>
         </div>
     </header>
-
-    <!-- ALL ACCESS MODES BAR (Android / Tab / Laptop / Desktop / Auto) -->
-    <div class="access-mode-bar">
-        <span class="access-mode-label"><i class="fa-solid fa-display" style="color: var(--accent);"></i> Access Mode:</span>
-        <div class="access-mode-pills" id="access-mode-pills">
-            <button class="access-pill active" data-mode="auto" onclick="setAccessMode('auto')"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto</button>
-            <button class="access-pill" data-mode="android" onclick="setAccessMode('android')"><i class="fa-brands fa-android"></i> Android</button>
-            <button class="access-pill" data-mode="tab" onclick="setAccessMode('tab')"><i class="fa-solid fa-tablet-screen-button"></i> Tab</button>
-            <button class="access-pill" data-mode="laptop" onclick="setAccessMode('laptop')"><i class="fa-solid fa-laptop"></i> Laptop</button>
-            <button class="access-pill" data-mode="desktop" onclick="setAccessMode('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
-        </div>
-    </div>
 
     <!-- ==================== HOME PAGE ==================== -->
     <div id="page-home" class="page-view active">
@@ -990,7 +961,7 @@
 
         <!-- Active Rearrange Mode Banner (Admin Only) -->
         <div class="rearrange-banner admin-only" id="rearrange-banner">
-            <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange & Edit Active</span>
+            <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
             <button class="rearrange-done-btn" onclick="toggleRearrangeMode(false)">Save to Cloud</button>
         </div>
 
@@ -1212,8 +1183,8 @@
             </div>
         </div>
 
-        <!-- Google User Authentication Section -->
-        <div class="tools-section-card">
+        <!-- Google User Authentication Section (Hidden if Admin PIN Login is Active without Google) -->
+        <div class="tools-section-card" id="google-auth-card">
             <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
 
             <!-- State 1: Logged Out View -->
@@ -1227,7 +1198,7 @@
                 </button>
             </div>
 
-            <!-- State 2: Logged In View (Hides Sign-In Button Completely) -->
+            <!-- State 2: Logged In View (Hides Sign-In Button & All Other Login Options) -->
             <div class="setting-row" id="google-logged-in-view" style="display: none;">
                 <div class="user-profile-row">
                     <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
@@ -1243,7 +1214,7 @@
             </div>
         </div>
 
-        <!-- Admin Login Section (Disappears when signed in via Google OR signed in to Admin) -->
+        <!-- Admin Login Section (Hidden when signed in via Google OR signed in to Admin) -->
         <div class="tools-section-card visitor-only" id="admin-access-section">
             <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Access</span></div>
             <div class="setting-row">
@@ -1257,7 +1228,7 @@
             </div>
         </div>
 
-        <!-- Appearance & Access Mode Section -->
+        <!-- Appearance & Access Mode Section (Access Mode Appears ONLY Here in Tools) -->
         <div class="tools-section-card">
             <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
 
@@ -1272,18 +1243,19 @@
                 </button>
             </div>
 
-            <div class="setting-row">
+            <!-- Access Mode Selector (Only in Tools) -->
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info">
-                    <h4>Device Access Mode</h4>
-                    <p>Switch between Android, Tab, Laptop, Desktop, or Auto</p>
+                    <h4>Access Mode</h4>
+                    <p>Switch interface layout for Android, Tab, Laptop, Desktop, or Auto</p>
                 </div>
-                <select class="form-select" style="width:auto;" id="tools-access-mode-select" onchange="setAccessMode(this.value)">
-                    <option value="auto">Auto Detect</option>
-                    <option value="android">Android</option>
-                    <option value="tab">Tab (Tablet)</option>
-                    <option value="laptop">Laptop</option>
-                    <option value="desktop">Desktop</option>
-                </select>
+                <div class="access-mode-pills" id="access-mode-pills">
+                    <button class="access-pill active" data-mode="auto" onclick="setAccessMode('auto')"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto</button>
+                    <button class="access-pill" data-mode="android" onclick="setAccessMode('android')"><i class="fa-brands fa-android"></i> Android</button>
+                    <button class="access-pill" data-mode="tab" onclick="setAccessMode('tab')"><i class="fa-solid fa-tablet-screen-button"></i> Tab</button>
+                    <button class="access-pill" data-mode="laptop" onclick="setAccessMode('laptop')"><i class="fa-solid fa-laptop"></i> Laptop</button>
+                    <button class="access-pill" data-mode="desktop" onclick="setAccessMode('desktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
+                </div>
             </div>
 
             <div class="setting-row admin-only">
@@ -1299,8 +1271,8 @@
 
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Rearrange Link Cards & Categories (Cloud)</h4>
-                    <p>Reorder or edit cards & filter pills for all visitors</p>
+                    <h4>Rearrange Link Cards (Cloud)</h4>
+                    <p>Reorder cards in Google Apps Script for all visitors</p>
                 </div>
                 <button class="btn-action" onclick="openRearrangeFromTools()">
                     <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
@@ -1557,12 +1529,19 @@
 </div>
 
 <script>
+    // ==================== CLOUD & GOOGLE OAUTH CONFIGURATION ====================
+    // Keep your existing Google Client ID, Admin Email, and Apps Script URL here:
+    const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+    const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
+    const CLOUD_SCRIPT_URL = ''; // Optional: Your Google Apps Script Web App URL
+
     const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
     let isAdmin = false;
     let isGoogleLoggedIn = false;
     let isRearrangeMode = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
+    let googleTokenClient = null;
 
     const DEFAULT_CATEGORIES = [
         { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -1589,7 +1568,6 @@
         accessMode: 'auto'
     };
 
-    // Capture initial 20 HTML cards as baseline
     function extractInitialDomCards() {
         const els = Array.from(document.querySelectorAll('#app-grid .service-item'));
         return els.map(el => {
@@ -1639,6 +1617,11 @@
             } catch (e) {}
         }
 
+        // Restore Admin Session if active
+        if (localStorage.getItem('kuafi_admin_unlocked') === 'true') {
+            isAdmin = true;
+        }
+
         setAccessMode(appState.accessMode || 'auto', false);
         renderCategories();
         renderServiceGrid();
@@ -1649,16 +1632,114 @@
         goHomeWithFav();
     }
 
-    // Disappear Admin Access Login when signed in via Google OR signed in to Admin
+    // ==================== RESTORED REAL GOOGLE OAUTH2 LOGIN ====================
+    function initGoogleTokenClient() {
+        if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
+        if (!googleTokenClient) {
+            googleTokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+                callback: async (tokenResponse) => {
+                    const btnText = document.getElementById('google-login-btn-text');
+                    if (tokenResponse && tokenResponse.access_token) {
+                        try {
+                            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                            });
+                            const data = await response.json();
+                            const userObj = {
+                                name: data.name || 'Google User',
+                                email: data.email || '',
+                                avatar: data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || 'U')}&background=3ded97&color=0b0f19`,
+                                accessToken: tokenResponse.access_token
+                            };
+                            localStorage.setItem('kuafi_google_user', JSON.stringify(userObj));
+                            applyGoogleUser(userObj);
+                        } catch (err) {
+                            console.error('Error fetching Google user info:', err);
+                            alert('Could not verify Google session. Please try again.');
+                        }
+                    }
+                    if (btnText) btnText.innerText = 'Sign in with Google';
+                },
+                error_callback: () => {
+                    const btnText = document.getElementById('google-login-btn-text');
+                    if (btnText) btnText.innerText = 'Sign in with Google';
+                }
+            });
+        }
+        return googleTokenClient;
+    }
+
+    function loginWithGoogle() {
+        const btnText = document.getElementById('google-login-btn-text');
+        if (btnText) btnText.innerText = 'Signing in...';
+
+        const client = initGoogleTokenClient();
+        if (client) {
+            client.requestAccessToken({ prompt: 'select_account' });
+        } else {
+            if (btnText) btnText.innerText = 'Sign in with Google';
+            alert('Google Sign-In library is still loading. Please check your internet connection and try again.');
+        }
+    }
+
+    function applyGoogleUser(user) {
+        isGoogleLoggedIn = true;
+        document.getElementById('google-logged-out-view').style.display = 'none';
+        document.getElementById('google-logged-in-view').style.display = 'flex';
+        document.getElementById('google-user-name').innerText = user.name || 'Welcome!';
+        document.getElementById('google-user-email').innerText = user.email || '';
+        document.getElementById('google-user-avatar').src = user.avatar || 'https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19';
+
+        // If the Google account matches an Admin email, also unlock Admin privileges automatically
+        if (user.email && ADMIN_GOOGLE_EMAILS.includes(user.email.toLowerCase())) {
+            isAdmin = true;
+            localStorage.setItem('kuafi_admin_unlocked', 'true');
+        }
+
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+    }
+
+    function logoutGoogle() {
+        const saved = localStorage.getItem('kuafi_google_user');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.accessToken && window.google && google.accounts && google.accounts.oauth2) {
+                    google.accounts.oauth2.revoke(parsed.accessToken, () => {});
+                }
+            } catch (e) {}
+        }
+        isGoogleLoggedIn = false;
+        localStorage.removeItem('kuafi_google_user');
+        document.getElementById('google-logged-out-view').style.display = 'flex';
+        document.getElementById('google-logged-in-view').style.display = 'none';
+        updateAuthAndAdminUI();
+        filterApps(currentFilter);
+    }
+
+    // ==================== MUTUAL EXCLUSIVITY: ANY LOGIN HIDES ALL OTHER LOGINS ====================
     function updateAuthAndAdminUI() {
         document.body.classList.toggle('is-admin', isAdmin);
         document.body.classList.toggle('is-google-auth', isGoogleLoggedIn);
 
+        // 1. Hide Admin Access Login Card in Tools if logged into EITHER Google OR Admin
         const adminAccessSection = document.getElementById('admin-access-section');
         if (adminAccessSection) {
             adminAccessSection.style.display = (isAdmin || isGoogleLoggedIn) ? 'none' : 'block';
         }
 
+        // 2. Hide Google Auth Card if logged in via Admin PIN (and not signed into Google)
+        const googleAuthCard = document.getElementById('google-auth-card');
+        if (googleAuthCard) {
+            googleAuthCard.style.display = (isAdmin && !isGoogleLoggedIn) ? 'none' : 'block';
+        }
+
+        // 3. Hide Admin Login Card (app-secure) in App Grid if logged into EITHER Google OR Admin
         const secureCard = document.querySelector('.service-item[data-id="app-secure"]');
         if (secureCard) {
             if (isAdmin || isGoogleLoggedIn) {
@@ -1679,7 +1760,7 @@
         if (notesArea) notesArea.value = appState.scratchpad || '';
     }
 
-    // Access Mode Switcher: Android / Tab / Laptop / Desktop / Auto
+    // Access Mode Switcher (Only in Tools & Settings)
     function setAccessMode(mode, save = true) {
         document.body.classList.remove('access-auto', 'access-android', 'access-tab', 'access-laptop', 'access-desktop');
         document.body.classList.add('access-' + mode);
@@ -1688,8 +1769,6 @@
         document.querySelectorAll('#access-mode-pills .access-pill').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
         });
-        const sel = document.getElementById('tools-access-mode-select');
-        if (sel) sel.value = mode;
 
         if (save) pushStateToCloud(false);
     }
@@ -1728,7 +1807,6 @@
             container.appendChild(wrap);
         });
 
-        // Populate category select inside Add/Edit Card Modal
         const catSelect = document.getElementById('card-cat-input');
         if (catSelect) {
             catSelect.innerHTML = appState.categories
@@ -1860,7 +1938,6 @@
         filterApps(currentFilter, document.getElementById('pill-' + currentFilter));
     }
 
-    // Filter Apps across Favourites / All Apps / Active Links / Work & Dev / Lifestyle
     function filterApps(filterKey, pillEl) {
         currentFilter = filterKey;
         document.querySelectorAll('#filter-pills-container .pill').forEach(p => p.classList.remove('active'));
@@ -1872,7 +1949,7 @@
 
         items.forEach(item => {
             const id = item.getAttribute('data-id');
-            // Always keep Admin Login card hidden when signed in via Google or Admin
+            // Always hide Admin login card when signed in via Google or Admin
             if (id === 'app-secure' && (isAdmin || isGoogleLoggedIn)) {
                 item.style.display = 'none';
                 return;
@@ -1898,7 +1975,6 @@
         }
     }
 
-    // Rearrange cards within ANY active filter tab (Favourites, All Apps, Active Links, Work & Dev, etc.)
     function moveCardInCurrentView(cardId, direction) {
         const visibleIds = Array.from(document.querySelectorAll('#app-grid .service-item'))
             .filter(el => el.style.display !== 'none')
@@ -1917,7 +1993,6 @@
         appState.cardsData[idxA] = appState.cardsData[idxB];
         appState.cardsData[idxB] = temp;
 
-        // Also keep favourites array order synced
         if (currentFilter === 'fav') {
             const favA = appState.favorites.indexOf(cardId);
             const favB = appState.favorites.indexOf(swapId);
@@ -1932,7 +2007,6 @@
         pushStateToCloud(false);
     }
 
-    // Add or Edit Service Card (Synced to Cloud)
     function hexToRgbString(hex) {
         const clean = hex.replace('#', '');
         const num = parseInt(clean, 16);
@@ -2011,7 +2085,7 @@
         pushStateToCloud(false);
     }
 
-    // Recycle Bin Operations (Synced to Cloud for All Users)
+    // Recycle Bin Operations
     function removeCardToBin(cardId) {
         const idx = appState.cardsData.findIndex(c => c.id === cardId);
         if (idx === -1) return;
@@ -2101,7 +2175,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Toggle Favourite (Synced to all users when Admin or saved locally/Cloud)
     function toggleFav(e, cardId) {
         e.preventDefault();
         e.stopPropagation();
@@ -2186,40 +2259,7 @@
         pushStateToCloud(false);
     }
 
-    // Google Sign-In & Sign-Out (Hides Admin Access Login when Signed In)
-    function loginWithGoogle() {
-        const mockOrPromptName = prompt('Sign in with Google Account (Enter your Google Email or Name):', 'kuafi@gmail.com');
-        if (!mockOrPromptName) return;
-        const userObj = {
-            name: mockOrPromptName.split('@')[0],
-            email: mockOrPromptName.includes('@') ? mockOrPromptName : mockOrPromptName + '@gmail.com',
-            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(mockOrPromptName)}&background=3ded97&color=0b0f19`
-        };
-        localStorage.setItem('kuafi_google_user', JSON.stringify(userObj));
-        applyGoogleUser(userObj);
-    }
-
-    function applyGoogleUser(user) {
-        isGoogleLoggedIn = true;
-        document.getElementById('google-logged-out-view').style.display = 'none';
-        document.getElementById('google-logged-in-view').style.display = 'flex';
-        document.getElementById('google-user-name').innerText = user.name;
-        document.getElementById('google-user-email').innerText = user.email;
-        document.getElementById('google-user-avatar').src = user.avatar;
-        updateAuthAndAdminUI();
-        filterApps(currentFilter);
-    }
-
-    function logoutGoogle() {
-        isGoogleLoggedIn = false;
-        localStorage.removeItem('kuafi_google_user');
-        document.getElementById('google-logged-out-view').style.display = 'flex';
-        document.getElementById('google-logged-in-view').style.display = 'none';
-        updateAuthAndAdminUI();
-        filterApps(currentFilter);
-    }
-
-    // Admin Mode Login / Logout (Hides Admin Access Login when Signed In)
+    // Admin PIN Login / Logout
     function openAdminModal() {
         document.getElementById('admin-pin-input').value = '';
         openModal('admin-modal');
@@ -2229,6 +2269,7 @@
         const entered = document.getElementById('admin-pin-input').value.trim();
         if (entered === appState.adminPin) {
             isAdmin = true;
+            localStorage.setItem('kuafi_admin_unlocked', 'true');
             closeModal('admin-modal');
             renderCategories();
             renderServiceGrid();
@@ -2242,6 +2283,7 @@
     function logoutAdmin() {
         isAdmin = false;
         isRearrangeMode = false;
+        localStorage.removeItem('kuafi_admin_unlocked');
         document.body.classList.remove('rearrange-active');
         document.getElementById('rearrange-banner').classList.remove('active');
         renderCategories();
@@ -2262,7 +2304,6 @@
         switchPage('tools');
     }
 
-    // Rearrange Mode
     function toggleRearrangeMode(forceState) {
         isRearrangeMode = typeof forceState === 'boolean' ? forceState : !isRearrangeMode;
         document.body.classList.toggle('rearrange-active', isRearrangeMode);
@@ -2275,7 +2316,6 @@
         toggleRearrangeMode(true);
     }
 
-    // Theme, Grid Layout, Accent, Utilities & Cloud Sync
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
         const isLight = document.body.classList.contains('light-mode');
@@ -2356,18 +2396,42 @@
         alert('Hub Link copied to clipboard!');
     }
 
-    function pushStateToCloud(showAlert = false) {
+    async function pushStateToCloud(showAlert = false) {
         const notesEl = document.getElementById('quick-notes');
         if (notesEl) appState.scratchpad = notesEl.value;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+
+        if (CLOUD_SCRIPT_URL) {
+            try {
+                await fetch(CLOUD_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appState)
+                });
+            } catch (e) {}
+        }
+
         const pill = document.getElementById('cloud-status-pill');
         if (pill) pill.innerText = 'Synced to Cloud ✓';
         if (showAlert) alert('Saved and synced to Cloud for all users!');
     }
 
-    function syncData() {
+    async function syncData() {
         const icon = document.getElementById('sync-icon');
         if (icon) icon.classList.add('fa-spin');
+
+        if (CLOUD_SCRIPT_URL) {
+            try {
+                const res = await fetch(CLOUD_SCRIPT_URL);
+                const cloudData = await res.json();
+                if (cloudData && typeof cloudData === 'object') {
+                    appState = { ...appState, ...cloudData };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                }
+            } catch (e) {}
+        }
+
         setTimeout(() => {
             if (icon) icon.classList.remove('fa-spin');
             renderCategories();
