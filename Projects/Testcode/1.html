@@ -33,6 +33,10 @@
             --app-max-width: 440px;
             --grid-cols: 3;
             --grid-gap: 10px;
+            --card-radius: 16px;
+            --card-border: 1px solid var(--border-color);
+            --card-bg: var(--bg-card);
+            --card-shadow: 0 8px 20px -6px rgba(0,0,0,0.2);
             --card-padding: 10px 8px 12px;
         }
 
@@ -45,22 +49,16 @@
             --border-color: rgba(15, 23, 42, 0.1);
         }
 
-        /* Access Modes: Android / Tab / Laptop / Desktop / Auto */
+        /* Access Modes */
         body.access-android { --app-max-width: 430px; }
         body.access-tab { --app-max-width: 820px; }
         body.access-laptop { --app-max-width: 1120px; }
         body.access-desktop { --app-max-width: 1440px; }
         body.access-auto { --app-max-width: 100%; }
 
-        @media (min-width: 640px) {
-            body.access-auto { --app-max-width: 780px; }
-        }
-        @media (min-width: 1024px) {
-            body.access-auto { --app-max-width: 1080px; }
-        }
-        @media (min-width: 1366px) {
-            body.access-auto { --app-max-width: 1380px; }
-        }
+        @media (min-width: 640px) { body.access-auto { --app-max-width: 780px; } }
+        @media (min-width: 1024px) { body.access-auto { --app-max-width: 1080px; } }
+        @media (min-width: 1366px) { body.access-auto { --app-max-width: 1380px; } }
 
         * {
             box-sizing: border-box;
@@ -166,7 +164,6 @@
             color: var(--accent);
         }
 
-        /* Live Sync Status Pill in Header (Admin Only) */
         .live-sync-indicator {
             display: none;
             align-items: center;
@@ -194,7 +191,6 @@
             box-shadow: 0 0 8px var(--accent);
         }
 
-        /* Access Mode Pills */
         .access-mode-pills {
             display: flex;
             flex-wrap: wrap;
@@ -222,7 +218,7 @@
             border-color: var(--accent);
         }
 
-        /* Attractive Notice Showcase Banner (Home) with Expandable Body */
+        /* Notice Showcase */
         .notice-showcase {
             position: relative;
             border-radius: 16px;
@@ -470,24 +466,16 @@
             grid-template-columns: repeat(var(--grid-cols, 3), minmax(0, 1fr));
             gap: var(--grid-gap, 10px);
         }
-        body.access-tab .service-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-        body.access-laptop .service-grid {
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-        }
-        body.access-desktop .service-grid {
-            grid-template-columns: repeat(6, minmax(0, 1fr));
-        }
 
         .service-item {
             position: relative;
             text-decoration: none;
             color: var(--text-primary);
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: var(--card-padding, 10px 8px 12px);
+            background: var(--card-bg);
+            border: var(--card-border);
+            border-radius: var(--card-radius);
+            padding: var(--card-padding);
+            box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -834,7 +822,7 @@
             display: inline-block;
         }
 
-        /* User Profile & Expanded Swatches */
+        /* User Profile & Swatches */
         .user-profile-row {
             display: flex;
             align-items: center;
@@ -1384,25 +1372,41 @@
                 </div>
             </div>
 
-            <!-- 12 Grid Layout Styles (Restricted to 2/3/4/5 columns) -->
+            <!-- Card Grid Column Option (Restricted to 2 / 3 / 4) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
-                    <h4>Card Grid Layout (12 Styles)</h4>
-                    <p>Choose among 12 styles (2, 3, 4, or 5 columns)</p>
+                    <h4>Card Grid Columns (2, 3, or 4)</h4>
+                    <p>Set number of grid columns for visitors</p>
                 </div>
-                <select id="grid-style-select" class="form-select" style="max-width:180px; padding:6px; font-size:11.5px;" onchange="setGridLayoutStyle(this.value)">
-                    <option value="1">1. Modern 2-Col (Spacious)</option>
-                    <option value="2">2. Compact 2-Col (Dense)</option>
-                    <option value="3">3. Classic 3-Col (Balanced)</option>
-                    <option value="4">4. Sleek 3-Col (Modern)</option>
-                    <option value="5">5. Wide 3-Col (Airy)</option>
-                    <option value="6">6. Executive 3-Col (Padded)</option>
-                    <option value="7">7. Standard 4-Col (Grid)</option>
-                    <option value="8">8. Dense 4-Col (Compact)</option>
-                    <option value="9">9. Spacious 4-Col (Wide)</option>
-                    <option value="10">10. Fluid 4-Col (Flexible)</option>
-                    <option value="11">11. Pro 5-Col (Dashboard)</option>
-                    <option value="12">12. Compact 5-Col (Ultra)</option>
+                <select id="grid-cols-select" class="form-select" style="max-width:130px; padding:6px; font-size:11.5px;" onchange="setGridColumns(this.value)">
+                    <option value="2">2 Columns</option>
+                    <option value="3" selected>3 Columns</option>
+                    <option value="4">4 Columns</option>
+                </select>
+            </div>
+
+            <!-- Separate Option for 15 Most Popular & Attractive Card Styles -->
+            <div class="setting-row admin-only">
+                <div class="setting-info">
+                    <h4>Card Grid UI Style (15 Popular Styles)</h4>
+                    <p>Choose visual look and feel for all cards</p>
+                </div>
+                <select id="grid-style-select" class="form-select" style="max-width:190px; padding:6px; font-size:11.5px;" onchange="setCardGridStyle(this.value)">
+                    <option value="1">1. Modern Glassmorphism</option>
+                    <option value="2">2. Neon Glow Border</option>
+                    <option value="3">3. Ultra Rounded Cards</option>
+                    <option value="4">4. Sleek Gradient Border</option>
+                    <option value="5">5. Minimalist Flat Dark</option>
+                    <option value="6">6. Deep Floating Shadow</option>
+                    <option value="7">7. Executive Bordered</option>
+                    <option value="8">8. Cyberpunk Tech Box</option>
+                    <option value="9">9. Soft Pastel Elegance</option>
+                    <option value="10">10. Frosted Glass Tile</option>
+                    <option value="11">11. High Contrast Bold</option>
+                    <option value="12">12. Clean Outline Modern</option>
+                    <option value="13">13. Pill Shaped Accent</option>
+                    <option value="14">14. Velvet Dark Elevation</option>
+                    <option value="15">15. Classic Standard Grid</option>
                 </select>
             </div>
 
@@ -1427,7 +1431,7 @@
                 </div>
             </div>
 
-            <!-- Expanded Accent Color Choices (12 Swatches) -->
+            <!-- Accent Color Choices (12 Swatches) -->
             <div class="setting-row admin-only" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info" style="margin-bottom: 8px;">
                     <h4>Accent Color (12 Popular Choices)</h4>
@@ -1622,7 +1626,7 @@
             </div>
             <div style="padding-top:14px;">
                 <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-primary);">
-                    <input type="checkbox" id="card-live-input"> Live Badge
+                    <input type="checkbox" id="card-live-input"> Mark as Live
                 </label>
             </div>
         </div>
@@ -1752,7 +1756,7 @@
             { text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }
         ],
         gridCols: 3,
-        gridStyleChoice: '3',
+        gridStyleChoice: '1',
         accentPrimary: '#3ded97',
         accentSecondary: '#06b6d4',
         scratchpad: '',
@@ -1820,8 +1824,13 @@
 
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridSelect = document.getElementById('grid-style-select');
-            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
+            const gridSelect = document.getElementById('grid-cols-select');
+            if (gridSelect) gridSelect.value = String(appState.gridCols);
+        }
+        if (appState.gridStyleChoice) {
+            const styleSelect = document.getElementById('grid-style-select');
+            if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
+            applyCardGridStyleVars(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -1905,8 +1914,13 @@
 
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
-            const gridSelect = document.getElementById('grid-style-select');
-            if (gridSelect && appState.gridStyleChoice) gridSelect.value = String(appState.gridStyleChoice);
+            const gridSelect = document.getElementById('grid-cols-select');
+            if (gridSelect) gridSelect.value = String(appState.gridCols);
+        }
+        if (appState.gridStyleChoice) {
+            const styleSelect = document.getElementById('grid-style-select');
+            if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
+            applyCardGridStyleVars(appState.gridStyleChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -2309,7 +2323,7 @@
             document.getElementById('card-icon-input').value = 'fa-solid fa-layer-group';
             document.getElementById('card-c1-input').value = '#3ded97';
             document.getElementById('card-c2-input').value = '#06b6d4';
-            document.getElementById('card-live-input').checked = true;
+            document.getElementById('card-live-input').checked = false;
         }
         openModal('card-modal');
     }
@@ -2454,7 +2468,7 @@
         pushStateToCloud(false);
     }
 
-    // ==================== ADVANCED NOTICE BOARD (PRIORITY FOR ALL, EXPAND, 30 MAX) ====================
+    // ==================== ADVANCED NOTICE BOARD ====================
     function renderNotices() {
         const notices = appState.notices || [];
         const listEl = document.getElementById('notices-list');
@@ -2548,7 +2562,6 @@
         document.getElementById('home-notice-counter').innerText = `${homeNoticeIdx + 1} / ${notices.length}`;
         document.getElementById('home-notice-time').innerHTML = `<i class="fa-regular fa-clock"></i> ${item.time || 'Synced Live'}`;
 
-        // Check if banner text overflows 2 lines
         setTimeout(() => {
             const txtEl = document.getElementById('home-notice-text');
             const btnEl = document.getElementById('home-notice-exp-btn');
@@ -2685,34 +2698,69 @@
         toggleRearrangeMode(true);
     }
 
-    // 12 Grid Layout Styles (Restricted to 2, 3, 4, 5 columns with unique layout styling)
-    function setGridLayoutStyle(styleKey) {
+    // Set Grid Columns to 2, 3, or 4
+    function setGridColumns(cols) {
+        const num = parseInt(cols, 10) || 3;
+        appState.gridCols = num;
+        document.documentElement.style.setProperty('--grid-cols', num);
+        pushStateToCloud(false);
+    }
+
+    // 15 Popular & Attractive Card Grid Styles
+    function setCardGridStyle(styleKey) {
         appState.gridStyleChoice = styleKey;
-        let cols = 3;
+        applyCardGridStyleVars(styleKey);
+        pushStateToCloud(false);
+    }
+
+    function applyCardGridStyleVars(styleKey) {
+        let radius = '16px';
+        let border = '1px solid var(--border-color)';
+        let bg = 'var(--bg-card)';
+        let shadow = '0 8px 20px -6px rgba(0,0,0,0.2)';
         let gap = '10px';
         let padding = '10px 8px 12px';
 
         switch (styleKey) {
-            case '1': cols = 2; gap = '14px'; padding = '14px 10px 16px'; break; // Modern 2-Col
-            case '2': cols = 2; gap = '8px';  padding = '8px 6px 10px';   break; // Compact 2-Col
-            case '3': cols = 3; gap = '10px'; padding = '10px 8px 12px';  break; // Classic 3-Col
-            case '4': cols = 3; gap = '8px';  padding = '9px 7px 11px';   break; // Sleek 3-Col
-            case '5': cols = 3; gap = '14px'; padding = '14px 10px 16px'; break; // Wide 3-Col
-            case '6': cols = 3; gap = '12px'; padding = '12px 10px 14px'; break; // Executive 3-Col
-            case '7': cols = 4; gap = '8px';  padding = '8px 6px 10px';   break; // Standard 4-Col
-            case '8': cols = 4; gap = '6px';  padding = '6px 4px 8px';    break; // Dense 4-Col
-            case '9': cols = 4; gap = '12px'; padding = '12px 8px 14px';  break; // Spacious 4-Col
-            case '10': cols = 4; gap = '10px'; padding = '10px 8px 12px'; break; // Fluid 4-Col
-            case '11': cols = 5; gap = '6px';  padding = '6px 4px 8px';    break; // Pro 5-Col
-            case '12': cols = 5; gap = '4px';  padding = '5px 3px 6px';    break; // Compact 5-Col
-            default: cols = 3; gap = '10px'; padding = '10px 8px 12px';
+            case '1': // Modern Glassmorphism
+                radius = '20px'; border = '1px solid rgba(255,255,255,0.15)'; bg = 'rgba(255,255,255,0.05)'; shadow = '0 12px 30px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '2': // Neon Glow Border
+                radius = '16px'; border = '1px solid var(--accent)'; bg = 'var(--bg-card)'; shadow = '0 0 15px rgba(61,237,151,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '3': // Ultra Rounded Cards
+                radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-elevated)'; shadow = '0 6px 18px rgba(0,0,0,0.15)'; gap = '12px'; padding = '16px 10px 18px'; break;
+            case '4': // Sleek Gradient Border
+                radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--bg-card), var(--bg-card)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '5': // Minimalist Flat Dark
+                radius = '10px'; border = '1px solid rgba(255,255,255,0.05)'; bg = 'var(--bg-elevated)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
+            case '6': // Deep Floating Shadow
+                radius = '20px'; border = 'none'; bg = 'var(--bg-card)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.4)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '7': // Executive Bordered
+                radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--bg-main)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '8': // Cyberpunk Tech Box
+                radius = '4px'; border = '1px dashed var(--accent)'; bg = 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.3)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '9': // Soft Pastel Elegance
+                radius = '22px'; border = '1px solid rgba(255,255,255,0.08)'; bg = 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--bg-card))'; shadow = '0 8px 22px rgba(0,0,0,0.18)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '10': // Frosted Glass Tile
+                radius = '18px'; border = '1px solid rgba(255,255,255,0.12)'; bg = 'rgba(255,255,255,0.07)'; shadow = '0 10px 25px rgba(0,0,0,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '11': // High Contrast Bold
+                radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--bg-elevated)'; shadow = '0 6px 16px rgba(0,0,0,0.3)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '12': // Clean Outline Modern
+                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '13': // Pill Shaped Accent
+                radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-card)'; shadow = '0 8px 20px rgba(0,0,0,0.2)'; gap = '10px'; padding = '16px 10px 18px'; break;
+            case '14': // Velvet Dark Elevation
+                radius = '24px'; border = '1px solid rgba(255,255,255,0.06)'; bg = '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.45)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '15': // Classic Standard Grid
+            default:
+                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'var(--bg-card)'; shadow = '0 8px 20px -6px rgba(0,0,0,0.2)'; gap = '10px'; padding = '10px 8px 12px';
         }
 
-        appState.gridCols = cols;
-        document.documentElement.style.setProperty('--grid-cols', cols);
+        document.documentElement.style.setProperty('--card-radius', radius);
+        document.documentElement.style.setProperty('--card-border', border);
+        document.documentElement.style.setProperty('--card-bg', bg);
+        document.documentElement.style.setProperty('--card-shadow', shadow);
         document.documentElement.style.setProperty('--grid-gap', gap);
         document.documentElement.style.setProperty('--card-padding', padding);
-        pushStateToCloud(false);
     }
 
     function setAccent(primary, secondary, el) {
@@ -2898,7 +2946,8 @@
         logoutAdmin,
         toggleTheme,
         setAccessMode,
-        setGridLayoutStyle,
+        setGridColumns,
+        setCardGridStyle,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
