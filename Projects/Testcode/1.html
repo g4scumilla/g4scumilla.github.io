@@ -164,6 +164,31 @@
             color: var(--accent);
         }
 
+        /* Live Sync Status Pill in Header */
+        .live-sync-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            background: rgba(61, 237, 151, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(61, 237, 151, 0.25);
+        }
+        .sync-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .sync-dot.polling {
+            transform: scale(1.5);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
         /* Access Mode Pills (Inside Tools & Settings Only) */
         .access-mode-pills {
             display: flex;
@@ -514,7 +539,7 @@
             max-width: 100%;
         }
 
-        /* Card Admin Overlay Controls (Edit, Delete to Bin, Move Left/Right) */
+        /* Card Admin Overlay Controls */
         .card-admin-bar {
             display: none;
             width: 100%;
@@ -946,6 +971,10 @@
             <span class="android-header-title">Abdullahil Kuafi</span>
         </div>
         <div class="header-actions-right">
+            <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                <span class="sync-dot" id="live-sync-dot"></span>
+                <span id="live-sync-text">Live</span>
+            </span>
             <div class="header-search-container" id="header-search-container">
                 <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
             </div>
@@ -1169,7 +1198,7 @@
             <div class="notice-form">
                 <textarea id="notice-input" class="notice-input" maxlength="280" placeholder="Write a notice for all visitors..."></textarea>
                 <div class="notice-form-footer">
-                    <span class="notice-limit-hint">Saves directly to Google Cloud</span>
+                    <span class="notice-limit-hint">Syncs to all users within 4.5s</span>
                     <button class="btn-action" onclick="addNotice()">
                         <i class="fa-solid fa-paper-plane"></i> Publish Notice
                     </button>
@@ -1202,7 +1231,7 @@
             </div>
         </div>
 
-        <!-- Google User Authentication Section (Hidden if Admin PIN Login is Active without Google) -->
+        <!-- Google User Authentication Section -->
         <div class="tools-section-card" id="google-auth-card">
             <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
 
@@ -1217,7 +1246,7 @@
                 </button>
             </div>
 
-            <!-- State 2: Logged In View (Hides Sign-In Button & All Other Login Options) -->
+            <!-- State 2: Logged In View -->
             <div class="setting-row" id="google-logged-in-view" style="display: none;">
                 <div class="user-profile-row">
                     <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
@@ -1233,7 +1262,7 @@
             </div>
         </div>
 
-        <!-- Admin Login Section (Hidden when signed in via Google OR signed in to Admin) -->
+        <!-- Admin Login Section -->
         <div class="tools-section-card visitor-only" id="admin-access-section">
             <div class="section-label"><span><i class="fa-solid fa-lock"></i> Admin Access</span></div>
             <div class="setting-row">
@@ -1247,7 +1276,7 @@
             </div>
         </div>
 
-        <!-- Appearance & Access Mode Section (Access Mode Appears ONLY Here in Tools) -->
+        <!-- Appearance & Access Mode Section -->
         <div class="tools-section-card">
             <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
 
@@ -1262,7 +1291,7 @@
                 </button>
             </div>
 
-            <!-- Access Mode Selector (Only in Tools) -->
+            <!-- Access Mode Selector -->
             <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info">
                     <h4>Access Mode</h4>
@@ -1326,7 +1355,7 @@
         <!-- Admin Controls Section -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management</span>
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management (4.5s Auto-Sync)</span>
                 <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Firebase Cloud Active ✓</span>
             </div>
 
@@ -1367,7 +1396,7 @@
                     <i class="fa-solid fa-share-from-square"></i>
                     <div>Copy Hub Link</div>
                 </button>
-                <button class="mini-tool-btn" onclick="syncData()">
+                <button class="mini-tool-btn" onclick="syncData(true)">
                     <i class="fa-solid fa-rotate"></i>
                     <div>Sync Latest</div>
                 </button>
@@ -1422,7 +1451,7 @@
     </div>
 </div>
 
-<!-- BOTTOM NAVIGATION (Home Always Auto-Selects Favourites) -->
+<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
     <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
         <i class="fa-solid fa-house"></i>
@@ -1506,7 +1535,7 @@
     </div>
 </div>
 
-<!-- MODAL 3: RECYCLE BIN (SYNCED TO ALL USERS) -->
+<!-- MODAL 3: RECYCLE BIN -->
 <div class="modal-backdrop" id="recycle-bin-modal">
     <div class="modal-card">
         <div class="modal-title">
@@ -1566,7 +1595,6 @@
         onSnapshot
     } from "firebase/firestore";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
         authDomain: "my-project-1-13e18.firebaseapp.com",
@@ -1576,7 +1604,6 @@
         appId: "1:628695847732:web:03af3d8569762d29ce0b61"
     };
 
-    // Initialize Firebase, Auth & Firestore
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
@@ -1591,14 +1618,18 @@
         console.warn("Firestore initialization warning:", e);
     }
 
-    const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
-    const CLOUD_SCRIPT_URL = ''; // Optional Google Apps Script fallback URL
+    // Secondary Firebase Realtime DB REST endpoint (no Apps Script needed)
+    const FIREBASE_RTDB_REST_URL = `https://${firebaseConfig.projectId}-default-rtdb.firebaseio.com/kuafi_hub_global.json`;
+    const AUTO_POLL_INTERVAL_MS = 4500; // Sync every 4.5 seconds across all users
 
+    const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
     const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
     const THEME_STORAGE_KEY = 'kuafi_theme_mode';
+
     let isAdmin = false;
     let isGoogleLoggedIn = false;
     let isRearrangeMode = false;
+    let isPushing = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
 
@@ -1611,6 +1642,7 @@
     ];
 
     let appState = {
+        updatedAt: 0,
         adminPin: '1234',
         favorites: ['app-dev', 'app-finance', 'app-sports'],
         cardOrder: [],
@@ -1653,8 +1685,23 @@
 
     const INITIAL_20_CARDS = extractInitialDomCards();
 
-    function applyCloudStateToUI(incomingState) {
+    function isUserActivelyEditingForm() {
+        const anyModalOpen = document.querySelector('.modal-backdrop.open') !== null;
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        const isTyping = (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT');
+        return anyModalOpen || isTyping || isRearrangeMode || isPushing;
+    }
+
+    function applyCloudStateToUI(incomingState, forceRender = false) {
         if (!incomingState || typeof incomingState !== 'object') return;
+
+        // Only apply if incoming state is newer than local state (or when forced)
+        const incomingTime = Number(incomingState.updatedAt || 0);
+        const localTime = Number(appState.updatedAt || 0);
+        if (!forceRender && incomingTime > 0 && incomingTime <= localTime) {
+            return;
+        }
+
         appState = { ...appState, ...incomingState };
         if (!appState.cardsData || appState.cardsData.length === 0) {
             appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
@@ -1671,6 +1718,9 @@
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
             document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
+            document.querySelectorAll('.swatch').forEach(s => {
+                s.classList.toggle('active', s.getAttribute('data-primary') === appState.accentPrimary);
+            });
         }
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
@@ -1680,11 +1730,21 @@
         updateAuthAndAdminUI();
     }
 
+    function pulseSyncBadge(label = 'Live') {
+        const dot = document.getElementById('live-sync-dot');
+        const txt = document.getElementById('live-sync-text');
+        if (txt) txt.innerText = label;
+        if (dot) {
+            dot.classList.add('polling');
+            setTimeout(() => dot.classList.remove('polling'), 600);
+        }
+    }
+
     function initApp() {
-        // 1. Restore saved Light/Dark theme preference & sync button UI
+        // 1. Restore saved Light/Dark theme preference
         applySavedThemeOnLoad();
 
-        // 2. Load Local App State
+        // 2. Load Local App State cache first for instant paint
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
@@ -1699,7 +1759,7 @@
             appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
         }
 
-        // 3. Restore Admin Session if active
+        // 3. Restore Admin Session if unlocked
         if (localStorage.getItem('kuafi_admin_unlocked') === 'true') {
             isAdmin = true;
         }
@@ -1721,18 +1781,27 @@
             }
         });
 
-        // 5. Real-time Firestore listener (syncs changes across all users automatically)
+        // 5. Real-Time Instant WebSocket Listener (Firestore onSnapshot)
         if (hubDocRef) {
             onSnapshot(hubDocRef, (snap) => {
-                if (snap.exists()) {
+                if (snap.exists() && !isUserActivelyEditingForm()) {
                     applyCloudStateToUI(snap.data());
+                    pulseSyncBadge('Live');
                 }
             }, (err) => {
                 console.warn("Firestore live listener standby:", err.message);
             });
         }
 
-        // 6. Apply saved Grid, Accent & Access Mode
+        // 6. 4.5-Second Continuous Cloud Sync Polling Loop (Guaranteed Every 4-5s Sync)
+        syncData(true);
+        setInterval(() => {
+            if (!document.hidden && !isUserActivelyEditingForm()) {
+                syncData(false);
+            }
+        }, AUTO_POLL_INTERVAL_MS);
+
+        // 7. Apply saved Grid, Accent & Access Mode
         if (appState.gridCols) {
             document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
             const gridLbl = document.getElementById('grid-style-label');
@@ -1749,7 +1818,6 @@
         renderNotices();
         updateAuthAndAdminUI();
 
-        // Start on Home with Favourites selected
         goHomeWithFav();
     }
 
@@ -1845,24 +1913,19 @@
         document.body.classList.toggle('is-admin', isAdmin);
         document.body.classList.toggle('is-google-auth', isGoogleLoggedIn);
 
-        // 1. Hide Admin Access Login Card in Tools if logged into EITHER Google OR Admin
         const adminAccessSection = document.getElementById('admin-access-section');
         if (adminAccessSection) {
             adminAccessSection.style.display = (isAdmin || isGoogleLoggedIn) ? 'none' : 'block';
         }
 
-        // 2. Hide Google Auth Card if logged in via Admin PIN (and not signed into Google)
         const googleAuthCard = document.getElementById('google-auth-card');
         if (googleAuthCard) {
             googleAuthCard.style.display = (isAdmin && !isGoogleLoggedIn) ? 'none' : 'block';
         }
 
-        // 3. Hide Admin Login Card (app-secure) in App Grid if logged into EITHER Google OR Admin
         const secureCard = document.querySelector('.service-item[data-id="app-secure"]');
-        if (secureCard) {
-            if (isAdmin || isGoogleLoggedIn) {
-                secureCard.style.display = 'none';
-            }
+        if (secureCard && (isAdmin || isGoogleLoggedIn)) {
+            secureCard.style.display = 'none';
         }
 
         const binCount = (appState.recycleBin || []).length;
@@ -1875,10 +1938,11 @@
         if (favLabel) favLabel.innerText = `${(appState.favorites || []).length} apps pinned to Favourites`;
 
         const notesArea = document.getElementById('quick-notes');
-        if (notesArea) notesArea.value = appState.scratchpad || '';
+        if (notesArea && document.activeElement !== notesArea) {
+            notesArea.value = appState.scratchpad || '';
+        }
     }
 
-    // Access Mode Switcher (Only in Tools & Settings)
     function setAccessMode(mode, save = true) {
         document.body.classList.remove('access-auto', 'access-android', 'access-tab', 'access-laptop', 'access-desktop');
         document.body.classList.add('access-' + mode);
@@ -1891,7 +1955,6 @@
         if (save) pushStateToCloud(false);
     }
 
-    // Render Category Pills with Admin Rearrange/Edit/Delete support
     function renderCategories() {
         const container = document.getElementById('filter-pills-container');
         container.innerHTML = '';
@@ -2008,7 +2071,6 @@
         pushStateToCloud(false);
     }
 
-    // Render Service Grid with Admin Edit / Delete (to Recycle Bin) / Rearrange in ANY category
     function renderServiceGrid() {
         const grid = document.getElementById('app-grid');
         const emptyMsg = document.getElementById('empty-fav-msg');
@@ -2274,7 +2336,6 @@
         pushStateToCloud(false);
     }
 
-    // Home Button Always Goes Home + Selects Favourites Automatically
     function goHomeWithFav() {
         switchPage('home');
         const favPill = document.getElementById('pill-fav');
@@ -2302,7 +2363,6 @@
         pushStateToCloud(false);
     }
 
-    // Attractive Notices Rendering & Home Showcase Ticker
     function renderNotices() {
         const notices = appState.notices || [];
         const listEl = document.getElementById('notices-list');
@@ -2507,68 +2567,92 @@
         alert('Hub Link copied to clipboard!');
     }
 
+    // ==================== DUAL-ENGINE CLOUD PUSH & 4.5s AUTO-POLL ====================
     async function pushStateToCloud(showAlert = false) {
+        isPushing = true;
         const notesEl = document.getElementById('quick-notes');
         if (notesEl) appState.scratchpad = notesEl.value;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
 
-        // 1. Sync to Firebase Firestore
+        appState.updatedAt = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        pulseSyncBadge('Saving...');
+
+        let syncedOk = false;
+
+        // Engine 1: Firebase Firestore
         if (hubDocRef) {
             try {
                 await setDoc(hubDocRef, appState, { merge: true });
+                syncedOk = true;
             } catch (e) {
-                console.warn("Firestore sync note:", e.message);
+                console.warn("Firestore write note:", e.message);
             }
         }
 
-        // 2. Optional Google Apps Script fallback
-        if (CLOUD_SCRIPT_URL) {
-            try {
-                await fetch(CLOUD_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(appState)
-                });
-            } catch (e) {}
-        }
+        // Engine 2: Firebase Realtime Database REST Fallback (No Apps Script)
+        try {
+            const res = await fetch(FIREBASE_RTDB_REST_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(appState)
+            });
+            if (res.ok) syncedOk = true;
+        } catch (e) {}
+
+        isPushing = false;
+        pulseSyncBadge('Live');
 
         const pill = document.getElementById('cloud-status-pill');
-        if (pill) pill.innerText = 'Synced to Firebase ✓';
-        if (showAlert) alert('Saved and synced to Firebase Cloud for all users!');
+        if (pill) {
+            pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally (Check Firebase Rules)';
+        }
+        if (showAlert) {
+            alert('Saved and synced to Cloud! All users will see this within 4.5 seconds.');
+        }
     }
 
-    async function syncData() {
+    async function syncData(manual = false) {
         const icon = document.getElementById('sync-icon');
-        if (icon) icon.classList.add('fa-spin');
+        if (manual && icon) icon.classList.add('fa-spin');
+        pulseSyncBadge('Sync');
 
+        let latestCloudData = null;
+
+        // 1. Check Firestore
         if (hubDocRef) {
             try {
                 const snap = await getDoc(hubDocRef);
                 if (snap.exists()) {
-                    applyCloudStateToUI(snap.data());
+                    latestCloudData = snap.data();
                 }
             } catch (e) {
-                console.warn("Firestore fetch note:", e.message);
+                console.warn("Firestore poll note:", e.message);
             }
         }
 
-        if (CLOUD_SCRIPT_URL) {
-            try {
-                const res = await fetch(CLOUD_SCRIPT_URL);
-                const cloudData = await res.json();
-                if (cloudData && typeof cloudData === 'object') {
-                    applyCloudStateToUI(cloudData);
+        // 2. Check Firebase Realtime DB REST Fallback if newer or Firestore unavailable
+        try {
+            const res = await fetch(FIREBASE_RTDB_REST_URL, { cache: 'no-store' });
+            if (res.ok) {
+                const rtdbData = await res.json();
+                if (rtdbData && typeof rtdbData === 'object') {
+                    const rtdbTime = Number(rtdbData.updatedAt || 0);
+                    const fsTime = Number(latestCloudData?.updatedAt || 0);
+                    if (rtdbTime > fsTime) {
+                        latestCloudData = rtdbData;
+                    }
                 }
-            } catch (e) {}
+            }
+        } catch (e) {}
+
+        if (latestCloudData) {
+            applyCloudStateToUI(latestCloudData, manual);
         }
 
         setTimeout(() => {
-            if (icon) icon.classList.remove('fa-spin');
-            renderCategories();
-            renderServiceGrid();
-            renderNotices();
-        }, 500);
+            if (manual && icon) icon.classList.remove('fa-spin');
+            pulseSyncBadge('Live');
+        }, 350);
     }
 
     function openModal(id) {
