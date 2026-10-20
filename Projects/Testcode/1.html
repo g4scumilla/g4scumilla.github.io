@@ -6,7 +6,17 @@
     <title>Abdullahil Kuafi | Smart Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Import Map so standard "firebase/*" imports work directly in the browser -->
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+        }
+    }
+    </script>
 
     <style>
         :root {
@@ -26,11 +36,11 @@
 
         body.light-mode {
             --bg-main: #f1f5f9;
-            --bg-card: rgba(255, 255, 255, 0.88);
+            --bg-card: rgba(255, 255, 255, 0.92);
             --bg-elevated: #ffffff;
             --text-primary: #0f172a;
             --text-secondary: #64748b;
-            --border-color: rgba(15, 23, 42, 0.09);
+            --border-color: rgba(15, 23, 42, 0.1);
         }
 
         /* Access Modes: Android / Tab / Laptop / Desktop / Auto */
@@ -92,7 +102,7 @@
             margin-bottom: 12px;
         }
         body.light-mode .android-top-header {
-            background: rgba(241, 245, 249, 0.85);
+            background: rgba(241, 245, 249, 0.88);
         }
 
         .header-left-group {
@@ -188,7 +198,7 @@
             border-radius: 16px;
             padding: 12px 14px;
             margin-bottom: 12px;
-            background: linear-gradient(135deg, rgba(61, 237, 151, 0.12) 0%, rgba(6, 182, 212, 0.09) 50%, rgba(22, 29, 47, 0.9) 100%);
+            background: linear-gradient(135deg, rgba(61, 237, 151, 0.12) 0%, rgba(6, 182, 212, 0.09) 50%, var(--bg-card) 100%);
             border: 1px solid rgba(61, 237, 151, 0.35);
             box-shadow: 0 10px 28px -8px rgba(61, 237, 151, 0.18);
             overflow: hidden;
@@ -459,7 +469,7 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.12);
+            background: rgba(148, 163, 184, 0.25);
         }
         .fav-badge {
             width: 22px;
@@ -469,7 +479,7 @@
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            color: rgba(255,255,255,0.25);
+            color: rgba(148, 163, 184, 0.35);
             cursor: pointer;
             transition: 0.2s;
         }
@@ -691,12 +701,12 @@
         }
         .attractive-notice-card {
             position: relative;
-            background: linear-gradient(135deg, rgba(61, 237, 151, 0.08), rgba(26, 34, 53, 0.92));
+            background: linear-gradient(135deg, rgba(61, 237, 151, 0.08), var(--bg-elevated));
             border: 1px solid rgba(61, 237, 151, 0.28);
             border-left: 4px solid var(--accent);
             border-radius: 14px;
             padding: 12px 14px;
-            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.2);
             transition: transform 0.2s ease;
         }
         .attractive-notice-card:hover {
@@ -763,7 +773,7 @@
             border: 2px solid transparent;
         }
         .swatch.active {
-            border-color: #fff;
+            border-color: var(--text-primary);
             transform: scale(1.12);
         }
         .mini-tools-grid {
@@ -822,7 +832,7 @@
             z-index: 200;
         }
         body.light-mode .bottom-nav {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
         }
         .nav-item {
             background: none;
@@ -915,9 +925,18 @@
     </style>
 </head>
 <body class="access-auto">
+<script>
+    // Apply saved Light/Dark theme immediately before page paint so refresh never resets to dark mode
+    (function() {
+        const savedTheme = localStorage.getItem('kuafi_theme_mode');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    })();
+</script>
 
 <div class="app-shell">
-    <!-- TOP HEADER (Access Mode Removed From Below Header) -->
+    <!-- TOP HEADER -->
     <header class="android-top-header">
         <div class="header-left-group">
             <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
@@ -1235,10 +1254,10 @@
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Display Theme</h4>
-                    <p>Switch between Dark and Light mode</p>
+                    <p>Switch between Dark and Light mode (Saved on refresh)</p>
                 </div>
                 <button class="btn-action" id="theme-toggle" onclick="toggleTheme()">
-                    <i class="fa-solid fa-sun" id="theme-icon"></i>
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
                     <span id="theme-text">Dark Mode</span>
                 </button>
             </div>
@@ -1272,7 +1291,7 @@
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Rearrange Link Cards (Cloud)</h4>
-                    <p>Reorder cards in Google Apps Script for all visitors</p>
+                    <p>Reorder cards in Cloud for all visitors</p>
                 </div>
                 <button class="btn-action" onclick="openRearrangeFromTools()">
                     <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
@@ -1308,7 +1327,7 @@
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management</span>
-                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Live Cloud Active ✓</span>
+                <span id="cloud-status-pill" style="font-size: 9.5px; color: var(--accent);">Firebase Cloud Active ✓</span>
             </div>
 
             <div class="setting-row">
@@ -1528,20 +1547,60 @@
     </div>
 </div>
 
-<script>
-    // ==================== CLOUD & GOOGLE OAUTH CONFIGURATION ====================
-    // Keep your existing Google Client ID, Admin Email, and Apps Script URL here:
-    const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+<script type="module">
+    // ==================== FIREBASE SDK IMPORTS & INITIALIZATION ====================
+    import { initializeApp } from "firebase/app";
+    import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signInWithRedirect,
+        signOut,
+        onAuthStateChanged
+    } from "firebase/auth";
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        onSnapshot
+    } from "firebase/firestore";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+        authDomain: "my-project-1-13e18.firebaseapp.com",
+        projectId: "my-project-1-13e18",
+        storageBucket: "my-project-1-13e18.firebasestorage.app",
+        messagingSenderId: "628695847732",
+        appId: "1:628695847732:web:03af3d8569762d29ce0b61"
+    };
+
+    // Initialize Firebase, Auth & Firestore
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    let db = null;
+    let hubDocRef = null;
+    try {
+        db = getFirestore(app);
+        hubDocRef = doc(db, "kuafi_hub", "global_state");
+    } catch (e) {
+        console.warn("Firestore initialization warning:", e);
+    }
+
     const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
-    const CLOUD_SCRIPT_URL = ''; // Optional: Your Google Apps Script Web App URL
+    const CLOUD_SCRIPT_URL = ''; // Optional Google Apps Script fallback URL
 
     const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
+    const THEME_STORAGE_KEY = 'kuafi_theme_mode';
     let isAdmin = false;
     let isGoogleLoggedIn = false;
     let isRearrangeMode = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
-    let googleTokenClient = null;
 
     const DEFAULT_CATEGORIES = [
         { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -1594,7 +1653,38 @@
 
     const INITIAL_20_CARDS = extractInitialDomCards();
 
+    function applyCloudStateToUI(incomingState) {
+        if (!incomingState || typeof incomingState !== 'object') return;
+        appState = { ...appState, ...incomingState };
+        if (!appState.cardsData || appState.cardsData.length === 0) {
+            appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
+        }
+        if (!appState.categories || appState.categories.length === 0) {
+            appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+        }
+
+        if (appState.gridCols) {
+            document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+            const gridLbl = document.getElementById('grid-style-label');
+            if (gridLbl) gridLbl.innerText = `${appState.gridCols} Columns`;
+        }
+        if (appState.accentPrimary && appState.accentSecondary) {
+            document.documentElement.style.setProperty('--accent', appState.accentPrimary);
+            document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        renderCategories();
+        renderServiceGrid();
+        renderNotices();
+        updateAuthAndAdminUI();
+    }
+
     function initApp() {
+        // 1. Restore saved Light/Dark theme preference & sync button UI
+        applySavedThemeOnLoad();
+
+        // 2. Load Local App State
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
@@ -1609,17 +1699,48 @@
             appState.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
         }
 
-        // Restore Google Session if active
-        const savedGoogleUser = localStorage.getItem('kuafi_google_user');
-        if (savedGoogleUser) {
-            try {
-                applyGoogleUser(JSON.parse(savedGoogleUser));
-            } catch (e) {}
-        }
-
-        // Restore Admin Session if active
+        // 3. Restore Admin Session if active
         if (localStorage.getItem('kuafi_admin_unlocked') === 'true') {
             isAdmin = true;
+        }
+
+        // 4. Listen for Firebase Auth State Changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                applyGoogleUser({
+                    name: user.displayName || 'Google User',
+                    email: user.email || '',
+                    avatar: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'U')}&background=3ded97&color=0b0f19`
+                });
+            } else {
+                isGoogleLoggedIn = false;
+                document.getElementById('google-logged-out-view').style.display = 'flex';
+                document.getElementById('google-logged-in-view').style.display = 'none';
+                updateAuthAndAdminUI();
+                filterApps(currentFilter);
+            }
+        });
+
+        // 5. Real-time Firestore listener (syncs changes across all users automatically)
+        if (hubDocRef) {
+            onSnapshot(hubDocRef, (snap) => {
+                if (snap.exists()) {
+                    applyCloudStateToUI(snap.data());
+                }
+            }, (err) => {
+                console.warn("Firestore live listener standby:", err.message);
+            });
+        }
+
+        // 6. Apply saved Grid, Accent & Access Mode
+        if (appState.gridCols) {
+            document.documentElement.style.setProperty('--grid-cols', appState.gridCols);
+            const gridLbl = document.getElementById('grid-style-label');
+            if (gridLbl) gridLbl.innerText = `${appState.gridCols} Columns`;
+        }
+        if (appState.accentPrimary && appState.accentSecondary) {
+            document.documentElement.style.setProperty('--accent', appState.accentPrimary);
+            document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
         }
 
         setAccessMode(appState.accessMode || 'auto', false);
@@ -1632,55 +1753,57 @@
         goHomeWithFav();
     }
 
-    // ==================== RESTORED REAL GOOGLE OAUTH2 LOGIN ====================
-    function initGoogleTokenClient() {
-        if (!window.google || !google.accounts || !google.accounts.oauth2) return null;
-        if (!googleTokenClient) {
-            googleTokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: GOOGLE_CLIENT_ID,
-                scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-                callback: async (tokenResponse) => {
-                    const btnText = document.getElementById('google-login-btn-text');
-                    if (tokenResponse && tokenResponse.access_token) {
-                        try {
-                            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                            });
-                            const data = await response.json();
-                            const userObj = {
-                                name: data.name || 'Google User',
-                                email: data.email || '',
-                                avatar: data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || 'U')}&background=3ded97&color=0b0f19`,
-                                accessToken: tokenResponse.access_token
-                            };
-                            localStorage.setItem('kuafi_google_user', JSON.stringify(userObj));
-                            applyGoogleUser(userObj);
-                        } catch (err) {
-                            console.error('Error fetching Google user info:', err);
-                            alert('Could not verify Google session. Please try again.');
-                        }
-                    }
-                    if (btnText) btnText.innerText = 'Sign in with Google';
-                },
-                error_callback: () => {
-                    const btnText = document.getElementById('google-login-btn-text');
-                    if (btnText) btnText.innerText = 'Sign in with Google';
-                }
-            });
-        }
-        return googleTokenClient;
+    // ==================== PERSISTENT THEME (DARK / LIGHT) ====================
+    function applySavedThemeOnLoad() {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+        const isLight = (savedTheme === 'light');
+        document.body.classList.toggle('light-mode', isLight);
+        updateThemeButtonUI(isLight);
     }
 
-    function loginWithGoogle() {
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-mode');
+        localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+        updateThemeButtonUI(isLight);
+    }
+
+    function updateThemeButtonUI(isLight) {
+        const themeText = document.getElementById('theme-text');
+        const themeIcon = document.getElementById('theme-icon');
+        if (themeText) themeText.innerText = isLight ? 'Light Mode' : 'Dark Mode';
+        if (themeIcon) {
+            themeIcon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    }
+
+    // ==================== FIREBASE GOOGLE AUTHENTICATION ====================
+    async function loginWithGoogle() {
         const btnText = document.getElementById('google-login-btn-text');
         if (btnText) btnText.innerText = 'Signing in...';
 
-        const client = initGoogleTokenClient();
-        if (client) {
-            client.requestAccessToken({ prompt: 'select_account' });
-        } else {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            if (result && result.user) {
+                applyGoogleUser({
+                    name: result.user.displayName || 'Google User',
+                    email: result.user.email || '',
+                    avatar: result.user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(result.user.displayName || 'U')}&background=3ded97&color=0b0f19`
+                });
+            }
+        } catch (error) {
+            console.error('Firebase Google Sign-In Error:', error);
+            if (error.code === 'auth/popup-blocked') {
+                await signInWithRedirect(auth, googleProvider);
+                return;
+            } else if (error.code === 'auth/unauthorized-domain') {
+                alert(`Domain Not Authorized in Firebase:\nPlease add "${window.location.hostname}" in Firebase Console -> Authentication -> Settings -> Authorized domains.`);
+            } else if (error.code === 'auth/operation-not-allowed') {
+                alert('Google Sign-In is not enabled yet in Firebase Console.\nGo to Authentication -> Sign-in method -> Enable Google.');
+            } else if (error.code !== 'auth/popup-closed-by-user') {
+                alert('Google Sign-In Error: ' + (error.message || error.code));
+            }
+        } finally {
             if (btnText) btnText.innerText = 'Sign in with Google';
-            alert('Google Sign-In library is still loading. Please check your internet connection and try again.');
         }
     }
 
@@ -1692,7 +1815,6 @@
         document.getElementById('google-user-email').innerText = user.email || '';
         document.getElementById('google-user-avatar').src = user.avatar || 'https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19';
 
-        // If the Google account matches an Admin email, also unlock Admin privileges automatically
         if (user.email && ADMIN_GOOGLE_EMAILS.includes(user.email.toLowerCase())) {
             isAdmin = true;
             localStorage.setItem('kuafi_admin_unlocked', 'true');
@@ -1704,15 +1826,11 @@
         updateAuthAndAdminUI();
     }
 
-    function logoutGoogle() {
-        const saved = localStorage.getItem('kuafi_google_user');
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                if (parsed.accessToken && window.google && google.accounts && google.accounts.oauth2) {
-                    google.accounts.oauth2.revoke(parsed.accessToken, () => {});
-                }
-            } catch (e) {}
+    async function logoutGoogle() {
+        try {
+            await signOut(auth);
+        } catch (e) {
+            console.error('Sign out error:', e);
         }
         isGoogleLoggedIn = false;
         localStorage.removeItem('kuafi_google_user');
@@ -1949,7 +2067,6 @@
 
         items.forEach(item => {
             const id = item.getAttribute('data-id');
-            // Always hide Admin login card when signed in via Google or Admin
             if (id === 'app-secure' && (isAdmin || isGoogleLoggedIn)) {
                 item.style.display = 'none';
                 return;
@@ -2316,12 +2433,6 @@
         toggleRearrangeMode(true);
     }
 
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
-    }
-
     function cycleGridLayout() {
         const next = appState.gridCols === 3 ? 4 : (appState.gridCols === 4 ? 2 : 3);
         appState.gridCols = next;
@@ -2401,6 +2512,16 @@
         if (notesEl) appState.scratchpad = notesEl.value;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
 
+        // 1. Sync to Firebase Firestore
+        if (hubDocRef) {
+            try {
+                await setDoc(hubDocRef, appState, { merge: true });
+            } catch (e) {
+                console.warn("Firestore sync note:", e.message);
+            }
+        }
+
+        // 2. Optional Google Apps Script fallback
         if (CLOUD_SCRIPT_URL) {
             try {
                 await fetch(CLOUD_SCRIPT_URL, {
@@ -2413,21 +2534,31 @@
         }
 
         const pill = document.getElementById('cloud-status-pill');
-        if (pill) pill.innerText = 'Synced to Cloud ✓';
-        if (showAlert) alert('Saved and synced to Cloud for all users!');
+        if (pill) pill.innerText = 'Synced to Firebase ✓';
+        if (showAlert) alert('Saved and synced to Firebase Cloud for all users!');
     }
 
     async function syncData() {
         const icon = document.getElementById('sync-icon');
         if (icon) icon.classList.add('fa-spin');
 
+        if (hubDocRef) {
+            try {
+                const snap = await getDoc(hubDocRef);
+                if (snap.exists()) {
+                    applyCloudStateToUI(snap.data());
+                }
+            } catch (e) {
+                console.warn("Firestore fetch note:", e.message);
+            }
+        }
+
         if (CLOUD_SCRIPT_URL) {
             try {
                 const res = await fetch(CLOUD_SCRIPT_URL);
                 const cloudData = await res.json();
                 if (cloudData && typeof cloudData === 'object') {
-                    appState = { ...appState, ...cloudData };
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                    applyCloudStateToUI(cloudData);
                 }
             } catch (e) {}
         }
@@ -2448,7 +2579,56 @@
         document.getElementById(id)?.classList.remove('open');
     }
 
-    window.addEventListener('DOMContentLoaded', initApp);
+    // Expose functions globally for inline HTML onclick handlers
+    Object.assign(window, {
+        toggleHeaderSearch,
+        handleSearch,
+        cycleHomeNotice,
+        switchPage,
+        toggleRearrangeMode,
+        openCardModal,
+        openCategoryModal,
+        openRecycleBinModal,
+        filterApps,
+        toggleFav,
+        handleSecureCardClick,
+        handleSettingsCardClick,
+        syncData,
+        goHomeWithFav,
+        addNotice,
+        deleteNotice,
+        loginWithGoogle,
+        logoutGoogle,
+        openAdminModal,
+        verifyAdminPin,
+        logoutAdmin,
+        toggleTheme,
+        setAccessMode,
+        cycleGridLayout,
+        openRearrangeFromTools,
+        setAccent,
+        changeAdminPin,
+        openSafeUrl,
+        copyPageUrl,
+        pushStateToCloud,
+        resetCardOrder,
+        clearFavorites,
+        clearNotes,
+        closeModal,
+        saveServiceCard,
+        removeCardToBin,
+        restoreFromBin,
+        deletePermanentlyFromBin,
+        emptyRecycleBin,
+        moveCategory,
+        editCategoryPrompt,
+        deleteCategory,
+        saveCategoryItem,
+        resetDefaultCategories,
+        moveCardInCurrentView
+    });
+
+    initApp();
 </script>
 </body>
 </html>
