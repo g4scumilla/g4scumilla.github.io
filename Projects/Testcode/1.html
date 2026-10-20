@@ -2898,9 +2898,12 @@
         isRearrangeMode = false;
         isPreviewMode = false;
         localStorage.removeItem('kuafi_admin_unlocked');
-        document.body.classList.remove('rearrange-active');
-        document.getElementById('rearrange-banner').classList.remove('active');
-        document.getElementById('preview-banner').classList.remove('active');
+        document.body.classList.remove('is-admin', 'rearrange-active');
+        const rBanner = document.getElementById('rearrange-banner');
+        if (rBanner) rBanner.classList.remove('active');
+        const pBanner = document.getElementById('preview-banner');
+        if (pBanner) pBanner.classList.remove('active');
+        
         renderCategories();
         renderServiceGrid();
         renderNotices();
