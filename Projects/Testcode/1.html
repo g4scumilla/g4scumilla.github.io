@@ -332,7 +332,7 @@
             color: var(--text-secondary);
         }
 
-        /* Live Preview Customizer Banner */
+        /* Live Preview Banner */
         .preview-banner {
             display: none;
             align-items: center;
@@ -1141,10 +1141,16 @@
             </div>
         </div>
 
-        <!-- Live Preview Active Banner (Admin Only) -->
+        <!-- Live Preview Active Banner -->
         <div class="preview-banner admin-only" id="preview-banner">
             <span><i class="fa-solid fa-eye" style="color: var(--accent-secondary); margin-right: 6px;"></i>🎨 Live Grid Preview Active</span>
             <button class="preview-save-btn" onclick="savePreviewAndSync()">Apply to Cloud</button>
+        </div>
+
+        <!-- Rearrange Banner (Admin Only) -->
+        <div class="rearrange-banner admin-only" id="rearrange-banner">
+            <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows or drag</span>
+            <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
         </div>
 
         <!-- Admin App Grid & Category Management Toolbar -->
@@ -2252,8 +2258,8 @@
         }
 
         const secureCard = document.querySelector('.service-item[data-id="app-secure"]');
-        if (secureCard && (isAdmin || isGoogleLoggedIn)) {
-            secureCard.style.display = 'none';
+        if (secureCard) {
+            secureCard.style.display = (isAdmin || isGoogleLoggedIn) ? 'none' : 'flex';
         }
 
         const binCount = (appState.recycleBin || []).length;
@@ -2890,15 +2896,16 @@
     function logoutAdmin() {
         isAdmin = false;
         isRearrangeMode = false;
+        isPreviewMode = false;
         localStorage.removeItem('kuafi_admin_unlocked');
         document.body.classList.remove('rearrange-active');
         document.getElementById('rearrange-banner').classList.remove('active');
         document.getElementById('preview-banner').classList.remove('active');
-        isPreviewMode = false;
         renderCategories();
         renderServiceGrid();
         renderNotices();
         updateAuthAndAdminUI();
+        showSyncToast('🔒 Admin Mode Locked');
     }
 
     function handleSecureCardClick() {
@@ -2941,7 +2948,6 @@
         toggleRearrangeMode(true);
     }
 
-    // Live Preview & Jump to Main Page on any Customizer change (Without default rearrange)
     function previewAndSaveGridCustomizer() {
         const cols = document.getElementById('grid-cols-select').value;
         const style = document.getElementById('grid-style-select').value;
@@ -2955,7 +2961,6 @@
         applyCardGridStyleVars(style);
         applyCardGridLayoutVars(layout);
 
-        // Jump to main page with live preview banner active (no rearrange menu)
         isPreviewMode = true;
         isRearrangeMode = false;
         document.body.classList.remove('rearrange-active');
@@ -3034,7 +3039,6 @@
         document.documentElement.style.setProperty('--grid-gap', gap);
     }
 
-    // Pomodoro Focus Timer Functions
     function startPomodoro() {
         if (pomodoroInterval) return;
         pomodoroInterval = setInterval(() => {
@@ -3065,7 +3069,6 @@
         }
     }
 
-    // Profile Customization Functions
     function openProfileModal() {
         const email = auth.currentUser?.email || 'default';
         const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${email}`) || '{}');
