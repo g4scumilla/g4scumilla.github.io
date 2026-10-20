@@ -38,6 +38,7 @@
             --card-bg: var(--bg-card);
             --card-shadow: 0 8px 20px -6px rgba(0,0,0,0.2);
             --card-padding: 10px 8px 12px;
+            --card-align: center;
         }
 
         body.light-mode {
@@ -230,6 +231,7 @@
             border: 1px solid rgba(61, 237, 151, 0.35);
             box-shadow: 0 10px 28px -8px rgba(61, 237, 151, 0.18);
             overflow: hidden;
+            cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .notice-showcase.urgent {
@@ -480,8 +482,8 @@
             box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: var(--card-align, center);
+            text-align: var(--card-align, center);
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             overflow: hidden;
         }
@@ -719,6 +721,23 @@
         .google-user-only { display: none !important; }
         body.is-google-auth .google-user-only { display: block !important; }
         body.is-google-auth .setting-row.google-user-only { display: flex !important; }
+
+        /* Focus Timer Widget */
+        .pomodoro-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .pomodoro-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 6px 0;
+            letter-spacing: 1px;
+        }
 
         /* Attractive Notices Page Cards & Expandable Text */
         .notice-input, .quick-note-area {
@@ -1075,10 +1094,10 @@
     <div id="page-home" class="page-view active">
 
         <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
-        <div class="notice-showcase" id="home-notice-showcase">
+        <div class="notice-showcase" id="home-notice-showcase" onclick="toggleHomeNoticeBannerExpand(event)">
             <div class="notice-showcase-top">
                 <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
-                <div class="notice-showcase-controls">
+                <div class="notice-showcase-controls" onclick="event.stopPropagation()">
                     <span id="home-notice-counter" style="font-size:10px; color:var(--text-secondary);">1 / 1</span>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
                     <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
@@ -1088,10 +1107,10 @@
             <div class="notice-showcase-body" id="home-notice-text">
                 Welcome to Abdullahil Kuafi's Smart Cloud Hub!
             </div>
-            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;" onclick="toggleHomeNoticeBannerExpand()">Expand</button>
+            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;">Expand</button>
             <div class="notice-showcase-footer">
                 <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
-                <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices')">View Board →</span>
+                <span style="color:var(--accent); cursor:pointer; font-weight:600;" onclick="switchPage('notices'); event.stopPropagation();">View Board →</span>
             </div>
         </div>
 
@@ -1336,10 +1355,18 @@
             </div>
         </div>
 
-        <!-- NEW: Individual Google User Tools & Settings Section -->
-        <div class="tools-section-card google-user-only" id="google-user-tools-section">
-            <div class="section-label"><span><i class="fa-solid fa-user-gear"></i> My Personal Hub Controls</span></div>
-            
+        <!-- NEW: "My Profile" Section for Google Logged-In Users -->
+        <div class="tools-section-card google-user-only" id="google-my-profile-section">
+            <div class="section-label"><span><i class="fa-solid fa-id-card"></i> My Profile & Custom Details</span></div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Profile Information</h4>
+                    <p id="profile-details-preview">Edit your name, phone, district & contact info</p>
+                </div>
+                <button class="btn-action" onclick="openProfileModal()">
+                    <i class="fa-solid fa-user-pen"></i> Edit Profile
+                </button>
+            </div>
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Personal Cloud Notes</h4>
@@ -1349,24 +1376,13 @@
                     <i class="fa-solid fa-note-sticky"></i> Open Notes
                 </button>
             </div>
-
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Export Personal Backup</h4>
-                    <p>Download your private app favorites and settings as JSON</p>
+                    <p>Download your private app favorites and profile settings as JSON</p>
                 </div>
                 <button class="btn-action" onclick="exportUserPersonalData()">
                     <i class="fa-solid fa-download"></i> Export JSON
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Reset Personal Favourites</h4>
-                    <p>Clear your personal home pinned cards</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="clearFavorites()">
-                    <i class="fa-solid fa-rotate-left"></i> Reset
                 </button>
             </div>
         </div>
@@ -1414,6 +1430,7 @@
                 </div>
             </div>
 
+            <!-- Card Grid Column Option (2, 3, or 4) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid Columns (2, 3, or 4)</h4>
@@ -1426,6 +1443,7 @@
                 </select>
             </div>
 
+            <!-- Card Grid UI Style (15 Popular Styles) -->
             <div class="setting-row admin-only">
                 <div class="setting-info">
                     <h4>Card Grid UI Style (15 Popular Styles)</h4>
@@ -1447,6 +1465,31 @@
                     <option value="13">13. Pill Shaped Accent</option>
                     <option value="14">14. Velvet Dark Elevation</option>
                     <option value="15">15. Classic Standard Grid</option>
+                </select>
+            </div>
+
+            <!-- Separate Option: 15 Distinct Card Grid Layout Options -->
+            <div class="setting-row admin-only">
+                <div class="setting-info">
+                    <h4>Card Grid Layout (15 Layout Options)</h4>
+                    <p>Choose structure and spacing layout for cards</p>
+                </div>
+                <select id="grid-layout-select" class="form-select" style="max-width:190px; padding:6px; font-size:11.5px;" onchange="setCardGridLayoutChoice(this.value)">
+                    <option value="1">1. Standard Balanced Grid</option>
+                    <option value="2">2. Compact Dense Grid</option>
+                    <option value="3">3. Spaced Airy Grid</option>
+                    <option value="4">4. Centered Alignment Grid</option>
+                    <option value="5">5. Border-Framed Grid</option>
+                    <option value="6">6. Shadow-Lifted Grid</option>
+                    <option value="7">7. Floating Island Grid</option>
+                    <option value="8">8. Rounded Capsule Grid</option>
+                    <option value="9">9. Minimal Flat Grid</option>
+                    <option value="10">10. Glowing Accent Grid</option>
+                    <option value="11">11. Dual-Tone Gradient Grid</option>
+                    <option value="12">12. Borderless Clean Grid</option>
+                    <option value="13">13. Elevated Card Grid</option>
+                    <option value="14">14. Sharp Geometric Grid</option>
+                    <option value="15">15. Fluid Auto-Fit Grid</option>
                 </select>
             </div>
 
@@ -1493,7 +1536,7 @@
             </div>
         </div>
 
-        <!-- NEW: Expanded Admin Management & All-User Sync Features -->
+        <!-- Expanded Admin Management & All-User Sync Features -->
         <div class="tools-section-card admin-only">
             <div class="section-label">
                 <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & All-User Sync</span>
@@ -1551,9 +1594,9 @@
             </div>
         </div>
 
-        <!-- Built-in Quick Utilities -->
+        <!-- Built-in Quick Utilities & Focus Pomodoro Timer -->
         <div class="tools-section-card">
-            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities</span></div>
+            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities & Focus Timer</span></div>
             <div class="mini-tools-grid">
                 <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/finance/main')">
                     <i class="fa-solid fa-wallet"></i>
@@ -1571,6 +1614,16 @@
                     <i class="fa-solid fa-rotate"></i>
                     <div>Sync Latest</div>
                 </button>
+            </div>
+
+            <!-- Focus Pomodoro Timer Widget -->
+            <div class="pomodoro-box">
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary);">POMODORO FOCUS TIMER</div>
+                <div class="pomodoro-display" id="pomodoro-timer">25:00</div>
+                <div style="display:flex; justify-content:center; gap:6px;">
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="startPomodoro()">Start</button>
+                    <button class="btn-action" style="padding:4px 10px; font-size:11px;" onclick="resetPomodoro()">Reset</button>
+                </div>
             </div>
         </div>
 
@@ -1765,6 +1818,32 @@
     </div>
 </div>
 
+<!-- MODAL 6: MY PROFILE CUSTOMIZATION -->
+<div class="modal-backdrop" id="user-profile-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile Details</span>
+            <button class="card-ctrl-btn" onclick="closeModal('user-profile-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profile-name-input" class="form-input" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="profile-phone-input" class="form-input" placeholder="+8801...">
+        </div>
+        <div class="form-group">
+            <label>District / Location</label>
+            <input type="text" id="profile-district-input" class="form-input" placeholder="e.g. Comilla">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('user-profile-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save Details</button>
+        </div>
+    </div>
+</div>
+
 <!-- Sync Toast Confirmation Element -->
 <div class="sync-toast" id="sync-toast">✓ Successfully Synced to Cloud!</div>
 
@@ -1822,6 +1901,8 @@
     let isPushing = false;
     let currentFilter = 'fav';
     let homeNoticeIdx = 0;
+    let pomodoroInterval = null;
+    let pomodoroSeconds = 1500;
 
     const DEFAULT_CATEGORIES = [
         { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -1844,6 +1925,7 @@
         ],
         gridCols: 3,
         gridStyleChoice: '1',
+        gridLayoutChoice: '1',
         accentPrimary: '#3ded97',
         accentSecondary: '#06b6d4',
         scratchpad: '',
@@ -1918,6 +2000,11 @@
             const styleSelect = document.getElementById('grid-style-select');
             if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
             applyCardGridStyleVars(appState.gridStyleChoice);
+        }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
         }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
@@ -2009,6 +2096,11 @@
             if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
             applyCardGridStyleVars(appState.gridStyleChoice);
         }
+        if (appState.gridLayoutChoice) {
+            const layoutSelect = document.getElementById('grid-layout-select');
+            if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
+            applyCardGridLayoutVars(appState.gridLayoutChoice);
+        }
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
             document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
@@ -2034,6 +2126,7 @@
         const isLight = document.body.classList.toggle('light-mode');
         localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
         updateThemeButtonUI(isLight);
+        applyCardGridStyleVars(appState.gridStyleChoice || '1');
     }
 
     function updateThemeButtonUI(isLight) {
@@ -2075,9 +2168,21 @@
         isGoogleLoggedIn = true;
         document.getElementById('google-logged-out-view').style.display = 'none';
         document.getElementById('google-logged-in-view').style.display = 'flex';
-        document.getElementById('google-user-name').innerText = user.name || 'Welcome!';
-        document.getElementById('google-user-email').innerText = user.email || '';
+        
+        const emailKey = user.email || 'default';
+        const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${emailKey}`) || '{}');
+
+        const finalName = customProfile.name || user.name || 'Welcome!';
+        const finalEmail = user.email || '';
+
+        document.getElementById('google-user-name').innerText = finalName;
+        document.getElementById('google-user-email').innerText = finalEmail;
         document.getElementById('google-user-avatar').src = user.avatar || 'https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19';
+
+        const previewEl = document.getElementById('profile-details-preview');
+        if (previewEl) {
+            previewEl.innerText = `${finalName} • ${customProfile.phone || 'No phone'} • ${customProfile.district || 'No district'}`;
+        }
 
         if (user.email && ADMIN_GOOGLE_EMAILS.includes(user.email.toLowerCase())) {
             isAdmin = true;
@@ -2616,12 +2721,14 @@
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
     }
 
-    function toggleHomeNoticeBannerExpand() {
+    function toggleHomeNoticeBannerExpand(e) {
+        if (e && e.target.closest('button')) return;
         const txtEl = document.getElementById('home-notice-text');
         const btnEl = document.getElementById('home-notice-exp-btn');
         if (!txtEl || !btnEl) return;
         const isExpanded = txtEl.classList.toggle('expanded');
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
+        btnEl.style.display = isExpanded ? 'inline-block' : (txtEl.scrollHeight > txtEl.clientHeight ? 'inline-block' : 'none');
     }
 
     function updateHomeNoticeShowcase() {
@@ -2799,7 +2906,6 @@
         pushStateToCloud(false);
     }
 
-    // 15 Popular Card Styles Harmonized for Both Dark & Light Modes
     function setCardGridStyle(styleKey) {
         appState.gridStyleChoice = styleKey;
         applyCardGridStyleVars(styleKey);
@@ -2817,35 +2923,21 @@
         const isLight = document.body.classList.contains('light-mode');
 
         switch (styleKey) {
-            case '1': // Modern Glassmorphism
-                radius = '20px'; border = '1px solid rgba(120,120,120,0.18)'; bg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(25,35,55,0.7)'; shadow = '0 12px 30px rgba(0,0,0,0.15)'; gap = '12px'; padding = '14px 10px 16px'; break;
-            case '2': // Neon Glow Border
-                radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
-            case '3': // Ultra Rounded Cards
-                radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
-            case '4': // Sleek Gradient Border
-                radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
-            case '5': // Minimalist Flat Dark
-                radius = '10px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
-            case '6': // Deep Floating Shadow
-                radius = '20px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; gap = '12px'; padding = '14px 10px 16px'; break;
-            case '7': // Executive Bordered
-                radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--card-bg)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
-            case '8': // Cyberpunk Tech Box
-                radius = '4px'; border = '1px dashed var(--accent)'; bg = isLight ? 'rgba(61,237,151,0.05)' : 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.15)'; gap = '10px'; padding = '12px 8px 14px'; break;
-            case '9': // Soft Pastel Elegance
-                radius = '22px'; border = '1px solid var(--border-color)'; bg = isLight ? '#ffffff' : 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--card-bg))'; shadow = '0 8px 22px rgba(0,0,0,0.12)'; gap = '12px'; padding = '14px 10px 16px'; break;
-            case '10': // Frosted Glass Tile
-                radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; shadow = '0 10px 25px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
-            case '11': // High Contrast Bold
-                radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--card-bg)'; shadow = '0 6px 16px rgba(0,0,0,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
-            case '12': // Clean Outline Modern
-                radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
-            case '13': // Pill Shaped Accent
-                radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 8px 20px rgba(0,0,0,0.12)'; gap = '10px'; padding = '16px 10px 18px'; break;
-            case '14': // Velvet Dark Elevation
-                radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
-            case '15': // Classic Standard Grid
+            case '1': radius = '20px'; border = '1px solid rgba(120,120,120,0.18)'; bg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(25,35,55,0.7)'; shadow = '0 12px 30px rgba(0,0,0,0.15)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '2': radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '3': radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
+            case '4': radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '5': radius = '10px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
+            case '6': radius = '20px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '7': radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--card-bg)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '8': radius = '4px'; border = '1px dashed var(--accent)'; bg = isLight ? 'rgba(61,237,151,0.05)' : 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.15)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '9': radius = '22px'; border = '1px solid var(--border-color)'; bg = isLight ? '#ffffff' : 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--card-bg))'; shadow = '0 8px 22px rgba(0,0,0,0.12)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '10': radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; shadow = '0 10px 25px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '11': radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--card-bg)'; shadow = '0 6px 16px rgba(0,0,0,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
+            case '12': radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
+            case '13': radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 8px 20px rgba(0,0,0,0.12)'; gap = '10px'; padding = '16px 10px 18px'; break;
+            case '14': radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '15':
             default:
                 radius = '16px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'var(--card-shadow)'; gap = '10px'; padding = '10px 8px 12px';
         }
@@ -2856,6 +2948,101 @@
         document.documentElement.style.setProperty('--card-shadow', shadow);
         document.documentElement.style.setProperty('--grid-gap', gap);
         document.documentElement.style.setProperty('--card-padding', padding);
+    }
+
+    function setCardGridLayoutChoice(layoutKey) {
+        appState.gridLayoutChoice = layoutKey;
+        applyCardGridLayoutVars(layoutKey);
+        pushStateToCloud(false);
+    }
+
+    function applyCardGridLayoutVars(layoutKey) {
+        let align = 'center';
+        let padding = '10px 8px 12px';
+        let gap = '10px';
+
+        switch (layoutKey) {
+            case '1': align = 'center'; padding = '10px 8px 12px'; gap = '10px'; break;
+            case '2': align = 'center'; padding = '6px 4px 8px';   gap = '6px';  break;
+            case '3': align = 'center'; padding = '16px 12px 18px';gap = '16px'; break;
+            case '4': align = 'center'; padding = '12px 10px 14px';gap = '10px'; break;
+            case '5': align = 'flex-start'; padding = '12px 10px 14px'; gap = '10px'; break;
+            case '6': align = 'center'; padding = '14px 10px 16px'; gap = '12px'; break;
+            case '7': align = 'center'; padding = '15px 12px 18px'; gap = '14px'; break;
+            case '8': align = 'center'; padding = '18px 12px 20px'; gap = '10px'; break;
+            case '9': align = 'flex-start'; padding = '8px 8px 10px';   gap = '8px';  break;
+            case '10': align = 'center'; padding = '12px 10px 14px'; gap = '12px'; break;
+            case '11': align = 'center'; padding = '14px 10px 16px'; gap = '10px'; break;
+            case '12': align = 'center'; padding = '10px 8px 12px';  gap = '10px'; break;
+            case '13': align = 'center'; padding = '16px 12px 18px'; gap = '14px'; break;
+            case '14': align = 'flex-start'; padding = '10px 8px 12px'; gap = '8px';  break;
+            case '15':
+            default:
+                align = 'center'; padding = '10px 8px 12px'; gap = '10px';
+        }
+
+        document.documentElement.style.setProperty('--card-align', align);
+        document.documentElement.style.setProperty('--card-padding', padding);
+        document.documentElement.style.setProperty('--grid-gap', gap);
+    }
+
+    // Pomodoro Focus Timer Functions
+    function startPomodoro() {
+        if (pomodoroInterval) return;
+        pomodoroInterval = setInterval(() => {
+            if (pomodoroSeconds > 0) {
+                pomodoroSeconds--;
+                updatePomodoroDisplay();
+            } else {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+                alert('Pomodoro session completed! Take a break.');
+            }
+        }, 1000);
+    }
+
+    function resetPomodoro() {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        pomodoroSeconds = 1500;
+        updatePomodoroDisplay();
+    }
+
+    function updatePomodoroDisplay() {
+        const m = Math.floor(pomodoroSeconds / 60);
+        const s = pomodoroSeconds % 60;
+        const disp = document.getElementById('pomodoro-timer');
+        if (disp) {
+            disp.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+    }
+
+    // Profile Customization Functions
+    function openProfileModal() {
+        const email = auth.currentUser?.email || 'default';
+        const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${email}`) || '{}');
+        document.getElementById('profile-name-input').value = customProfile.name || auth.currentUser?.displayName || '';
+        document.getElementById('profile-phone-input').value = customProfile.phone || '';
+        document.getElementById('profile-district-input').value = customProfile.district || '';
+        openModal('user-profile-modal');
+    }
+
+    function saveUserProfileDetails() {
+        const email = auth.currentUser?.email || 'default';
+        const name = document.getElementById('profile-name-input').value.trim();
+        const phone = document.getElementById('profile-phone-input').value.trim();
+        const district = document.getElementById('profile-district-input').value.trim();
+
+        const profileData = { name, phone, district };
+        localStorage.setItem(`kuafi_user_profile_${email}`, JSON.stringify(profileData));
+
+        if (name) {
+            document.getElementById('google-user-name').innerText = name;
+        }
+        document.getElementById('profile-details-preview').innerText = `${name || 'User'} • ${phone || 'No phone'} • ${district || 'No district'}`;
+
+        closeModal('user-profile-modal');
+        showSyncToast('✓ Profile details saved successfully!');
     }
 
     function setAccent(primary, secondary, el) {
@@ -2896,7 +3083,6 @@
         pushStateToCloud(true);
     }
 
-    // Individual Google User Private Notes & Backup
     function openUserNotesModal() {
         const email = auth.currentUser?.email || 'guest';
         const savedNotes = localStorage.getItem(`kuafi_user_notes_${email}`) || '';
@@ -3087,6 +3273,7 @@
         setAccessMode,
         setGridColumns,
         setCardGridStyle,
+        setCardGridLayoutChoice,
         openRearrangeFromTools,
         setAccent,
         changeAdminPin,
@@ -3100,6 +3287,10 @@
         saveUserPrivateNotes,
         exportUserPersonalData,
         exportGlobalBackup,
+        openProfileModal,
+        saveUserProfileDetails,
+        startPomodoro,
+        resetPomodoro,
         closeModal,
         saveServiceCard,
         removeCardToBin,
