@@ -1467,7 +1467,7 @@
         <!-- Grouped Admin Live Grid Customizer (Columns, Style, Layout) -->
         <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
             <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
-            
+
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>1. Card Grid Columns</h4>
@@ -1939,6 +1939,7 @@
     let homeNoticeIdx = 0;
     let pomodoroInterval = null;
     let pomodoroSeconds = 1500;
+    let isRearrangeMode = false;
 
     const DEFAULT_CATEGORIES = [
         { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -2204,7 +2205,7 @@
         isGoogleLoggedIn = true;
         document.getElementById('google-logged-out-view').style.display = 'none';
         document.getElementById('google-logged-in-view').style.display = 'flex';
-        
+
         const emailKey = user.email || 'default';
         const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${emailKey}`) || '{}');
 
@@ -2898,10 +2899,10 @@
         isRearrangeMode = false;
         isPreviewMode = false;
         localStorage.removeItem('kuafi_admin_unlocked');
-        
+
         document.body.classList.remove('is-admin');
         document.body.classList.remove('rearrange-active');
-        
+
         const rBanner = document.getElementById('rearrange-banner');
         if (rBanner) rBanner.classList.remove('active');
         const pBanner = document.getElementById('preview-banner');
@@ -3366,3 +3367,4 @@
 </script>
 </body>
 </html>
+x
