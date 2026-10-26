@@ -1,39 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shared PDFs Viewer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .drive-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        iframe {
-            width: 100%;
-            height: 700px;
-            border: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online PDF Study Portal</title>
+  <style>
+    :root {
+      --bg-primary: #141517;
+      --bg-secondary: #1e2024;
+      --bg-tertiary: #282b30;
+      --text-primary: #e8eaed;
+      --text-muted: #9aa0a6;
+      --accent: #4c8bf5;
+      --accent-hover: #3b78e7;
+      --border: #32363c;
+      --danger: #e5534b;
+    }
+
+    body.sepia-mode {
+      --bg-primary: #f4ecd8;
+      --bg-secondary: #eae0c8;
+      --bg-tertiary: #dfd3b8;
+      --text-primary: #3c352a;
+      --text-muted: #6e6454;
+      --accent: #8c5a2b;
+      --accent-hover: #734820;
+      --border: #cbbd9f;
+    }
+
+    body.light-mode {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f3f4;
+      --text-primary: #202124;
+      --text-muted: #5f6368;
+      --accent: #1a73e8;
+      --accent-hover: #1557b0;
+      --border: #dadce0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 310px;
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 14px;
+      overflow-y: auto;
+      transition: margin-left 0.25s ease;
+    }
+
+    .sidebar.collapsed {
+      margin-left: -310px;
+    }
+
+    .brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-bar h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.15s;
+    }
+
+    .btn-small:hover {
+      background-color: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .pdf-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pdf-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+
+    .pdf-btn:hover,
+    .pdf-btn.active {
+      background-color: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    /* Quick Notes */
+    .notes-area {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .notes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notes-area textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      resize: none;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* Main Viewer */
+    .viewer-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: relative;
+    }
+
+    .viewer-header {
+      padding: 10px 18px;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-left, .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-tertiary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background-color: var(--bg-primary);
+    }
+
+    /* Setup / Link Manager Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal h3 {
+      font-size: 1.15rem;
+    }
+
+    .modal p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.88rem;
+    }
+
+    .pdf-slot-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      padding: 9px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+  </style>
 </head>
 <body>
 
-    <div class="drive-container">
-        <h2 style="text-align: center; color: #333;">PDF Document Library</h2>
-        
-        <!-- Google Drive Folder Embed (Grid View) -->
-        <iframe src="https://drive.google.com/embeddedfolderview?id=1O0-aJsuU5G-yB6RRGJ1jh9FNDW-E9cSP#grid"></iframe>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-bar">
+      <h2>📚 Study Portal</h2>
+      <button class="btn-small" onclick="openSetupModal()">⚙️ Manage Links</button>
     </div>
 
+    <div class="section-label">Folder Overview</div>
+    <ul class="pdf-list">
+      <li>
+        <button class="pdf-btn active" id="folderListBtn" onclick="loadFolder('list', this)">
+          📁 Folder (List View)
+        </button>
+      </li>
+      <li>
+        <button class="pdf-btn" id="folderGridBtn" onclick="loadFolder('grid', this)">
+          🗂️ Folder (Grid View)
+        </button>
+      </li>
+    </ul>
+
+    <div class="section-label">8 Study PDFs</div>
+    <ul class="pdf-list" id="pdfList"></ul>
+
+    <div class="notes-area">
+      <div class="notes-header">
+        <span class="section-label">Study Notes</span>
+        <button class="btn-small" onclick="downloadNotes()">💾 Export .txt</button>
+      </div>
+      <textarea id="studyNotes" placeholder="Jot down key takeaways, page numbers, or formulas here (auto-saved)..."></textarea>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="viewer-container">
+    <header class="viewer-header">
+      <div class="header-left">
+        <button class="btn-small" onclick="toggleSidebar()" title="Toggle Distraction-Free Fullscreen">
+          ☰ Focus Mode
+        </button>
+        <strong id="currentTitle">Folder (List View)</strong>
+      </div>
+
+      <div class="header-right">
+        <!-- Pomodoro Study Timer -->
+        <div class="timer-box">
+          <span>⏱️</span>
+          <span id="timerDisplay">25:00</span>
+          <button class="btn-small" onclick="toggleTimer()" id="timerBtn">Start</button>
+          <button class="btn-small" onclick="resetTimer()">↺</button>
+        </div>
+
+        <button class="btn-small" onclick="cycleTheme()" id="themeBtn">🌙 Dark</button>
+      </div>
+    </header>
+
+    <iframe id="pdfFrame" allow="autoplay"></iframe>
+  </main>
+
+  <!-- Setup Modal for Folder & 8 PDFs -->
+  <div class="modal-backdrop" id="setupModal">
+    <div class="modal">
+      <h3>Configure Your Google Drive Folder & 8 PDFs</h3>
+      <p>
+        Paste your Google Drive Folder link and/or individual PDF share links below. Everything is saved automatically in your browser.
+        Make sure your folder's sharing permission in Google Drive is set to <strong>"Anyone with the link"</strong> so it loads across accounts.
+      </p>
+
+      <div class="input-group">
+        <label for="folderInput">Google Drive Folder Link (or Folder ID)</label>
+        <input type="text" id="folderInput" placeholder="https://drive.google.com/drive/folders/..." />
+      </div>
+
+      <div class="input-group">
+        <label>Individual PDF Links (Optional — for 1-click reading without leaving the sidebar)</label>
+        <div class="pdf-slot-grid" id="pdfInputsContainer"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-small" onclick="closeSetupModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveSetup()">Save & Load</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_PDF_COUNT = 8;
+    const frame = document.getElementById('pdfFrame');
+    const titleEl = document.getElementById('currentTitle');
+    const notesEl = document.getElementById('studyNotes');
+    const pdfListEl = document.getElementById('pdfList');
+    const setupModal = document.getElementById('setupModal');
+
+    // Load state from localStorage
+    let appData = JSON.parse(localStorage.getItem('pdf_study_portal_v1')) || {
+      folderUrl: '',
+      pdfs: Array.from({ length: DEFAULT_PDF_COUNT }, (_, i) => ({
+        title: `PDF ${i + 1}`,
+        url: ''
+      }))
+    };
+
+    // Extract clean Google Drive ID from any full Drive URL or raw ID
+    function extractDriveId(input) {
+      if (!input) return '';
+      const trimmed = input.trim();
+      const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+      if (folderMatch) return folderMatch[1];
+
+      const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (fileMatch) return fileMatch[1];
+
+      const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (idParamMatch) return idParamMatch[1];
+
+      return trimmed;
+    }
+
+    // Render Sidebar PDF Buttons
+    function renderSidebar() {
+      pdfListEl.innerHTML = '';
+      appData.pdfs.forEach((item, index) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = 'pdf-btn';
+        const fileId = extractDriveId(item.url);
+        btn.innerHTML = `<span>📄</span> <span>${item.title || 'PDF ' + (index + 1)}</span>`;
+        btn.onclick = () => {
+          if (!fileId) {
+            openSetupModal();
+            return;
+          }
+          setActiveButton(btn);
+          titleEl.textContent = item.title || `PDF ${index + 1}`;
+          frame.src = `https://drive.google.com/file/d/${fileId}/preview`;
+        };
+        li.appendChild(btn);
+        pdfListEl.appendChild(li);
+      });
+    }
+
+    function setActiveButton(activeBtn) {
+      document.querySelectorAll('.pdf-btn').forEach(b => b.classList.remove('active'));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function loadFolder(mode, btn) {
+      const folderId = extractDriveId(appData.folderUrl);
+      if (!folderId) {
+        openSetupModal();
+        return;
+      }
+      setActiveButton(btn);
+      titleEl.textContent = mode === 'grid' ? 'Folder (Grid View)' : 'Folder (List View)';
+      frame.src = `https://drive.google.com/embeddedfolderview?id=${folderId}#${mode}`;
+    }
+
+    // Modal Setup Functions
+    function openSetupModal() {
+      document.getElementById('folderInput').value = appData.folderUrl || '';
+      const container = document.getElementById('pdfInputsContainer');
+      container.innerHTML = '';
+
+      appData.pdfs.forEach((pdf, i) => {
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.placeholder = `Title ${i + 1}`;
+        titleInput.value = pdf.title;
+        titleInput.id = `pdfTitle_${i}`;
+
+        const urlInput = document.createElement('input');
+        urlInput.type = 'text';
+        urlInput.placeholder = `Paste PDF ${i + 1} Share Link (or leave blank)`;
+        urlInput.value = pdf.url;
+        urlInput.id = `pdfUrl_${i}`;
+
+        container.appendChild(titleInput);
+        container.appendChild(urlInput);
+      });
+
+      setupModal.classList.add('open');
+    }
+
+    function closeSetupModal() {
+      setupModal.classList.remove('open');
+    }
+
+    function saveSetup() {
+      appData.folderUrl = document.getElementById('folderInput').value.trim();
+      for (let i = 0; i < DEFAULT_PDF_COUNT; i++) {
+        appData.pdfs[i] = {
+          title: document.getElementById(`pdfTitle_${i}`).value.trim() || `PDF ${i + 1}`,
+          url: document.getElementById(`pdfUrl_${i}`).value.trim()
+        };
+      }
+      localStorage.setItem('pdf_study_portal_v1', JSON.stringify(appData));
+      renderSidebar();
+      closeSetupModal();
+
+      if (appData.folderUrl) {
+        loadFolder('list', document.getElementById('folderListBtn'));
+      }
+    }
+
+    // Distraction-Free Sidebar Toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    // Theme Switcher (Dark -> Sepia -> Light)
+    const themes = ['dark', 'sepia', 'light'];
+    let currentThemeIdx = 0;
+    function cycleTheme() {
+      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+      document.body.classList.remove('sepia-mode', 'light-mode');
+      const themeBtn = document.getElementById('themeBtn');
+      if (themes[currentThemeIdx] === 'sepia') {
+        document.body.classList.add('sepia-mode');
+        themeBtn.textContent = '📜 Sepia';
+      } else if (themes[currentThemeIdx] === 'light') {
+        document.body.classList.add('light-mode');
+        themeBtn.textContent = '☀️ Light';
+      } else {
+        themeBtn.textContent = '🌙 Dark';
+      }
+    }
+
+    // Notes Auto-Save & Export
+    notesEl.value = localStorage.getItem('study_portal_notes') || '';
+    notesEl.addEventListener('input', () => {
+      localStorage.setItem('study_portal_notes', notesEl.value);
+    });
+
+    function downloadNotes() {
+      const blob = new Blob([notesEl.value], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'study-notes.txt';
+      a.click();
+    }
+
+    // Built-in 25-Minute Pomodoro Study Timer
+    let timeLeft = 25 * 60;
+    let timerInterval = null;
+    function updateTimerDisplay() {
+      const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const secs = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('timerBtn');
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = 'Start';
+      } else {
+        btn.textContent = 'Pause';
+        timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            btn.textContent = 'Start';
+            alert('Pomodoro session complete! Time for a 5-minute break.');
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timeLeft = 25 * 60;
+      document.getElementById('timerBtn').textContent = 'Start';
+      updateTimerDisplay();
+    }
+
+    // Initialize on load
+    renderSidebar();
+    if (extractDriveId(appData.folderUrl)) {
+      loadFolder('list', document.getElementById('folderListBtn'));
+    } else {
+      openSetupModal();
+    }
+  </script>
 </body>
 </html>
