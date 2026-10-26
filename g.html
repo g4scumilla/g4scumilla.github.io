@@ -587,10 +587,10 @@
                 </div>
             </div>
 
-            <!-- Instant Drive Link Paste Bar -->
+            <!-- Instant Link Paste Bar -->
             <div class="quick-input-bar">
-                <i class="fa-brands fa-google-drive" style="color: var(--accent-hover); margin-right: 8px;"></i>
-                <input type="text" id="quickUrlInput" placeholder="Paste Google Drive PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
+                <i class="fa-solid fa-link" style="color: var(--accent-hover); margin-right: 8px;"></i>
+                <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
                 <button class="btn btn-primary btn-sm" onclick="saveQuickLink()">
                     <i class="fa-solid fa-floppy-disk"></i> Save & Preview
                 </button>
@@ -652,21 +652,13 @@
         <!-- Main Workspace -->
         <main class="workspace" id="workspace">
             <div class="pdf-card" id="pdfCard">
-                <!-- Mini Window Header -->
+                <!-- Mini Window Header (Open in Drive removed) -->
                 <div class="card-header">
                     <div class="window-dots">
                         <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
                         <div class="dot green" onclick="toggleEdgeToEdge()" title="Expand Width"></div>
                         <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
                         <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Default Document</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <a id="openInDriveLink"
-                           href="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/view" 
-                           target="_blank" 
-                           style="color: var(--accent-hover); text-decoration: none;">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Drive
-                        </a>
                     </div>
                 </div>
 
@@ -704,7 +696,7 @@
         </div>
 
         <div class="input-group">
-            <label>Google Drive PDF Link (or File ID)</label>
+            <label>PDF Link (or File ID)</label>
             <input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view">
         </div>
 
@@ -798,7 +790,6 @@
 
         // ================= INITIALIZE & LOAD PERMANENT SAVED STATE =================
         window.addEventListener('DOMContentLoaded', () => {
-            // Load library from localStorage or initialize with default PDF
             const storedList = localStorage.getItem(STORAGE_KEY_LIST);
             if (storedList) {
                 try {
@@ -817,7 +808,6 @@
                 localStorage.setItem(STORAGE_KEY_LIST, JSON.stringify(savedLibrary));
             }
 
-            // Check if URL has ?id= parameter, otherwise load last active PDF from localStorage
             const urlParams = new URLSearchParams(window.location.search);
             const paramId = urlParams.get('id');
             const storedActiveId = localStorage.getItem(STORAGE_KEY_ACTIVE);
@@ -838,33 +828,28 @@
             renderSavedLibrary();
         });
 
-        // Extract Google Drive ID from any Drive URL format or raw ID
         function extractDriveId(input) {
             const trimmed = input.trim();
             if (!trimmed) return null;
 
-            // Match /file/d/ID or /d/ID
             const fileMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]{15,})/);
             if (fileMatch && fileMatch[1]) return fileMatch[1];
 
-            // Match ?id=ID or &id=ID
             const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]{15,})/);
             if (idParamMatch && idParamMatch[1]) return idParamMatch[1];
 
-            // Match raw ID string
             if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed;
 
             return null;
         }
 
-        // Save from Top Quick Input Bar
         function saveQuickLink() {
             const inputEl = document.getElementById('quickUrlInput');
             const rawUrl = inputEl.value;
             const fileId = extractDriveId(rawUrl);
 
             if (!fileId) {
-                showToast('Please paste a valid Google Drive link!', true);
+                showToast('Please paste a valid PDF link!', true);
                 return;
             }
 
@@ -874,14 +859,13 @@
             inputEl.value = '';
         }
 
-        // Save from Side Library Drawer (with Custom Title)
         function addAndSavePDF() {
             const titleEl = document.getElementById('pdfTitleInput');
             const urlEl = document.getElementById('pdfUrlInput');
 
             const fileId = extractDriveId(urlEl.value);
             if (!fileId) {
-                showToast('Invalid Google Drive PDF link!', true);
+                showToast('Invalid PDF link!', true);
                 return;
             }
 
@@ -893,7 +877,6 @@
             urlEl.value = '';
         }
 
-        // Ensure PDF exists in permanent localStorage list
         function ensureInLibrary(fileId, title) {
             const existingIndex = savedLibrary.findIndex(item => item.id === fileId);
             if (existingIndex > -1) {
@@ -911,21 +894,17 @@
             renderSavedLibrary();
         }
 
-        // Load PDF into iframe, update links, and save active ID permanently
         function loadPDFById(fileId, showNotification = true) {
             activeFileId = fileId;
             localStorage.setItem(STORAGE_KEY_ACTIVE, fileId);
 
             const item = savedLibrary.find(i => i.id === fileId);
-            const docTitle = item ? item.title : 'Custom Drive PDF';
+            const docTitle = item ? item.title : 'Custom PDF';
 
-            // Show loading spinner
             document.getElementById('loader').classList.remove('hidden');
 
-            // Update Iframe Preview, Download, and Open in Drive URLs
             pdfFrame.src = `https://drive.google.com/file/d/${fileId}/preview`;
             document.getElementById('downloadBtn').href = `https://drive.google.com/uc?export=download&id=${fileId}`;
-            document.getElementById('openInDriveLink').href = `https://drive.google.com/file/d/${fileId}/view`;
             document.getElementById('docTitleDisplay').innerText = docTitle;
             document.title = `${docTitle} - PDF Studio Pro`;
 
@@ -935,7 +914,6 @@
             }
         }
 
-        // Render the Saved PDFs List inside the Drawer
         function renderSavedLibrary() {
             const container = document.getElementById('savedListContainer');
             document.getElementById('savedCount').innerText = savedLibrary.length;
@@ -965,7 +943,6 @@
             });
         }
 
-        // Delete a PDF from the Saved Library
         function deleteSavedPDF(event, fileId) {
             event.stopPropagation();
             savedLibrary = savedLibrary.filter(item => item.id !== fileId);
@@ -978,7 +955,6 @@
             showToast('Removed from saved library');
         }
 
-        // Copy direct URL with ?id=FILE_ID so it works across devices
         function copyShareUrl(event, fileId) {
             event.stopPropagation();
             const shareUrl = `${window.location.origin}${window.location.pathname}?id=${fileId}`;
