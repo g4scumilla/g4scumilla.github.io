@@ -11,10 +11,12 @@
     <style>
         :root {
             --bg-gradient: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
-            --glass-bg: rgba(30, 41, 59, 0.78);
+            --glass-bg: rgba(30, 41, 59, 0.82);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #6366f1;
             --accent-hover: #818cf8;
+            --success: #10b981;
+            --danger: #ef4444;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --viewer-width: 92%;
@@ -36,7 +38,6 @@
             user-select: none;
         }
 
-        /* Main Layout Wrapper */
         .app-wrapper {
             display: flex;
             flex-direction: column;
@@ -51,15 +52,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 24px;
+            padding: 10px 20px;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
             z-index: 100;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            max-height: 80px;
+            max-height: 90px;
             opacity: 1;
+            gap: 12px;
         }
 
         .top-toolbar.collapsed {
@@ -76,8 +78,8 @@
             align-items: center;
             gap: 12px;
             font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 0.3px;
+            font-size: 0.95rem;
+            white-space: nowrap;
         }
 
         .brand-icon {
@@ -89,13 +91,45 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            flex-shrink: 0;
         }
 
-        /* Control Buttons Group */
+        /* Quick Link Input Bar in Header */
+        .quick-input-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 4px 4px 4px 12px;
+            flex: 1;
+            max-width: 420px;
+            transition: border-color 0.2s;
+        }
+
+        .quick-input-bar:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+        }
+
+        .quick-input-bar input {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.82rem;
+            width: 100%;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .quick-input-bar input::placeholder {
+            color: var(--text-muted);
+        }
+
         .controls-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
             flex-wrap: wrap;
         }
 
@@ -103,16 +137,17 @@
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            padding: 8px 13px;
+            padding: 8px 12px;
             border-radius: 9px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
             transition: all 0.2s ease;
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .btn:hover {
@@ -131,11 +166,17 @@
             background: var(--accent-hover);
         }
 
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            border-radius: 7px;
+        }
+
         .divider {
             width: 1px;
             height: 24px;
             background: var(--glass-border);
-            margin: 0 4px;
+            margin: 0 2px;
         }
 
         /* Floating Expand/Collapse Pill Button */
@@ -185,7 +226,6 @@
             padding: 0;
         }
 
-        /* PDF Card Container (Collapsible & Resizable) */
         .pdf-card {
             width: var(--viewer-width);
             height: 100%;
@@ -206,14 +246,12 @@
             border: none;
         }
 
-        /* Collapsible PDF State */
         .pdf-card.minimized {
-            height: 54px !important;
-            width: 460px !important;
+            height: 48px !important;
+            width: 480px !important;
             border-radius: 14px;
         }
 
-        /* Mini Card Header inside PDF Card */
         .card-header {
             display: flex;
             align-items: center;
@@ -243,7 +281,6 @@
         .dot.green { background: #10b981; }
         .dot.purple { background: #6366f1; }
 
-        /* Iframe Wrapper & Eye Care Filters */
         .iframe-wrapper {
             flex: 1;
             width: 100%;
@@ -292,12 +329,14 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ================= COLLAPSIBLE SIDE DRAWERS (FILTERS & NOTES) ================= */
+        /* ================= COLLAPSIBLE SIDE DRAWERS ================= */
         .side-drawer {
             position: fixed;
-            top: 75px;
+            top: 72px;
             right: 20px;
-            width: 310px;
+            width: 350px;
+            max-height: calc(100vh - 95px);
+            overflow-y: auto;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -305,7 +344,7 @@
             border-radius: 16px;
             padding: 20px;
             z-index: 120;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             transform: translateX(120%);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -323,6 +362,117 @@
             border-bottom: 1px solid var(--glass-border);
             font-weight: 600;
             font-size: 0.95rem;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .text-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 9px 12px;
+            font-size: 0.83rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Saved PDF Library List */
+        .saved-list {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .saved-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .saved-item:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .saved-item.active {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .saved-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+            flex: 1;
+            margin-right: 8px;
+        }
+
+        .saved-item-title {
+            font-size: 0.83rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .saved-item-id {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .saved-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: var(--text-muted);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .icon-btn.delete:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.15);
         }
 
         .control-row {
@@ -358,20 +508,43 @@
             margin-bottom: 12px;
         }
 
-        .notes-area:focus {
-            border-color: var(--accent);
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #10b981;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Responsive adjustments */
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 950px) {
+            .quick-input-bar {
+                display: none;
+            }
+        }
+
         @media (max-width: 768px) {
             .top-toolbar {
-                padding: 10px 14px;
+                padding: 10px 12px;
                 flex-direction: column;
-                gap: 10px;
-                max-height: 140px;
-            }
-            .brand span {
-                display: none;
+                max-height: 150px;
             }
             .workspace {
                 padding: 6px;
@@ -381,6 +554,10 @@
             }
             .btn span {
                 display: none;
+            }
+            .side-drawer {
+                width: calc(100vw - 24px);
+                right: 12px;
             }
         }
     </style>
@@ -392,6 +569,11 @@
         <i class="fa-solid fa-sliders"></i> Show Controls
     </button>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
+    </div>
+
     <div class="app-wrapper">
         <!-- Collapsible Top Control Bar -->
         <header class="top-toolbar" id="topToolbar">
@@ -401,31 +583,45 @@
                 </div>
                 <div>
                     <div>PDF Studio Pro</div>
-                    <small style="color: var(--text-muted); font-size: 0.72rem;">Interactive Reader</small>
+                    <small style="color: var(--text-muted); font-size: 0.72rem;" id="activeDocSub">Permanent Reader</small>
                 </div>
             </div>
 
+            <!-- Instant Drive Link Paste Bar -->
+            <div class="quick-input-bar">
+                <i class="fa-brands fa-google-drive" style="color: var(--accent-hover); margin-right: 8px;"></i>
+                <input type="text" id="quickUrlInput" placeholder="Paste Google Drive PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
+                <button class="btn btn-primary btn-sm" onclick="saveQuickLink()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save & Preview
+                </button>
+            </div>
+
             <div class="controls-group">
-                <!-- Collapse/Expand PDF Card -->
-                <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer">
-                    <i class="fa-solid fa-compress"></i> <span>Collapse PDF</span>
-                </button>
-
-                <!-- Width / Cinema Toggle -->
-                <button class="btn" onclick="toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width">
-                    <i class="fa-solid fa-arrows-left-right"></i> <span>Cinema Width</span>
-                </button>
-
-                <!-- Rotate Page -->
-                <button class="btn" onclick="rotatePDF()" title="Rotate Viewer 90°">
-                    <i class="fa-solid fa-rotate-right"></i> <span>Rotate</span>
+                <!-- Saved PDF Library & Link Manager Drawer -->
+                <button class="btn btn-primary" onclick="toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs">
+                    <i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span>
                 </button>
 
                 <div class="divider"></div>
 
+                <!-- Collapse/Expand PDF Card -->
+                <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer">
+                    <i class="fa-solid fa-compress"></i> <span>Collapse</span>
+                </button>
+
+                <!-- Width / Cinema Toggle -->
+                <button class="btn" onclick="toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width">
+                    <i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span>
+                </button>
+
+                <!-- Rotate Page -->
+                <button class="btn" onclick="rotatePDF()" title="Rotate Viewer 90°">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+
                 <!-- Eye Care & Display Controls Drawer -->
                 <button class="btn" onclick="toggleDrawer('displayDrawer')" id="displayBtn" title="Eye Care & Zoom Controls">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Display & Filters</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Filters</span>
                 </button>
 
                 <!-- Quick Notes Drawer -->
@@ -433,19 +629,12 @@
                     <i class="fa-solid fa-pen-to-square"></i> <span>Notes</span>
                 </button>
 
-                <div class="divider"></div>
-
-                <!-- Reload PDF -->
-                <button class="btn" onclick="reloadPDF()" title="Reload Document">
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                </button>
-
                 <!-- Direct Download -->
-                <a class="btn btn-primary" 
+                <a class="btn" id="downloadBtn"
                    href="https://drive.google.com/uc?export=download&id=1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt" 
                    target="_blank" 
-                   title="Download PDF">
-                    <i class="fa-solid fa-download"></i> <span>Download</span>
+                   title="Download Current PDF">
+                    <i class="fa-solid fa-download"></i>
                 </a>
 
                 <!-- Fullscreen -->
@@ -454,7 +643,7 @@
                 </button>
 
                 <!-- Collapse Top Bar -->
-                <button class="btn" onclick="toggleToolbar()" title="Collapse Toolbar for Zen Reading">
+                <button class="btn" onclick="toggleToolbar()" title="Hide Toolbar">
                     <i class="fa-solid fa-chevron-up"></i>
                 </button>
             </div>
@@ -463,16 +652,17 @@
         <!-- Main Workspace -->
         <main class="workspace" id="workspace">
             <div class="pdf-card" id="pdfCard">
-                <!-- Sleek Mini Window Header -->
-                <div class="card-header" id="cardHeader">
+                <!-- Mini Window Header -->
+                <div class="card-header">
                     <div class="window-dots">
                         <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
                         <div class="dot green" onclick="toggleEdgeToEdge()" title="Expand Width"></div>
                         <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
-                        <span style="margin-left: 8px; font-weight: 500; color: #e2e8f0;">Document Preview</span>
+                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Default Document</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 14px;">
-                        <a href="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/view" 
+                        <a id="openInDriveLink"
+                           href="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/view" 
                            target="_blank" 
                            style="color: var(--accent-hover); text-decoration: none;">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Drive
@@ -484,7 +674,7 @@
                 <div class="iframe-wrapper">
                     <div class="loader-overlay" id="loader">
                         <div class="spinner"></div>
-                        <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your magical PDF preview...</span>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your PDF preview...</span>
                     </div>
 
                     <iframe 
@@ -499,11 +689,43 @@
         </main>
     </div>
 
-    <!-- Collapsible Display & Eye-Care Drawer -->
+    <!-- ================= 1. PERMANENT PDF LIBRARY & LINK INPUT DRAWER ================= -->
+    <aside class="side-drawer" id="libraryDrawer">
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-bookmark" style="color: var(--accent);"></i> Add & Save PDF Link</span>
+            <button class="btn btn-sm" onclick="toggleDrawer('libraryDrawer')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="input-group">
+            <label>PDF Name / Title (Optional)</label>
+            <input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide">
+        </div>
+
+        <div class="input-group">
+            <label>Google Drive PDF Link (or File ID)</label>
+            <input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view">
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="addAndSavePDF()">
+            <i class="fa-solid fa-floppy-disk"></i> Preview & Save Permanently
+        </button>
+
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
+            Permanently Saved PDFs (<span id="savedCount">1</span>)
+        </div>
+
+        <div class="saved-list" id="savedListContainer">
+            <!-- Dynamically populated by JavaScript -->
+        </div>
+    </aside>
+
+    <!-- ================= 2. DISPLAY & EYE-CARE DRAWER ================= -->
     <aside class="side-drawer" id="displayDrawer">
         <div class="drawer-header">
             <span><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Reading Comfort Controls</span>
-            <button class="btn" style="padding: 4px 8px;" onclick="toggleDrawer('displayDrawer')">
+            <button class="btn btn-sm" onclick="toggleDrawer('displayDrawer')">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -538,15 +760,15 @@
         </div>
     </aside>
 
-    <!-- Collapsible Scratchpad Notes Drawer -->
+    <!-- ================= 3. QUICK NOTES DRAWER ================= -->
     <aside class="side-drawer" id="notesDrawer">
         <div class="drawer-header">
             <span><i class="fa-solid fa-pen-nib" style="color: var(--accent);"></i> Quick Reading Notes</span>
-            <button class="btn" style="padding: 4px 8px;" onclick="toggleDrawer('notesDrawer')">
+            <button class="btn btn-sm" onclick="toggleDrawer('notesDrawer')">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
-        <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways while reading... (Auto-saved in browser)"></textarea>
+        <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways while reading... (Auto-saved permanently in browser)"></textarea>
         <div style="display: flex; gap: 8px;">
             <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="downloadNotes()">
                 <i class="fa-solid fa-file-arrow-down"></i> Save .txt
@@ -558,6 +780,10 @@
     </aside>
 
     <script>
+        const DEFAULT_FILE_ID = '1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt';
+        const STORAGE_KEY_LIST = 'magical_pdf_saved_library_v1';
+        const STORAGE_KEY_ACTIVE = 'magical_pdf_active_id_v1';
+
         const pdfFrame = document.getElementById('pdfFrame');
         const pdfCard = document.getElementById('pdfCard');
         const topToolbar = document.getElementById('topToolbar');
@@ -567,52 +793,248 @@
 
         let currentRotation = 0;
         let isInverted = false;
+        let savedLibrary = [];
+        let activeFileId = DEFAULT_FILE_ID;
 
-        // Hide loading spinner when PDF loads
+        // ================= INITIALIZE & LOAD PERMANENT SAVED STATE =================
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load library from localStorage or initialize with default PDF
+            const storedList = localStorage.getItem(STORAGE_KEY_LIST);
+            if (storedList) {
+                try {
+                    savedLibrary = JSON.parse(storedList);
+                } catch (e) {
+                    savedLibrary = [];
+                }
+            }
+
+            if (savedLibrary.length === 0) {
+                savedLibrary = [{
+                    id: DEFAULT_FILE_ID,
+                    title: 'Primary Document',
+                    addedAt: new Date().toLocaleDateString()
+                }];
+                localStorage.setItem(STORAGE_KEY_LIST, JSON.stringify(savedLibrary));
+            }
+
+            // Check if URL has ?id= parameter, otherwise load last active PDF from localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramId = urlParams.get('id');
+            const storedActiveId = localStorage.getItem(STORAGE_KEY_ACTIVE);
+
+            if (paramId) {
+                const extracted = extractDriveId(paramId);
+                if (extracted) {
+                    activeFileId = extracted;
+                    ensureInLibrary(activeFileId, 'Shared Document');
+                }
+            } else if (storedActiveId) {
+                activeFileId = storedActiveId;
+            } else {
+                activeFileId = savedLibrary[0].id;
+            }
+
+            loadPDFById(activeFileId, false);
+            renderSavedLibrary();
+        });
+
+        // Extract Google Drive ID from any Drive URL format or raw ID
+        function extractDriveId(input) {
+            const trimmed = input.trim();
+            if (!trimmed) return null;
+
+            // Match /file/d/ID or /d/ID
+            const fileMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]{15,})/);
+            if (fileMatch && fileMatch[1]) return fileMatch[1];
+
+            // Match ?id=ID or &id=ID
+            const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]{15,})/);
+            if (idParamMatch && idParamMatch[1]) return idParamMatch[1];
+
+            // Match raw ID string
+            if (/^[a-zA-Z0-9_-]{20,}$/.test(trimmed)) return trimmed;
+
+            return null;
+        }
+
+        // Save from Top Quick Input Bar
+        function saveQuickLink() {
+            const inputEl = document.getElementById('quickUrlInput');
+            const rawUrl = inputEl.value;
+            const fileId = extractDriveId(rawUrl);
+
+            if (!fileId) {
+                showToast('Please paste a valid Google Drive link!', true);
+                return;
+            }
+
+            const title = `Document #${savedLibrary.length + 1}`;
+            ensureInLibrary(fileId, title);
+            loadPDFById(fileId, true);
+            inputEl.value = '';
+        }
+
+        // Save from Side Library Drawer (with Custom Title)
+        function addAndSavePDF() {
+            const titleEl = document.getElementById('pdfTitleInput');
+            const urlEl = document.getElementById('pdfUrlInput');
+
+            const fileId = extractDriveId(urlEl.value);
+            if (!fileId) {
+                showToast('Invalid Google Drive PDF link!', true);
+                return;
+            }
+
+            const title = titleEl.value.trim() || `Saved PDF #${savedLibrary.length + 1}`;
+            ensureInLibrary(fileId, title);
+            loadPDFById(fileId, true);
+
+            titleEl.value = '';
+            urlEl.value = '';
+        }
+
+        // Ensure PDF exists in permanent localStorage list
+        function ensureInLibrary(fileId, title) {
+            const existingIndex = savedLibrary.findIndex(item => item.id === fileId);
+            if (existingIndex > -1) {
+                if (title && title !== 'Shared Document') {
+                    savedLibrary[existingIndex].title = title;
+                }
+            } else {
+                savedLibrary.unshift({
+                    id: fileId,
+                    title: title,
+                    addedAt: new Date().toLocaleDateString()
+                });
+            }
+            localStorage.setItem(STORAGE_KEY_LIST, JSON.stringify(savedLibrary));
+            renderSavedLibrary();
+        }
+
+        // Load PDF into iframe, update links, and save active ID permanently
+        function loadPDFById(fileId, showNotification = true) {
+            activeFileId = fileId;
+            localStorage.setItem(STORAGE_KEY_ACTIVE, fileId);
+
+            const item = savedLibrary.find(i => i.id === fileId);
+            const docTitle = item ? item.title : 'Custom Drive PDF';
+
+            // Show loading spinner
+            document.getElementById('loader').classList.remove('hidden');
+
+            // Update Iframe Preview, Download, and Open in Drive URLs
+            pdfFrame.src = `https://drive.google.com/file/d/${fileId}/preview`;
+            document.getElementById('downloadBtn').href = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            document.getElementById('openInDriveLink').href = `https://drive.google.com/file/d/${fileId}/view`;
+            document.getElementById('docTitleDisplay').innerText = docTitle;
+            document.title = `${docTitle} - PDF Studio Pro`;
+
+            renderSavedLibrary();
+            if (showNotification) {
+                showToast(`"${docTitle}" loaded & saved permanently!`);
+            }
+        }
+
+        // Render the Saved PDFs List inside the Drawer
+        function renderSavedLibrary() {
+            const container = document.getElementById('savedListContainer');
+            document.getElementById('savedCount').innerText = savedLibrary.length;
+            container.innerHTML = '';
+
+            savedLibrary.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `saved-item ${item.id === activeFileId ? 'active' : ''}`;
+                div.onclick = () => loadPDFById(item.id, true);
+
+                div.innerHTML = `
+                    <div class="saved-item-info">
+                        <div class="saved-item-title">${escapeHtml(item.title)}</div>
+                        <div class="saved-item-id">ID: ${item.id.substring(0, 14)}... • ${item.addedAt}</div>
+                    </div>
+                    <div class="saved-item-actions">
+                        <button class="icon-btn" onclick="copyShareUrl(event, '${item.id}')" title="Copy Shareable Link">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </button>
+                        ${savedLibrary.length > 1 ? `
+                        <button class="icon-btn delete" onclick="deleteSavedPDF(event, '${item.id}')" title="Remove from Saved">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Delete a PDF from the Saved Library
+        function deleteSavedPDF(event, fileId) {
+            event.stopPropagation();
+            savedLibrary = savedLibrary.filter(item => item.id !== fileId);
+            localStorage.setItem(STORAGE_KEY_LIST, JSON.stringify(savedLibrary));
+
+            if (activeFileId === fileId && savedLibrary.length > 0) {
+                loadPDFById(savedLibrary[0].id, false);
+            }
+            renderSavedLibrary();
+            showToast('Removed from saved library');
+        }
+
+        // Copy direct URL with ?id=FILE_ID so it works across devices
+        function copyShareUrl(event, fileId) {
+            event.stopPropagation();
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${fileId}`;
+            navigator.clipboard.writeText(shareUrl);
+            showToast('Shareable direct link copied!');
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toast.style.background = isError ? '#ef4444' : '#10b981';
+            toastMsg.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        // ================= VIEWER CONTROLS =================
         function hideLoader() {
             document.getElementById('loader').classList.add('hidden');
         }
 
-        // Collapse / Expand Top Control Bar
         function toggleToolbar() {
             topToolbar.classList.toggle('collapsed');
             expandToolbarBtn.classList.toggle('visible');
         }
 
-        // Collapse / Expand the PDF Card itself
         function toggleMinimizePDF() {
             pdfCard.classList.toggle('minimized');
             const btn = document.getElementById('minimizeBtn');
             if (pdfCard.classList.contains('minimized')) {
-                btn.innerHTML = '<i class="fa-solid fa-expand"></i> <span>Expand PDF</span>';
+                btn.innerHTML = '<i class="fa-solid fa-expand"></i> <span>Expand</span>';
                 btn.classList.add('active');
             } else {
-                btn.innerHTML = '<i class="fa-solid fa-compress"></i> <span>Collapse PDF</span>';
+                btn.innerHTML = '<i class="fa-solid fa-compress"></i> <span>Collapse</span>';
                 btn.classList.remove('active');
             }
         }
 
-        // Toggle Edge-to-Edge Cinema Width
         function toggleEdgeToEdge() {
             workspace.classList.toggle('edge-to-edge');
             document.getElementById('edgeBtn').classList.toggle('active');
         }
 
-        // Rotate PDF Viewer
         function rotatePDF() {
             currentRotation = (currentRotation + 90) % 360;
             pdfFrame.style.transform = `rotate(${currentRotation}deg)`;
         }
 
-        // Reload PDF Iframe
-        function reloadPDF() {
-            document.getElementById('loader').classList.remove('hidden');
-            pdfFrame.src = pdfFrame.src;
-        }
-
-        // Toggle Side Drawers (Display & Notes)
         function toggleDrawer(drawerId) {
-            const drawers = ['displayDrawer', 'notesDrawer'];
+            const drawers = ['libraryDrawer', 'displayDrawer', 'notesDrawer'];
             drawers.forEach(id => {
                 const el = document.getElementById(id);
                 if (id === drawerId) {
@@ -623,13 +1045,11 @@
             });
         }
 
-        // Update Viewer Width
         function updateWidth(val) {
             document.documentElement.style.setProperty('--viewer-width', val + '%');
             document.getElementById('widthVal').innerText = val + '%';
         }
 
-        // Apply Eye-Care CSS Filters to PDF
         function applyFilters() {
             const b = document.getElementById('brightSlider').value;
             const c = document.getElementById('contrastSlider').value;
@@ -659,7 +1079,6 @@
             applyFilters();
         }
 
-        // Fullscreen API
         function toggleFullScreen() {
             const icon = document.getElementById('fsIcon');
             if (!document.fullscreenElement) {
