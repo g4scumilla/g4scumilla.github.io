@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Online PDF Study Portal</title>
+  <title>Google Drive PDF Study Portal</title>
   <style>
     :root {
       --bg-primary: #141517;
@@ -14,7 +14,6 @@
       --accent: #4c8bf5;
       --accent-hover: #3b78e7;
       --border: #32363c;
-      --danger: #e5534b;
     }
 
     body.sepia-mode {
@@ -46,7 +45,7 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
       display: flex;
@@ -156,7 +155,7 @@
 
     .notes-area textarea {
       width: 100%;
-      height: 150px;
+      height: 140px;
       padding: 10px;
       border-radius: 6px;
       border: 1px solid var(--border);
@@ -184,7 +183,6 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
     }
 
     .header-left, .header-right {
@@ -193,114 +191,11 @@
       gap: 10px;
     }
 
-    .timer-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-tertiary);
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-variant-numeric: tabular-nums;
-    }
-
     iframe {
       flex: 1;
       width: 100%;
       border: none;
       background-color: var(--bg-primary);
-    }
-
-    /* Setup / Link Manager Modal */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      padding: 16px;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      width: 100%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    }
-
-    .modal h3 {
-      font-size: 1.15rem;
-    }
-
-    .modal p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .input-group label {
-      font-size: 0.82rem;
-      font-weight: 600;
-    }
-
-    .input-group input,
-    .input-group textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: 0.88rem;
-    }
-
-    .pdf-slot-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .btn-primary {
-      padding: 9px 16px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
     }
   </style>
 </head>
@@ -310,32 +205,41 @@
   <aside class="sidebar" id="sidebar">
     <div class="brand-bar">
       <h2>📚 Study Portal</h2>
-      <button class="btn-small" onclick="openSetupModal()">⚙️ Manage Links</button>
+      <button class="btn-small" onclick="toggleSidebar()">Toggle Menu</button>
     </div>
 
-    <div class="section-label">Folder Overview</div>
+    <div class="section-label">Google Drive Folder</div>
     <ul class="pdf-list">
       <li>
-        <button class="pdf-btn active" id="folderListBtn" onclick="loadFolder('list', this)">
+        <button class="pdf-btn active" onclick="loadFolder('1NZxIZnVGw66GUU-6xIqE_GxbHWM-16Hi', 'list', this)">
           📁 Folder (List View)
-        </button>
-      </li>
-      <li>
-        <button class="pdf-btn" id="folderGridBtn" onclick="loadFolder('grid', this)">
-          🗂️ Folder (Grid View)
         </button>
       </li>
     </ul>
 
-    <div class="section-label">8 Study PDFs</div>
-    <ul class="pdf-list" id="pdfList"></ul>
+    <div class="section-label">8 PDFs (Direct View)</div>
+    <ul class="pdf-list">
+      <!-- 
+        NOTE FOR YOUR 8 PDFS:
+        Replace 'YOUR_PDF_FILE_ID_X' below with the actual file ID from each PDF's Google Drive share link.
+        Example: If your link is drive.google.com/file/d/1A2B3C.../view, replace YOUR_PDF_FILE_ID_1 with 1A2B3C...
+      -->
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_1', 'PDF Document 1', this)">📄 PDF 1</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_2', 'PDF Document 2', this)">📄 PDF 2</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_3', 'PDF Document 3', this)">📄 PDF 3</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_4', 'PDF Document 4', this)">📄 PDF 4</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_5', 'PDF Document 5', this)">📄 PDF 5</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_6', 'PDF Document 6', this)">📄 PDF 6</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_7', 'PDF Document 7', this)">📄 PDF 7</button></li>
+      <li><button class="pdf-btn" onclick="loadPdf('YOUR_PDF_FILE_ID_8', 'PDF Document 8', this)">📄 PDF 8</button></li>
+    </ul>
 
     <div class="notes-area">
       <div class="notes-header">
-        <span class="section-label">Study Notes</span>
-        <button class="btn-small" onclick="downloadNotes()">💾 Export .txt</button>
+        <span class="section-label">Quick Study Notes</span>
+        <button class="btn-small" onclick="downloadNotes()">💾 Save .txt</button>
       </div>
-      <textarea id="studyNotes" placeholder="Jot down key takeaways, page numbers, or formulas here (auto-saved)..."></textarea>
+      <textarea id="studyNotes" placeholder="Type notes here (auto-saved in browser)..."></textarea>
     </div>
   </aside>
 
@@ -343,179 +247,47 @@
   <main class="viewer-container">
     <header class="viewer-header">
       <div class="header-left">
-        <button class="btn-small" onclick="toggleSidebar()" title="Toggle Distraction-Free Fullscreen">
-          ☰ Focus Mode
-        </button>
+        <button class="btn-small" onclick="toggleSidebar()">☰ Focus Mode</button>
         <strong id="currentTitle">Folder (List View)</strong>
       </div>
 
       <div class="header-right">
-        <!-- Pomodoro Study Timer -->
-        <div class="timer-box">
-          <span>⏱️</span>
-          <span id="timerDisplay">25:00</span>
-          <button class="btn-small" onclick="toggleTimer()" id="timerBtn">Start</button>
-          <button class="btn-small" onclick="resetTimer()">↺</button>
-        </div>
-
-        <button class="btn-small" onclick="cycleTheme()" id="themeBtn">🌙 Dark</button>
+        <button class="btn-small" onclick="cycleTheme()" id="themeBtn">🌙 Theme: Dark</button>
       </div>
     </header>
 
-    <iframe id="pdfFrame" allow="autoplay"></iframe>
+    <!-- Initial load points to your Google Drive folder embed -->
+    <iframe id="pdfFrame" src="https://drive.google.com/embeddedfolderview?id=1NZxIZnVGw66GUU-6xIqE_GxbHWM-16Hi#list"></iframe>
   </main>
 
-  <!-- Setup Modal for Folder & 8 PDFs -->
-  <div class="modal-backdrop" id="setupModal">
-    <div class="modal">
-      <h3>Configure Your Google Drive Folder & 8 PDFs</h3>
-      <p>
-        Paste your Google Drive Folder link and/or individual PDF share links below. Everything is saved automatically in your browser.
-        Make sure your folder's sharing permission in Google Drive is set to <strong>"Anyone with the link"</strong> so it loads across accounts.
-      </p>
-
-      <div class="input-group">
-        <label for="folderInput">Google Drive Folder Link (or Folder ID)</label>
-        <input type="text" id="folderInput" placeholder="https://drive.google.com/drive/folders/..." />
-      </div>
-
-      <div class="input-group">
-        <label>Individual PDF Links (Optional — for 1-click reading without leaving the sidebar)</label>
-        <div class="pdf-slot-grid" id="pdfInputsContainer"></div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-small" onclick="closeSetupModal()">Cancel</button>
-        <button class="btn-primary" onclick="saveSetup()">Save & Load</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const DEFAULT_PDF_COUNT = 8;
     const frame = document.getElementById('pdfFrame');
     const titleEl = document.getElementById('currentTitle');
     const notesEl = document.getElementById('studyNotes');
-    const pdfListEl = document.getElementById('pdfList');
-    const setupModal = document.getElementById('setupModal');
 
-    // Load state from localStorage
-    let appData = JSON.parse(localStorage.getItem('pdf_study_portal_v1')) || {
-      folderUrl: '',
-      pdfs: Array.from({ length: DEFAULT_PDF_COUNT }, (_, i) => ({
-        title: `PDF ${i + 1}`,
-        url: ''
-      }))
-    };
-
-    // Extract clean Google Drive ID from any full Drive URL or raw ID
-    function extractDriveId(input) {
-      if (!input) return '';
-      const trimmed = input.trim();
-      const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
-      if (folderMatch) return folderMatch[1];
-
-      const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (fileMatch) return fileMatch[1];
-
-      const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (idParamMatch) return idParamMatch[1];
-
-      return trimmed;
-    }
-
-    // Render Sidebar PDF Buttons
-    function renderSidebar() {
-      pdfListEl.innerHTML = '';
-      appData.pdfs.forEach((item, index) => {
-        const li = document.createElement('li');
-        const btn = document.createElement('button');
-        btn.className = 'pdf-btn';
-        const fileId = extractDriveId(item.url);
-        btn.innerHTML = `<span>📄</span> <span>${item.title || 'PDF ' + (index + 1)}</span>`;
-        btn.onclick = () => {
-          if (!fileId) {
-            openSetupModal();
-            return;
-          }
-          setActiveButton(btn);
-          titleEl.textContent = item.title || `PDF ${index + 1}`;
-          frame.src = `https://drive.google.com/file/d/${fileId}/preview`;
-        };
-        li.appendChild(btn);
-        pdfListEl.appendChild(li);
-      });
-    }
-
-    function setActiveButton(activeBtn) {
+    function setActiveButton(btn) {
       document.querySelectorAll('.pdf-btn').forEach(b => b.classList.remove('active'));
-      if (activeBtn) activeBtn.classList.add('active');
+      btn.classList.add('active');
     }
 
-    function loadFolder(mode, btn) {
-      const folderId = extractDriveId(appData.folderUrl);
-      if (!folderId) {
-        openSetupModal();
-        return;
-      }
+    function loadFolder(folderId, mode, btn) {
       setActiveButton(btn);
-      titleEl.textContent = mode === 'grid' ? 'Folder (Grid View)' : 'Folder (List View)';
+      titleEl.textContent = 'Google Drive Folder View';
       frame.src = `https://drive.google.com/embeddedfolderview?id=${folderId}#${mode}`;
     }
 
-    // Modal Setup Functions
-    function openSetupModal() {
-      document.getElementById('folderInput').value = appData.folderUrl || '';
-      const container = document.getElementById('pdfInputsContainer');
-      container.innerHTML = '';
-
-      appData.pdfs.forEach((pdf, i) => {
-        const titleInput = document.createElement('input');
-        titleInput.type = 'text';
-        titleInput.placeholder = `Title ${i + 1}`;
-        titleInput.value = pdf.title;
-        titleInput.id = `pdfTitle_${i}`;
-
-        const urlInput = document.createElement('input');
-        urlInput.type = 'text';
-        urlInput.placeholder = `Paste PDF ${i + 1} Share Link (or leave blank)`;
-        urlInput.value = pdf.url;
-        urlInput.id = `pdfUrl_${i}`;
-
-        container.appendChild(titleInput);
-        container.appendChild(urlInput);
-      });
-
-      setupModal.classList.add('open');
+    function loadPdf(fileId, title, btn) {
+      setActiveButton(btn);
+      titleEl.textContent = title;
+      // Loads the PDF directly inside the HTML iframe preview window
+      frame.src = `https://drive.google.com/file/d/${fileId}/preview`;
     }
 
-    function closeSetupModal() {
-      setupModal.classList.remove('open');
-    }
-
-    function saveSetup() {
-      appData.folderUrl = document.getElementById('folderInput').value.trim();
-      for (let i = 0; i < DEFAULT_PDF_COUNT; i++) {
-        appData.pdfs[i] = {
-          title: document.getElementById(`pdfTitle_${i}`).value.trim() || `PDF ${i + 1}`,
-          url: document.getElementById(`pdfUrl_${i}`).value.trim()
-        };
-      }
-      localStorage.setItem('pdf_study_portal_v1', JSON.stringify(appData));
-      renderSidebar();
-      closeSetupModal();
-
-      if (appData.folderUrl) {
-        loadFolder('list', document.getElementById('folderListBtn'));
-      }
-    }
-
-    // Distraction-Free Sidebar Toggle
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('collapsed');
     }
 
-    // Theme Switcher (Dark -> Sepia -> Light)
+    // Theme Switcher
     const themes = ['dark', 'sepia', 'light'];
     let currentThemeIdx = 0;
     function cycleTheme() {
@@ -524,16 +296,16 @@
       const themeBtn = document.getElementById('themeBtn');
       if (themes[currentThemeIdx] === 'sepia') {
         document.body.classList.add('sepia-mode');
-        themeBtn.textContent = '📜 Sepia';
+        themeBtn.textContent = '📜 Theme: Sepia';
       } else if (themes[currentThemeIdx] === 'light') {
         document.body.classList.add('light-mode');
-        themeBtn.textContent = '☀️ Light';
+        themeBtn.textContent = '☀️ Theme: Light';
       } else {
-        themeBtn.textContent = '🌙 Dark';
+        themeBtn.textContent = '🌙 Theme: Dark';
       }
     }
 
-    // Notes Auto-Save & Export
+    // Notes Persistence
     notesEl.value = localStorage.getItem('study_portal_notes') || '';
     notesEl.addEventListener('input', () => {
       localStorage.setItem('study_portal_notes', notesEl.value);
@@ -545,53 +317,6 @@
       a.href = URL.createObjectURL(blob);
       a.download = 'study-notes.txt';
       a.click();
-    }
-
-    // Built-in 25-Minute Pomodoro Study Timer
-    let timeLeft = 25 * 60;
-    let timerInterval = null;
-    function updateTimerDisplay() {
-      const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-      const secs = String(timeLeft % 60).padStart(2, '0');
-      document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
-    }
-
-    function toggleTimer() {
-      const btn = document.getElementById('timerBtn');
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        btn.textContent = 'Start';
-      } else {
-        btn.textContent = 'Pause';
-        timerInterval = setInterval(() => {
-          if (timeLeft > 0) {
-            timeLeft--;
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            btn.textContent = 'Start';
-            alert('Pomodoro session complete! Time for a 5-minute break.');
-          }
-        }, 1000);
-      }
-    }
-
-    function resetTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      timeLeft = 25 * 60;
-      document.getElementById('timerBtn').textContent = 'Start';
-      updateTimerDisplay();
-    }
-
-    // Initialize on load
-    renderSidebar();
-    if (extractDriveId(appData.folderUrl)) {
-      loadFolder('list', document.getElementById('folderListBtn'));
-    } else {
-      openSetupModal();
     }
   </script>
 </body>
