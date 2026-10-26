@@ -1,348 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Google Drive PDF Study Portal</title>
-  <style>
-    :root {
-      --bg-primary: #141517;
-      --bg-secondary: #1e2024;
-      --bg-tertiary: #282b30;
-      --text-primary: #e8eaed;
-      --text-muted: #9aa0a6;
-      --accent: #4c8bf5;
-      --accent-hover: #3b78e7;
-      --border: #32363c;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My PDF Reader</title>
+    <style>
+        /* Reset margins and padding to ensure a full-screen experience */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #333; /* Dark background to make the white PDF pop */
+            overflow: hidden; /* Hides the website's scrollbar so only the PDF scrolls */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    body.sepia-mode {
-      --bg-primary: #f4ecd8;
-      --bg-secondary: #eae0c8;
-      --bg-tertiary: #dfd3b8;
-      --text-primary: #3c352a;
-      --text-muted: #6e6454;
-      --accent: #8c5a2b;
-      --accent-hover: #734820;
-      --border: #cbbd9f;
-    }
+        /* Container to hold the iframe */
+        .pdf-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    body.light-mode {
-      --bg-primary: #f8f9fa;
-      --bg-secondary: #ffffff;
-      --bg-tertiary: #f1f3f4;
-      --text-primary: #202124;
-      --text-muted: #5f6368;
-      --accent: #1a73e8;
-      --accent-hover: #1557b0;
-      --border: #dadce0;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 310px;
-      background-color: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 14px;
-      overflow-y: auto;
-      transition: margin-left 0.25s ease;
-    }
-
-    .sidebar.collapsed {
-      margin-left: -310px;
-    }
-
-    .brand-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand-bar h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .btn-small {
-      padding: 6px 10px;
-      background-color: var(--bg-tertiary);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background 0.15s;
-    }
-
-    .btn-small:hover {
-      background-color: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .pdf-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .pdf-btn {
-      width: 100%;
-      text-align: left;
-      padding: 10px 12px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .pdf-btn:hover,
-    .pdf-btn.active {
-      background-color: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
-
-    /* Quick Notes */
-    .notes-area {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-    }
-
-    .notes-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .notes-area textarea {
-      width: 100%;
-      height: 140px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      resize: none;
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-
-    /* Main Viewer */
-    .viewer-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      position: relative;
-    }
-
-    .viewer-header {
-      padding: 10px 18px;
-      background-color: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-left, .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    iframe {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background-color: var(--bg-primary);
-    }
-  </style>
+        /* Iframe styling for a seamless look */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="brand-bar">
-      <h2>📚 Study Portal</h2>
-      <button class="btn-small" onclick="toggleSidebar()">Toggle Menu</button>
+    <div class="pdf-container">
+        <!-- Google Drive Embed with the /preview tag -->
+        <iframe 
+            src="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/preview" 
+            allow="autoplay"
+            title="PDF Document Viewer">
+        </iframe>
     </div>
 
-    <div class="section-label">Google Drive Folder</div>
-    <ul class="pdf-list">
-      <li>
-        <button class="pdf-btn active" onclick="loadFolder('1NZxIZnVGw66GUU-6xIqE_GxbHWM-16Hi', 'list', this)">
-          📁 Folder (List View)
-        </button>
-      </li>
-    </ul>
-
-    <div class="section-label">Drive PDFs (Dynamic View)</div>
-    <ul class="pdf-list" id="dynamicPdfList">
-      <li><button class="pdf-btn" disabled>Loading PDFs from Drive...</button></li>
-    </ul>
-
-    <div class="notes-area">
-      <div class="notes-header">
-        <span class="section-label">Quick Study Notes</span>
-        <button class="btn-small" onclick="downloadNotes()">💾 Save .txt</button>
-      </div>
-      <textarea id="studyNotes" placeholder="Type notes here (auto-saved in browser)..."></textarea>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="viewer-container">
-    <header class="viewer-header">
-      <div class="header-left">
-        <button class="btn-small" onclick="toggleSidebar()">☰ Focus Mode</button>
-        <strong id="currentTitle">Folder (List View)</strong>
-      </div>
-
-      <div class="header-right">
-        <button class="btn-small" onclick="cycleTheme()" id="themeBtn">🌙 Theme: Dark</button>
-      </div>
-    </header>
-
-    <iframe id="pdfFrame" src="https://drive.google.com/embeddedfolderview?id=1NZxIZnVGw66GUU-6xIqE_GxbHWM-16Hi#list"></iframe>
-  </main>
-
-  <script>
-    // Configured Apps Script Web App URL
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhFQ9FI9yQNAk0dxsn32DBZ-EQmB0cWLj6WGuj8bR9PIoOicdbVvmTjq4Umn3FMft0NQ/exec";
-
-    const frame = document.getElementById('pdfFrame');
-    const titleEl = document.getElementById('currentTitle');
-    const notesEl = document.getElementById('studyNotes');
-    const dynamicListEl = document.getElementById('dynamicPdfList');
-
-    // Fetch PDFs dynamically on load
-    async function fetchPdfs() {
-      try {
-        const response = await fetch(APPS_SCRIPT_URL);
-        const files = await response.json();
-        
-        if (files.length === 0) {
-          dynamicListEl.innerHTML = `<li><button class="pdf-btn" disabled>No PDFs found in folder</button></li>`;
-          return;
-        }
-
-        dynamicListEl.innerHTML = '';
-        files.forEach((file) => {
-          const li = document.createElement('li');
-          const btn = document.createElement('button');
-          btn.className = 'pdf-btn';
-          btn.title = file.name; // Tooltip on hover
-          btn.innerHTML = `📄 ${file.name}`;
-          btn.onclick = () => loadPdf(file.id, file.name, btn);
-          li.appendChild(btn);
-          dynamicListEl.appendChild(li);
-        });
-      } catch (err) {
-        console.error(err);
-        dynamicListEl.innerHTML = `<li><button class="pdf-btn" disabled style="color:salmon;">Error loading files</button></li>`;
-      }
-    }
-
-    function setActiveButton(btn) {
-      document.querySelectorAll('.pdf-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    function loadFolder(folderId, mode, btn) {
-      setActiveButton(btn);
-      titleEl.textContent = 'Google Drive Folder View';
-      frame.src = `https://drive.google.com/embeddedfolderview?id=${folderId}#${mode}`;
-    }
-
-    function loadPdf(fileId, title, btn) {
-      setActiveButton(btn);
-      titleEl.textContent = title;
-      // Loads the PDF directly inside the HTML iframe preview window smoothly without redirects
-      frame.src = `https://drive.google.com/file/d/${fileId}/preview`;
-    }
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('collapsed');
-    }
-
-    // Theme Switcher
-    const themes = ['dark', 'sepia', 'light'];
-    let currentThemeIdx = 0;
-    function cycleTheme() {
-      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
-      document.body.classList.remove('sepia-mode', 'light-mode');
-      const themeBtn = document.getElementById('themeBtn');
-      if (themes[currentThemeIdx] === 'sepia') {
-        document.body.classList.add('sepia-mode');
-        themeBtn.textContent = '📜 Theme: Sepia';
-      } else if (themes[currentThemeIdx] === 'light') {
-        document.body.classList.add('light-mode');
-        themeBtn.textContent = '☀️ Theme: Light';
-      } else {
-        themeBtn.textContent = '🌙 Theme: Dark';
-      }
-    }
-
-    // Notes Persistence
-    notesEl.value = localStorage.getItem('study_portal_notes') || '';
-    notesEl.addEventListener('input', () => {
-      localStorage.setItem('study_portal_notes', notesEl.value);
-    });
-
-    function downloadNotes() {
-      const blob = new Blob([notesEl.value], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'study-notes.txt';
-      a.click();
-    }
-
-    // Initialize fetching
-    fetchPdfs();
-  </script>
 </body>
 </html>
