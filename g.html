@@ -3,45 +3,695 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My PDF Reader</title>
+    <title>Magical PDF Reader Pro</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-        /* Reset margins and padding to ensure a full-screen experience */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: #333; /* Dark background to make the white PDF pop */
-            overflow: hidden; /* Hides the website's scrollbar so only the PDF scrolls */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg-gradient: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
+            --glass-bg: rgba(30, 41, 59, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --viewer-width: 92%;
         }
 
-        /* Container to hold the iframe */
-        .pdf-container {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Main Layout Wrapper */
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
             width: 100vw;
             height: 100vh;
+            position: relative;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ================= TOP COLLAPSIBLE CONTROL BAR ================= */
+        .top-toolbar {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 80px;
+            opacity: 1;
+        }
+
+        .top-toolbar.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Control Buttons Group */
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 13px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn.active, .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent-hover);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--glass-border);
+            margin: 0 4px;
+        }
+
+        /* Floating Expand/Collapse Pill Button */
+        .toolbar-toggle-pill {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150%);
+            z-index: 150;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toolbar-toggle-pill.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toolbar-toggle-pill:hover {
+            background: var(--accent);
+        }
+
+        /* ================= MAIN CONTENT AREA ================= */
+        .workspace {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            transition: padding 0.3s ease;
+        }
+
+        .workspace.edge-to-edge {
+            padding: 0;
+        }
+
+        /* PDF Card Container (Collapsible & Resizable) */
+        .pdf-card {
+            width: var(--viewer-width);
+            height: 100%;
+            background: #1e293b;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .workspace.edge-to-edge .pdf-card {
+            width: 100% !important;
+            border-radius: 0;
+            border: none;
+        }
+
+        /* Collapsible PDF State */
+        .pdf-card.minimized {
+            height: 54px !important;
+            width: 460px !important;
+            border-radius: 14px;
+        }
+
+        /* Mini Card Header inside PDF Card */
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 8px;
             align-items: center;
         }
 
-        /* Iframe styling for a seamless look */
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .dot:hover { transform: scale(1.2); }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+        .dot.purple { background: #6366f1; }
+
+        /* Iframe Wrapper & Eye Care Filters */
+        .iframe-wrapper {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            transition: filter 0.25s ease, transform 0.35s ease;
+        }
+
+        /* Loading Spinner */
+        .loader-overlay {
+            position: absolute;
+            inset: 0;
+            background: #0f172a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            z-index: 10;
+            transition: opacity 0.4s ease;
+        }
+
+        .loader-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(99, 102, 241, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ================= COLLAPSIBLE SIDE DRAWERS (FILTERS & NOTES) ================= */
+        .side-drawer {
+            position: fixed;
+            top: 75px;
+            right: 20px;
+            width: 310px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 120;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transform: translateX(120%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .side-drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .control-row {
+            margin-bottom: 15px;
+        }
+
+        .control-row label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .notes-area {
+            width: 100%;
+            height: 220px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .notes-area:focus {
+            border-color: var(--accent);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .top-toolbar {
+                padding: 10px 14px;
+                flex-direction: column;
+                gap: 10px;
+                max-height: 140px;
+            }
+            .brand span {
+                display: none;
+            }
+            .workspace {
+                padding: 6px;
+            }
+            :root {
+                --viewer-width: 100%;
+            }
+            .btn span {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="pdf-container">
-        <!-- Google Drive Embed with the /preview tag -->
-        <iframe 
-            src="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/preview" 
-            allow="autoplay"
-            title="PDF Document Viewer">
-        </iframe>
+    <!-- Floating Pill to Expand Toolbar When Collapsed -->
+    <button class="toolbar-toggle-pill" id="expandToolbarBtn" onclick="toggleToolbar()">
+        <i class="fa-solid fa-sliders"></i> Show Controls
+    </button>
+
+    <div class="app-wrapper">
+        <!-- Collapsible Top Control Bar -->
+        <header class="top-toolbar" id="topToolbar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <div>
+                    <div>PDF Studio Pro</div>
+                    <small style="color: var(--text-muted); font-size: 0.72rem;">Interactive Reader</small>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <!-- Collapse/Expand PDF Card -->
+                <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer">
+                    <i class="fa-solid fa-compress"></i> <span>Collapse PDF</span>
+                </button>
+
+                <!-- Width / Cinema Toggle -->
+                <button class="btn" onclick="toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width">
+                    <i class="fa-solid fa-arrows-left-right"></i> <span>Cinema Width</span>
+                </button>
+
+                <!-- Rotate Page -->
+                <button class="btn" onclick="rotatePDF()" title="Rotate Viewer 90°">
+                    <i class="fa-solid fa-rotate-right"></i> <span>Rotate</span>
+                </button>
+
+                <div class="divider"></div>
+
+                <!-- Eye Care & Display Controls Drawer -->
+                <button class="btn" onclick="toggleDrawer('displayDrawer')" id="displayBtn" title="Eye Care & Zoom Controls">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Display & Filters</span>
+                </button>
+
+                <!-- Quick Notes Drawer -->
+                <button class="btn" onclick="toggleDrawer('notesDrawer')" id="notesBtn" title="Take Reading Notes">
+                    <i class="fa-solid fa-pen-to-square"></i> <span>Notes</span>
+                </button>
+
+                <div class="divider"></div>
+
+                <!-- Reload PDF -->
+                <button class="btn" onclick="reloadPDF()" title="Reload Document">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+
+                <!-- Direct Download -->
+                <a class="btn btn-primary" 
+                   href="https://drive.google.com/uc?export=download&id=1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt" 
+                   target="_blank" 
+                   title="Download PDF">
+                    <i class="fa-solid fa-download"></i> <span>Download</span>
+                </a>
+
+                <!-- Fullscreen -->
+                <button class="btn" onclick="toggleFullScreen()" title="Fullscreen Mode">
+                    <i class="fa-solid fa-expand" id="fsIcon"></i>
+                </button>
+
+                <!-- Collapse Top Bar -->
+                <button class="btn" onclick="toggleToolbar()" title="Collapse Toolbar for Zen Reading">
+                    <i class="fa-solid fa-chevron-up"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace" id="workspace">
+            <div class="pdf-card" id="pdfCard">
+                <!-- Sleek Mini Window Header -->
+                <div class="card-header" id="cardHeader">
+                    <div class="window-dots">
+                        <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
+                        <div class="dot green" onclick="toggleEdgeToEdge()" title="Expand Width"></div>
+                        <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
+                        <span style="margin-left: 8px; font-weight: 500; color: #e2e8f0;">Document Preview</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <a href="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/view" 
+                           target="_blank" 
+                           style="color: var(--accent-hover); text-decoration: none;">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Drive
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF Embed Container -->
+                <div class="iframe-wrapper">
+                    <div class="loader-overlay" id="loader">
+                        <div class="spinner"></div>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your magical PDF preview...</span>
+                    </div>
+
+                    <iframe 
+                        id="pdfFrame"
+                        src="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/preview" 
+                        allow="autoplay"
+                        onload="hideLoader()"
+                        title="PDF Document Viewer">
+                    </iframe>
+                </div>
+            </div>
+        </main>
     </div>
 
+    <!-- Collapsible Display & Eye-Care Drawer -->
+    <aside class="side-drawer" id="displayDrawer">
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Reading Comfort Controls</span>
+            <button class="btn" style="padding: 4px 8px;" onclick="toggleDrawer('displayDrawer')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="control-row">
+            <label><span>Container Width</span> <span id="widthVal">92%</span></label>
+            <input type="range" min="50" max="100" value="92" oninput="updateWidth(this.value)">
+        </div>
+
+        <div class="control-row">
+            <label><span>Brightness</span> <span id="brightVal">100%</span></label>
+            <input type="range" id="brightSlider" min="50" max="130" value="100" oninput="applyFilters()">
+        </div>
+
+        <div class="control-row">
+            <label><span>Contrast</span> <span id="contrastVal">100%</span></label>
+            <input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="applyFilters()">
+        </div>
+
+        <div class="control-row">
+            <label><span>Warm Sepia (Eye Care)</span> <span id="sepiaVal">0%</span></label>
+            <input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="applyFilters()">
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="toggleInvert()">
+                <i class="fa-solid fa-moon"></i> Invert Dark
+            </button>
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="resetFilters()">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+        </div>
+    </aside>
+
+    <!-- Collapsible Scratchpad Notes Drawer -->
+    <aside class="side-drawer" id="notesDrawer">
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-pen-nib" style="color: var(--accent);"></i> Quick Reading Notes</span>
+            <button class="btn" style="padding: 4px 8px;" onclick="toggleDrawer('notesDrawer')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways while reading... (Auto-saved in browser)"></textarea>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="downloadNotes()">
+                <i class="fa-solid fa-file-arrow-down"></i> Save .txt
+            </button>
+            <button class="btn" onclick="clearNotes()" title="Clear Notes">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    </aside>
+
+    <script>
+        const pdfFrame = document.getElementById('pdfFrame');
+        const pdfCard = document.getElementById('pdfCard');
+        const topToolbar = document.getElementById('topToolbar');
+        const expandToolbarBtn = document.getElementById('expandToolbarBtn');
+        const workspace = document.getElementById('workspace');
+        const notesInput = document.getElementById('notesInput');
+
+        let currentRotation = 0;
+        let isInverted = false;
+
+        // Hide loading spinner when PDF loads
+        function hideLoader() {
+            document.getElementById('loader').classList.add('hidden');
+        }
+
+        // Collapse / Expand Top Control Bar
+        function toggleToolbar() {
+            topToolbar.classList.toggle('collapsed');
+            expandToolbarBtn.classList.toggle('visible');
+        }
+
+        // Collapse / Expand the PDF Card itself
+        function toggleMinimizePDF() {
+            pdfCard.classList.toggle('minimized');
+            const btn = document.getElementById('minimizeBtn');
+            if (pdfCard.classList.contains('minimized')) {
+                btn.innerHTML = '<i class="fa-solid fa-expand"></i> <span>Expand PDF</span>';
+                btn.classList.add('active');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-compress"></i> <span>Collapse PDF</span>';
+                btn.classList.remove('active');
+            }
+        }
+
+        // Toggle Edge-to-Edge Cinema Width
+        function toggleEdgeToEdge() {
+            workspace.classList.toggle('edge-to-edge');
+            document.getElementById('edgeBtn').classList.toggle('active');
+        }
+
+        // Rotate PDF Viewer
+        function rotatePDF() {
+            currentRotation = (currentRotation + 90) % 360;
+            pdfFrame.style.transform = `rotate(${currentRotation}deg)`;
+        }
+
+        // Reload PDF Iframe
+        function reloadPDF() {
+            document.getElementById('loader').classList.remove('hidden');
+            pdfFrame.src = pdfFrame.src;
+        }
+
+        // Toggle Side Drawers (Display & Notes)
+        function toggleDrawer(drawerId) {
+            const drawers = ['displayDrawer', 'notesDrawer'];
+            drawers.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === drawerId) {
+                    el.classList.toggle('open');
+                } else {
+                    el.classList.remove('open');
+                }
+            });
+        }
+
+        // Update Viewer Width
+        function updateWidth(val) {
+            document.documentElement.style.setProperty('--viewer-width', val + '%');
+            document.getElementById('widthVal').innerText = val + '%';
+        }
+
+        // Apply Eye-Care CSS Filters to PDF
+        function applyFilters() {
+            const b = document.getElementById('brightSlider').value;
+            const c = document.getElementById('contrastSlider').value;
+            const s = document.getElementById('sepiaSlider').value;
+
+            document.getElementById('brightVal').innerText = b + '%';
+            document.getElementById('contrastVal').innerText = c + '%';
+            document.getElementById('sepiaVal').innerText = s + '%';
+
+            const invertFilter = isInverted ? 'invert(0.9) hue-rotate(180deg)' : '';
+            pdfFrame.style.filter = `brightness(${b}%) contrast(${c}%) sepia(${s}%) ${invertFilter}`;
+        }
+
+        function toggleInvert() {
+            isInverted = !isInverted;
+            applyFilters();
+        }
+
+        function resetFilters() {
+            isInverted = false;
+            currentRotation = 0;
+            pdfFrame.style.transform = 'rotate(0deg)';
+            document.getElementById('brightSlider').value = 100;
+            document.getElementById('contrastSlider').value = 100;
+            document.getElementById('sepiaSlider').value = 0;
+            updateWidth(92);
+            applyFilters();
+        }
+
+        // Fullscreen API
+        function toggleFullScreen() {
+            const icon = document.getElementById('fsIcon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                icon.classList.replace('fa-expand', 'fa-compress');
+            } else {
+                document.exitFullscreen();
+                icon.classList.replace('fa-compress', 'fa-expand');
+            }
+        }
+
+        // Auto-save & Download Notes
+        notesInput.value = localStorage.getItem('pdf_reader_notes') || '';
+        notesInput.addEventListener('input', () => {
+            localStorage.setItem('pdf_reader_notes', notesInput.value);
+        });
+
+        function downloadNotes() {
+            const blob = new Blob([notesInput.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PDF-Reading-Notes.txt';
+            a.click();
+        }
+
+        function clearNotes() {
+            if (confirm('Clear all saved notes?')) {
+                notesInput.value = '';
+                localStorage.removeItem('pdf_reader_notes');
+            }
+        }
+    </script>
 </body>
 </html>
