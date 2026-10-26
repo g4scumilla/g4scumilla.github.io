@@ -11,7 +11,7 @@
     <style>
         :root {
             --bg-gradient: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
-            --glass-bg: rgba(30, 41, 59, 0.82);
+            --glass-bg: rgba(30, 41, 59, 0.85);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #6366f1;
             --accent-hover: #818cf8;
@@ -19,7 +19,7 @@
             --danger: #ef4444;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --viewer-width: 92%;
+            --viewer-width: 94%;
         }
 
         * {
@@ -52,7 +52,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
+            padding: 10px 18px;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -61,7 +61,7 @@
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             max-height: 90px;
             opacity: 1;
-            gap: 12px;
+            gap: 10px;
         }
 
         .top-toolbar.collapsed {
@@ -76,16 +76,16 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             white-space: nowrap;
         }
 
         .brand-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
             background: linear-gradient(135deg, #6366f1, #a855f7);
             display: flex;
             align-items: center;
@@ -103,7 +103,7 @@
             border-radius: 10px;
             padding: 4px 4px 4px 12px;
             flex: 1;
-            max-width: 420px;
+            max-width: 340px;
             transition: border-color 0.2s;
         }
 
@@ -116,7 +116,7 @@
             background: transparent;
             border: none;
             color: var(--text-main);
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             width: 100%;
             outline: none;
             font-family: inherit;
@@ -126,10 +126,70 @@
             color: var(--text-muted);
         }
 
+        /* Dedicated Smooth Zoom Pill in Toolbar */
+        .zoom-toolbar-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid var(--glass-border);
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+
+        .zoom-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid transparent;
+            color: var(--text-main);
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.15s ease;
+        }
+
+        .zoom-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+
+        .zoom-slider-inline {
+            width: 85px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            height: 4px;
+        }
+
+        .zoom-badge {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            min-width: 46px;
+            text-align: center;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: rgba(99, 102, 241, 0.18);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            transition: all 0.2s;
+        }
+
+        .zoom-badge:hover {
+            background: var(--accent);
+        }
+
         .controls-group {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
@@ -137,10 +197,10 @@
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            padding: 8px 12px;
+            padding: 8px 11px;
             border-radius: 9px;
             cursor: pointer;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 500;
             display: inline-flex;
             align-items: center;
@@ -168,13 +228,13 @@
 
         .btn-sm {
             padding: 6px 10px;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             border-radius: 7px;
         }
 
         .divider {
             width: 1px;
-            height: 24px;
+            height: 22px;
             background: var(--glass-border);
             margin: 0 2px;
         }
@@ -210,6 +270,35 @@
             background: var(--accent);
         }
 
+        /* ================= FLOATING BOTTOM ZOOM DOCK (COLLAPSIBLE) ================= */
+        .floating-zoom-dock {
+            position: fixed;
+            bottom: 20px;
+            right: 24px;
+            z-index: 130;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 7px 12px;
+            border-radius: 999px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .floating-zoom-dock.minimized .dock-controls {
+            display: none;
+        }
+
+        .dock-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* ================= MAIN CONTENT AREA ================= */
         .workspace {
             flex: 1;
@@ -218,7 +307,7 @@
             overflow: hidden;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 12px;
             transition: padding 0.3s ease;
         }
 
@@ -237,7 +326,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease;
         }
 
         .workspace.edge-to-edge .pdf-card {
@@ -247,7 +336,7 @@
         }
 
         .pdf-card.minimized {
-            height: 48px !important;
+            height: 46px !important;
             width: 480px !important;
             border-radius: 14px;
         }
@@ -256,11 +345,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 18px;
-            background: rgba(15, 23, 42, 0.9);
+            padding: 9px 18px;
+            background: rgba(15, 23, 42, 0.92);
             border-bottom: 1px solid var(--glass-border);
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
+            flex-shrink: 0;
         }
 
         .window-dots {
@@ -281,20 +371,47 @@
         .dot.green { background: #10b981; }
         .dot.purple { background: #6366f1; }
 
+        /* Smooth Scrollable Zoom Viewport */
         .iframe-wrapper {
             flex: 1;
             width: 100%;
             height: 100%;
             position: relative;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             background: #0f172a;
+            scroll-behavior: auto;
+        }
+
+        /* Custom sleek horizontal scrollbar when zoomed in */
+        .iframe-wrapper::-webkit-scrollbar {
+            height: 10px;
+        }
+        .iframe-wrapper::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .iframe-wrapper::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 5px;
+        }
+        .iframe-wrapper::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .zoom-stage {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-origin: center center;
+            transition: transform 0.3s ease;
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
-            transition: filter 0.25s ease, transform 0.35s ease;
+            display: block;
+            transition: filter 0.25s ease;
         }
 
         /* Loading Spinner */
@@ -332,7 +449,7 @@
         /* ================= COLLAPSIBLE SIDE DRAWERS ================= */
         .side-drawer {
             position: fixed;
-            top: 72px;
+            top: 70px;
             right: 20px;
             width: 350px;
             max-height: calc(100vh - 95px);
@@ -343,7 +460,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 20px;
-            z-index: 120;
+            z-index: 140;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             transform: translateX(120%);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -362,6 +479,13 @@
             border-bottom: 1px solid var(--glass-border);
             font-weight: 600;
             font-size: 0.95rem;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
         }
 
         .input-group {
@@ -534,7 +658,7 @@
             opacity: 1;
         }
 
-        @media (max-width: 950px) {
+        @media (max-width: 1150px) {
             .quick-input-bar {
                 display: none;
             }
@@ -542,12 +666,12 @@
 
         @media (max-width: 768px) {
             .top-toolbar {
-                padding: 10px 12px;
+                padding: 8px 10px;
                 flex-direction: column;
-                max-height: 150px;
+                max-height: 160px;
             }
             .workspace {
-                padding: 6px;
+                padding: 4px;
             }
             :root {
                 --viewer-width: 100%;
@@ -569,6 +693,22 @@
         <i class="fa-solid fa-sliders"></i> Show Controls
     </button>
 
+    <!-- Floating Bottom-Right Collapsible Zoom Dock -->
+    <div class="floating-zoom-dock" id="floatingZoomDock">
+        <button class="zoom-btn" onclick="toggleZoomDock()" title="Collapse/Expand Zoom Bar">
+            <i class="fa-solid fa-magnifying-glass" id="dockToggleIcon"></i>
+        </button>
+        <div class="dock-controls">
+            <button class="zoom-btn" onclick="stepZoom(-15)" title="Zoom Out (-)">
+                <i class="fa-solid fa-minus"></i>
+            </button>
+            <span class="zoom-badge" id="dockZoomBadge" onclick="animateZoomTo(100)" title="Click to Reset to 100%">100%</span>
+            <button class="zoom-btn" onclick="stepZoom(15)" title="Zoom In (+)">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
@@ -583,7 +723,7 @@
                 </div>
                 <div>
                     <div>PDF Studio Pro</div>
-                    <small style="color: var(--text-muted); font-size: 0.72rem;" id="activeDocSub">Permanent Reader</small>
+                    <small style="color: var(--text-muted); font-size: 0.7rem;">Smooth Zoom Reader</small>
                 </div>
             </div>
 
@@ -592,7 +732,19 @@
                 <i class="fa-solid fa-link" style="color: var(--accent-hover); margin-right: 8px;"></i>
                 <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
                 <button class="btn btn-primary btn-sm" onclick="saveQuickLink()">
-                    <i class="fa-solid fa-floppy-disk"></i> Save & Preview
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+            </div>
+
+            <!-- Dedicated Smooth Zoom Bar in Header -->
+            <div class="zoom-toolbar-pill">
+                <button class="zoom-btn" onclick="stepZoom(-15)" title="Smooth Zoom Out (Ctrl + -)">
+                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                </button>
+                <input type="range" class="zoom-slider-inline" id="topZoomSlider" min="50" max="250" value="100" oninput="setZoomImmediate(this.value)" title="Smooth Zoom Slider">
+                <span class="zoom-badge" id="topZoomBadge" onclick="animateZoomTo(100)" title="Click to Reset Zoom (100%)">100%</span>
+                <button class="zoom-btn" onclick="stepZoom(15)" title="Smooth Zoom In (Ctrl + +)">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </button>
             </div>
 
@@ -601,8 +753,6 @@
                 <button class="btn btn-primary" onclick="toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs">
                     <i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span>
                 </button>
-
-                <div class="divider"></div>
 
                 <!-- Collapse/Expand PDF Card -->
                 <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer">
@@ -620,7 +770,7 @@
                 </button>
 
                 <!-- Eye Care & Display Controls Drawer -->
-                <button class="btn" onclick="toggleDrawer('displayDrawer')" id="displayBtn" title="Eye Care & Zoom Controls">
+                <button class="btn" onclick="toggleDrawer('displayDrawer')" id="displayBtn" title="Zoom Presets & Eye Care Filters">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Filters</span>
                 </button>
 
@@ -652,7 +802,7 @@
         <!-- Main Workspace -->
         <main class="workspace" id="workspace">
             <div class="pdf-card" id="pdfCard">
-                <!-- Mini Window Header (Open in Drive removed) -->
+                <!-- Mini Window Header -->
                 <div class="card-header">
                     <div class="window-dots">
                         <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
@@ -660,22 +810,27 @@
                         <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
                         <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Default Document</span>
                     </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        <span id="headerZoomReadout">Zoom: 100%</span>
+                    </div>
                 </div>
 
-                <!-- PDF Embed Container -->
-                <div class="iframe-wrapper">
+                <!-- PDF Embed Container with Dynamic Zoom Stage -->
+                <div class="iframe-wrapper" id="iframeWrapper">
                     <div class="loader-overlay" id="loader">
                         <div class="spinner"></div>
                         <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your PDF preview...</span>
                     </div>
 
-                    <iframe 
-                        id="pdfFrame"
-                        src="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/preview" 
-                        allow="autoplay"
-                        onload="hideLoader()"
-                        title="PDF Document Viewer">
-                    </iframe>
+                    <div class="zoom-stage" id="zoomStage">
+                        <iframe 
+                            id="pdfFrame"
+                            src="https://drive.google.com/file/d/1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt/preview" 
+                            allow="autoplay"
+                            onload="hideLoader()"
+                            title="PDF Document Viewer">
+                        </iframe>
+                    </div>
                 </div>
             </div>
         </main>
@@ -708,23 +863,36 @@
             Permanently Saved PDFs (<span id="savedCount">1</span>)
         </div>
 
-        <div class="saved-list" id="savedListContainer">
-            <!-- Dynamically populated by JavaScript -->
-        </div>
+        <div class="saved-list" id="savedListContainer"></div>
     </aside>
 
-    <!-- ================= 2. DISPLAY & EYE-CARE DRAWER ================= -->
+    <!-- ================= 2. ZOOM PRESETS & EYE-CARE DRAWER ================= -->
     <aside class="side-drawer" id="displayDrawer">
         <div class="drawer-header">
-            <span><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Reading Comfort Controls</span>
+            <span><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Zoom & Reading Comfort</span>
             <button class="btn btn-sm" onclick="toggleDrawer('displayDrawer')">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
         <div class="control-row">
-            <label><span>Container Width</span> <span id="widthVal">92%</span></label>
-            <input type="range" min="50" max="100" value="92" oninput="updateWidth(this.value)">
+            <label><span>Smooth PDF Zoom</span> <span id="drawerZoomVal">100%</span></label>
+            <input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="setZoomImmediate(this.value)">
+        </div>
+
+        <!-- Instant Smooth Zoom Presets -->
+        <div class="preset-grid">
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(75)">75%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(100)">100%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(125)">125%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(150)">150%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(175)">175%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(200)">200%</button>
+        </div>
+
+        <div class="control-row">
+            <label><span>Viewer Card Width</span> <span id="widthVal">94%</span></label>
+            <input type="range" id="widthSlider" min="50" max="100" value="94" oninput="updateWidth(this.value)">
         </div>
 
         <div class="control-row">
@@ -747,7 +915,7 @@
                 <i class="fa-solid fa-moon"></i> Invert Dark
             </button>
             <button class="btn" style="flex: 1; justify-content: center;" onclick="resetFilters()">
-                <i class="fa-solid fa-rotate-left"></i> Reset
+                <i class="fa-solid fa-rotate-left"></i> Reset All
             </button>
         </div>
     </aside>
@@ -775,8 +943,11 @@
         const DEFAULT_FILE_ID = '1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt';
         const STORAGE_KEY_LIST = 'magical_pdf_saved_library_v1';
         const STORAGE_KEY_ACTIVE = 'magical_pdf_active_id_v1';
+        const STORAGE_KEY_ZOOM = 'magical_pdf_saved_zoom_v1';
 
         const pdfFrame = document.getElementById('pdfFrame');
+        const zoomStage = document.getElementById('zoomStage');
+        const iframeWrapper = document.getElementById('iframeWrapper');
         const pdfCard = document.getElementById('pdfCard');
         const topToolbar = document.getElementById('topToolbar');
         const expandToolbarBtn = document.getElementById('expandToolbarBtn');
@@ -787,6 +958,11 @@
         let isInverted = false;
         let savedLibrary = [];
         let activeFileId = DEFAULT_FILE_ID;
+
+        // Smooth Zoom State
+        let currentZoom = 100;
+        let targetZoom = 100;
+        let zoomAnimFrame = null;
 
         // ================= INITIALIZE & LOAD PERMANENT SAVED STATE =================
         window.addEventListener('DOMContentLoaded', () => {
@@ -824,10 +1000,119 @@
                 activeFileId = savedLibrary[0].id;
             }
 
+            // Restore last saved zoom level if any
+            const savedZoom = parseFloat(localStorage.getItem(STORAGE_KEY_ZOOM));
+            if (!isNaN(savedZoom) && savedZoom >= 50 && savedZoom <= 250) {
+                setZoomImmediate(savedZoom);
+            } else {
+                setZoomImmediate(100);
+            }
+
             loadPDFById(activeFileId, false);
             renderSavedLibrary();
         });
 
+        // ================= SMOOTH 60FPS ZOOM ENGINE =================
+        function stepZoom(delta) {
+            const next = Math.min(250, Math.max(50, Math.round(targetZoom + delta)));
+            animateZoomTo(next);
+        }
+
+        function animateZoomTo(newTarget) {
+            targetZoom = Math.min(250, Math.max(50, parseFloat(newTarget)));
+            localStorage.setItem(STORAGE_KEY_ZOOM, targetZoom);
+
+            if (zoomAnimFrame) cancelAnimationFrame(zoomAnimFrame);
+
+            function tick() {
+                const diff = targetZoom - currentZoom;
+                if (Math.abs(diff) < 0.4) {
+                    currentZoom = targetZoom;
+                    applyZoomGeometry(currentZoom);
+                    zoomAnimFrame = null;
+                    return;
+                }
+                currentZoom += diff * 0.24; // Smooth spring interpolation
+                applyZoomGeometry(currentZoom);
+                zoomAnimFrame = requestAnimationFrame(tick);
+            }
+
+            zoomAnimFrame = requestAnimationFrame(tick);
+        }
+
+        function setZoomImmediate(val) {
+            if (zoomAnimFrame) cancelAnimationFrame(zoomAnimFrame);
+            currentZoom = Math.min(250, Math.max(50, parseFloat(val)));
+            targetZoom = currentZoom;
+            localStorage.setItem(STORAGE_KEY_ZOOM, currentZoom);
+            applyZoomGeometry(currentZoom);
+        }
+
+        function applyZoomGeometry(z) {
+            const scale = z / 100;
+            const rounded = Math.round(z);
+
+            // Sync all UI badges and sliders
+            document.getElementById('topZoomBadge').innerText = rounded + '%';
+            document.getElementById('dockZoomBadge').innerText = rounded + '%';
+            document.getElementById('drawerZoomVal').innerText = rounded + '%';
+            document.getElementById('headerZoomReadout').innerText = `Zoom: ${rounded}%`;
+            document.getElementById('topZoomSlider').value = rounded;
+            document.getElementById('drawerZoomSlider').value = rounded;
+
+            // Record horizontal scroll ratio before resizing stage
+            const maxScrollBefore = iframeWrapper.scrollWidth - iframeWrapper.clientWidth;
+            const scrollRatio = maxScrollBefore > 0 ? (iframeWrapper.scrollLeft / maxScrollBefore) : 0.5;
+
+            if (scale >= 1) {
+                // Magnify PDF & expand horizontal stage while keeping vertical scrollbar 100% fitted
+                zoomStage.style.width = (scale * 100) + '%';
+                zoomStage.style.height = '100%';
+
+                pdfFrame.style.width = (100 / scale) + '%';
+                pdfFrame.style.height = (100 / scale) + '%';
+                pdfFrame.style.transformOrigin = '0 0';
+                pdfFrame.style.transform = `scale(${scale})`;
+
+                // Keep horizontal scroll smoothly centered
+                const maxScrollAfter = iframeWrapper.scrollWidth - iframeWrapper.clientWidth;
+                if (maxScrollAfter > 0) {
+                    iframeWrapper.scrollLeft = maxScrollAfter * scrollRatio;
+                }
+            } else {
+                // Zoom Out (<100%): Center PDF cleanly while still spanning 100% vertical height
+                zoomStage.style.width = '100%';
+                zoomStage.style.height = '100%';
+
+                pdfFrame.style.width = '100%';
+                pdfFrame.style.height = (100 / scale) + '%';
+                pdfFrame.style.transformOrigin = 'top center';
+                pdfFrame.style.transform = `scale(${scale})`;
+                iframeWrapper.scrollLeft = 0;
+            }
+        }
+
+        // Keyboard shortcuts: Ctrl/Cmd + Plus, Minus, 0
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === '=' || e.key === '+') {
+                    e.preventDefault();
+                    stepZoom(15);
+                } else if (e.key === '-') {
+                    e.preventDefault();
+                    stepZoom(-15);
+                } else if (e.key === '0') {
+                    e.preventDefault();
+                    animateZoomTo(100);
+                }
+            }
+        });
+
+        function toggleZoomDock() {
+            document.getElementById('floatingZoomDock').classList.toggle('minimized');
+        }
+
+        // ================= PERMANENT DRIVE LINK MANAGER =================
         function extractDriveId(input) {
             const trimmed = input.trim();
             if (!trimmed) return null;
@@ -845,8 +1130,7 @@
 
         function saveQuickLink() {
             const inputEl = document.getElementById('quickUrlInput');
-            const rawUrl = inputEl.value;
-            const fileId = extractDriveId(rawUrl);
+            const fileId = extractDriveId(inputEl.value);
 
             if (!fileId) {
                 showToast('Please paste a valid PDF link!', true);
@@ -977,7 +1261,7 @@
             }[m]));
         }
 
-        // ================= VIEWER CONTROLS =================
+        // ================= VIEWER & FILTER CONTROLS =================
         function hideLoader() {
             document.getElementById('loader').classList.add('hidden');
         }
@@ -1006,7 +1290,7 @@
 
         function rotatePDF() {
             currentRotation = (currentRotation + 90) % 360;
-            pdfFrame.style.transform = `rotate(${currentRotation}deg)`;
+            zoomStage.style.transform = `rotate(${currentRotation}deg)`;
         }
 
         function toggleDrawer(drawerId) {
@@ -1022,8 +1306,11 @@
         }
 
         function updateWidth(val) {
+            workspace.classList.remove('edge-to-edge');
+            document.getElementById('edgeBtn').classList.remove('active');
             document.documentElement.style.setProperty('--viewer-width', val + '%');
             document.getElementById('widthVal').innerText = val + '%';
+            document.getElementById('widthSlider').value = val;
         }
 
         function applyFilters() {
@@ -1047,11 +1334,12 @@
         function resetFilters() {
             isInverted = false;
             currentRotation = 0;
-            pdfFrame.style.transform = 'rotate(0deg)';
+            zoomStage.style.transform = 'rotate(0deg)';
             document.getElementById('brightSlider').value = 100;
             document.getElementById('contrastSlider').value = 100;
             document.getElementById('sepiaSlider').value = 0;
-            updateWidth(92);
+            updateWidth(94);
+            animateZoomTo(100);
             applyFilters();
         }
 
