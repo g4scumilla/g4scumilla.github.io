@@ -253,18 +253,20 @@
             border-color: var(--accent);
         }
 
-        /* ==================== NOTICE SHOWCASE ==================== */
+        /* ==================== COMPACT NOTICE SHOWCASE ==================== */
         .notice-showcase {
             position: relative;
             border-radius: 18px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             margin-bottom: 16px;
             background: linear-gradient(135deg, rgba(61, 237, 151, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%), var(--bg-card);
             border: 1px solid rgba(61, 237, 151, 0.3);
             box-shadow: 0 12px 30px -8px rgba(61, 237, 151, 0.15);
-            overflow: hidden;
             cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .notice-showcase.urgent {
@@ -287,14 +289,8 @@
             background: linear-gradient(180deg, var(--danger), var(--warning));
         }
 
-        .notice-showcase-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
         .notice-live-badge {
+            flex-shrink: 0;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -334,7 +330,19 @@
             50% { transform: scale(1.45); opacity: 0.55; }
         }
 
+        .notice-showcase-body {
+            flex-grow: 1;
+            min-width: 0; 
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .notice-showcase-controls {
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -355,31 +363,6 @@
             transition: all 0.2s;
         }
         .notice-nav-btn:hover { background: rgba(255,255,255,0.1); }
-
-        .notice-showcase-body {
-            font-size: 13.5px;
-            font-weight: 600;
-            line-height: 1.5;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            word-break: break-word;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        .notice-showcase-body.expanded {
-            -webkit-line-clamp: unset;
-        }
-
-        .notice-showcase-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
 
         /* ==================== BANNERS & ADMIN UI ==================== */
         .preview-banner, .rearrange-banner {
@@ -1178,24 +1161,17 @@
     <!-- ==================== HOME PAGE ==================== -->
     <div id="page-home" class="page-view active">
 
-        <!-- ATTRACTIVE NOTICE SHOWCASE BANNER -->
-        <div class="notice-showcase" id="home-notice-showcase" onclick="toggleHomeNoticeBannerExpand(event)">
-            <div class="notice-showcase-top">
-                <span class="notice-live-badge" id="home-notice-badge"><span class="pulse-dot"></span> Notice Board</span>
-                <div class="notice-showcase-controls" onclick="event.stopPropagation()">
-                    <span id="home-notice-counter" style="font-size:10.5px; color:var(--text-secondary); font-weight: 600;">1 / 1</span>
-                    <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
-                    <button class="notice-nav-btn" onclick="switchPage('notices')" title="All Notices"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                </div>
+        <!-- COMPACT NOTICE SHOWCASE BANNER -->
+        <div class="notice-showcase" id="home-notice-showcase" onclick="switchPage('notices')">
+            <div class="notice-live-badge" id="home-notice-badge">
+                <span class="pulse-dot"></span> Notice
             </div>
             <div class="notice-showcase-body" id="home-notice-text">
                 Welcome to Abdullahil Kuafi's Smart Cloud Hub!
             </div>
-            <button class="notice-expand-btn" id="home-notice-exp-btn" style="display:none;">Expand</button>
-            <div class="notice-showcase-footer">
-                <span id="home-notice-time"><i class="fa-regular fa-clock"></i> Synced Live</span>
-                <span style="color:var(--accent); cursor:pointer; font-weight:700;" onclick="switchPage('notices'); event.stopPropagation();">View Board →</span>
+            <div class="notice-showcase-controls" onclick="event.stopPropagation()">
+                <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
 
@@ -2807,16 +2783,6 @@
         btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
     }
 
-    function toggleHomeNoticeBannerExpand(e) {
-        if (e && e.target.closest('button')) return;
-        const txtEl = document.getElementById('home-notice-text');
-        const btnEl = document.getElementById('home-notice-exp-btn');
-        if (!txtEl || !btnEl) return;
-        const isExpanded = txtEl.classList.toggle('expanded');
-        btnEl.innerText = isExpanded ? 'Collapse' : 'Expand';
-        btnEl.style.display = isExpanded ? 'inline-block' : (txtEl.scrollHeight > txtEl.clientHeight ? 'inline-block' : 'none');
-    }
-
     function updateHomeNoticeShowcase() {
         const notices = appState.notices || [];
         const showcase = document.getElementById('home-notice-showcase');
@@ -2824,10 +2790,8 @@
 
         if (notices.length === 0) {
             document.getElementById('home-notice-text').innerText = 'No global announcements right now.';
-            document.getElementById('home-notice-counter').innerText = '0 / 0';
-            document.getElementById('home-notice-time').innerHTML = '<i class="fa-regular fa-clock"></i> Standby';
             showcase.classList.remove('urgent');
-            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice Board';
+            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice';
             return;
         }
 
@@ -2838,32 +2802,12 @@
         const isUrgent = item.priority === 'urgent';
 
         showcase.classList.toggle('urgent', isUrgent);
-        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent Notice' : 'Notice Board'}`;
+        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent' : 'Notice'}`;
         document.getElementById('home-notice-text').innerText = item.text;
-        document.getElementById('home-notice-counter').innerText = `${homeNoticeIdx + 1} / ${notices.length}`;
-        document.getElementById('home-notice-time').innerHTML = `<i class="fa-regular fa-clock"></i> ${item.time || 'Synced Live'}`;
-
-        setTimeout(() => {
-            const txtEl = document.getElementById('home-notice-text');
-            const btnEl = document.getElementById('home-notice-exp-btn');
-            if (txtEl && btnEl) {
-                if (txtEl.scrollHeight > txtEl.clientHeight || txtEl.innerText.length > 100) {
-                    btnEl.style.display = 'inline-block';
-                } else {
-                    btnEl.style.display = 'none';
-                    txtEl.classList.remove('expanded');
-                    btnEl.innerText = 'Expand';
-                }
-            }
-        }, 50);
     }
 
     function cycleHomeNotice(step) {
         homeNoticeIdx += step;
-        const txtEl = document.getElementById('home-notice-text');
-        if (txtEl) txtEl.classList.remove('expanded');
-        const btnEl = document.getElementById('home-notice-exp-btn');
-        if (btnEl) btnEl.innerText = 'Expand';
         updateHomeNoticeShowcase();
     }
 
@@ -3324,7 +3268,6 @@
         deleteNotice,
         clearAllNotices,
         toggleNoticeExpand,
-        toggleHomeNoticeBannerExpand,
         loginWithGoogle,
         logoutGoogle,
         openAdminModal,
