@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Link to the universal CSS file -->
+    <!-- Link to the universal CSS file (Required for external Header/Footer) -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Import Map for Firebase -->
@@ -58,7 +58,7 @@
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Top Toolbar Controls (RESTORED TO EXACT ORIGINAL TO PREVENT SCRIPT CRASH) */
+        /* Top Toolbar Controls */
         .top-toolbar {
             display: flex;
             align-items: center;
@@ -79,6 +79,7 @@
         .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
         .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
 
+        /* Retained to prevent script.js crash */
         .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
         .quick-input-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
         .quick-input-bar input { background: transparent; border: none; color: var(--text-main); font-size: 0.8rem; width: 100%; outline: none; font-family: inherit; }
@@ -107,7 +108,7 @@
         .floating-zoom-dock.minimized .dock-controls { display: none; }
         .dock-controls { display: flex; align-items: center; gap: 8px; }
 
-        /* FIXED: Added CSS to hide the toast properly so it doesn't break page layout! */
+        /* Hidden Toast Notification Fix */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -217,7 +218,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification (Now hidden properly via CSS) -->
+    <!-- Toast Notification (Hidden properly via CSS) -->
     <div class="toast" id="toast">
         <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
     </div>
@@ -227,7 +228,7 @@
         <!-- ================= EXTERNAL HEADER INJECTION ================= -->
         <div id="header-placeholder"></div>
 
-        <!-- Collapsible Top Control Bar (Original Layout Restored) -->
+        <!-- Collapsible Top Control Bar -->
         <div class="top-toolbar" id="topToolbar">
             <div class="brand">
                 <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
@@ -237,7 +238,7 @@
                 </div>
             </div>
 
-            <!-- Instant Link Paste Bar (Restored so script.js doesn't crash) -->
+            <!-- Instant Link Paste Bar -->
             <div class="quick-input-bar">
                 <i class="fa-solid fa-link" style="color: var(--accent-hover); margin-right: 8px;"></i>
                 <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
@@ -284,7 +285,8 @@
                         <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your PDF preview...</span>
                     </div>
                     <div class="zoom-stage" id="zoomStage">
-                        <iframe id="pdfFrame" src="" allow="autoplay" onload="hideLoader()" title="PDF Document Viewer"></iframe>
+                        <!-- THE GOOGLE DRIVE PDF LINK IS INJECTED HERE (Formatted as /preview for proper embedding) -->
+                        <iframe id="pdfFrame" src="https://drive.google.com/file/d/1VSwckIpJOzUl0x3CfkkJtGslVT91KKy7/preview" allow="autoplay" onload="hideLoader()" title="PDF Document Viewer"></iframe>
                     </div>
                 </div>
             </div>
@@ -293,7 +295,7 @@
 
     <!-- Drawers -->
 
-    <!-- Notices Drawer (Opens when intercepted) -->
+    <!-- Notices Drawer (Opens when intercepted from Profile Header) -->
     <aside class="side-drawer" id="noticesDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: var(--accent);"></i> Recent Notices</span><button class="btn btn-sm" onclick="toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
@@ -302,7 +304,7 @@
         </div>
     </aside>
 
-    <!-- Settings Drawer (Opens when intercepted) -->
+    <!-- Settings Drawer (Opens when intercepted from Profile Header) -->
     <aside class="side-drawer" id="settingsDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: var(--accent);"></i> App Settings</span><button class="btn btn-sm" onclick="toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
@@ -356,7 +358,7 @@
     <!-- SINGLE JAVASCRIPT FILE (Loads both Hub and PDF Reader logic) -->
     <script type="module" src="script.js"></script>
 
-    <!-- SCRIPT TO INTERCEPT DYNAMIC HEADER CLICKS (Fixes Issue 3) -->
+    <!-- SCRIPT TO INTERCEPT DYNAMIC HEADER CLICKS -->
     <script>
         document.addEventListener('click', function(event) {
             // Check if the click happened on a link inside the injected header
@@ -372,7 +374,7 @@
                 if (text.includes('notice') || title.includes('notice') ||
                     text.includes('setting') || title.includes('setting')) {
                     
-                    // 1. Prevent the redirect to the homepage!
+                    // 1. Prevent the redirect to the homepage
                     event.preventDefault(); 
                     
                     // 2. Open the corresponding side drawer on this page instead
