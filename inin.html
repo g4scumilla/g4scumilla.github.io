@@ -180,7 +180,7 @@
         .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
         .saved-item:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(30, 41, 59, 0.9); }
         .saved-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; flex: 1; margin-right: 8px; }
-        .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+        .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; display: flex; align-items: center; }
         .saved-item-id { font-size: 0.7rem; color: #6366f1; font-weight: 500;}
         .icon-btn { background: rgba(255, 255, 255, 0.06); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .icon-btn:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.15); }
@@ -220,7 +220,7 @@
 
     <!-- Toast Notification -->
     <div class="toast" id="toast">
-        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">Action Successful!</span>
     </div>
 
     <div class="app-wrapper">
@@ -305,7 +305,7 @@
                         <div class="dot yellow" onclick="window.toggleMinimizePDF()"></div>
                         <div class="dot green" onclick="window.toggleEdgeToEdge()"></div>
                         <div class="dot purple" onclick="window.toggleToolbar()"></div>
-                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Advanced Engineering Mathematics.pdf</span>
+                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Loading Library...</span>
                     </div>
                     <div style="font-size: 0.75rem;"><span id="headerZoomReadout">Zoom: 100%</span></div>
                 </div>
@@ -316,7 +316,7 @@
                         <span style="font-size: 0.9rem; color: var(--text-secondary);">Loading your PDF preview...</span>
                     </div>
                     <div class="zoom-stage" id="zoomStage">
-                        <iframe id="pdfFrame" src="https://drive.google.com/file/d/1VSwckIpJOzUl0x3CfkkJtGslVT91KKy7/preview" allow="autoplay" onload="window.hideLoader()" title="PDF Document Viewer"></iframe>
+                        <iframe id="pdfFrame" src="" allow="autoplay" onload="window.hideLoader()" title="PDF Document Viewer"></iframe>
                     </div>
                 </div>
             </div>
@@ -340,7 +340,7 @@
         </div>
     </aside>
 
-    <!-- ADVANCED PDF LIBRARY DRAWER (WITH FOLDERS) -->
+    <!-- PDF Library Drawer -->
     <aside class="side-drawer" id="libraryDrawer">
         <div class="drawer-header">
             <span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span>
@@ -447,14 +447,17 @@
         const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
         const THEME_STORAGE_KEY = 'kuafi_theme_mode';
 
-        // Updated global state to hold Folders
+        // Updated global state to hold Folders & Default PDF Memory
         let appState = {
             updatedAt: 0, 
             adminPin: '1234',
-            savedFolders: [], // <--- NEW: Holds folder objects {id, name}
-            savedPDFs: [],    // Will now contain {id, title, url, folderId}
+            savedFolders: [], 
+            savedPDFs: [],    
+            defaultPdfId: null, // NEW: Cloud memory for the explicitly pinned default PDF
             notices: [{ text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }]
         };
+
+        let initialLoadDone = false; // Tracks if we've successfully booted up once
 
         function isUserActivelyEditingForm() {
             return document.querySelector('.modal-backdrop.open') !== null || (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'));
@@ -472,6 +475,14 @@
             
             updateHomeNoticeShowcase();
             if (typeof window.renderSavedPDFs === 'function') window.renderSavedPDFs();
+            
+            // --- NEW: AUTO LOAD PDF ON VERY FIRST STARTUP ---
+            if (!initialLoadDone) {
+                initialLoadDone = true;
+                if (typeof window.autoLoadPDF === 'function') {
+                    window.autoLoadPDF();
+                }
+            }
         }
 
         function updateHomeNoticeShowcase() {
@@ -525,7 +536,6 @@
                 try { appState = { ...appState, ...JSON.parse(saved) }; } catch (e) {}
             }
             
-            // Ensure folder structure exists
             if (!appState.savedFolders) appState.savedFolders = [];
             window.appState = appState; 
 
@@ -547,7 +557,7 @@
         initApp();
     </script>
 
-    <!-- ================= PDF READER LOGIC (UI, Zoom, FOLDERS, Library CRUD) ================= -->
+    <!-- ================= PDF READER LOGIC (UI, Zoom, FOLDERS, MEMORY, CRUD) ================= -->
     <script>
         window.hideLoader = function() {
             const loader = document.getElementById('loader');
@@ -561,20 +571,26 @@
             return url;
         };
 
-        // --- NEW: FOLDER NAVIGATION STATE --- //
+        // FOLDER NAVIGATION STATE
         window.currentFolderId = null;
 
-        // HELPER: Generates the HTML for a single PDF item
+        // HELPER: Generates the HTML for a single PDF item (Now with "Default" badge and Set Default button)
         function generatePdfHtml(pdf) {
+            const isDefault = window.appState.defaultPdfId === pdf.id;
+            
             return `
                 <div class="saved-item">
                     <div class="saved-item-info" onclick="window.loadPDF('${pdf.id}')">
-                        <div class="saved-item-title"><i class="fa-solid fa-file-pdf" style="color: #f43f5e; margin-right: 6px;"></i>${pdf.title}</div>
+                        <div class="saved-item-title">
+                            <i class="fa-solid fa-file-pdf" style="color: #f43f5e; margin-right: 6px;"></i>${pdf.title}
+                            ${isDefault ? '<span style="margin-left:8px; font-size:0.65rem; background:var(--accent); color:#000; padding:2px 6px; border-radius:4px; font-weight:700;">Default</span>' : ''}
+                        </div>
                         <div class="saved-item-id" style="display:flex; align-items:center; gap:4px; margin-top:2px;">
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i> Click to Read
                         </div>
                     </div>
                     <div style="display:flex; gap:4px;">
+                        <button class="icon-btn" onclick="window.setDefaultPDF('${pdf.id}')" title="Set as Default"><i class="fa-solid fa-thumbtack" ${isDefault ? 'style="color:#3ded97;"' : ''}></i></button>
                         <button class="icon-btn" onclick="window.editSavedPDF('${pdf.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
                         <button class="icon-btn delete" onclick="window.deleteSavedPDF('${pdf.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -594,7 +610,7 @@
             let itemCount = 0;
 
             if (window.currentFolderId) {
-                // WE ARE INSIDE A FOLDER
+                // INSIDE A FOLDER
                 const currentFolder = folders.find(f => f.id === window.currentFolderId);
                 breadcrumbText.innerHTML = `<button class="btn btn-sm" style="display:inline-flex; width:auto; padding:4px 8px; font-size:0.75rem; margin-right:8px;" onclick="window.goBackToRoot()"><i class="fa-solid fa-arrow-left"></i> Back</button> ${currentFolder ? currentFolder.name : 'Unknown Folder'}`;
                 
@@ -607,13 +623,12 @@
                     html += folderPdfs.map(pdf => generatePdfHtml(pdf)).join('');
                 }
             } else {
-                // WE ARE IN THE ROOT LIBRARY
+                // ROOT LIBRARY
                 breadcrumbText.innerHTML = `<i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library`;
                 
                 const rootPdfs = pdfs.filter(p => !p.folderId);
                 itemCount = folders.length + rootPdfs.length;
                 
-                // Render Folders First
                 if (folders.length > 0) {
                     html += folders.map(folder => `
                         <div class="saved-item" style="border-left: 3px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
@@ -630,7 +645,6 @@
                     `).join('');
                 }
                 
-                // Render Root PDFs below folders
                 if (rootPdfs.length > 0) {
                     html += rootPdfs.map(pdf => generatePdfHtml(pdf)).join('');
                 }
@@ -650,33 +664,19 @@
             if (!name || !name.trim()) return;
             
             if (!window.appState.savedFolders) window.appState.savedFolders = [];
-            
-            window.appState.savedFolders.push({
-                id: 'folder-' + Date.now(),
-                name: name.trim()
-            });
+            window.appState.savedFolders.push({ id: 'folder-' + Date.now(), name: name.trim() });
             
             if (window.pushStateToCloud) window.pushStateToCloud(false);
             window.renderSavedPDFs();
             window.showToast("Folder Created!");
         };
 
-        window.openFolder = function(id) {
-            window.currentFolderId = id;
-            window.renderSavedPDFs();
-        };
-
-        window.goBackToRoot = function() {
-            window.currentFolderId = null;
-            window.renderSavedPDFs();
-        };
+        window.openFolder = function(id) { window.currentFolderId = id; window.renderSavedPDFs(); };
+        window.goBackToRoot = function() { window.currentFolderId = null; window.renderSavedPDFs(); };
 
         window.deleteFolder = function(id) {
             if (!confirm("⚠️ WARNING: Are you sure you want to delete this folder? ALL PDFs inside it will be permanently deleted!")) return;
-            
-            // Delete folder
             window.appState.savedFolders = window.appState.savedFolders.filter(f => f.id !== id);
-            // Delete PDFs inside that folder
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.folderId !== id);
             
             if (window.pushStateToCloud) window.pushStateToCloud(false);
@@ -684,7 +684,14 @@
             window.showToast("Folder and its contents deleted");
         };
 
-        // PDF CRUD ACTIONS
+        // PDF CRUD ACTIONS & MEMORY LOGIC
+        window.setDefaultPDF = function(id) {
+            window.appState.defaultPdfId = id;
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Set as Default PDF!");
+        };
+
         window.addAndSavePDF = function() {
             const titleInput = document.getElementById('pdfTitleInput');
             const urlInput = document.getElementById('pdfUrlInput');
@@ -702,39 +709,41 @@
             if (!window.appState.savedPDFs) window.appState.savedPDFs = [];
 
             const editId = editIdInput.value;
+            let newlyCreatedId = null;
             
             if (editId) {
-                // Update Existing PDF
                 const idx = window.appState.savedPDFs.findIndex(p => p.id === editId);
                 if (idx !== -1) {
-                    // Preserve its existing folder location when editing!
                     const existingFolderId = window.appState.savedPDFs[idx].folderId;
                     window.appState.savedPDFs[idx] = { id: editId, title, url, folderId: existingFolderId };
+                    newlyCreatedId = editId;
                     window.showToast("PDF Updated Successfully!");
                 }
             } else {
-                // Add New PDF (Saves to active currentFolderId)
-                const newId = 'pdf-' + Date.now();
+                newlyCreatedId = 'pdf-' + Date.now();
                 window.appState.savedPDFs.push({ 
-                    id: newId, 
+                    id: newlyCreatedId, 
                     title, 
                     url, 
-                    folderId: window.currentFolderId // Logs it to the current folder context
+                    folderId: window.currentFolderId 
                 });
+                
+                // If it's the very first PDF they ever add, make it the default automatically
+                if (window.appState.savedPDFs.length === 1) {
+                    window.appState.defaultPdfId = newlyCreatedId;
+                }
                 window.showToast("PDF Saved Permanently!");
             }
 
             if (window.pushStateToCloud) window.pushStateToCloud(false);
 
-            document.getElementById('loader').classList.remove('hidden');
-            document.getElementById('pdfFrame').src = url;
-            document.getElementById('docTitleDisplay').innerText = title;
+            // Load it and save memory
+            window.loadPDF(newlyCreatedId, true); // true = don't toggle drawer since we will do it below if we want
 
             titleInput.value = '';
             urlInput.value = '';
             editIdInput.value = '';
             document.getElementById('savePdfBtnText').innerText = "Preview & Save Here";
-
             window.renderSavedPDFs();
         };
 
@@ -750,14 +759,19 @@
 
         window.deleteSavedPDF = function(id) {
             if (!confirm("Are you sure you want to delete this PDF from your Library?")) return;
-            
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.id !== id);
+            
+            if (window.appState.defaultPdfId === id) {
+                window.appState.defaultPdfId = null; // Clear default if it was deleted
+            }
+            
             if (window.pushStateToCloud) window.pushStateToCloud(false);
             window.renderSavedPDFs();
             window.showToast("PDF Deleted");
         };
 
-        window.loadPDF = function(id) {
+        // Modified Load PDF to save to browser's LocalStorage memory
+        window.loadPDF = function(id, preventDrawerToggle = false) {
             const pdf = window.appState.savedPDFs.find(p => p.id === id);
             if (!pdf) return;
             
@@ -765,16 +779,43 @@
             document.getElementById('pdfFrame').src = pdf.url;
             document.getElementById('docTitleDisplay').innerText = pdf.title;
             
-            window.toggleDrawer('libraryDrawer');
+            // Save to memory "Where I left off"
+            localStorage.setItem('kuafi_last_pdf_id', id);
+            
+            if (!preventDrawerToggle) {
+                window.toggleDrawer('libraryDrawer');
+            }
+        };
+
+        // NEW: AUTO LOAD MEMORY OR DEFAULT PDF
+        window.autoLoadPDF = function() {
+            const lastId = localStorage.getItem('kuafi_last_pdf_id');
+            const defaultId = window.appState.defaultPdfId;
+            const pdfs = window.appState.savedPDFs || [];
+            
+            let targetId = null;
+            // 1. Check Memory
+            if (lastId && pdfs.find(p => p.id === lastId)) {
+                targetId = lastId;
+            } 
+            // 2. Fallback to pinned Default
+            else if (defaultId && pdfs.find(p => p.id === defaultId)) {
+                targetId = defaultId;
+            }
+
+            if (targetId) {
+                window.loadPDF(targetId, true); // true = prevents drawer from toggling randomly on boot
+            } else {
+                // If brand new user with no memory and no default, just let the hardcoded PDF load
+                document.getElementById('docTitleDisplay').innerText = "Advanced Engineering Mathematics.pdf";
+            }
         };
 
         window.saveQuickLink = function() {
             const input = document.getElementById('quickUrlInput');
             if (!input.value.trim()) return alert('Paste a link first!');
-            
             document.getElementById('pdfUrlInput').value = input.value;
             document.getElementById('pdfTitleInput').value = 'Quick Saved PDF';
-            // It will save to whatever folder is currently open automatically!
             window.addAndSavePDF();
             input.value = '';
         };
@@ -792,7 +833,6 @@
             const drawer = document.getElementById(drawerId);
             if(drawer) drawer.classList.toggle('open');
             
-            // If they open the library drawer, clear any edit states so it says "Save" not "Update"
             if (drawerId === 'libraryDrawer') {
                 document.getElementById('pdfTitleInput').value = '';
                 document.getElementById('pdfUrlInput').value = '';
