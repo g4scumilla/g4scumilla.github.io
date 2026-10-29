@@ -251,8 +251,10 @@ async function initApp() {
             });
         } else {
             isGoogleLoggedIn = false;
-            document.getElementById('google-logged-out-view').style.display = 'flex';
-            document.getElementById('google-logged-in-view').style.display = 'none';
+            const loggedOutView = document.getElementById('google-logged-out-view');
+            const loggedInView = document.getElementById('google-logged-in-view');
+            if(loggedOutView) loggedOutView.style.display = 'flex';
+            if(loggedInView) loggedInView.style.display = 'none';
             updateAuthAndAdminUI();
             filterApps(currentFilter);
         }
@@ -302,12 +304,15 @@ async function initApp() {
     renderNotices();
     updateAuthAndAdminUI();
 
-    // SMART ROUTING: Check if we arrived from another page asking to open a specific tab
-    const hash = window.location.hash.replace('#', '');
-    if (hash && ['home', 'notices', 'tools'].includes(hash)) {
-        setTimeout(() => switchPage(hash), 100);
-    } else {
-        goHomeWithFav();
+    // SMART ROUTING: Only execute tab rendering if #page-home exists on this page
+    const homePage = document.getElementById('page-home');
+    if (homePage) {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && ['home', 'notices', 'tools'].includes(hash)) {
+            setTimeout(() => switchPage(hash), 100);
+        } else {
+            goHomeWithFav();
+        }
     }
 }
 
@@ -376,8 +381,10 @@ async function loginWithGoogle() {
 
 function applyGoogleUser(user) {
     isGoogleLoggedIn = true;
-    document.getElementById('google-logged-out-view').style.display = 'none';
-    document.getElementById('google-logged-in-view').style.display = 'flex';
+    const loggedOutView = document.getElementById('google-logged-out-view');
+    const loggedInView = document.getElementById('google-logged-in-view');
+    if(loggedOutView) loggedOutView.style.display = 'none';
+    if(loggedInView) loggedInView.style.display = 'flex';
 
     const emailKey = user.email || 'default';
     const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${emailKey}`) || '{}');
@@ -414,10 +421,10 @@ async function logoutGoogle() {
     } catch (e) {}
 
     isGoogleLoggedIn = false;
-    localStorage.removeItem('kuafi_google_user');
-
-    document.getElementById('google-logged-out-view').style.display = 'flex';
-    document.getElementById('google-logged-in-view').style.display = 'none';
+    const loggedOutView = document.getElementById('google-logged-out-view');
+    const loggedInView = document.getElementById('google-logged-in-view');
+    if(loggedOutView) loggedOutView.style.display = 'flex';
+    if(loggedInView) loggedInView.style.display = 'none';
 
     updateAuthAndAdminUI();
     filterApps(currentFilter);
@@ -456,7 +463,7 @@ function updateAuthAndAdminUI() {
 function renderCategories() {
     const container = document.getElementById('filter-pills-container');
     if (!container) return; // Prevent crash on non-index pages
-    
+
     container.innerHTML = '';
 
     appState.categories.forEach((cat, idx) => {
@@ -533,6 +540,7 @@ function deleteCategory(key) {
 
 function openCategoryModal() {
     const list = document.getElementById('category-manager-list');
+    if(!list) return;
     list.innerHTML = appState.categories.map((c, i) => `
         <div class="bin-item">
             <span style="font-size:12.5px; font-weight:600;">${c.label} <small style="color:var(--text-secondary);">(${c.key})</small></span>
@@ -577,9 +585,9 @@ function resetDefaultCategories() {
 function renderServiceGrid() {
     const grid = document.getElementById('app-grid');
     const emptyMsg = document.getElementById('empty-fav-msg');
-    
+
     if (!grid) return; // Safely exit if grid doesn't exist on this page
-    
+
     grid.querySelectorAll('.service-item').forEach(el => el.remove());
 
     appState.cardsData.forEach(card => {
@@ -866,7 +874,7 @@ function goHomeWithFav() {
 
 function switchPage(pageId) {
     const targetPage = document.getElementById('page-' + pageId);
-    
+
     // 1. Check if the requested tab exists on this page
     if (!targetPage) {
         // We are on a different page! Redirect back to index and tell it which tab to open
@@ -912,7 +920,7 @@ function renderNotices() {
     const notices = appState.notices || [];
     const listEl = document.getElementById('notices-list');
     const countPill = document.getElementById('notice-count-pill');
-    
+
     if (countPill) countPill.innerText = `${notices.length} / 30`;
 
     if (listEl) {
