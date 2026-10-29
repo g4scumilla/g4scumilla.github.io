@@ -52,7 +52,7 @@ let isPreviewMode = false;
 let isPushing = false;
 let currentFilter = 'fav';
 let isRearrangeMode = false;
-let INITIAL_20_CARDS = []; // Populated safely in initApp() after DOM loads
+let INITIAL_20_CARDS = [];
 
 const DEFAULT_CATEGORIES = [
     { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -193,9 +193,7 @@ async function loadComponents() {
             const headerPlaceholder = document.getElementById('header-placeholder');
             if (headerPlaceholder) headerPlaceholder.outerHTML = headerHtml;
         }
-    } catch (e) {
-        console.warn('Header injection warning (safe to ignore if header is embedded):', e);
-    }
+    } catch (e) {}
 
     try {
         const footerRes = await fetch('footer.html');
@@ -204,19 +202,13 @@ async function loadComponents() {
             const footerPlaceholder = document.getElementById('footer-placeholder');
             if (footerPlaceholder) footerPlaceholder.outerHTML = footerHtml;
         }
-    } catch (e) {
-        console.warn('Footer injection warning (safe to ignore if footer is embedded):', e);
-    }
+    } catch (e) {}
 }
 
 // ----- Initialization -----
 async function initApp() {
-    // Wait for the external components (if any) to inject so the DOM is fully ready
     await loadComponents();
-
-    // Now safe to read the DOM for fallback cards
     INITIAL_20_CARDS = extractInitialDomCards();
-
     applySavedThemeOnLoad();
 
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -262,9 +254,7 @@ async function initApp() {
                 applyCloudStateToUI(snap.data());
                 pulseSyncBadge('Live');
             }
-        }, (err) => {
-            console.warn("Firestore live listener standby:", err.message);
-        });
+        }, (err) => {});
     }
 
     syncData(true);
@@ -300,7 +290,6 @@ async function initApp() {
     renderNotices();
     updateAuthAndAdminUI();
 
-    // SMART ROUTING
     const homePage = document.getElementById('page-home');
     if (homePage) {
         const hash = window.location.hash.replace('#', '');
@@ -363,7 +352,6 @@ async function loginWithGoogle() {
             });
         }
     } catch (error) {
-        console.error('Firebase Google Sign-In Error:', error);
         if (error.code === 'auth/popup-blocked') {
             await signInWithRedirect(auth, googleProvider);
             return;
@@ -647,7 +635,7 @@ function filterApps(filterKey, pillEl) {
     items.forEach(item => {
         const id = item.getAttribute('data-id');
         const cat = item.getAttribute('data-cat');
-        const isLive = item.getAttribute('data-live') === 'true';
+        const isLive = item.getAttribute('data-live'] === 'true';
         const isFav = (appState.favorites || []).includes(id);
 
         let show = false;
@@ -1108,7 +1096,7 @@ function openRearrangeFromTools() {
     toggleRearrangeMode(true);
 }
 
-// ----- Grid Customizer Logic -----
+// ----- Grid Customizer Logic (15 Options Support) -----
 function previewAndSaveGridCustomizer() {
     const cols = document.getElementById('grid-cols-select').value;
     const style = document.getElementById('grid-style-select').value;
@@ -1142,21 +1130,22 @@ function applyCardGridStyleVars(styleKey) {
     let gap = '12px';
     let padding = '12px 8px 14px';
 
-    switch (styleKey) {
-        case '1': radius = '20px'; border = '1px solid var(--border-color)'; shadow = isLight ? '0 12px 30px rgba(0,0,0,0.08), inset 0 1px 0px rgba(255, 255, 255, 1)' : '0 12px 30px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255, 255, 255, 0.06)'; gap = '12px'; padding = '14px 10px 16px'; break;
-        case '2': radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
-        case '3': radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
-        case '4': radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
-        case '5': radius = '10px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = 'none'; gap = '8px'; padding = '10px 8px 12px'; break;
-        case '6': radius = '20px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; gap = '12px'; padding = '14px 10px 16px'; break;
-        case '7': radius = '12px'; border = '1.5px solid var(--text-secondary)'; bg = 'var(--card-bg)'; shadow = '0 4px 12px rgba(0,0,0,0.1)'; gap = '10px'; padding = '10px 8px 12px'; break;
-        case '8': radius = '4px'; border = '1px dashed var(--accent)'; bg = isLight ? 'rgba(61,237,151,0.05)' : 'rgba(61,237,151,0.03)'; shadow = '0 8px 20px rgba(0,0,0,0.15)'; gap = '10px'; padding = '12px 8px 14px'; break;
-        case '9': radius = '22px'; border = '1px solid var(--border-color)'; bg = isLight ? '#ffffff' : 'linear-gradient(135deg, rgba(255,255,255,0.04), var(--card-bg))'; shadow = '0 8px 22px rgba(0,0,0,0.12)'; gap = '12px'; padding = '14px 10px 16px'; break;
-        case '10': radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; shadow = '0 10px 25px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
-        case '11': radius = '14px'; border = '2px solid var(--text-primary)'; bg = 'var(--card-bg)'; shadow = '0 6px 16px rgba(0,0,0,0.2)'; gap = '10px'; padding = '12px 8px 14px'; break;
-        case '12': radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; gap = '10px'; padding = '10px 8px 12px'; break;
-        case '13': radius = '36px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 8px 20px rgba(0,0,0,0.12)'; gap = '10px'; padding = '16px 10px 18px'; break;
-        case '14': radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; shadow = '0 14px 32px rgba(0,0,0,0.3)'; gap = '12px'; padding = '14px 10px 16px'; break;
+    switch (String(styleKey)) {
+        case '1': radius = '20px'; border = '1px solid var(--border-color)'; break;
+        case '2': radius = '16px'; border = '1.5px solid var(--accent)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; break;
+        case '3': radius = '28px'; border = '1px solid var(--border-color)'; break;
+        case '4': radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; break;
+        case '5': radius = '10px'; border = '1px solid var(--border-color)'; shadow = 'none'; break;
+        case '6': radius = '20px'; border = '1px solid var(--border-color)'; shadow = '0 16px 36px -10px rgba(0,0,0,0.25)'; break;
+        case '7': radius = '12px'; border = '1.5px solid var(--text-secondary)'; break;
+        case '8': radius = '4px'; border = '1px dashed var(--accent)'; break;
+        case '9': radius = '22px'; border = '1px solid var(--border-color)'; break;
+        case '10': radius = '18px'; border = '1px solid var(--border-color)'; bg = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(30,41,59,0.85)'; break;
+        case '11': radius = '14px'; border = '2px solid var(--text-primary)'; break;
+        case '12': radius = '16px'; border = '1px solid var(--border-color)'; bg = 'transparent'; shadow = 'none'; break;
+        case '13': radius = '36px'; border = '1px solid var(--border-color)'; break;
+        case '14': radius = '24px'; border = '1px solid var(--border-color)'; bg = isLight ? '#f8fafc' : '#121929'; break;
+        case '15': radius = '8px'; border = '1px solid var(--border-color)'; shadow = 'none'; break;
     }
 
     document.documentElement.style.setProperty('--card-radius', radius);
@@ -1172,24 +1161,22 @@ function applyCardGridLayoutVars(layoutKey) {
     let padding = '12px 8px 14px';
     let gap = '12px';
 
-    switch (layoutKey) {
+    switch (String(layoutKey)) {
         case '1': align = 'center'; padding = '12px 8px 14px'; gap = '12px'; break;
-        case '2': align = 'center'; padding = '8px 6px 10px';   gap = '8px';  break;
-        case '3': align = 'center'; padding = '18px 14px 20px';gap = '16px'; break;
-        case '4': align = 'center'; padding = '14px 10px 16px';gap = '10px'; break;
+        case '2': align = 'center'; padding = '8px 6px 10px'; gap = '8px'; break;
+        case '3': align = 'center'; padding = '18px 14px 20px'; gap = '16px'; break;
+        case '4': align = 'center'; padding = '14px 10px 16px'; gap = '10px'; break;
         case '5': align = 'flex-start'; padding = '14px 12px 16px'; gap = '12px'; break;
         case '6': align = 'center'; padding = '14px 10px 16px'; gap = '12px'; break;
         case '7': align = 'center'; padding = '15px 12px 18px'; gap = '14px'; break;
         case '8': align = 'center'; padding = '18px 12px 20px'; gap = '10px'; break;
-        case '9': align = 'flex-start'; padding = '10px 10px 12px';   gap = '10px';  break;
+        case '9': align = 'flex-start'; padding = '10px 10px 12px'; gap = '10px'; break;
         case '10': align = 'center'; padding = '12px 10px 14px'; gap = '12px'; break;
         case '11': align = 'center'; padding = '14px 10px 16px'; gap = '10px'; break;
-        case '12': align = 'center'; padding = '10px 8px 12px';  gap = '10px'; break;
+        case '12': align = 'center'; padding = '10px 8px 12px'; gap = '10px'; break;
         case '13': align = 'center'; padding = '16px 12px 18px'; gap = '14px'; break;
-        case '14': align = 'flex-start'; padding = '12px 10px 14px'; gap = '10px';  break;
-        case '15':
-        default:
-            align = 'center'; padding = '12px 8px 14px'; gap = '12px';
+        case '14': align = 'flex-start'; padding = '12px 10px 14px'; gap = '10px'; break;
+        case '15': align = 'center'; padding = '10px 10px 10px'; gap = '12px'; break;
     }
 
     document.documentElement.style.setProperty('--card-align', align);
@@ -1202,26 +1189,40 @@ function openProfileModal() {
     const email = auth.currentUser?.email || 'default';
     const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${email}`) || '{}');
 
-    document.getElementById('profile-email-input').value = auth.currentUser?.email || 'Not available';
-    document.getElementById('profile-name-input').value = customProfile.name || auth.currentUser?.displayName || '';
-    document.getElementById('profile-phone-input').value = customProfile.phone || '';
-    document.getElementById('profile-address-input').value = customProfile.address || '';
-    document.getElementById('profile-district-input').value = customProfile.district || '';
+    const emailInput = document.getElementById('profile-email-input');
+    const nameInput = document.getElementById('profile-name-input');
+    const phoneInput = document.getElementById('profile-phone-input');
+    const addressInput = document.getElementById('profile-address-input');
+    const districtInput = document.getElementById('profile-district-input');
+
+    if(emailInput) emailInput.value = auth.currentUser?.email || 'Not available';
+    if(nameInput) nameInput.value = customProfile.name || auth.currentUser?.displayName || '';
+    if(phoneInput) phoneInput.value = customProfile.phone || '';
+    if(addressInput) addressInput.value = customProfile.address || '';
+    if(districtInput) districtInput.value = customProfile.district || '';
+
     openModal('user-profile-modal');
 }
 
 function saveUserProfileDetails() {
     const email = auth.currentUser?.email || 'default';
-    const name = document.getElementById('profile-name-input').value.trim();
-    const phone = document.getElementById('profile-phone-input').value.trim();
-    const address = document.getElementById('profile-address-input').value.trim();
-    const district = document.getElementById('profile-district-input').value.trim();
+    const name = document.getElementById('profile-name-input')?.value.trim() || '';
+    const phone = document.getElementById('profile-phone-input')?.value.trim() || '';
+    const address = document.getElementById('profile-address-input')?.value.trim() || '';
+    const district = document.getElementById('profile-district-input')?.value.trim() || '';
 
     const profileData = { name, phone, address, district };
     localStorage.setItem(`kuafi_user_profile_${email}`, JSON.stringify(profileData));
 
-    if (name) document.getElementById('google-user-name').innerText = name;
-    document.getElementById('profile-details-preview').innerText = `${name || 'User'} • ${phone || 'No phone'} • ${district || 'No district'}`;
+    const userNameEl = document.getElementById('google-user-name');
+    if (userNameEl && name) {
+        userNameEl.innerText = name;
+    }
+
+    const previewEl = document.getElementById('profile-details-preview');
+    if (previewEl) {
+        previewEl.innerText = `${name || 'User'} • ${phone || 'No phone'} • ${district || 'No district'}`;
+    }
 
     closeModal('user-profile-modal');
     showSyncToast('✓ Profile details saved successfully!');
@@ -1262,20 +1263,22 @@ function clearFavorites() {
 
 function clearNotes() {
     appState.scratchpad = '';
-    document.getElementById('quick-notes').value = '';
+    const notesEl = document.getElementById('quick-notes');
+    if(notesEl) notesEl.value = '';
     pushStateToCloud(true);
 }
 
 function openUserNotesModal() {
     const email = auth.currentUser?.email || 'guest';
     const savedNotes = localStorage.getItem(`kuafi_user_notes_${email}`) || '';
-    document.getElementById('user-private-notes-textarea').value = savedNotes;
+    const notesArea = document.getElementById('user-private-notes-textarea');
+    if(notesArea) notesArea.value = savedNotes;
     openModal('user-notes-modal');
 }
 
 function saveUserPrivateNotes() {
     const email = auth.currentUser?.email || 'guest';
-    const notes = document.getElementById('user-private-notes-textarea').value;
+    const notes = document.getElementById('user-private-notes-textarea')?.value || '';
     localStorage.setItem(`kuafi_user_notes_${email}`, notes);
     closeModal('user-notes-modal');
     showSyncToast('✓ Private notes saved locally!');
@@ -1331,9 +1334,7 @@ async function pushStateToCloud(showAlert = false) {
         try {
             await setDoc(hubDocRef, appState, { merge: true });
             syncedOk = true;
-        } catch (e) {
-            console.warn("Firestore write note:", e.message);
-        }
+        } catch (e) {}
     }
 
     try {
@@ -1393,7 +1394,6 @@ function closeModal(id) { document.getElementById(id)?.classList.remove('open');
 
 // ==========================================
 // EXPORT FUNCTIONS TO GLOBAL WINDOW
-// Required for HTML onclick attributes to work
 // ==========================================
 Object.assign(window, {
     toggleHeaderSearch, handleSearch, switchPage, toggleRearrangeMode,
