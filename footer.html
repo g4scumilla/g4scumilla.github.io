@@ -40,7 +40,7 @@
         padding: 6px 16px;
         border-radius: 16px;
         transition: all 0.2s;
-        text-decoration: none; /* In case anchor tags are used */
+        text-decoration: none;
     }
 
     .nav-item i {
@@ -72,3 +72,114 @@
         <span>Settings</span>
     </button>
 </nav>
+
+<!-- ==================== MODALS (Required for Admin Actions) ==================== -->
+
+<!-- MODAL: ADD / EDIT SERVICE CARD -->
+<div class="modal-backdrop" id="card-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span id="card-modal-title">Add Service Card</span>
+            <button class="card-ctrl-btn" onclick="closeModal('card-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="edit-card-id">
+        <div class="form-group">
+            <label>Card Title</label>
+            <input type="text" id="card-title-input" class="form-input" placeholder="e.g. Portfolio">
+        </div>
+        <div class="form-group">
+            <label>Subtitle</label>
+            <input type="text" id="card-sub-input" class="form-input" placeholder="e.g. Projects & Case Studies">
+        </div>
+        <div class="form-group">
+            <label>Target Link (URL)</label>
+            <input type="text" id="card-href-input" class="form-input" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <select id="card-cat-input" class="form-select"></select>
+        </div>
+        <div class="form-group">
+            <label>FontAwesome Icon Class</label>
+            <input type="text" id="card-icon-input" class="form-input" placeholder="fa-solid fa-rocket">
+        </div>
+        <div class="form-group" style="display:flex; gap:12px; align-items:center;">
+            <div style="flex:1;">
+                <label>Primary Color</label>
+                <input type="color" id="card-c1-input" class="form-input" value="#3ded97" style="height:38px; padding:2px;">
+            </div>
+            <div style="flex:1;">
+                <label>Secondary Color</label>
+                <input type="color" id="card-c2-input" class="form-input" value="#06b6d4" style="height:38px; padding:2px;">
+            </div>
+            <div style="padding-top:16px;">
+                <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-primary);">
+                    <input type="checkbox" id="card-live-input"> Mark as Live
+                </label>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('card-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveServiceCard()">Save & Sync</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: RECYCLE BIN -->
+<div class="modal-backdrop" id="recycle-bin-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Cloud Recycle Bin</span>
+            <button class="card-ctrl-btn" onclick="closeModal('recycle-bin-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="recycle-bin-list"></div>
+        <div class="modal-actions">
+            <button class="btn-action btn-danger" onclick="emptyRecycleBin()"><i class="fa-solid fa-fire"></i> Empty Bin</button>
+            <button class="btn-action" onclick="closeModal('recycle-bin-modal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: MANAGE / ADD CATEGORIES -->
+<div class="modal-backdrop" id="category-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-tags" style="color:var(--accent);"></i> Manage Filter Categories</span>
+            <button class="card-ctrl-btn" onclick="closeModal('category-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="category-manager-list" style="margin-bottom:14px;"></div>
+        <div style="border-top:1px solid var(--border-color); padding-top:12px;">
+            <div class="form-group">
+                <label>Add or Edit Category Name</label>
+                <input type="text" id="cat-label-input" class="form-input" placeholder="e.g. Cloud Tools">
+                <input type="hidden" id="cat-edit-key">
+            </div>
+            <div class="form-group">
+                <label>Category Filter Key (lowercase)</label>
+                <input type="text" id="cat-key-input" class="form-input" placeholder="e.g. cloud">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="resetDefaultCategories()">Restore Defaults</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveCategoryItem()">Save Category</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: PERSONAL USER NOTES -->
+<div class="modal-backdrop" id="user-notes-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span><i class="fa-solid fa-note-sticky" style="color:var(--accent);"></i> My Private Google Notes</span>
+            <button class="card-ctrl-btn" onclick="closeModal('user-notes-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="form-group">
+            <label>Private Notes (Saved only on your browser)</label>
+            <textarea id="user-private-notes-textarea" class="quick-note-area" placeholder="Write your private tasks or reminders here..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-action" onclick="closeModal('user-notes-modal')">Cancel</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserPrivateNotes()">Save Notes</button>
+        </div>
+    </div>
+</div>
