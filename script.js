@@ -635,7 +635,7 @@ function filterApps(filterKey, pillEl) {
     items.forEach(item => {
         const id = item.getAttribute('data-id');
         const cat = item.getAttribute('data-cat');
-        const isLive = item.getAttribute('data-live'] === 'true';
+        const isLive = item.getAttribute('data-live') === 'true'; // FIXED BRACKET TYPO HERE
         const isFav = (appState.favorites || []).includes(id);
 
         let show = false;
