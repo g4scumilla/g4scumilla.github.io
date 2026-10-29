@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical PDF Reader Pro</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Import Map for Firebase -->
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+        }
+    }
+    </script>
+
+    <!-- ==================== MERGED STYLES ==================== -->
+    <style>
+        /* --- 1. GLOBAL STYLE.CSS --- */
+        :root {
+            --bg-main: #080b12;
+            --bg-card: rgba(22, 29, 47, 0.65);
+            --bg-elevated: #151b2b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3ded97;
+            --accent-secondary: #06b6d4;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --danger: #f43f5e;
+            --app-max-width: 440px;
+            --viewer-width: 94%;
+        }
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: rgba(15, 23, 42, 0.18);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* --- 2. HEADER.CSS --- */
+        .app-global-header {
+            position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column;
+            background: rgba(8, 11, 18, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
+            flex-shrink: 0; 
+        }
+        body.light-mode .app-global-header { background: rgba(241, 245, 249, 0.85); box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08); }
+        .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
+        .header-left-group { display: flex; align-items: center; gap: 12px; }
+        .android-header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25); }
+        .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; }
+        .android-header-title a { color: inherit; text-decoration: none; }
+        .header-actions-right { display: flex; align-items: center; gap: 8px; }
+        .header-search-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .header-search-container.open { width: 170px; }
+        .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-size: 12px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .header-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(61, 237, 151, 0.05); }
+        .live-sync-indicator { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(61, 237, 151, 0.1); color: var(--accent); border: 1px solid rgba(61, 237, 151, 0.25); }
+        body.is-admin .live-sync-indicator { display: inline-flex; }
+        .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease, background 0.2s ease; }
+        .sync-dot.polling { transform: scale(1.6); box-shadow: 0 0 10px var(--accent); }
+        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px 12px 14px; cursor: pointer; overflow: hidden; transition: opacity 0.3s ease; width: 100%; }
+        .notice-update-label { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; z-index: 2; }
+        .header-notice-row.urgent .notice-update-label { color: var(--danger); }
+        .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
+        .header-notice-row.urgent .pulse-dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
+        .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; }
+        .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+        .header-notice-row.urgent .notice-marquee-text { color: var(--danger); }
+
+        /* --- 3. FOOTER.CSS --- */
+        .bottom-nav {
+            position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 28px); max-width: calc(var(--app-max-width, 440px) - 28px);
+            background: rgba(18, 25, 41, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px;
+            display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+        body.light-mode .bottom-nav { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1); }
+        .nav-item { background: none; border: none; color: var(--text-secondary); font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; padding: 6px 16px; border-radius: 16px; transition: all 0.2s; text-decoration: none; }
+        .nav-item i { font-size: 17px; }
+        .nav-item:hover { color: var(--text-primary); }
+        .nav-item.active { color: var(--accent); background: rgba(61, 237, 151, 0.1); }
+
+        /* --- 4. PDF READER SPECIFIC STYLES OVERRIDES --- */
+        body, html {
+            width: 100%; height: 100%;
+            background: var(--bg-main); background-image: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
+            color: var(--text-primary); overflow: hidden; user-select: none; margin: 0; padding: 0;
+        }
+        body.light-mode { background-image: radial-gradient(circle at top left, #e2e8f0, #f1f5f9 50%, #ffffff); }
+        .app-wrapper { display: flex; flex-direction: column; width: 100vw; height: 100vh; position: relative; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .top-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 18px; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12); z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0;
+        }
+        .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; font-family: 'Inter', sans-serif;}
+        .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
+
+        .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
+        .quick-input-bar:focus-within { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
+        .quick-input-bar input { background: transparent; border: none; color: var(--text-primary); font-size: 0.8rem; width: 100%; outline: none; font-family: 'Inter', sans-serif; }
+
+        .zoom-toolbar-pill { display: flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); padding: 4px 8px; border-radius: 10px; }
+        .zoom-btn { background: rgba(255, 255, 255, 0.07); border: 1px solid transparent; color: var(--text-primary); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
+        .zoom-btn:hover { background: #6366f1; transform: scale(1.05); }
+        .zoom-slider-inline { width: 85px; accent-color: #6366f1; cursor: pointer; height: 4px; }
+        .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; font-family: 'Inter', sans-serif;}
+        .zoom-badge:hover { background: #6366f1; }
+
+        .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-primary); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; font-family: 'Inter', sans-serif;}
+        .btn:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.25); }
+        .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
+        .btn-primary:hover { background: #818cf8; }
+        .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
+
+        /* Floating Components */
+        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); }
+        .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.16); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .floating-zoom-dock.minimized .dock-controls { display: none; }
+        .dock-controls { display: flex; align-items: center; gap: 8px; }
+        .toast { position: fixed; bottom: 85px; left: 30px; background: rgba(16, 185, 129, 0.95); backdrop-filter: blur(10px); color: white; padding: 12px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 9999; transform: translateY(150px); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Main Workspace */
+        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
+        .workspace.edge-to-edge { padding: 0; padding-bottom: 85px; }
+        .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
+        .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
+        .pdf-card.minimized { height: 46px !important; width: 480px !important; border-radius: 14px; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid rgba(255, 255, 255, 0.12); font-size: 0.8rem; color: var(--text-secondary); flex-shrink: 0; font-family: 'Inter', sans-serif;}
+        .window-dots { display: flex; gap: 8px; align-items: center; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
+        .dot:hover { transform: scale(1.2); }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+        .dot.purple { background: #6366f1; }
+
+        .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow: auto; background: #0f172a; scroll-behavior: auto; }
+        .iframe-wrapper::-webkit-scrollbar { height: 10px; width: 10px;}
+        .iframe-wrapper::-webkit-scrollbar-track { background: #0f172a; }
+        .iframe-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
+        .iframe-wrapper::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+        .zoom-stage { width: 100%; height: 100%; position: relative; transform-origin: center center; transition: transform 0.3s ease; }
+        iframe { width: 100%; height: 100%; border: none; display: block; transition: filter 0.25s ease; }
+
+        /* Loader */
+        .loader-overlay { position: absolute; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; z-index: 10; transition: opacity 0.4s ease; }
+        .loader-overlay.hidden { opacity: 0; pointer-events: none; }
+        .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Side Drawers */
+        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;}
+        .side-drawer.open { transform: translateX(0); }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); font-weight: 600; font-size: 0.95rem; }
+        .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; }
+        .text-input { width: 100%; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; }
+        .text-input:focus { border-color: #6366f1; }
+        .saved-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
+        .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .saved-item:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(30, 41, 59, 0.9); }
+        .saved-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; flex: 1; margin-right: 8px; }
+        .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; display: flex; align-items: center; }
+        .saved-item-id { font-size: 0.7rem; color: #6366f1; font-weight: 500;}
+        .icon-btn { background: rgba(255, 255, 255, 0.06); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.15); }
+        .icon-btn.delete:hover { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
+        .control-row { margin-bottom: 15px; }
+        .control-row label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+        input[type="range"] { width: 100%; accent-color: #6366f1; cursor: pointer; }
+        .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; color: var(--text-primary); padding: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
+
+        @media (max-width: 768px) {
+            .top-toolbar { padding: 8px 10px; flex-direction: column; max-height: 160px; }
+            .workspace { padding: 4px; padding-bottom: 85px; }
+            :root { --viewer-width: 100%; }
+            .btn span { display: none; }
+            .side-drawer { width: calc(100vw - 24px); right: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Pill to Expand Toolbar -->
+    <button class="toolbar-toggle-pill" id="expandToolbarBtn" onclick="window.toggleToolbar()">
+        <i class="fa-solid fa-sliders"></i> Show Controls
+    </button>
+
+    <!-- Floating Zoom Dock -->
+    <div class="floating-zoom-dock" id="floatingZoomDock">
+        <button class="zoom-btn" onclick="window.toggleZoomDock()" title="Collapse/Expand Zoom Bar">
+            <i class="fa-solid fa-magnifying-glass" id="dockToggleIcon"></i>
+        </button>
+        <div class="dock-controls">
+            <button class="zoom-btn" onclick="window.stepZoom(-15)" title="Zoom Out (-)"><i class="fa-solid fa-minus"></i></button>
+            <span class="zoom-badge" id="dockZoomBadge" onclick="window.animateZoomTo(100)" title="Click to Reset to 100%">100%</span>
+            <button class="zoom-btn" onclick="window.stepZoom(15)" title="Zoom In (+)"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">Action Successful!</span>
+    </div>
+
+    <div class="app-wrapper">
+
+        <!-- ================= HEADER HTML ================= -->
+        <header class="app-global-header">
+            <div class="header-main-row">
+                <div class="header-left-group">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="android-header-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+                    <span class="android-header-title"> <a href="index.html">Abdullahil Kuafi </a> </span>
+                </div>
+                <div class="header-actions-right">
+                    <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                        <span class="sync-dot" id="live-sync-dot"></span>
+                        <span id="live-sync-text">Live</span>
+                    </span>
+                    <div class="header-search-container" id="header-search-container">
+                        <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
+                    </div>
+                    <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-notice-row" id="home-notice-showcase" onclick="switchPage('notices')">
+                <div class="notice-update-label">
+                    <span class="pulse-dot"></span> Update:
+                </div>
+                <div class="notice-marquee-container">
+                    <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                        Welcome to Abdullahil Kuafi's Smart Cloud Hub!
+                    </marquee>
+                </div>
+            </div>
+        </header>
+
+        <!-- PDF Top Control Bar -->
+        <div class="top-toolbar" id="topToolbar">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
+                <div style="line-height: 1.1;">
+                    <div>PDF Studio Pro</div>
+                    <small style="color: var(--text-secondary); font-size: 0.7rem;">Smooth Zoom Reader</small>
+                </div>
+            </div>
+
+            <!-- Instant Link Paste Bar -->
+            <div class="quick-input-bar">
+                <i class="fa-solid fa-link" style="color: #818cf8; margin-right: 8px;"></i>
+                <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') window.saveQuickLink()">
+                <button class="btn btn-primary btn-sm" onclick="window.saveQuickLink()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+            </div>
+
+            <div class="zoom-toolbar-pill">
+                <button class="zoom-btn" onclick="window.stepZoom(-15)" title="Smooth Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                <input type="range" class="zoom-slider-inline" id="topZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)">
+                <span class="zoom-badge" id="topZoomBadge" onclick="window.animateZoomTo(100)">100%</span>
+                <button class="zoom-btn" onclick="window.stepZoom(15)" title="Smooth Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            </div>
+
+            <div class="controls-group">
+                <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn"><i class="fa-solid fa-toolbox"></i> <span>Saved PDFs</span></button>
+                <button class="btn" onclick="window.toggleMinimizePDF()"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
+                <button class="btn" onclick="window.toggleEdgeToEdge()"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
+                <button class="btn" onclick="window.rotatePDF()"><i class="fa-solid fa-rotate-right"></i></button>
+                <button class="btn" onclick="window.toggleDrawer('displayDrawer')"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>Filters</span></button>
+                <button class="btn" onclick="window.toggleDrawer('notesDrawer')"><i class="fa-solid fa-pen-to-square"></i> <span>Notes</span></button>
+                <button class="btn" onclick="window.toggleFullScreen()"><i class="fa-solid fa-expand" id="fsIcon"></i></button>
+                <button class="btn" onclick="window.toggleToolbar()"><i class="fa-solid fa-chevron-up"></i></button>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <main class="workspace" id="workspace">
+            <div class="pdf-card" id="pdfCard">
+                <div class="card-header">
+                    <div class="window-dots">
+                        <div class="dot yellow" onclick="window.toggleMinimizePDF()"></div>
+                        <div class="dot green" onclick="window.toggleEdgeToEdge()"></div>
+                        <div class="dot purple" onclick="window.toggleToolbar()"></div>
+                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Loading Library...</span>
+                    </div>
+                    <div style="font-size: 0.75rem;"><span id="headerZoomReadout">Zoom: 100%</span></div>
+                </div>
+
+                <div class="iframe-wrapper" id="iframeWrapper">
+                    <div class="loader-overlay" id="loader">
+                        <div class="spinner"></div>
+                        <span style="font-size: 0.9rem; color: var(--text-secondary);">Loading your PDF preview...</span>
+                    </div>
+                    <div class="zoom-stage" id="zoomStage">
+                        <iframe id="pdfFrame" src="" allow="autoplay" onload="window.hideLoader()" title="PDF Document Viewer"></iframe>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Drawers -->
+    <aside class="side-drawer" id="noticesDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: #6366f1;"></i> Recent Notices</span><button class="btn btn-sm" onclick="window.toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 30px;">
+            <i class="fa-regular fa-bell-slash" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>You have no new notifications right now.</p>
+        </div>
+    </aside>
+
+    <aside class="side-drawer" id="settingsDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: #6366f1;"></i> App Settings</span><button class="btn btn-sm" onclick="window.toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 30px;">
+            <i class="fa-solid fa-sliders" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>Preferences configuration will appear here.</p>
+        </div>
+    </aside>
+
+    <!-- PDF Library Drawer -->
+    <aside class="side-drawer" id="libraryDrawer">
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span>
+            <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <input type="hidden" id="editPdfId" value="">
+
+        <!-- Breadcrumbs / Folder Nav -->
+        <div id="libraryBreadcrumb" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <span id="currentFolderName"><i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library</span>
+            <button class="btn btn-sm" onclick="window.createNewFolder()" title="Create New Folder"><i class="fa-solid fa-folder-plus"></i></button>
+        </div>
+
+        <div class="input-group"><label>PDF Name / Title (Optional)</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
+        <div class="input-group"><label>PDF Link (or File ID)</label><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view"></div>
+
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()">
+            <i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Here</span>
+        </button>
+
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
+            <span>Saved Items (<span id="savedCount">0</span>)</span>
+        </div>
+
+        <!-- Dynamic list of Folders and PDFs will render here -->
+        <div class="saved-list" id="savedListContainer">
+            <div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Loading Library...</div>
+        </div>
+    </aside>
+
+    <aside class="side-drawer" id="displayDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-sliders" style="color: #6366f1;"></i> Zoom & Reading Comfort</span><button class="btn btn-sm" onclick="window.toggleDrawer('displayDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="control-row"><label><span>Smooth PDF Zoom</span> <span id="drawerZoomVal">100%</span></label><input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)"></div>
+        <div class="preset-grid">
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(75)">75%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(100)">100%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(125)">125%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(150)">150%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(175)">175%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(200)">200%</button>
+        </div>
+        <div class="control-row"><label><span>Viewer Card Width</span> <span id="widthVal">94%</span></label><input type="range" id="widthSlider" min="50" max="100" value="94" oninput="window.updateWidth(this.value)"></div>
+        <div class="control-row"><label><span>Brightness</span> <span id="brightVal">100%</span></label><input type="range" id="brightSlider" min="50" max="130" value="100" oninput="window.applyFilters()"></div>
+        <div class="control-row"><label><span>Contrast</span> <span id="contrastVal">100%</span></label><input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="window.applyFilters()"></div>
+        <div class="control-row"><label><span>Warm Sepia (Eye Care)</span> <span id="sepiaVal">0%</span></label><input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="window.applyFilters()"></div>
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="window.toggleInvert()"><i class="fa-solid fa-moon"></i> Invert Dark</button>
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="window.resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset All</button>
+        </div>
+    </aside>
+
+    <aside class="side-drawer" id="notesDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-pen-nib" style="color: #6366f1;"></i> Quick Reading Notes</span><button class="btn btn-sm" onclick="window.toggleDrawer('notesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways while reading... (Auto-saved permanently in browser)"></textarea>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="window.downloadNotes()"><i class="fa-solid fa-file-arrow-down"></i> Save .txt</button>
+            <button class="btn" onclick="window.clearNotes()" title="Clear Notes"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </aside>
+
+    <!-- ================= FOOTER HTML ================= -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" id="nav-notices" onclick="switchPage('notices')">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>Notices</span>
+        </button>
+        <button class="nav-item" id="nav-tools" onclick="switchPage('tools')">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- ================= FIREBASE / CLOUD SYNC MODULE ================= -->
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+            authDomain: "my-project-1-13e18.firebaseapp.com",
+            projectId: "my-project-1-13e18",
+            storageBucket: "my-project-1-13e18.firebasestorage.app",
+            messagingSenderId: "628695847732",
+            appId: "1:628695847732:web:03af3d8569762d29ce0b61"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        let db = null;
+        let hubDocRef = null;
+        try {
+            db = getFirestore(app);
+            hubDocRef = doc(db, "kuafi_hub", "global_state");
+        } catch (e) { console.warn("Firestore warning:", e); }
+
+        const FIREBASE_RTDB_REST_URL = `https://${firebaseConfig.projectId}-default-rtdb.firebaseio.com/kuafi_hub_global.json`;
+        const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
+        const THEME_STORAGE_KEY = 'kuafi_theme_mode';
+
+        // Updated global state to hold Folders & Default PDF Memory
+        let appState = {
+            updatedAt: 0, 
+            adminPin: '1234',
+            savedFolders: [], 
+            savedPDFs: [],    
+            defaultPdfId: null, // NEW: Cloud memory for the explicitly pinned default PDF
+            notices: [{ text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }]
+        };
+
+        let initialLoadDone = false; // Tracks if we've successfully booted up once
+
+        function isUserActivelyEditingForm() {
+            return document.querySelector('.modal-backdrop.open') !== null || (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'));
+        }
+
+        function applyCloudStateToUI(incomingState, forceRender = false) {
+            if (!incomingState || typeof incomingState !== 'object') return;
+            const incomingTime = Number(incomingState.updatedAt || 0);
+            const localTime = Number(appState.updatedAt || 0);
+            if (!forceRender && incomingTime > 0 && incomingTime <= localTime) return;
+
+            appState = { ...appState, ...incomingState };
+            window.appState = appState;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+
+            updateHomeNoticeShowcase();
+            if (typeof window.renderSavedPDFs === 'function') window.renderSavedPDFs();
+
+            // --- NEW: AUTO LOAD PDF ON VERY FIRST STARTUP ---
+            if (!initialLoadDone) {
+                initialLoadDone = true;
+                if (typeof window.autoLoadPDF === 'function') {
+                    window.autoLoadPDF();
+                }
+            }
+        }
+
+        function updateHomeNoticeShowcase() {
+            const notices = appState.notices || [];
+            const showcaseText = document.getElementById('home-notice-text');
+            if (showcaseText && notices.length > 0) showcaseText.innerText = notices[0].text;
+        }
+
+        async function pushStateToCloud(showAlert = false) {
+            appState.updatedAt = Date.now();
+            window.appState = appState;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+
+            if (hubDocRef) {
+                try { await setDoc(hubDocRef, appState, { merge: true }); } catch (e) {}
+            }
+            try {
+                await fetch(FIREBASE_RTDB_REST_URL, {
+                    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(appState)
+                });
+            } catch (e) {}
+
+            if (showAlert && typeof window.showToast === 'function') {
+                window.showToast("Cloud Sync Complete!");
+            }
+        }
+
+        async function syncData(manual = false) {
+            let latestCloudData = null;
+            if (hubDocRef) {
+                try { const snap = await getDoc(hubDocRef); if (snap.exists()) latestCloudData = snap.data(); } catch (e) {}
+            }
+            try {
+                const res = await fetch(FIREBASE_RTDB_REST_URL, { cache: 'no-store' });
+                if (res.ok) {
+                    const rtdbData = await res.json();
+                    if (rtdbData && Number(rtdbData.updatedAt || 0) > Number(latestCloudData?.updatedAt || 0)) {
+                        latestCloudData = rtdbData;
+                    }
+                }
+            } catch (e) {}
+            if (latestCloudData) applyCloudStateToUI(latestCloudData, manual);
+        }
+
+        async function initApp() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+            document.body.classList.toggle('light-mode', savedTheme === 'light');
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { appState = { ...appState, ...JSON.parse(saved) }; } catch (e) {}
+            }
+
+            if (!appState.savedFolders) appState.savedFolders = [];
+            window.appState = appState; 
+
+            if (hubDocRef) {
+                onSnapshot(hubDocRef, (snap) => {
+                    if (snap.exists() && !isUserActivelyEditingForm()) {
+                        applyCloudStateToUI(snap.data());
+                    }
+                });
+            }
+            syncData(true);
+            setInterval(() => {
+                if (!document.hidden && !isUserActivelyEditingForm()) syncData(false);
+            }, 4500);
+        }
+
+        Object.assign(window, { syncData, pushStateToCloud });
+
+        initApp();
+    </script>
+
+    <!-- ================= PDF READER LOGIC (UI, Zoom, FOLDERS, MEMORY, CRUD) ================= -->
+    <script>
+        window.hideLoader = function() {
+            const loader = document.getElementById('loader');
+            if (loader) loader.classList.add('hidden');
+        };
+
+        window.formatPdfUrl = function(url) {
+            if (url.includes('drive.google.com')) {
+                return url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview');
+            }
+            return url;
+        };
+
+        // FOLDER NAVIGATION STATE
+        window.currentFolderId = null;
+
+        // HELPER: Generates the HTML for a single PDF item (Now with "Default" badge and Set Default button)
+        function generatePdfHtml(pdf) {
+            const isDefault = window.appState.defaultPdfId === pdf.id;
+
+            return `
+                <div class="saved-item">
+                    <div class="saved-item-info" onclick="window.loadPDF('${pdf.id}')">
+                        <div class="saved-item-title">
+                            <i class="fa-solid fa-file-pdf" style="color: #f43f5e; margin-right: 6px;"></i>${pdf.title}
+                            ${isDefault ? '<span style="margin-left:8px; font-size:0.65rem; background:var(--accent); color:#000; padding:2px 6px; border-radius:4px; font-weight:700;">Default</span>' : ''}
+                        </div>
+                        <div class="saved-item-id" style="display:flex; align-items:center; gap:4px; margin-top:2px;">
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i> Click to Read
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:4px;">
+                        <button class="icon-btn" onclick="window.setDefaultPDF('${pdf.id}')" title="Set as Default"><i class="fa-solid fa-thumbtack" ${isDefault ? 'style="color:#3ded97;"' : ''}></i></button>
+                        <button class="icon-btn" onclick="window.editSavedPDF('${pdf.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-btn delete" onclick="window.deleteSavedPDF('${pdf.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.renderSavedPDFs = function() {
+            const container = document.getElementById('savedListContainer');
+            const countEl = document.getElementById('savedCount');
+            const breadcrumbText = document.getElementById('currentFolderName');
+
+            const pdfs = window.appState?.savedPDFs || [];
+            const folders = window.appState?.savedFolders || [];
+
+            let html = '';
+            let itemCount = 0;
+
+            if (window.currentFolderId) {
+                // INSIDE A FOLDER
+                const currentFolder = folders.find(f => f.id === window.currentFolderId);
+                breadcrumbText.innerHTML = `<button class="btn btn-sm" style="display:inline-flex; width:auto; padding:4px 8px; font-size:0.75rem; margin-right:8px;" onclick="window.goBackToRoot()"><i class="fa-solid fa-arrow-left"></i> Back</button> ${currentFolder ? currentFolder.name : 'Unknown Folder'}`;
+
+                const folderPdfs = pdfs.filter(p => p.folderId === window.currentFolderId);
+                itemCount = folderPdfs.length;
+
+                if (itemCount === 0) {
+                    html += '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">This folder is empty. Use the form above to add a PDF here!</div>';
+                } else {
+                    html += folderPdfs.map(pdf => generatePdfHtml(pdf)).join('');
+                }
+            } else {
+                // ROOT LIBRARY
+                breadcrumbText.innerHTML = `<i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library`;
+
+                const rootPdfs = pdfs.filter(p => !p.folderId);
+                itemCount = folders.length + rootPdfs.length;
+
+                if (folders.length > 0) {
+                    html += folders.map(folder => `
+                        <div class="saved-item" style="border-left: 3px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+                            <div class="saved-item-info" onclick="window.openFolder('${folder.id}')">
+                                <div class="saved-item-title" style="display:flex; align-items:center; gap:8px;">
+                                    <i class="fa-solid fa-folder" style="color: #6366f1; font-size: 1.1rem;"></i> ${folder.name}
+                                </div>
+                                <div class="saved-item-id">${pdfs.filter(p => p.folderId === folder.id).length} PDFs inside</div>
+                            </div>
+                            <div style="display:flex; gap:4px;">
+                                <button class="icon-btn delete" onclick="window.deleteFolder('${folder.id}')" title="Delete Folder & Contents"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                if (rootPdfs.length > 0) {
+                    html += rootPdfs.map(pdf => generatePdfHtml(pdf)).join('');
+                }
+
+                if (itemCount === 0) {
+                    html += '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">No items saved yet. Create a folder or add a PDF!</div>';
+                }
+            }
+
+            if (countEl) countEl.innerText = itemCount;
+            container.innerHTML = html;
+        };
+
+        // FOLDER ACTIONS
+        window.createNewFolder = function() {
+            const name = prompt("Enter a name for the new folder:");
+            if (!name || !name.trim()) return;
+
+            if (!window.appState.savedFolders) window.appState.savedFolders = [];
+            window.appState.savedFolders.push({ id: 'folder-' + Date.now(), name: name.trim() });
+
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Folder Created!");
+        };
+
+        window.openFolder = function(id) { window.currentFolderId = id; window.renderSavedPDFs(); };
+        window.goBackToRoot = function() { window.currentFolderId = null; window.renderSavedPDFs(); };
+
+        window.deleteFolder = function(id) {
+            if (!confirm("⚠️ WARNING: Are you sure you want to delete this folder? ALL PDFs inside it will be permanently deleted!")) return;
+            window.appState.savedFolders = window.appState.savedFolders.filter(f => f.id !== id);
+            window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.folderId !== id);
+
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Folder and its contents deleted");
+        };
+
+        // PDF CRUD ACTIONS & MEMORY LOGIC
+        window.setDefaultPDF = function(id) {
+            window.appState.defaultPdfId = id;
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Set as Default PDF!");
+        };
+
+        window.addAndSavePDF = function() {
+            const titleInput = document.getElementById('pdfTitleInput');
+            const urlInput = document.getElementById('pdfUrlInput');
+            const editIdInput = document.getElementById('editPdfId');
+
+            let title = titleInput.value.trim();
+            let url = urlInput.value.trim();
+
+            if (!url) return alert("Please enter a valid PDF link.");
+            if (!title) title = "Untitled Document";
+
+            url = window.formatPdfUrl(url);
+
+            if (!window.appState) return;
+            if (!window.appState.savedPDFs) window.appState.savedPDFs = [];
+
+            const editId = editIdInput.value;
+            let newlyCreatedId = null;
+
+            if (editId) {
+                const idx = window.appState.savedPDFs.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    const existingFolderId = window.appState.savedPDFs[idx].folderId;
+                    window.appState.savedPDFs[idx] = { id: editId, title, url, folderId: existingFolderId };
+                    newlyCreatedId = editId;
+                    window.showToast("PDF Updated Successfully!");
+                }
+            } else {
+                newlyCreatedId = 'pdf-' + Date.now();
+                window.appState.savedPDFs.push({ 
+                    id: newlyCreatedId, 
+                    title, 
+                    url, 
+                    folderId: window.currentFolderId 
+                });
+
+                // If it's the very first PDF they ever add, make it the default automatically
+                if (window.appState.savedPDFs.length === 1) {
+                    window.appState.defaultPdfId = newlyCreatedId;
+                }
+                window.showToast("PDF Saved Permanently!");
+            }
+
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+
+            // Load it and save memory
+            window.loadPDF(newlyCreatedId, true); // true = don't toggle drawer since we will do it below if we want
+
+            titleInput.value = '';
+            urlInput.value = '';
+            editIdInput.value = '';
+            document.getElementById('savePdfBtnText').innerText = "Preview & Save Here";
+            window.renderSavedPDFs();
+        };
+
+        window.editSavedPDF = function(id) {
+            const pdf = window.appState.savedPDFs.find(p => p.id === id);
+            if (!pdf) return;
+
+            document.getElementById('pdfTitleInput').value = pdf.title;
+            document.getElementById('pdfUrlInput').value = pdf.url;
+            document.getElementById('editPdfId').value = pdf.id;
+            document.getElementById('savePdfBtnText').innerText = "Update PDF";
+        };
+
+        window.deleteSavedPDF = function(id) {
+            if (!confirm("Are you sure you want to delete this PDF from your Library?")) return;
+            window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.id !== id);
+
+            if (window.appState.defaultPdfId === id) {
+                window.appState.defaultPdfId = null; // Clear default if it was deleted
+            }
+
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("PDF Deleted");
+        };
+
+        // Modified Load PDF to save to browser's LocalStorage memory
+        window.loadPDF = function(id, preventDrawerToggle = false) {
+            const pdf = window.appState.savedPDFs.find(p => p.id === id);
+            if (!pdf) return;
+
+            document.getElementById('loader').classList.remove('hidden'); 
+            document.getElementById('pdfFrame').src = pdf.url;
+            document.getElementById('docTitleDisplay').innerText = pdf.title;
+
+            // Save to memory "Where I left off"
+            localStorage.setItem('kuafi_last_pdf_id', id);
+
+            if (!preventDrawerToggle) {
+                window.toggleDrawer('libraryDrawer');
+            }
+        };
+
+        // NEW: AUTO LOAD MEMORY OR DEFAULT PDF
+        window.autoLoadPDF = function() {
+            const lastId = localStorage.getItem('kuafi_last_pdf_id');
+            const defaultId = window.appState.defaultPdfId;
+            const pdfs = window.appState.savedPDFs || [];
+
+            let targetId = null;
+            // 1. Check Memory
+            if (lastId && pdfs.find(p => p.id === lastId)) {
+                targetId = lastId;
+            } 
+            // 2. Fallback to pinned Default
+            else if (defaultId && pdfs.find(p => p.id === defaultId)) {
+                targetId = defaultId;
+            }
+
+            if (targetId) {
+                window.loadPDF(targetId, true); // true = prevents drawer from toggling randomly on boot
+            } else {
+                // If brand new user with no memory and no default, just let the hardcoded PDF load
+                document.getElementById('docTitleDisplay').innerText = "Advanced Engineering Mathematics.pdf";
+            }
+        };
+
+        window.saveQuickLink = function() {
+            const input = document.getElementById('quickUrlInput');
+            if (!input.value.trim()) return alert('Paste a link first!');
+            document.getElementById('pdfUrlInput').value = input.value;
+            document.getElementById('pdfTitleInput').value = 'Quick Saved PDF';
+            window.addAndSavePDF();
+            input.value = '';
+        };
+
+        // --- UI & ZOOM CONTROLS --- //
+        let currentZoom = 100;
+        let currentRotation = 0;
+        let isMinimized = false;
+        let isEdgeToEdge = false;
+        let isToolbarHidden = false;
+        let isInverted = false;
+
+        window.toggleDrawer = function(drawerId) {
+            document.querySelectorAll('.side-drawer').forEach(d => { if(d.id !== drawerId) d.classList.remove('open'); });
+            const drawer = document.getElementById(drawerId);
+            if(drawer) drawer.classList.toggle('open');
+
+            if (drawerId === 'libraryDrawer') {
+                document.getElementById('pdfTitleInput').value = '';
+                document.getElementById('pdfUrlInput').value = '';
+                document.getElementById('editPdfId').value = '';
+                document.getElementById('savePdfBtnText').innerText = "Preview & Save Here";
+            }
+        };
+
+        window.updateZoomUI = function() {
+            const stage = document.getElementById('zoomStage');
+            const scale = currentZoom / 100;
+            if(stage) {
+                stage.style.transformOrigin = 'center center';
+                let shift = scale > 1 ? ((scale - 1) / 2) * 100 : 0;
+                stage.style.transform = `translate(${shift}%, ${shift}%) scale(${scale}) rotate(${currentRotation}deg)`;
+            }
+            ['topZoomSlider', 'drawerZoomSlider'].forEach(id => { const el = document.getElementById(id); if(el) el.value = currentZoom; });
+            ['topZoomBadge', 'dockZoomBadge', 'drawerZoomVal', 'headerZoomReadout'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = currentZoom + '%'; });
+        };
+
+        window.setZoomImmediate = function(val) { currentZoom = parseInt(val); window.updateZoomUI(); };
+        window.stepZoom = function(delta) { currentZoom += delta; if(currentZoom < 50) currentZoom = 50; if(currentZoom > 250) currentZoom = 250; window.updateZoomUI(); };
+        window.animateZoomTo = function(val) { currentZoom = val; window.updateZoomUI(); };
+        window.rotatePDF = function() { currentRotation = (currentRotation + 90) % 360; window.updateZoomUI(); };
+        window.toggleMinimizePDF = function() { const card = document.getElementById('pdfCard'); isMinimized = !isMinimized; if(isMinimized) card.classList.add('minimized'); else card.classList.remove('minimized'); };
+        window.toggleEdgeToEdge = function() { const ws = document.getElementById('workspace'); isEdgeToEdge = !isEdgeToEdge; if(isEdgeToEdge) ws.classList.add('edge-to-edge'); else ws.classList.remove('edge-to-edge'); };
+        window.toggleToolbar = function() { const tb = document.getElementById('topToolbar'); const pill = document.getElementById('expandToolbarBtn'); isToolbarHidden = !isToolbarHidden; if(isToolbarHidden) { tb.classList.add('collapsed'); pill.classList.add('visible'); } else { tb.classList.remove('collapsed'); pill.classList.remove('visible'); } };
+        window.toggleZoomDock = function() { const dock = document.getElementById('floatingZoomDock'); const icon = document.getElementById('dockToggleIcon'); dock.classList.toggle('minimized'); if(dock.classList.contains('minimized')) icon.classList.replace('fa-magnifying-glass', 'fa-up-right-and-down-left-from-center'); else icon.classList.replace('fa-up-right-and-down-left-from-center', 'fa-magnifying-glass'); };
+        window.toggleFullScreen = function() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
+
+        window.applyFilters = function() {
+            const bright = document.getElementById('brightSlider').value;
+            const contrast = document.getElementById('contrastSlider').value;
+            const sepia = document.getElementById('sepiaSlider').value;
+            document.getElementById('brightVal').innerText = bright + '%'; document.getElementById('contrastVal').innerText = contrast + '%'; document.getElementById('sepiaVal').innerText = sepia + '%';
+            let filterString = `brightness(${bright}%) contrast(${contrast}%) sepia(${sepia}%)`;
+            if (isInverted) filterString += ' invert(90%) hue-rotate(180deg)';
+            document.getElementById('pdfFrame').style.filter = filterString;
+        };
+        window.toggleInvert = function() { isInverted = !isInverted; window.applyFilters(); };
+        window.resetFilters = function() { document.getElementById('brightSlider').value = 100; document.getElementById('contrastSlider').value = 100; document.getElementById('sepiaSlider').value = 0; isInverted = false; window.applyFilters(); };
+        window.updateWidth = function(val) { document.getElementById('widthVal').innerText = val + '%'; document.documentElement.style.setProperty('--viewer-width', val + '%'); };
+        window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); };
+        window.clearNotes = function() { if(confirm("Clear notes?")) document.getElementById('notesInput').value = ''; };
+        window.downloadNotes = function() { const text = document.getElementById('notesInput').value; if(!text) return alert("Notes are empty!"); const blob = new Blob([text], {type: "text/plain"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "Reading_Notes.txt"; a.click(); URL.revokeObjectURL(url); };
+
+        // --- SMART ROUTING INTERCEPTORS ---
+        window.switchPage = function(pageId) {
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+            const navBtn = document.getElementById('nav-' + pageId);
+            if (navBtn) navBtn.classList.add('active');
+
+            if (pageId === 'notices') window.toggleDrawer('noticesDrawer');
+            else if (pageId === 'tools' || pageId === 'settings') window.toggleDrawer('settingsDrawer');
+            else window.location.href = 'index.html#' + pageId; 
+        };
+        window.goHomeWithFav = function() { window.location.href = 'index.html'; };
+
+        setTimeout(window.renderSavedPDFs, 1000);
+    </script>
+</body>
+</html>
