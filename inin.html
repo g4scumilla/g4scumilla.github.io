@@ -228,9 +228,9 @@
             </div>
 
             <div class="controls-group">
-                <!-- UPDATED: Standard buttons to prevent page redirects -->
-                <button class="btn" title="Notices"><i class="fa-solid fa-bell"></i> <span>Notices</span></button>
-                <button class="btn" title="Settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></button>
+                <!-- NOW THESE PROPERLY OPEN SLIDING PANELS ON THE SAME PAGE -->
+                <button class="btn" onclick="toggleDrawer('noticesDrawer')" id="noticesBtn" title="Notices"><i class="fa-solid fa-bell"></i> <span>Notices</span></button>
+                <button class="btn" onclick="toggleDrawer('settingsDrawer')" id="settingsBtn" title="Settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></button>
                 
                 <button class="btn btn-primary" onclick="toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs"><i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span></button>
                 <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
@@ -271,6 +271,25 @@
     </div>
 
     <!-- Drawers -->
+
+    <!-- NEW: Notices Drawer -->
+    <aside class="side-drawer" id="noticesDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: var(--accent);"></i> Recent Notices</span><button class="btn btn-sm" onclick="toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
+            <i class="fa-regular fa-bell-slash" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>You have no new notifications right now.</p>
+        </div>
+    </aside>
+
+    <!-- NEW: Settings Drawer -->
+    <aside class="side-drawer" id="settingsDrawer">
+        <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: var(--accent);"></i> App Settings</span><button class="btn btn-sm" onclick="toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
+            <i class="fa-solid fa-sliders" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>Preferences and settings configuration will appear here.</p>
+        </div>
+    </aside>
+
     <aside class="side-drawer" id="libraryDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-bookmark" style="color: var(--accent);"></i> Add & Save PDF Link</span><button class="btn btn-sm" onclick="toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div class="input-group"><label>PDF Name / Title (Optional)</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
