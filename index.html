@@ -209,6 +209,99 @@
             </div>
         </div>
 
+        <!-- Live Grid Customizer (15 Options for Style & Layout) -->
+        <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
+            <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>1. Card Grid Columns</h4>
+                    <p>Select number of columns (2, 3, or 4)</p>
+                </div>
+                <select id="grid-cols-select" class="form-select" style="max-width:140px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="2">2 Columns</option>
+                    <option value="3" selected>3 Columns</option>
+                    <option value="4">4 Columns</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>2. Card UI Style (15 Options)</h4>
+                    <p>Choose visual theme look for service cards</p>
+                </div>
+                <select id="grid-style-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Modern Glass</option>
+                    <option value="2">2. Neon Glow</option>
+                    <option value="3">3. Ultra Rounded</option>
+                    <option value="4">4. Gradient Border</option>
+                    <option value="5">5. Minimal Flat</option>
+                    <option value="6">6. Deep Floating</option>
+                    <option value="7">7. Executive</option>
+                    <option value="8">8. Cyberpunk</option>
+                    <option value="9">9. Soft Pastel</option>
+                    <option value="10">10. Frosted Tile</option>
+                    <option value="11">11. High Contrast</option>
+                    <option value="12">12. Outline Modern</option>
+                    <option value="13">13. Pill Shaped</option>
+                    <option value="14">14. Velvet Dark</option>
+                    <option value="15">15. Classic Grid</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>3. Card Grid Layout (15 Options)</h4>
+                    <p>Choose structural padding and alignment</p>
+                </div>
+                <select id="grid-layout-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
+                    <option value="1">1. Standard Balanced</option>
+                    <option value="2">2. Compact Dense</option>
+                    <option value="3">3. Spaced Airy</option>
+                    <option value="4">4. Centered Alignment</option>
+                    <option value="5">5. Border-Framed</option>
+                    <option value="6">6. Shadow-Lifted</option>
+                    <option value="7">7. Floating Island</option>
+                    <option value="8">8. Rounded Capsule</option>
+                    <option value="9">9. Minimal Flat</option>
+                    <option value="10">10. Glowing Accent</option>
+                    <option value="11">11. Dual Gradient</option>
+                    <option value="12">12. Borderless Clean</option>
+                    <option value="13">13. Elevated Card</option>
+                    <option value="14">14. Sharp Geometric</option>
+                    <option value="15">15. Fluid Auto-Fit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Admin Management & Sync (Includes Logout Admin) -->
+        <div class="tools-section-card admin-only">
+            <div class="section-label">
+                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & Sync</span>
+                <span id="cloud-status-pill" style="font-size: 10px; color: var(--accent);">Firebase Active ✓</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Force Broadcast Sync</h4>
+                    <p>Instantly broadcast current layout to all active visitors</p>
+                </div>
+                <button class="btn-action" onclick="pushStateToCloud(true)">
+                    <i class="fa-solid fa-satellite-dish"></i> Broadcast Now
+                </button>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Logout from Admin</h4>
+                    <p>Switch back to General Visitor view</p>
+                </div>
+                <button class="btn-action btn-danger" onclick="logoutAdmin()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout Admin
+                </button>
+            </div>
+        </div>
+
         <div class="bottom-safe-spacer"></div>
     </div>
 </div>
@@ -239,16 +332,32 @@
 <div class="modal-backdrop" id="user-profile-modal">
     <div class="modal-card">
         <div class="modal-title">
-            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile</span>
+            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile Details</span>
             <button class="card-ctrl-btn" onclick="closeModal('user-profile-modal')"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="profile-email-input" class="form-input" disabled></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="profile-name-input" class="form-input"></div>
-        <div class="form-group"><label>Phone Number</label><input type="text" id="profile-phone-input" class="form-input"></div>
-        <div class="form-group"><label>District / Location</label><input type="text" id="profile-district-input" class="form-input"></div>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="profile-email-input" class="form-input" disabled style="opacity: 0.6; cursor: not-allowed;" title="Email cannot be changed">
+        </div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profile-name-input" class="form-input" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="profile-phone-input" class="form-input" placeholder="+8801...">
+        </div>
+        <div class="form-group">
+            <label>Full Address</label>
+            <textarea id="profile-address-input" class="form-input" style="min-height:50px; resize:vertical;" placeholder="House, Road, Area..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>District / Location</label>
+            <input type="text" id="profile-district-input" class="form-input" placeholder="e.g. Comilla">
+        </div>
         <div class="modal-actions">
             <button class="btn-action" onclick="closeModal('user-profile-modal')">Cancel</button>
-            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save Details</button>
         </div>
     </div>
 </div>
