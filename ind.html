@@ -270,19 +270,17 @@
         .app-wrapper { display: flex; flex-direction: column; width: 100vw; height: 100vh; position: relative; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .top-toolbar {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; justify-content: flex-end;
             padding: 10px 18px; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.12); z-index: 99;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0;
         }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
-        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; font-family: 'Inter', sans-serif;}
-        .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
 
         .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; font-family: 'Inter', sans-serif;}
         .zoom-badge:hover { background: #6366f1; }
 
-        .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; width: 100%; justify-content: flex-end; }
         .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-primary); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; font-family: 'Inter', sans-serif;}
         .btn:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.25); }
         .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
@@ -352,8 +350,31 @@
         input[type="range"] { width: 100%; accent-color: #6366f1; cursor: pointer; }
         .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; color: var(--text-primary); padding: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
 
+        /* --- TRUE FULL-SCREEN OVERRIDES --- */
+        body.is-true-fullscreen .app-global-header,
+        body.is-true-fullscreen .top-toolbar,
+        body.is-true-fullscreen .bottom-nav,
+        body.is-true-fullscreen .floating-zoom-dock,
+        body.is-true-fullscreen .toolbar-toggle-pill {
+            display: none !important;
+        }
+        body.is-true-fullscreen .app-wrapper {
+            height: 100vh !important;
+            width: 100vw !important;
+        }
+        body.is-true-fullscreen .workspace {
+            padding: 0 !important;
+            height: 100vh !important;
+        }
+        body.is-true-fullscreen .pdf-card {
+            height: 100vh !important;
+            width: 100vw !important;
+            border-radius: 0 !important;
+            border: none !important;
+        }
+
         @media (max-width: 768px) {
-            .top-toolbar { padding: 8px 10px; flex-direction: column; max-height: 160px; }
+            .top-toolbar { padding: 8px 10px; }
             .workspace { padding: 4px; padding-bottom: 85px; }
             :root { --viewer-width: 100%; }
             .btn span { display: none; }
@@ -425,14 +446,6 @@
 
         <!-- PDF Top Control Bar -->
         <div class="top-toolbar" id="topToolbar">
-            <div class="brand">
-                <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
-                <div style="line-height: 1.1;">
-                    <div>PDF Studio Pro</div>
-                    <small style="color: var(--text-secondary); font-size: 0.7rem;">Smooth Zoom Reader</small>
-                </div>
-            </div>
-
             <div class="controls-group">
                 <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn"><i class="fa-solid fa-toolbox"></i> <span>Saved PDFs</span></button>
                 <button class="btn" onclick="window.toggleMinimizePDF()"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
@@ -633,7 +646,7 @@
 
         function updateHomeNoticeShowcase() {
             const notices = appState.notices || [];
-            const showcaseText = document.getElementById('home-notice-text');
+            const showcaseText = document.getElementById('home-notice-showcase');
             if (showcaseText && notices.length > 0) showcaseText.innerText = notices[0].text;
         }
 
@@ -963,7 +976,6 @@
 
         window.handleSearch = function(query) {
             const q = query.trim().toLowerCase();
-            // Optional handling if search is triggered
         };
 
         window.toggleDrawer = function(drawerId) {
@@ -1001,7 +1013,34 @@
         window.toggleEdgeToEdge = function() { const ws = document.getElementById('workspace'); isEdgeToEdge = !isEdgeToEdge; if(isEdgeToEdge) ws.classList.add('edge-to-edge'); else ws.classList.remove('edge-to-edge'); };
         window.toggleToolbar = function() { const tb = document.getElementById('topToolbar'); const pill = document.getElementById('expandToolbarBtn'); isToolbarHidden = !isToolbarHidden; if(isToolbarHidden) { tb.classList.add('collapsed'); pill.classList.add('visible'); } else { tb.classList.remove('collapsed'); pill.classList.remove('visible'); } };
         window.toggleZoomDock = function() { const dock = document.getElementById('floatingZoomDock'); const icon = document.getElementById('dockToggleIcon'); dock.classList.toggle('minimized'); if(dock.classList.contains('minimized')) icon.classList.replace('fa-magnifying-glass', 'fa-up-right-and-down-left-from-center'); else icon.classList.replace('fa-up-right-and-down-left-from-center', 'fa-magnifying-glass'); };
-        window.toggleFullScreen = function() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
+        
+        // --- TRUE FULL-SCREEN LOGIC ---
+        window.toggleFullScreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    document.body.classList.add('is-true-fullscreen');
+                    const fsIcon = document.getElementById('fsIcon');
+                    if(fsIcon) fsIcon.classList.replace('fa-expand', 'fa-compress');
+                }).catch(err => {
+                    console.error("Error attempting to enable full-screen:", err);
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    document.body.classList.remove('is-true-fullscreen');
+                    const fsIcon = document.getElementById('fsIcon');
+                    if(fsIcon) fsIcon.classList.replace('fa-compress', 'fa-expand');
+                }).catch(err => {});
+            }
+        };
+
+        // Handle physical exit (ESC or mobile back gesture)
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                document.body.classList.remove('is-true-fullscreen');
+                const fsIcon = document.getElementById('fsIcon');
+                if(fsIcon) fsIcon.classList.replace('fa-compress', 'fa-expand');
+            }
+        });
 
         window.applyFilters = function() {
             const bright = document.getElementById('brightSlider').value;
