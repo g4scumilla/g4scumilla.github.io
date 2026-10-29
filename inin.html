@@ -61,7 +61,7 @@
             position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column;
             background: rgba(8, 11, 18, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color); box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
-            flex-shrink: 0; /* Ensures header doesn't get squished */
+            flex-shrink: 0;
         }
         body.light-mode .app-global-header { background: rgba(241, 245, 249, 0.85); box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08); }
         .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
@@ -116,7 +116,7 @@
             background: var(--bg-main);
             background-image: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
             color: var(--text-primary);
-            overflow: hidden; /* Lock viewport for PDF app */
+            overflow: hidden; 
             user-select: none;
             margin: 0;
             padding: 0;
@@ -184,11 +184,14 @@
         .dot.yellow { background: #f59e0b; }
         .dot.green { background: #10b981; }
         .dot.purple { background: #6366f1; }
-        .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow-x: auto; overflow-y: hidden; background: #0f172a; scroll-behavior: auto; }
-        .iframe-wrapper::-webkit-scrollbar { height: 10px; }
+        
+        /* FIXED: Changed overflow-y: hidden to overflow: auto so vertical scrolling works when zoomed! */
+        .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow: auto; background: #0f172a; scroll-behavior: auto; }
+        .iframe-wrapper::-webkit-scrollbar { height: 10px; width: 10px;}
         .iframe-wrapper::-webkit-scrollbar-track { background: #0f172a; }
         .iframe-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
         .iframe-wrapper::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+        
         .zoom-stage { width: 100%; height: 100%; position: relative; transform-origin: center center; transition: transform 0.3s ease; }
         iframe { width: 100%; height: 100%; border: none; display: block; transition: filter 0.25s ease; }
 
@@ -495,7 +498,7 @@
             scratchpad: '', accessMode: 'auto'
         };
 
-        function extractInitialDomCards() { return []; } // Empty array fallback if grid isn't here
+        function extractInitialDomCards() { return []; } 
         const INITIAL_20_CARDS = extractInitialDomCards();
 
         function isUserActivelyEditingForm() {
@@ -539,8 +542,7 @@
             }
         }
 
-        // loadComponents is disabled because header/footer are now hardcoded in the file
-        async function loadComponents() { /* Disabled for merged single-file version */ }
+        async function loadComponents() { /* Disabled */ }
 
         async function initApp() {
             await loadComponents();
@@ -618,7 +620,7 @@
             if (c) { c.classList.toggle('open'); if (c.classList.contains('open')) document.getElementById('search-input')?.focus(); }
         }
 
-        function handleSearch(query) { /* Placeholder for header search */ }
+        function handleSearch(query) { /* Placeholder */ }
 
         // --- EXPOSE GLOBALLY ---
         Object.assign(window, {
@@ -652,10 +654,24 @@
             if(drawer) drawer.classList.toggle('open');
         };
 
+        // FIXED: Dynamically shifts the PDF right and down when zoomed so it doesn't get cut off in negative space!
         window.updateZoomUI = function() {
             const stage = document.getElementById('zoomStage');
-            if(stage) stage.style.transform = `scale(${currentZoom / 100}) rotate(${currentRotation}deg)`;
+            const scale = currentZoom / 100;
+            
+            if(stage) {
+                stage.style.transformOrigin = 'center center';
+                
+                let shift = 0;
+                // If zooming in past 100%, push it mathematically into the positive scroll boundary
+                if (scale > 1) {
+                    shift = ((scale - 1) / 2) * 100;
+                }
+                
+                stage.style.transform = `translate(${shift}%, ${shift}%) scale(${scale}) rotate(${currentRotation}deg)`;
+            }
 
+            // Update sliders & text badges
             ['topZoomSlider', 'drawerZoomSlider'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.value = currentZoom;
@@ -733,7 +749,6 @@
         };
 
         // --- SMART ROUTING INTERCEPTORS ---
-        // Overrides Hub navigation logic to safely open side drawers instead of leaving the PDF app
         window.switchPage = function(pageId) {
             document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
             const navBtn = document.getElementById('nav-' + pageId);
@@ -744,7 +759,7 @@
             } else if (pageId === 'tools' || pageId === 'settings') {
                 window.toggleDrawer('settingsDrawer');
             } else {
-                window.location.href = 'index.html#' + pageId; // Redirect back to hub for other pages
+                window.location.href = 'index.html#' + pageId; 
             }
         };
 
