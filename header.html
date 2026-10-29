@@ -1,0 +1,232 @@
+<style>
+    /* ==================== GLOBAL UNIFIED HEADER ==================== */
+    .app-global-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        background: rgba(8, 11, 18, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 16px;
+        box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
+    }
+
+    body.light-mode .app-global-header {
+        background: rgba(241, 245, 249, 0.85);
+        box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+    }
+
+    .header-main-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 6px 12px 6px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-left-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .android-header-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--accent);
+        box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25);
+    }
+
+    .android-header-title {
+        font-size: 16.5px;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+    }
+
+    .header-actions-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .header-search-container {
+        width: 0;
+        overflow: hidden;
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .header-search-container.open {
+        width: 170px;
+    }
+
+    .header-search-input {
+        width: 100%;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-elevated);
+        color: var(--text-primary);
+        font-size: 12px;
+        outline: none;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .header-icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+    .header-icon-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(61, 237, 151, 0.05);
+    }
+
+    .live-sync-indicator {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 700;
+        background: rgba(61, 237, 151, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(61, 237, 151, 0.25);
+    }
+
+    body.is-admin .live-sync-indicator {
+        display: inline-flex;
+    }
+
+    .sync-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .sync-dot.polling {
+        transform: scale(1.6);
+        box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* ==================== HEADER NOTICE ROW (MARQUEE) ==================== */
+    .header-notice-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 6px 12px 6px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: opacity 0.3s ease;
+        width: 100%;
+    }
+
+    .notice-update-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        z-index: 2;
+    }
+
+    .header-notice-row.urgent .notice-update-label {
+        color: var(--danger);
+    }
+
+    .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        animation: pulseGlow 1.5s infinite;
+    }
+
+    .header-notice-row.urgent .pulse-dot {
+        background: var(--danger);
+        box-shadow: 0 0 8px var(--danger);
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.45); opacity: 0.55; }
+    }
+
+    .notice-marquee-container {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .notice-marquee-text {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+        white-space: nowrap;
+    }
+
+    .header-notice-row.urgent .notice-marquee-text {
+        color: var(--danger);
+    }
+</style>
+
+<header class="app-global-header">
+    <div class="header-main-row">
+        <div class="header-left-group">
+            <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                 alt="Abdullahil Kuafi" 
+                 class="android-header-avatar"
+                 onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+            <span class="android-header-title">Abdullahil Kuafi</span>
+        </div>
+        <div class="header-actions-right">
+            <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                <span class="sync-dot" id="live-sync-dot"></span>
+                <span id="live-sync-text">Live</span>
+            </span>
+            <div class="header-search-container" id="header-search-container">
+                <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
+            </div>
+            <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="header-notice-row" id="home-notice-showcase" onclick="switchPage('notices')">
+        <div class="notice-update-label">
+            <span class="pulse-dot"></span> Update:
+        </div>
+        <div class="notice-marquee-container">
+            <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                Welcome to Abdullahil Kuafi's Smart Cloud Hub!
+            </marquee>
+        </div>
+    </div>
+</header>
