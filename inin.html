@@ -63,7 +63,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 18px;
+            padding: 10px 24px;
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
@@ -71,29 +71,24 @@
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             max-height: 90px;
             opacity: 1;
-            gap: 10px;
+            gap: 15px;
             flex-shrink: 0;
         }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
 
-        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; text-decoration: none; color: inherit; transition: opacity 0.2s;}
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.95rem; white-space: nowrap; text-decoration: none; color: inherit; transition: opacity 0.2s;}
         .brand:hover { opacity: 0.8; }
         .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
 
-        .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
-        .quick-input-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
-        .quick-input-bar input { background: transparent; border: none; color: var(--text-main); font-size: 0.8rem; width: 100%; outline: none; font-family: inherit; }
-        .quick-input-bar input::placeholder { color: var(--text-muted); }
-
-        .zoom-toolbar-pill { display: flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); padding: 4px 8px; border-radius: 10px; }
+        .zoom-toolbar-pill { display: flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 4px 12px; border-radius: 12px; margin: 0 auto; }
         .zoom-btn { background: rgba(255, 255, 255, 0.07); border: 1px solid transparent; color: var(--text-main); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
         .zoom-btn:hover { background: var(--accent); transform: scale(1.05); }
-        .zoom-slider-inline { width: 85px; accent-color: var(--accent); cursor: pointer; height: 4px; }
+        .zoom-slider-inline { width: 100px; accent-color: var(--accent); cursor: pointer; height: 4px; }
         .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; }
         .zoom-badge:hover { background: var(--accent); }
 
-        .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+        .controls-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 12px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
         .btn:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.25); }
         .btn.active, .btn-primary { background: var(--accent); border-color: var(--accent-hover); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
         .btn-primary:hover { background: var(--accent-hover); }
@@ -108,14 +103,41 @@
         .floating-zoom-dock.minimized .dock-controls { display: none; }
         .dock-controls { display: flex; align-items: center; gap: 8px; }
 
+        /* FIXED: Hidden Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(16, 185, 129, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            z-index: 9999;
+            transform: translateY(150px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
         /* Main Workspace */
-        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
+        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 16px; transition: padding 0.3s ease; padding-bottom: 85px; }
         .workspace.edge-to-edge { padding: 0; padding-bottom: 85px; }
-        .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
+        .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
         .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
         .pdf-card.minimized { height: 46px !important; width: 480px !important; border-radius: 14px; }
 
-        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid var(--glass-border); font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid var(--glass-border); font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; }
         .window-dots { display: flex; gap: 8px; align-items: center; }
         .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
         .dot:hover { transform: scale(1.2); }
@@ -139,7 +161,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Side Drawers */
-        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--glass-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .side-drawer.open { transform: translateX(0); }
         .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--glass-border); font-weight: 600; font-size: 0.95rem; }
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
@@ -163,11 +185,13 @@
         input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
         .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--text-main); padding: 12px; font-family: inherit; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
 
+        @media (max-width: 900px) {
+            .btn span { display: none; }
+        }
         @media (max-width: 768px) {
-            .top-toolbar { padding: 8px 10px; flex-direction: column; max-height: 160px; }
+            .top-toolbar { padding: 8px 10px; flex-direction: column; max-height: 180px; }
             .workspace { padding: 4px; padding-bottom: 85px; }
             :root { --viewer-width: 100%; }
-            .btn span { display: none; }
             .side-drawer { width: calc(100vw - 24px); right: 12px; }
         }
     </style>
@@ -191,7 +215,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast Notification (Now securely hidden until triggered!) -->
     <div class="toast" id="toast">
         <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
     </div>
@@ -201,25 +225,18 @@
         <!-- ================= EXTERNAL HEADER INJECTION ================= -->
         <div id="header-placeholder"></div>
 
-        <!-- Collapsible Top Control Bar (PDF Specific) -->
+        <!-- Clean & Simple Top Control Bar -->
         <div class="top-toolbar" id="topToolbar">
-            <!-- Brand now safely returns to homepage -->
+            <!-- Brand -->
             <a href="index.html" class="brand" title="Return to Homepage">
                 <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
                 <div style="line-height: 1.1;">
                     <div>PDF Studio Pro</div>
-                    <small style="color: var(--text-muted); font-size: 0.7rem;">Smooth Zoom Reader</small>
+                    <small style="color: var(--text-muted); font-size: 0.7rem;">Simple Reader</small>
                 </div>
             </a>
 
-            <!-- Instant Link Paste Bar -->
-            <div class="quick-input-bar">
-                <i class="fa-solid fa-link" style="color: var(--accent-hover); margin-right: 8px;"></i>
-                <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
-                <button class="btn btn-primary btn-sm" onclick="saveQuickLink()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-            </div>
-
-            <!-- Dedicated Smooth Zoom Bar in Header -->
+            <!-- Dedicated Smooth Zoom Bar (Centered cleanly) -->
             <div class="zoom-toolbar-pill">
                 <button class="zoom-btn" onclick="stepZoom(-15)" title="Smooth Zoom Out (Ctrl + -)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
                 <input type="range" class="zoom-slider-inline" id="topZoomSlider" min="50" max="250" value="100" oninput="setZoomImmediate(this.value)" title="Smooth Zoom Slider">
@@ -227,8 +244,8 @@
                 <button class="zoom-btn" onclick="stepZoom(15)" title="Smooth Zoom In (Ctrl + +)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
             </div>
 
+            <!-- Neatly organized control group -->
             <div class="controls-group">
-                <!-- NOW THESE PROPERLY OPEN SLIDING PANELS ON THE SAME PAGE -->
                 <button class="btn" onclick="toggleDrawer('noticesDrawer')" id="noticesBtn" title="Notices"><i class="fa-solid fa-bell"></i> <span>Notices</span></button>
                 <button class="btn" onclick="toggleDrawer('settingsDrawer')" id="settingsBtn" title="Settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></button>
                 
@@ -272,7 +289,7 @@
 
     <!-- Drawers -->
 
-    <!-- NEW: Notices Drawer -->
+    <!-- Notices Drawer -->
     <aside class="side-drawer" id="noticesDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: var(--accent);"></i> Recent Notices</span><button class="btn btn-sm" onclick="toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
@@ -281,7 +298,7 @@
         </div>
     </aside>
 
-    <!-- NEW: Settings Drawer -->
+    <!-- Settings Drawer -->
     <aside class="side-drawer" id="settingsDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: var(--accent);"></i> App Settings</span><button class="btn btn-sm" onclick="toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
