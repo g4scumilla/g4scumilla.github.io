@@ -286,7 +286,8 @@
             </div>
 
             <div class="controls-group">
-                <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn"><i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span></button>
+                <!-- MODIFIED: Changed icon to fa-toolbox -->
+                <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn"><i class="fa-solid fa-toolbox"></i> <span>Saved PDFs</span></button>
                 <button class="btn" onclick="window.toggleMinimizePDF()"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
                 <button class="btn" onclick="window.toggleEdgeToEdge()"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
                 <button class="btn" onclick="window.rotatePDF()"><i class="fa-solid fa-rotate-right"></i></button>
@@ -340,11 +341,11 @@
         </div>
     </aside>
 
-    <!-- NEW: PDF Library Add/Edit/Delete Logic Drawer -->
+    <!-- PDF Library Drawer -->
     <aside class="side-drawer" id="libraryDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-bookmark" style="color: #6366f1;"></i> PDF Library Manager</span><button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <!-- MODIFIED: Changed icon to fa-toolbox -->
+        <div class="drawer-header"><span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span><button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         
-        <!-- Hidden input to track if we are Editing an existing PDF -->
         <input type="hidden" id="editPdfId" value="">
         
         <div class="input-group"><label>PDF Name / Title (Optional)</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
@@ -357,7 +358,6 @@
         <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 6px;">
             Permanently Saved PDFs (<span id="savedCount">0</span>)
         </div>
-        <!-- Dynamic list of saved PDFs will render here -->
         <div class="saved-list" id="savedListContainer">
             <div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Loading PDFs from Cloud...</div>
         </div>
@@ -438,11 +438,10 @@
         const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
         const THEME_STORAGE_KEY = 'kuafi_theme_mode';
 
-        // Include savedPDFs array in the global state definition
         let appState = {
             updatedAt: 0, 
             adminPin: '1234',
-            savedPDFs: [], // Array to hold saved PDFs
+            savedPDFs: [],
             notices: [{ text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }]
         };
 
@@ -456,19 +455,12 @@
             const localTime = Number(appState.updatedAt || 0);
             if (!forceRender && incomingTime > 0 && incomingTime <= localTime) return;
 
-            // Merge cloud state into local state
             appState = { ...appState, ...incomingState };
-            
-            // Critical: Expose the state to the window so the PDF scripts can access it!
             window.appState = appState;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
             
             updateHomeNoticeShowcase();
-            
-            // Auto-render PDF list if function exists
-            if (typeof window.renderSavedPDFs === 'function') {
-                window.renderSavedPDFs();
-            }
+            if (typeof window.renderSavedPDFs === 'function') window.renderSavedPDFs();
         }
 
         function updateHomeNoticeShowcase() {
@@ -522,7 +514,7 @@
                 try { appState = { ...appState, ...JSON.parse(saved) }; } catch (e) {}
             }
             
-            window.appState = appState; // Expose initially
+            window.appState = appState; 
 
             if (hubDocRef) {
                 onSnapshot(hubDocRef, (snap) => {
@@ -537,7 +529,6 @@
             }, 4500);
         }
 
-        // Export functions to window so inline HTML onclicks work!
         Object.assign(window, { syncData, pushStateToCloud });
 
         initApp();
@@ -545,15 +536,11 @@
 
     <!-- ================= PDF READER LOGIC (UI, Zoom, Library CRUD) ================= -->
     <script>
-        // PDF Loading Indicator
         window.hideLoader = function() {
             const loader = document.getElementById('loader');
             if (loader) loader.classList.add('hidden');
         };
-
-        // --- NEW: PDF LIBRARY ADD / EDIT / DELETE LOGIC --- //
         
-        // Auto-formats Google Drive Links so they embed correctly
         window.formatPdfUrl = function(url) {
             if (url.includes('drive.google.com')) {
                 return url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview');
@@ -608,28 +595,23 @@
             const editId = editIdInput.value;
             
             if (editId) {
-                // Update Existing
                 const idx = window.appState.savedPDFs.findIndex(p => p.id === editId);
                 if (idx !== -1) {
                     window.appState.savedPDFs[idx] = { id: editId, title, url };
                     window.showToast("PDF Updated Successfully!");
                 }
             } else {
-                // Add New
                 const newId = 'pdf-' + Date.now();
                 window.appState.savedPDFs.push({ id: newId, title, url });
                 window.showToast("PDF Saved Permanently to Cloud!");
             }
 
-            // Sync to Firebase Cloud
             if (window.pushStateToCloud) window.pushStateToCloud(false);
 
-            // Automatically load it into the viewer
             document.getElementById('loader').classList.remove('hidden');
             document.getElementById('pdfFrame').src = url;
             document.getElementById('docTitleDisplay').innerText = title;
 
-            // Reset the form
             titleInput.value = '';
             urlInput.value = '';
             editIdInput.value = '';
@@ -652,10 +634,7 @@
             if (!confirm("Are you sure you want to delete this PDF from your Cloud Library?")) return;
             
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.id !== id);
-            
-            // Sync to Firebase Cloud
             if (window.pushStateToCloud) window.pushStateToCloud(false);
-            
             window.renderSavedPDFs();
             window.showToast("PDF Deleted");
         };
@@ -678,11 +657,8 @@
             document.getElementById('pdfUrlInput').value = input.value;
             document.getElementById('pdfTitleInput').value = 'Quick Saved PDF';
             window.addAndSavePDF();
-            
-            input.value = ''; // clear bar
+            input.value = '';
         };
-        // --- END PDF LIBRARY LOGIC --- //
-
 
         // --- UI & ZOOM CONTROLS --- //
         let currentZoom = 100;
@@ -748,7 +724,6 @@
         };
         window.goHomeWithFav = function() { window.location.href = 'index.html'; };
         
-        // Initial render trigger in case Firebase loads slow
         setTimeout(window.renderSavedPDFs, 1000);
     </script>
 </body>
