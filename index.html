@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Link to the separated CSS file -->
+    <!-- Link to the universal CSS file -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Import Map for Firebase -->
@@ -27,8 +27,7 @@
 <script>
     // Extremely lightweight inline script to prevent light-mode flickering on load
     (function() {
-        const savedTheme = localStorage.getItem('kuafi_theme_mode');
-        if (savedTheme === 'light') {
+        if (localStorage.getItem('kuafi_theme_mode') === 'light') {
             document.body.classList.add('light-mode');
         }
     })();
@@ -41,13 +40,11 @@
     <!-- ==================== HOME PAGE ==================== -->
     <div id="page-home" class="page-view active">
 
-        <!-- Live Preview Banner -->
+        <!-- Live Preview & Rearrange Banners -->
         <div class="preview-banner admin-only" id="preview-banner">
             <span><i class="fa-solid fa-eye" style="color: var(--accent-secondary); margin-right: 6px;"></i>🎨 Live Grid Preview Active</span>
             <button class="preview-save-btn" onclick="savePreviewAndSync()">Apply to Cloud</button>
         </div>
-
-        <!-- Rearrange Banner (Admin Only) -->
         <div class="rearrange-banner admin-only" id="rearrange-banner">
             <span><i class="fa-solid fa-hand-pointer" style="color: var(--accent); margin-right: 6px;"></i>Cloud Rearrange: Use arrows</span>
             <button class="rearrange-done-btn" onclick="saveRearrangeAndSync()">Save to Cloud</button>
@@ -55,117 +52,26 @@
 
         <!-- Admin App Grid & Category Management Toolbar -->
         <div class="admin-grid-toolbar">
-            <button class="admin-chip-btn" onclick="openCardModal()">
-                <i class="fa-solid fa-plus" style="color:var(--accent);"></i> Add Service Card
-            </button>
-            <button class="admin-chip-btn" onclick="openCategoryModal()">
-                <i class="fa-solid fa-tags" style="color:#f59e0b;"></i> Edit Categories
-            </button>
-            <button class="admin-chip-btn" onclick="toggleRearrangeMode()">
-                <i class="fa-solid fa-arrows-up-down-left-right" style="color:#38bdf8;"></i> Rearrange
-            </button>
-            <button class="admin-chip-btn" onclick="openRecycleBinModal()">
-                <i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Recycle Bin
-                <span class="bin-count-badge" id="grid-bin-count">0</span>
-            </button>
+            <button class="admin-chip-btn" onclick="openCardModal()"><i class="fa-solid fa-plus" style="color:var(--accent);"></i> Add Service Card</button>
+            <button class="admin-chip-btn" onclick="openCategoryModal()"><i class="fa-solid fa-tags" style="color:#f59e0b;"></i> Edit Categories</button>
+            <button class="admin-chip-btn" onclick="toggleRearrangeMode()"><i class="fa-solid fa-arrows-up-down-left-right" style="color:#38bdf8;"></i> Rearrange</button>
+            <button class="admin-chip-btn" onclick="openRecycleBinModal()"><i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Recycle Bin <span class="bin-count-badge" id="grid-bin-count">0</span></button>
         </div>
 
         <!-- Quick Filter Category Pills -->
         <div class="controls-section">
-            <div class="filter-pills" id="filter-pills-container">
-                <!-- Javascript will inject categories here -->
-            </div>
+            <div class="filter-pills" id="filter-pills-container"></div>
         </div>
 
         <!-- Cards Grid -->
         <div class="service-grid" id="app-grid">
-            <a href="#" class="service-item" data-id="app-work" data-cat="work" style="--c1:#3b82f6; --c2:#6366f1; --c-rgb:59,130,246;">
-                <div class="icon-circle"><i class="fa-solid fa-briefcase"></i></div>
-                <div class="card-text"><div class="card-title">Work</div><div class="card-sub">Office & Tasks</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-edu" data-cat="work" style="--c1:#f59e0b; --c2:#ea580c; --c-rgb:245,158,11;">
-                <div class="icon-circle"><i class="fa-solid fa-graduation-cap"></i></div>
-                <div class="card-text"><div class="card-title">Edu</div><div class="card-sub">Study & Courses</div></div>
-            </a>
-            <a href="https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index" rel="noopener noreferrer" class="service-item" data-id="app-dev" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#06b6d4; --c-rgb:61,237,151;">
-                <div class="icon-circle"><i class="fa-solid fa-code"></i></div>
-                <div class="card-text"><div class="card-title">Dev</div><div class="card-sub">Code & Projects</div></div>
-            </a>
-            <a href="https://g4scumilla.github.io/Projects/Television/index" rel="noopener noreferrer" class="service-item" data-id="app-sports" data-cat="life" data-live="true" style="--c1:#f43f5e; --c2:#e11d48; --c-rgb:244,63,94;">
-                <div class="icon-circle"><i class="fa-solid fa-tv"></i></div>
-                <div class="card-text"><div class="card-title">Sports</div><div class="card-sub">Live TV Stream</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-cv" data-cat="work" style="--c1:#8b5cf6; --c2:#6d28d9; --c-rgb:139,92,246;">
-                <div class="icon-circle"><i class="fa-solid fa-address-card"></i></div>
-                <div class="card-text"><div class="card-title">CV</div><div class="card-sub">Resume & Bio</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-links" data-cat="work" style="--c1:#0ea5e9; --c2:#0284c7; --c-rgb:14,165,233;">
-                <div class="icon-circle"><i class="fa-solid fa-link"></i></div>
-                <div class="card-text"><div class="card-title">Links</div><div class="card-sub">Bookmarks</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-media" data-cat="life" style="--c1:#ec4899; --c2:#db2777; --c-rgb:236,72,153;">
-                <div class="icon-circle"><i class="fa-solid fa-image"></i></div>
-                <div class="card-text"><div class="card-title">Media</div><div class="card-sub">Photos & Clips</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-social" data-cat="life" style="--c1:#6366f1; --c2:#a855f7; --c-rgb:99,102,241;">
-                <div class="icon-circle"><i class="fa-solid fa-share-nodes"></i></div>
-                <div class="card-text"><div class="card-title">Social</div><div class="card-sub">Feeds & Connect</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-docs" data-cat="work" style="--c1:#ef4444; --c2:#dc2626; --c-rgb:239,68,68;">
-                <div class="icon-circle"><i class="fa-solid fa-file-pdf"></i></div>
-                <div class="card-text"><div class="card-title">Docs</div><div class="card-sub">PDFs & Papers</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-blog" data-cat="life" style="--c1:#14b8a6; --c2:#0d9488; --c-rgb:20,184,166;">
-                <div class="icon-circle"><i class="fa-solid fa-pen-nib"></i></div>
-                <div class="card-text"><div class="card-title">Blog</div><div class="card-sub">Notes & Stories</div></div>
-            </a>
-            <a href="https://g4scumilla.github.io/Projects/finance/main" rel="noopener noreferrer" class="service-item" data-id="app-finance" data-cat="work" data-live="true" style="--c1:#3ded97; --c2:#059669; --c-rgb:61,237,151;">
-                <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
-                <div class="card-text"><div class="card-title">Finance</div><div class="card-sub">Budget & Cash</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-growth" data-cat="work" style="--c1:#22c55e; --c2:#16a34a; --c-rgb:34,197,94;">
-                <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
-                <div class="card-text"><div class="card-title">Growth</div><div class="card-sub">Goals & Stats</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-awards" data-cat="life" style="--c1:#f59e0b; --c2:#d97706; --c-rgb:245,158,11;">
-                <div class="icon-circle"><i class="fa-solid fa-trophy"></i></div>
-                <div class="card-text"><div class="card-title">Awards</div><div class="card-sub">Honors & Wins</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-travel" data-cat="life" style="--c1:#06b6d4; --c2:#0891b2; --c-rgb:6,182,212;">
-                <div class="icon-circle"><i class="fa-solid fa-earth-americas"></i></div>
-                <div class="card-text"><div class="card-title">Travel</div><div class="card-sub">Trips & Maps</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-scan" data-cat="work" style="--c1:#a855f7; --c2:#7e22ce; --c-rgb:168,85,247;">
-                <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
-                <div class="card-text"><div class="card-title">Scan</div><div class="card-sub">QR & Lens</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-health" data-cat="life" style="--c1:#fb7185; --c2:#e11d48; --c-rgb:251,113,133;">
-                <div class="icon-circle"><i class="fa-solid fa-heart-pulse"></i></div>
-                <div class="card-text"><div class="card-title">Health</div><div class="card-sub">Care & Fitness</div></div>
-            </a>
-            <a href="#" class="service-item" data-id="app-home" data-cat="life" style="--c1:#f97316; --c2:#ea580c; --c-rgb:249,115,22;">
-                <div class="icon-circle"><i class="fa-solid fa-house-chimney"></i></div>
-                <div class="card-text"><div class="card-title">Home</div><div class="card-sub">Personal Space</div></div>
-            </a>
-            <a href="javascript:void(0)" onclick="handleSettingsCardClick()" class="service-item" data-id="app-settings" data-cat="work" style="--c1:#64748b; --c2:#475569; --c-rgb:100,116,139;">
-                <div class="icon-circle"><i class="fa-solid fa-sliders"></i></div>
-                <div class="card-text"><div class="card-title">Settings</div><div class="card-sub">Preferences</div></div>
-            </a>
-            <a href="javascript:void(0)" class="service-item" data-id="app-sync" data-cat="work" onclick="syncData()" style="--c1:#3ded97; --c2:#2563eb; --c-rgb:61,237,151;">
-                <div class="icon-circle"><i class="fa-solid fa-arrows-rotate" id="sync-icon"></i></div>
-                <div class="card-text"><div class="card-title">Sync</div><div class="card-sub">Fetch Live Data</div></div>
-            </a>
-
             <div class="empty-fav-msg" id="empty-fav-msg">
                 <i class="fa-regular fa-star" style="font-size: 26px; margin-bottom: 12px; display: block; color: #f59e0b;"></i>
                 No favourite apps pinned in Cloud yet.
                 <br>
-                <button class="browse-all-btn" onclick="filterApps('all', document.getElementById('pill-all'))">
-                    Browse All Apps
-                </button>
+                <button class="browse-all-btn" onclick="filterApps('all', document.getElementById('pill-all'))">Browse All Apps</button>
             </div>
         </div>
-
         <div class="bottom-safe-spacer"></div>
     </div>
 
@@ -173,9 +79,7 @@
     <div id="page-notices" class="page-view">
         <div class="tools-header">
             <div class="tools-header-left">
-                <button class="back-btn" onclick="goHomeWithFav()">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
+                <button class="back-btn" onclick="goHomeWithFav()"><i class="fa-solid fa-arrow-left"></i></button>
                 <div>
                     <div class="tools-title">Cloud Notice Board</div>
                     <div class="tools-subtitle">Live Broadcasts & Announcements</div>
@@ -184,9 +88,7 @@
         </div>
 
         <div class="tools-section-card admin-only">
-            <div class="section-label">
-                <span><i class="fa-solid fa-plus-circle"></i> Post / Edit Global Notice (Admin)</span>
-            </div>
+            <div class="section-label"><span><i class="fa-solid fa-plus-circle"></i> Post / Edit Global Notice (Admin)</span></div>
             <div class="notice-form">
                 <input type="hidden" id="edit-notice-idx" value="">
                 <textarea id="notice-input" class="notice-input" maxlength="400" placeholder="Write a notice for all visitors (English or Bengali)..."></textarea>
@@ -199,9 +101,7 @@
                 </div>
                 <div class="notice-form-footer">
                     <span class="notice-limit-hint">Max 30 Notices stored in Cloud</span>
-                    <button class="btn-action" onclick="saveNoticeItem()">
-                        <i class="fa-solid fa-paper-plane"></i> <span id="notice-btn-text">Publish Notice</span>
-                    </button>
+                    <button class="btn-action" onclick="saveNoticeItem()"><i class="fa-solid fa-paper-plane"></i> <span id="notice-btn-text">Publish Notice</span></button>
                 </div>
             </div>
         </div>
@@ -213,7 +113,6 @@
             </div>
             <div id="notices-list" class="notices-list"></div>
         </div>
-
         <div class="bottom-safe-spacer"></div>
     </div>
 
@@ -221,9 +120,7 @@
     <div id="page-tools" class="page-view">
         <div class="tools-header">
             <div class="tools-header-left">
-                <button class="back-btn" onclick="goHomeWithFav()">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
+                <button class="back-btn" onclick="goHomeWithFav()"><i class="fa-solid fa-arrow-left"></i></button>
                 <div>
                     <div class="tools-title">Tools & Settings</div>
                     <div class="tools-subtitle">Account Login & Preferences</div>
@@ -234,7 +131,6 @@
         <!-- Google User Authentication Section -->
         <div class="tools-section-card" id="google-auth-card">
             <div class="section-label"><span><i class="fa-brands fa-google"></i> User Account</span></div>
-
             <div class="setting-row" id="google-logged-out-view">
                 <div class="setting-info">
                     <h4>Google Account Sign-In</h4>
@@ -244,23 +140,20 @@
                     <i class="fa-brands fa-google" style="color: #4285F4;"></i> <span id="google-login-btn-text">Sign in with Google</span>
                 </button>
             </div>
-
             <div class="setting-row" id="google-logged-in-view" style="display: none;">
                 <div class="user-profile-row">
-                    <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User&background=3ded97&color=0b0f19" alt="User" class="user-profile-avatar">
+                    <img id="google-user-avatar" src="https://ui-avatars.com/api/?name=User" alt="User" class="user-profile-avatar">
                     <div class="setting-info" style="min-width: 0;">
                         <h4 id="google-user-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Welcome!</h4>
                         <p id="google-user-email" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></p>
                         <span class="user-status-pill"><i class="fa-solid fa-circle-check"></i> Signed in with Google</span>
                     </div>
                 </div>
-                <button class="btn-action btn-danger" onclick="logoutGoogle()">
-                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
-                </button>
+                <button class="btn-action btn-danger" onclick="logoutGoogle()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
             </div>
         </div>
 
-        <!-- "My Profile" Section for Google Logged-In Users -->
+        <!-- "My Profile" Section -->
         <div class="tools-section-card google-user-only" id="google-my-profile-section">
             <div class="section-label"><span><i class="fa-solid fa-id-card"></i> My Profile & Custom Details</span></div>
             <div class="setting-row">
@@ -268,25 +161,14 @@
                     <h4>Profile Information</h4>
                     <p id="profile-details-preview">Edit your name, phone, district & contact info</p>
                 </div>
-                <button class="btn-action" onclick="openProfileModal()">
-                    <i class="fa-solid fa-user-pen"></i> Edit Profile
-                </button>
+                <button class="btn-action" onclick="openProfileModal()"><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
             </div>
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Personal Cloud Notes</h4>
                     <p>Store your private notes locally tied to your Google session</p>
                 </div>
-                <button class="btn-action" onclick="openUserNotesModal()">
-                    <i class="fa-solid fa-note-sticky"></i> Open Notes
-                </button>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Account Security</h4>
-                    <p>Your session is protected securely via Google OAuth 2.0</p>
-                </div>
-                <span style="font-size: 11.5px; font-weight: 700; color: var(--accent);"><i class="fa-solid fa-shield-check"></i> Secured</span>
+                <button class="btn-action" onclick="openUserNotesModal()"><i class="fa-solid fa-note-sticky"></i> Open Notes</button>
             </div>
         </div>
 
@@ -298,31 +180,24 @@
                     <h4>Are you Abdullahil Kuafi?</h4>
                     <p>Enter your Admin PIN to manage layout and publish notices.</p>
                 </div>
-                <button class="btn-action" onclick="openAdminModal()">
-                    <i class="fa-solid fa-user-shield"></i> Admin Login
-                </button>
+                <button class="btn-action" onclick="openAdminModal()"><i class="fa-solid fa-user-shield"></i> Admin Login</button>
             </div>
         </div>
 
         <!-- Appearance & Access Mode Section -->
         <div class="tools-section-card">
             <div class="section-label"><span><i class="fa-solid fa-palette"></i> Appearance & Arrangement</span></div>
-
             <div class="setting-row">
                 <div class="setting-info">
                     <h4>Display Theme</h4>
                     <p>Switch between Dark and Light mode (Saved on refresh)</p>
                 </div>
-                <button class="btn-action" id="theme-toggle" onclick="toggleTheme()">
-                    <i class="fa-solid fa-moon" id="theme-icon"></i>
-                    <span id="theme-text">Dark Mode</span>
-                </button>
+                <button class="btn-action" id="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i><span id="theme-text">Dark Mode</span></button>
             </div>
-
             <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
                 <div class="setting-info">
                     <h4>Access Mode</h4>
-                    <p>Switch interface layout for Android, Tab, Laptop, Desktop, or Auto</p>
+                    <p>Switch interface layout</p>
                 </div>
                 <div class="access-mode-pills" id="access-mode-pills">
                     <button class="access-pill active" data-mode="auto" onclick="setAccessMode('auto')"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto</button>
@@ -334,251 +209,16 @@
             </div>
         </div>
 
-        <!-- Grouped Admin Live Grid Customizer -->
-        <div class="tools-section-card admin-only" id="admin-live-grid-customizer">
-            <div class="section-label"><span><i class="fa-solid fa-wand-magic-sparkles"></i> 🎨 Live Grid Customizer (Columns, Style & Layout)</span></div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>1. Card Grid Columns</h4>
-                    <p>Select number of columns (2, 3, or 4)</p>
-                </div>
-                <select id="grid-cols-select" class="form-select" style="max-width:140px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
-                    <option value="2">2 Columns</option>
-                    <option value="3" selected>3 Columns</option>
-                    <option value="4">4 Columns</option>
-                </select>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>2. Card UI Style</h4>
-                    <p>Choose visual theme look for service cards</p>
-                </div>
-                <select id="grid-style-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
-                    <option value="1">1. Modern Glass</option>
-                    <option value="2">2. Neon Glow</option>
-                    <option value="3">3. Ultra Rounded</option>
-                    <option value="4">4. Gradient Border</option>
-                    <option value="5">5. Minimal Flat</option>
-                    <option value="6">6. Deep Floating</option>
-                    <option value="7">7. Executive</option>
-                    <option value="8">8. Cyberpunk</option>
-                    <option value="9">9. Soft Pastel</option>
-                    <option value="10">10. Frosted Tile</option>
-                    <option value="11">11. High Contrast</option>
-                    <option value="12">12. Outline Modern</option>
-                    <option value="13">13. Pill Shaped</option>
-                    <option value="14">14. Velvet Dark</option>
-                    <option value="15">15. Classic Grid</option>
-                </select>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>3. Card Grid Layout (15 Options)</h4>
-                    <p>Choose structural padding and alignment</p>
-                </div>
-                <select id="grid-layout-select" class="form-select" style="max-width:160px; padding:6px; font-size:11.5px;" onchange="previewAndSaveGridCustomizer()">
-                    <option value="1">1. Standard Balanced</option>
-                    <option value="2">2. Compact Dense</option>
-                    <option value="3">3. Spaced Airy</option>
-                    <option value="4">4. Centered Alignment</option>
-                    <option value="5">5. Border-Framed</option>
-                    <option value="6">6. Shadow-Lifted</option>
-                    <option value="7">7. Floating Island</option>
-                    <option value="8">8. Rounded Capsule</option>
-                    <option value="9">9. Minimal Flat</option>
-                    <option value="10">10. Glowing Accent</option>
-                    <option value="11">11. Dual Gradient</option>
-                    <option value="12">12. Borderless Clean</option>
-                    <option value="13">13. Elevated Card</option>
-                    <option value="14">14. Sharp Geometric</option>
-                    <option value="15">15. Fluid Auto-Fit</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Accent Colors & Management -->
-        <div class="tools-section-card admin-only">
-            <div class="section-label"><span><i class="fa-solid fa-palette"></i> Accent Colors</span></div>
-            <div class="setting-row" style="flex-direction: column; align-items: flex-start;">
-                <div class="setting-info" style="margin-bottom: 8px;">
-                    <h4>Accent Color (12 Popular Choices)</h4>
-                    <p>Customize highlight tones for everyone</p>
-                </div>
-                <div class="color-swatches-grid">
-                    <div class="swatch active" data-primary="#3ded97" style="background: #3ded97;" onclick="setAccent('#3ded97', '#06b6d4', this)" title="Emerald Mint"></div>
-                    <div class="swatch" data-primary="#10b981" style="background: #10b981;" onclick="setAccent('#10b981', '#06b6d4', this)" title="Emerald Green"></div>
-                    <div class="swatch" data-primary="#3b82f6" style="background: #3b82f6;" onclick="setAccent('#3b82f6', '#6366f1', this)" title="Royal Blue"></div>
-                    <div class="swatch" data-primary="#06b6d4" style="background: #06b6d4;" onclick="setAccent('#06b6d4', '#3b82f6', this)" title="Cyan Glow"></div>
-                    <div class="swatch" data-primary="#8b5cf6" style="background: #8b5cf6;" onclick="setAccent('#8b5cf6', '#ec4899', this)" title="Electric Violet"></div>
-                    <div class="swatch" data-primary="#ec4899" style="background: #ec4899;" onclick="setAccent('#ec4899', '#f43f5e', this)" title="Hot Pink"></div>
-                    <div class="swatch" data-primary="#f43f5e" style="background: #f43f5e;" onclick="setAccent('#f43f5e', '#f59e0b', this)" title="Crimson Red"></div>
-                    <div class="swatch" data-primary="#f59e0b" style="background: #f59e0b;" onclick="setAccent('#f59e0b', '#ef4444', this)" title="Amber Gold"></div>
-                    <div class="swatch" data-primary="#eab308" style="background: #eab308;" onclick="setAccent('#eab308', '#22c55e', this)" title="Sun Yellow"></div>
-                    <div class="swatch" data-primary="#22c55e" style="background: #22c55e;" onclick="setAccent('#22c55e', '#06b6d4', this)" title="Neon Green"></div>
-                    <div class="swatch" data-primary="#f97316" style="background: #f97316;" onclick="setAccent('#f97316', '#eab308', this)" title="Sunset Orange"></div>
-                    <div class="swatch" data-primary="#64748b" style="background: #64748b;" onclick="setAccent('#64748b', '#0f172a', this)" title="Slate Charcoal"></div>
-                </div>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Rearrange Link Cards (Cloud)</h4>
-                    <p>Reorder cards in Cloud for all visitors</p>
-                </div>
-                <button class="btn-action" onclick="openRearrangeFromTools()">
-                    <i class="fa-solid fa-arrows-up-down-left-right"></i> <span id="tools-rearrange-label">Rearrange</span>
-                </button>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Service Cards & Recycle Bin (Cloud)</h4>
-                    <p>Add new cards or restore removed cards from Recycle Bin</p>
-                </div>
-                <div style="display:flex; gap:6px;">
-                    <button class="btn-action" onclick="openCardModal()"><i class="fa-solid fa-plus"></i> Add</button>
-                    <button class="btn-action" onclick="openRecycleBinModal()"><i class="fa-solid fa-trash-can"></i> Bin (<span id="tools-bin-count">0</span>)</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Expanded Admin Management & All-User Sync Features -->
-        <div class="tools-section-card admin-only">
-            <div class="section-label">
-                <span><i class="fa-solid fa-cloud-arrow-up"></i> Admin Management & Sync</span>
-                <span id="cloud-status-pill" style="font-size: 10px; color: var(--accent);">Firebase Active ✓</span>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Force Broadcast Sync</h4>
-                    <p>Instantly broadcast current layout to all active visitors</p>
-                </div>
-                <button class="btn-action" onclick="pushStateToCloud(true)">
-                    <i class="fa-solid fa-satellite-dish"></i> Broadcast Now
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Global Notice Board Clear</h4>
-                    <p>Erase all published notices from Cloud for all users</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="clearAllNotices()">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Clear Notices
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Change Admin PIN</h4>
-                    <p>Update the PIN stored in Cloud for Admin Mode</p>
-                </div>
-                <button class="btn-action" onclick="changeAdminPin()">
-                    <i class="fa-solid fa-key"></i> Change PIN
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Logout from Admin</h4>
-                    <p>Switch back to General Visitor view</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="logoutAdmin()">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout Admin
-                </button>
-            </div>
-        </div>
-
-        <!-- Built-in Quick Utilities -->
-        <div class="tools-section-card">
-            <div class="section-label"><span><i class="fa-solid fa-bolt"></i> Quick Utilities</span></div>
-            <div class="mini-tools-grid">
-                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/finance/main')">
-                    <i class="fa-solid fa-wallet"></i>
-                    <div>Finance App</div>
-                </button>
-                <button class="mini-tool-btn" onclick="openSafeUrl('https://g4scumilla.github.io/Projects/Testcode/parent_dashboard/index')">
-                    <i class="fa-solid fa-code"></i>
-                    <div>Dev Console</div>
-                </button>
-                <button class="mini-tool-btn" onclick="copyPageUrl()">
-                    <i class="fa-solid fa-share-from-square"></i>
-                    <div>Copy Hub Link</div>
-                </button>
-                <button class="mini-tool-btn" onclick="syncData(true)">
-                    <i class="fa-solid fa-rotate"></i>
-                    <div>Sync Latest</div>
-                </button>
-            </div>
-        </div>
-
-        <!-- Admin Scratchpad -->
-        <div class="tools-section-card admin-only">
-            <div class="section-label">
-                <span><i class="fa-solid fa-note-sticky"></i> Admin Cloud Scratchpad</span>
-                <button class="btn-action" style="padding: 4px 10px; font-size: 10px;" onclick="pushStateToCloud(true)">Save Note</button>
-            </div>
-            <textarea id="quick-notes" class="quick-note-area" placeholder="Write admin notes here and tap Save Note to store in Cloud..."></textarea>
-        </div>
-
-        <!-- Global Data Reset -->
-        <div class="tools-section-card admin-only">
-            <div class="section-label"><span><i class="fa-solid fa-database"></i> Global Cloud Data Reset (Admin)</span></div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Card Arrangement Order</h4>
-                    <p>Restore default service cards sequence in Cloud</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="resetCardOrder()">
-                    <i class="fa-solid fa-rotate-left"></i> Default
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Saved Favourites</h4>
-                    <p id="fav-count-label">0 apps pinned to Favourites</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="clearFavorites()">
-                    <i class="fa-solid fa-trash"></i> Reset
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Clear Scratchpad</h4>
-                    <p>Erase admin notes from Cloud</p>
-                </div>
-                <button class="btn-action btn-danger" onclick="clearNotes()">
-                    <i class="fa-solid fa-eraser"></i> Clear
-                </button>
-            </div>
-        </div>
-
         <div class="bottom-safe-spacer"></div>
     </div>
 </div>
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="bottom-nav">
-    <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-    </button>
-    <button class="nav-item" id="nav-notices" onclick="switchPage('notices')">
-        <i class="fa-solid fa-bullhorn"></i>
-        <span>Notices</span>
-    </button>
-    <button class="nav-item" id="nav-tools" onclick="switchPage('tools')">
-        <i class="fa-solid fa-sliders"></i>
-        <span>Settings</span>
-    </button>
-</nav>
+<!-- ==================== EXTERNAL FOOTER INJECTION ==================== -->
+<div id="footer-placeholder"></div>
 
-<!-- MODAL 1: ADMIN PIN LOGIN -->
+<!-- Modals & Toasts -->
+<div class="sync-toast" id="sync-toast">✓ Successfully Synced to Cloud!</div>
+
 <div class="modal-backdrop" id="admin-modal">
     <div class="modal-card">
         <div class="modal-title">
@@ -596,153 +236,24 @@
     </div>
 </div>
 
-<!-- MODAL 2: ADD / EDIT SERVICE CARD -->
-<div class="modal-backdrop" id="card-modal">
-    <div class="modal-card">
-        <div class="modal-title">
-            <span id="card-modal-title">Add Service Card</span>
-            <button class="card-ctrl-btn" onclick="closeModal('card-modal')"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <input type="hidden" id="edit-card-id">
-        <div class="form-group">
-            <label>Card Title</label>
-            <input type="text" id="card-title-input" class="form-input" placeholder="e.g. Portfolio">
-        </div>
-        <div class="form-group">
-            <label>Subtitle</label>
-            <input type="text" id="card-sub-input" class="form-input" placeholder="e.g. Projects & Case Studies">
-        </div>
-        <div class="form-group">
-            <label>Target Link (URL)</label>
-            <input type="text" id="card-href-input" class="form-input" placeholder="https://...">
-        </div>
-        <div class="form-group">
-            <label>Category</label>
-            <select id="card-cat-input" class="form-select"></select>
-        </div>
-        <div class="form-group">
-            <label>FontAwesome Icon Class</label>
-            <input type="text" id="card-icon-input" class="form-input" placeholder="fa-solid fa-rocket">
-        </div>
-        <div class="form-group" style="display:flex; gap:12px; align-items:center;">
-            <div style="flex:1;">
-                <label>Primary Color</label>
-                <input type="color" id="card-c1-input" class="form-input" value="#3ded97" style="height:38px; padding:2px;">
-            </div>
-            <div style="flex:1;">
-                <label>Secondary Color</label>
-                <input type="color" id="card-c2-input" class="form-input" value="#06b6d4" style="height:38px; padding:2px;">
-            </div>
-            <div style="padding-top:16px;">
-                <label style="display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-primary);">
-                    <input type="checkbox" id="card-live-input"> Mark as Live
-                </label>
-            </div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn-action" onclick="closeModal('card-modal')">Cancel</button>
-            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveServiceCard()">Save & Sync</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL 3: RECYCLE BIN -->
-<div class="modal-backdrop" id="recycle-bin-modal">
-    <div class="modal-card">
-        <div class="modal-title">
-            <span><i class="fa-solid fa-trash-can" style="color:var(--danger);"></i> Cloud Recycle Bin</span>
-            <button class="card-ctrl-btn" onclick="closeModal('recycle-bin-modal')"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="recycle-bin-list"></div>
-        <div class="modal-actions">
-            <button class="btn-action btn-danger" onclick="emptyRecycleBin()"><i class="fa-solid fa-fire"></i> Empty Bin</button>
-            <button class="btn-action" onclick="closeModal('recycle-bin-modal')">Close</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL 4: MANAGE / ADD CATEGORIES -->
-<div class="modal-backdrop" id="category-modal">
-    <div class="modal-card">
-        <div class="modal-title">
-            <span><i class="fa-solid fa-tags" style="color:var(--accent);"></i> Manage Filter Categories</span>
-            <button class="card-ctrl-btn" onclick="closeModal('category-modal')"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="category-manager-list" style="margin-bottom:14px;"></div>
-        <div style="border-top:1px solid var(--border-color); padding-top:12px;">
-            <div class="form-group">
-                <label>Add or Edit Category Name</label>
-                <input type="text" id="cat-label-input" class="form-input" placeholder="e.g. Cloud Tools">
-                <input type="hidden" id="cat-edit-key">
-            </div>
-            <div class="form-group">
-                <label>Category Filter Key (lowercase)</label>
-                <input type="text" id="cat-key-input" class="form-input" placeholder="e.g. cloud">
-            </div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn-action" onclick="resetDefaultCategories()">Restore Defaults</button>
-            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveCategoryItem()">Save Category</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL 5: PERSONAL USER NOTES -->
-<div class="modal-backdrop" id="user-notes-modal">
-    <div class="modal-card">
-        <div class="modal-title">
-            <span><i class="fa-solid fa-note-sticky" style="color:var(--accent);"></i> My Private Google Notes</span>
-            <button class="card-ctrl-btn" onclick="closeModal('user-notes-modal')"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="form-group">
-            <label>Private Notes (Saved only on your browser)</label>
-            <textarea id="user-private-notes-textarea" class="quick-note-area" placeholder="Write your private tasks or reminders here..."></textarea>
-        </div>
-        <div class="modal-actions">
-            <button class="btn-action" onclick="closeModal('user-notes-modal')">Cancel</button>
-            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserPrivateNotes()">Save Notes</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL 6: MY PROFILE CUSTOMIZATION -->
 <div class="modal-backdrop" id="user-profile-modal">
     <div class="modal-card">
         <div class="modal-title">
-            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile Details</span>
+            <span><i class="fa-solid fa-user-pen" style="color:var(--accent);"></i> Edit My Profile</span>
             <button class="card-ctrl-btn" onclick="closeModal('user-profile-modal')"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="profile-email-input" class="form-input" disabled style="opacity: 0.6; cursor: not-allowed;" title="Email cannot be changed">
-        </div>
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="profile-name-input" class="form-input" placeholder="Your Name">
-        </div>
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="text" id="profile-phone-input" class="form-input" placeholder="+8801...">
-        </div>
-        <div class="form-group">
-            <label>Full Address</label>
-            <textarea id="profile-address-input" class="form-input" style="min-height:50px; resize:vertical;" placeholder="House, Road, Area..."></textarea>
-        </div>
-        <div class="form-group">
-            <label>District / Location</label>
-            <input type="text" id="profile-district-input" class="form-input" placeholder="e.g. Comilla">
-        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="profile-email-input" class="form-input" disabled></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="profile-name-input" class="form-input"></div>
+        <div class="form-group"><label>Phone Number</label><input type="text" id="profile-phone-input" class="form-input"></div>
+        <div class="form-group"><label>District / Location</label><input type="text" id="profile-district-input" class="form-input"></div>
         <div class="modal-actions">
             <button class="btn-action" onclick="closeModal('user-profile-modal')">Cancel</button>
-            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save Details</button>
+            <button class="btn-action" style="background:var(--accent); color:#0b0f19;" onclick="saveUserProfileDetails()">Save</button>
         </div>
     </div>
 </div>
 
-<!-- Sync Toast Confirmation Element -->
-<div class="sync-toast" id="sync-toast">✓ Successfully Synced to Cloud!</div>
-
-<!-- Link to the separated JS file -->
+<!-- SINGLE JAVASCRIPT FILE -->
 <script type="module" src="script.js"></script>
 
 </body>
