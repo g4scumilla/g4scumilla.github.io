@@ -7,6 +7,17 @@
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Import Map for Firebase -->
+    <script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+        }
+    }
+    </script>
 
     <style>
         :root {
@@ -47,7 +58,201 @@
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ================= TOP COLLAPSIBLE CONTROL BAR ================= */
+        /* ================= GLOBAL UNIFIED HEADER (IMPORTED) ================= */
+        .app-global-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            background: rgba(8, 11, 18, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
+            flex-shrink: 0;
+        }
+
+        .header-main-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .android-header-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px; /* Matched the brand-icon look from PDF Pro */
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+        }
+
+        .android-header-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .header-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-search-container {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-search-container.open {
+            width: 170px;
+        }
+
+        .header-search-input {
+            width: 100%;
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.75);
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.75);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .header-icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Live Sync Indicator */
+        .live-sync-indicator {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 10.5px;
+            font-weight: 700;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+        }
+
+        /* Toggled on when admin */
+        body.is-admin .live-sync-indicator {
+            display: inline-flex;
+        }
+
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .sync-dot.polling {
+            transform: scale(1.6);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* HEADER NOTICE ROW (MARQUEE) */
+        .header-notice-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px 12px 18px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+            width: 100%;
+        }
+
+        .notice-update-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .header-notice-row.urgent .notice-update-label {
+            color: var(--danger);
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            animation: pulseGlow 1.5s infinite;
+        }
+
+        .header-notice-row.urgent .pulse-dot {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.45); opacity: 0.55; }
+        }
+
+        .notice-marquee-container {
+            flex-grow: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .notice-marquee-text {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .header-notice-row.urgent .notice-marquee-text {
+            color: var(--danger);
+        }
+
+        /* ================= TOP COLLAPSIBLE CONTROL BAR (PDF) ================= */
         .top-toolbar {
             display: flex;
             align-items: center;
@@ -57,11 +262,12 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
-            z-index: 100;
+            z-index: 99;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             max-height: 90px;
             opacity: 1;
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .top-toolbar.collapsed {
@@ -71,27 +277,6 @@
             border-bottom: none;
             opacity: 0;
             pointer-events: none;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 0.92rem;
-            white-space: nowrap;
-        }
-
-        .brand-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-            flex-shrink: 0;
         }
 
         /* Quick Link Input Bar in Header */
@@ -242,7 +427,7 @@
         /* Floating Expand/Collapse Pill Button */
         .toolbar-toggle-pill {
             position: fixed;
-            top: 12px;
+            top: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(-150%);
             z-index: 150;
@@ -449,10 +634,10 @@
         /* ================= COLLAPSIBLE SIDE DRAWERS ================= */
         .side-drawer {
             position: fixed;
-            top: 70px;
+            top: 170px;
             right: 20px;
             width: 350px;
-            max-height: calc(100vh - 95px);
+            max-height: calc(100vh - 195px);
             overflow-y: auto;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -715,13 +900,51 @@
     </div>
 
     <div class="app-wrapper">
-        <!-- Collapsible Top Control Bar -->
-        <header class="top-toolbar" id="topToolbar">
+        
+        <!-- ================= GLOBAL UNIFIED HEADER (INJECTED) ================= -->
+        <header class="app-global-header">
+            <div class="header-main-row">
+                <div class="header-left-group">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="android-header-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+                    <span class="android-header-title" style="margin-left: -2px;">Abdullahil Kuafi</span>
+                </div>
+                <div class="header-actions-right">
+                    <span class="live-sync-indicator" id="headerLiveSyncIndicator" title="Auto Cloud Sync Every 4.5s">
+                        <span class="sync-dot" id="live-sync-dot"></span>
+                        <span id="live-sync-text">Live</span>
+                    </span>
+                    <div class="header-search-container" id="header-search-container">
+                        <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
+                    </div>
+                    <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- COMPACT MARQUEE NOTICE ROW -->
+            <div class="header-notice-row" id="home-notice-showcase">
+                <div class="notice-update-label">
+                    <span class="pulse-dot"></span> Update:
+                </div>
+                <div class="notice-marquee-container">
+                    <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                        Welcome to Magical PDF Reader Pro!
+                    </marquee>
+                </div>
+            </div>
+        </header>
+
+        <!-- Collapsible Top Control Bar (PDF Specific) -->
+        <div class="top-toolbar" id="topToolbar">
             <div class="brand">
                 <div class="brand-icon">
-                    <i class="fa-solid fa-book-open-reader"></i>
+                    <i class="fa-solid fa-book-open-reader" style="color: white;"></i>
                 </div>
-                <div>
+                <div style="line-height: 1.1;">
                     <div>PDF Studio Pro</div>
                     <small style="color: var(--text-muted); font-size: 0.7rem;">Smooth Zoom Reader</small>
                 </div>
@@ -797,7 +1020,7 @@
                     <i class="fa-solid fa-chevron-up"></i>
                 </button>
             </div>
-        </header>
+        </div>
 
         <!-- Main Workspace -->
         <main class="workspace" id="workspace">
@@ -939,7 +1162,90 @@
         </div>
     </aside>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "firebase/auth";
+        import {
+            getFirestore,
+            doc,
+            onSnapshot
+        } from "firebase/firestore";
+
+        // ================= HEADER SYNC LOGIC =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+            authDomain: "my-project-1-13e18.firebaseapp.com",
+            projectId: "my-project-1-13e18",
+            storageBucket: "my-project-1-13e18.firebasestorage.app",
+            messagingSenderId: "628695847732",
+            appId: "1:628695847732:web:03af3d8569762d29ce0b61"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        let db = null;
+        let hubDocRef = null;
+        try {
+            db = getFirestore(app);
+            hubDocRef = doc(db, "kuafi_hub", "global_state");
+        } catch (e) {
+            console.warn("Firestore initialization warning:", e);
+        }
+
+        const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
+        let isAdmin = localStorage.getItem('kuafi_admin_unlocked') === 'true';
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email && ADMIN_GOOGLE_EMAILS.includes(user.email.toLowerCase())) {
+                isAdmin = true;
+            }
+            if (isAdmin) {
+                document.body.classList.add('is-admin');
+            }
+        });
+
+        // Sync notice board text from Firestore
+        if (hubDocRef) {
+            onSnapshot(hubDocRef, (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    if (data.notices && data.notices.length > 0) {
+                        const latestNotice = data.notices[0];
+                        document.getElementById('home-notice-text').innerText = latestNotice.text;
+                        
+                        // Restart marquee animation to prevent clipping when text changes
+                        const marquee = document.getElementById('home-notice-text');
+                        marquee.style.display = 'none';
+                        marquee.offsetHeight; // trigger reflow
+                        marquee.style.display = 'inline-block';
+                    }
+                    
+                    // Pulse the live indicator
+                    const dot = document.getElementById('live-sync-dot');
+                    if (dot) {
+                        dot.classList.add('polling');
+                        setTimeout(() => dot.classList.remove('polling'), 600);
+                    }
+                }
+            });
+        }
+
+        window.toggleHeaderSearch = function() {
+            const c = document.getElementById('header-search-container');
+            c.classList.toggle('open');
+            if (c.classList.contains('open')) document.getElementById('search-input').focus();
+        };
+
+        window.handleSearch = function(query) {
+            console.log("Global search triggered with:", query);
+            // Search functionality could be implemented here if you wish
+        };
+
+        // ================= PDF READER LOGIC =================
         const DEFAULT_FILE_ID = '1iLYBo1YToYSTlSqt8cYDyIwOk0V9yZbt';
         const STORAGE_KEY_LIST = 'magical_pdf_saved_library_v1';
         const STORAGE_KEY_ACTIVE = 'magical_pdf_active_id_v1';
@@ -964,7 +1270,6 @@
         let targetZoom = 100;
         let zoomAnimFrame = null;
 
-        // ================= INITIALIZE & LOAD PERMANENT SAVED STATE =================
         window.addEventListener('DOMContentLoaded', () => {
             const storedList = localStorage.getItem(STORAGE_KEY_LIST);
             if (storedList) {
@@ -1013,12 +1318,12 @@
         });
 
         // ================= SMOOTH 60FPS ZOOM ENGINE =================
-        function stepZoom(delta) {
+        window.stepZoom = function(delta) {
             const next = Math.min(250, Math.max(50, Math.round(targetZoom + delta)));
             animateZoomTo(next);
-        }
+        };
 
-        function animateZoomTo(newTarget) {
+        window.animateZoomTo = function(newTarget) {
             targetZoom = Math.min(250, Math.max(50, parseFloat(newTarget)));
             localStorage.setItem(STORAGE_KEY_ZOOM, targetZoom);
 
@@ -1038,15 +1343,15 @@
             }
 
             zoomAnimFrame = requestAnimationFrame(tick);
-        }
+        };
 
-        function setZoomImmediate(val) {
+        window.setZoomImmediate = function(val) {
             if (zoomAnimFrame) cancelAnimationFrame(zoomAnimFrame);
             currentZoom = Math.min(250, Math.max(50, parseFloat(val)));
             targetZoom = currentZoom;
             localStorage.setItem(STORAGE_KEY_ZOOM, currentZoom);
             applyZoomGeometry(currentZoom);
-        }
+        };
 
         function applyZoomGeometry(z) {
             const scale = z / 100;
@@ -1108,9 +1413,9 @@
             }
         });
 
-        function toggleZoomDock() {
+        window.toggleZoomDock = function() {
             document.getElementById('floatingZoomDock').classList.toggle('minimized');
-        }
+        };
 
         // ================= PERMANENT DRIVE LINK MANAGER =================
         function extractDriveId(input) {
@@ -1128,7 +1433,7 @@
             return null;
         }
 
-        function saveQuickLink() {
+        window.saveQuickLink = function() {
             const inputEl = document.getElementById('quickUrlInput');
             const fileId = extractDriveId(inputEl.value);
 
@@ -1141,9 +1446,9 @@
             ensureInLibrary(fileId, title);
             loadPDFById(fileId, true);
             inputEl.value = '';
-        }
+        };
 
-        function addAndSavePDF() {
+        window.addAndSavePDF = function() {
             const titleEl = document.getElementById('pdfTitleInput');
             const urlEl = document.getElementById('pdfUrlInput');
 
@@ -1159,7 +1464,7 @@
 
             titleEl.value = '';
             urlEl.value = '';
-        }
+        };
 
         function ensureInLibrary(fileId, title) {
             const existingIndex = savedLibrary.findIndex(item => item.id === fileId);
@@ -1227,7 +1532,7 @@
             });
         }
 
-        function deleteSavedPDF(event, fileId) {
+        window.deleteSavedPDF = function(event, fileId) {
             event.stopPropagation();
             savedLibrary = savedLibrary.filter(item => item.id !== fileId);
             localStorage.setItem(STORAGE_KEY_LIST, JSON.stringify(savedLibrary));
@@ -1237,14 +1542,14 @@
             }
             renderSavedLibrary();
             showToast('Removed from saved library');
-        }
+        };
 
-        function copyShareUrl(event, fileId) {
+        window.copyShareUrl = function(event, fileId) {
             event.stopPropagation();
             const shareUrl = `${window.location.origin}${window.location.pathname}?id=${fileId}`;
             navigator.clipboard.writeText(shareUrl);
             showToast('Shareable direct link copied!');
-        }
+        };
 
         function showToast(message, isError = false) {
             const toast = document.getElementById('toast');
@@ -1262,16 +1567,16 @@
         }
 
         // ================= VIEWER & FILTER CONTROLS =================
-        function hideLoader() {
+        window.hideLoader = function() {
             document.getElementById('loader').classList.add('hidden');
-        }
+        };
 
-        function toggleToolbar() {
+        window.toggleToolbar = function() {
             topToolbar.classList.toggle('collapsed');
             expandToolbarBtn.classList.toggle('visible');
-        }
+        };
 
-        function toggleMinimizePDF() {
+        window.toggleMinimizePDF = function() {
             pdfCard.classList.toggle('minimized');
             const btn = document.getElementById('minimizeBtn');
             if (pdfCard.classList.contains('minimized')) {
@@ -1281,19 +1586,19 @@
                 btn.innerHTML = '<i class="fa-solid fa-compress"></i> <span>Collapse</span>';
                 btn.classList.remove('active');
             }
-        }
+        };
 
-        function toggleEdgeToEdge() {
+        window.toggleEdgeToEdge = function() {
             workspace.classList.toggle('edge-to-edge');
             document.getElementById('edgeBtn').classList.toggle('active');
-        }
+        };
 
-        function rotatePDF() {
+        window.rotatePDF = function() {
             currentRotation = (currentRotation + 90) % 360;
             zoomStage.style.transform = `rotate(${currentRotation}deg)`;
-        }
+        };
 
-        function toggleDrawer(drawerId) {
+        window.toggleDrawer = function(drawerId) {
             const drawers = ['libraryDrawer', 'displayDrawer', 'notesDrawer'];
             drawers.forEach(id => {
                 const el = document.getElementById(id);
@@ -1303,17 +1608,17 @@
                     el.classList.remove('open');
                 }
             });
-        }
+        };
 
-        function updateWidth(val) {
+        window.updateWidth = function(val) {
             workspace.classList.remove('edge-to-edge');
             document.getElementById('edgeBtn').classList.remove('active');
             document.documentElement.style.setProperty('--viewer-width', val + '%');
             document.getElementById('widthVal').innerText = val + '%';
             document.getElementById('widthSlider').value = val;
-        }
+        };
 
-        function applyFilters() {
+        window.applyFilters = function() {
             const b = document.getElementById('brightSlider').value;
             const c = document.getElementById('contrastSlider').value;
             const s = document.getElementById('sepiaSlider').value;
@@ -1324,14 +1629,14 @@
 
             const invertFilter = isInverted ? 'invert(0.9) hue-rotate(180deg)' : '';
             pdfFrame.style.filter = `brightness(${b}%) contrast(${c}%) sepia(${s}%) ${invertFilter}`;
-        }
+        };
 
-        function toggleInvert() {
+        window.toggleInvert = function() {
             isInverted = !isInverted;
             applyFilters();
-        }
+        };
 
-        function resetFilters() {
+        window.resetFilters = function() {
             isInverted = false;
             currentRotation = 0;
             zoomStage.style.transform = 'rotate(0deg)';
@@ -1341,9 +1646,9 @@
             updateWidth(94);
             animateZoomTo(100);
             applyFilters();
-        }
+        };
 
-        function toggleFullScreen() {
+        window.toggleFullScreen = function() {
             const icon = document.getElementById('fsIcon');
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
@@ -1352,7 +1657,7 @@
                 document.exitFullscreen();
                 icon.classList.replace('fa-compress', 'fa-expand');
             }
-        }
+        };
 
         // Auto-save & Download Notes
         notesInput.value = localStorage.getItem('pdf_reader_notes') || '';
@@ -1360,21 +1665,21 @@
             localStorage.setItem('pdf_reader_notes', notesInput.value);
         });
 
-        function downloadNotes() {
+        window.downloadNotes = function() {
             const blob = new Blob([notesInput.value], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'PDF-Reading-Notes.txt';
             a.click();
-        }
+        };
 
-        function clearNotes() {
+        window.clearNotes = function() {
             if (confirm('Clear all saved notes?')) {
                 notesInput.value = '';
                 localStorage.removeItem('pdf_reader_notes');
             }
-        }
+        };
     </script>
 </body>
 </html>
