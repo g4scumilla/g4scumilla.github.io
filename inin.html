@@ -7,7 +7,7 @@
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Link to the universal CSS file -->
     <link rel="stylesheet" href="style.css">
 
@@ -75,10 +75,11 @@
             flex-shrink: 0;
         }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
-        
-        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
+
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; text-decoration: none; color: inherit; transition: opacity 0.2s;}
+        .brand:hover { opacity: 0.8; }
         .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
-        
+
         .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
         .quick-input-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
         .quick-input-bar input { background: transparent; border: none; color: var(--text-main); font-size: 0.8rem; width: 100%; outline: none; font-family: inherit; }
@@ -113,7 +114,7 @@
         .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
         .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
         .pdf-card.minimized { height: 46px !important; width: 480px !important; border-radius: 14px; }
-        
+
         .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid var(--glass-border); font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
         .window-dots { display: flex; gap: 8px; align-items: center; }
         .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
@@ -146,7 +147,7 @@
         .input-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 5px; }
         .text-input { width: 100%; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); padding: 9px 12px; font-size: 0.83rem; font-family: inherit; outline: none; }
         .text-input:focus { border-color: var(--accent); }
-        
+
         .saved-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
         .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
         .saved-item:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(30, 41, 59, 0.9); }
@@ -202,13 +203,14 @@
 
         <!-- Collapsible Top Control Bar (PDF Specific) -->
         <div class="top-toolbar" id="topToolbar">
-            <div class="brand">
+            <!-- Brand now safely returns to homepage -->
+            <a href="index.html" class="brand" title="Return to Homepage">
                 <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
                 <div style="line-height: 1.1;">
                     <div>PDF Studio Pro</div>
                     <small style="color: var(--text-muted); font-size: 0.7rem;">Smooth Zoom Reader</small>
                 </div>
-            </div>
+            </a>
 
             <!-- Instant Link Paste Bar -->
             <div class="quick-input-bar">
@@ -226,6 +228,10 @@
             </div>
 
             <div class="controls-group">
+                <!-- UPDATED: Standard buttons to prevent page redirects -->
+                <button class="btn" title="Notices"><i class="fa-solid fa-bell"></i> <span>Notices</span></button>
+                <button class="btn" title="Settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></button>
+                
                 <button class="btn btn-primary" onclick="toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs"><i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span></button>
                 <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
                 <button class="btn" onclick="toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
