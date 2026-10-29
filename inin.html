@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical PDF Reader Pro</title>
     <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <!-- Link to the universal CSS file (Required for your external Header/Footer) -->
-    <link rel="stylesheet" href="style.css">
 
     <!-- Import Map for Firebase -->
     <script type="importmap">
@@ -22,31 +19,111 @@
     }
     </script>
 
+    <!-- ==================== MERGED STYLES ==================== -->
     <style>
-        /* PDF Reader Specific Styles */
+        /* --- 1. GLOBAL STYLE.CSS --- */
         :root {
-            --bg-gradient: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
+            --bg-main: #080b12;
+            --bg-card: rgba(22, 29, 47, 0.65);
+            --bg-elevated: #151b2b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3ded97;
+            --accent-secondary: #06b6d4;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+            --app-max-width: 440px;
+            --grid-cols: 3;
+            --grid-gap: 12px;
+            --card-radius: 18px;
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --card-bg: var(--bg-card);
+            --card-shadow: 0 12px 32px -8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+            --card-padding: 12px 8px 14px;
+            --card-align: center;
+        }
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: rgba(15, 23, 42, 0.18);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: 1px solid rgba(15, 23, 42, 0.06);
+            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.06), inset 0 1px 0px rgba(255, 255, 255, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* --- 2. HEADER.CSS --- */
+        .app-global-header {
+            position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column;
+            background: rgba(8, 11, 18, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
+            flex-shrink: 0; /* Ensures header doesn't get squished */
+        }
+        body.light-mode .app-global-header { background: rgba(241, 245, 249, 0.85); box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08); }
+        .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
+        .header-left-group { display: flex; align-items: center; gap: 12px; }
+        .android-header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25); }
+        .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; }
+        .android-header-title a { color: inherit; text-decoration: none; }
+        .header-actions-right { display: flex; align-items: center; gap: 8px; }
+        .header-search-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .header-search-container.open { width: 170px; }
+        .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-size: 12px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .header-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(61, 237, 151, 0.05); }
+        .live-sync-indicator { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(61, 237, 151, 0.1); color: var(--accent); border: 1px solid rgba(61, 237, 151, 0.25); }
+        body.is-admin .live-sync-indicator { display: inline-flex; }
+        .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease, background 0.2s ease; }
+        .sync-dot.polling { transform: scale(1.6); box-shadow: 0 0 10px var(--accent); }
+        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px 12px 14px; cursor: pointer; overflow: hidden; transition: opacity 0.3s ease; width: 100%; }
+        .notice-update-label { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; z-index: 2; }
+        .header-notice-row.urgent .notice-update-label { color: var(--danger); }
+        .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
+        .header-notice-row.urgent .pulse-dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
+        .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; }
+        .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+        .header-notice-row.urgent .notice-marquee-text { color: var(--danger); }
+
+        /* --- 3. FOOTER.CSS --- */
+        .bottom-nav {
+            position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 28px); max-width: calc(var(--app-max-width, 440px) - 28px);
+            background: rgba(18, 25, 41, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px;
+            display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+        body.light-mode .bottom-nav { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1); }
+        .nav-item { background: none; border: none; color: var(--text-secondary); font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; padding: 6px 16px; border-radius: 16px; transition: all 0.2s; text-decoration: none; }
+        .nav-item i { font-size: 17px; }
+        .nav-item:hover { color: var(--text-primary); }
+        .nav-item.active { color: var(--accent); background: rgba(61, 237, 151, 0.1); }
+
+        /* --- 4. PDF READER SPECIFIC STYLES OVERRIDES --- */
+        :root {
             --glass-bg: rgba(30, 41, 59, 0.85);
             --glass-border: rgba(255, 255, 255, 0.12);
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
             --viewer-width: 94%;
         }
 
         body, html {
             width: 100%;
             height: 100%;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            overflow: hidden;
+            background: var(--bg-main);
+            background-image: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
+            color: var(--text-primary);
+            overflow: hidden; /* Lock viewport for PDF app */
             user-select: none;
             margin: 0;
             padding: 0;
+        }
+
+        body.light-mode {
+            background-image: radial-gradient(circle at top left, #e2e8f0, #f1f5f9 50%, #ffffff);
         }
 
         .app-wrapper {
@@ -60,79 +137,39 @@
 
         /* Top Toolbar Controls */
         .top-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 18px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--glass-border);
-            z-index: 99;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            max-height: 90px;
-            opacity: 1;
-            gap: 10px;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 18px; background: var(--glass-bg); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border); z-index: 99;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0;
         }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
-
-        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; font-family: 'Inter', sans-serif;}
         .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
-
         .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
-        .quick-input-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
-        .quick-input-bar input { background: transparent; border: none; color: var(--text-main); font-size: 0.8rem; width: 100%; outline: none; font-family: inherit; }
-        .quick-input-bar input::placeholder { color: var(--text-muted); }
-
+        .quick-input-bar:focus-within { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
+        .quick-input-bar input { background: transparent; border: none; color: var(--text-primary); font-size: 0.8rem; width: 100%; outline: none; font-family: 'Inter', sans-serif; }
         .zoom-toolbar-pill { display: flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); padding: 4px 8px; border-radius: 10px; }
-        .zoom-btn { background: rgba(255, 255, 255, 0.07); border: 1px solid transparent; color: var(--text-main); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
-        .zoom-btn:hover { background: var(--accent); transform: scale(1.05); }
-        .zoom-slider-inline { width: 85px; accent-color: var(--accent); cursor: pointer; height: 4px; }
-        .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; }
-        .zoom-badge:hover { background: var(--accent); }
-
+        .zoom-btn { background: rgba(255, 255, 255, 0.07); border: 1px solid transparent; color: var(--text-primary); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
+        .zoom-btn:hover { background: #6366f1; transform: scale(1.05); }
+        .zoom-slider-inline { width: 85px; accent-color: #6366f1; cursor: pointer; height: 4px; }
+        .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; font-family: 'Inter', sans-serif;}
+        .zoom-badge:hover { background: #6366f1; }
         .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; }
+        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); color: var(--text-primary); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; font-family: 'Inter', sans-serif;}
         .btn:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.25); }
-        .btn.active, .btn-primary { background: var(--accent); border-color: var(--accent-hover); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
-        .btn-primary:hover { background: var(--accent-hover); }
+        .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
+        .btn-primary:hover { background: #818cf8; }
         .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
 
         /* Floating Components */
-        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); color: var(--text-main); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); }
-        .toolbar-toggle-pill:hover { background: var(--accent); }
-
         .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.16); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .floating-zoom-dock.minimized .dock-controls { display: none; }
         .dock-controls { display: flex; align-items: center; gap: 8px; }
 
-        /* Hidden Toast Notification Fix */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(16, 185, 129, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            z-index: 9999;
-            transform: translateY(150px);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .toast { position: fixed; bottom: 85px; left: 30px; background: rgba(16, 185, 129, 0.95); backdrop-filter: blur(10px); color: white; padding: 12px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 9999; transform: translateY(150px); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toast.show { transform: translateY(0); opacity: 1; }
 
         /* Main Workspace */
         .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
@@ -140,54 +177,50 @@
         .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
         .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
         .pdf-card.minimized { height: 46px !important; width: 480px !important; border-radius: 14px; }
-
-        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid var(--glass-border); font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid var(--glass-border); font-size: 0.8rem; color: var(--text-secondary); flex-shrink: 0; font-family: 'Inter', sans-serif;}
         .window-dots { display: flex; gap: 8px; align-items: center; }
         .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
         .dot:hover { transform: scale(1.2); }
         .dot.yellow { background: #f59e0b; }
         .dot.green { background: #10b981; }
         .dot.purple { background: #6366f1; }
-
-        /* Smooth Scrollable Zoom Viewport */
         .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow-x: auto; overflow-y: hidden; background: #0f172a; scroll-behavior: auto; }
         .iframe-wrapper::-webkit-scrollbar { height: 10px; }
         .iframe-wrapper::-webkit-scrollbar-track { background: #0f172a; }
         .iframe-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
-        .iframe-wrapper::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .iframe-wrapper::-webkit-scrollbar-thumb:hover { background: #6366f1; }
         .zoom-stage { width: 100%; height: 100%; position: relative; transform-origin: center center; transition: transform 0.3s ease; }
         iframe { width: 100%; height: 100%; border: none; display: block; transition: filter 0.25s ease; }
 
         /* Loader */
         .loader-overlay { position: absolute; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; z-index: 10; transition: opacity 0.4s ease; }
         .loader-overlay.hidden { opacity: 0; pointer-events: none; }
-        .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+        .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.9s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Side Drawers */
-        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;}
         .side-drawer.open { transform: translateX(0); }
         .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--glass-border); font-weight: 600; font-size: 0.95rem; }
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
         .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 5px; }
-        .text-input { width: 100%; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); padding: 9px 12px; font-size: 0.83rem; font-family: inherit; outline: none; }
-        .text-input:focus { border-color: var(--accent); }
-
+        .input-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; }
+        .text-input { width: 100%; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; }
+        .text-input:focus { border-color: #6366f1; }
         .saved-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
         .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
         .saved-item:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(30, 41, 59, 0.9); }
-        .saved-item.active { border-color: var(--accent); background: rgba(99, 102, 241, 0.15); }
+        .saved-item.active { border-color: #6366f1; background: rgba(99, 102, 241, 0.15); }
         .saved-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; flex: 1; margin-right: 8px; }
         .saved-item-title { font-size: 0.83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .saved-item-id { font-size: 0.7rem; color: var(--text-muted); }
-        .icon-btn { background: rgba(255, 255, 255, 0.06); border: none; color: var(--text-muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .icon-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.15); }
+        .saved-item-id { font-size: 0.7rem; color: var(--text-secondary); }
+        .icon-btn { background: rgba(255, 255, 255, 0.06); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.15); }
         .icon-btn.delete:hover { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
         .control-row { margin-bottom: 15px; }
-        .control-row label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
-        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-        .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--text-main); padding: 12px; font-family: inherit; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
+        .control-row label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+        input[type="range"] { width: 100%; accent-color: #6366f1; cursor: pointer; }
+        .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--text-primary); padding: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
 
         @media (max-width: 768px) {
             .top-toolbar { padding: 8px 10px; flex-direction: column; max-height: 160px; }
@@ -201,67 +234,100 @@
 <body>
 
     <!-- Floating Pill to Expand Toolbar When Collapsed -->
-    <button class="toolbar-toggle-pill" id="expandToolbarBtn" onclick="toggleToolbar()">
+    <button class="toolbar-toggle-pill" id="expandToolbarBtn" onclick="window.toggleToolbar()">
         <i class="fa-solid fa-sliders"></i> Show Controls
     </button>
 
     <!-- Floating Bottom-Right Collapsible Zoom Dock -->
     <div class="floating-zoom-dock" id="floatingZoomDock">
-        <button class="zoom-btn" onclick="toggleZoomDock()" title="Collapse/Expand Zoom Bar">
+        <button class="zoom-btn" onclick="window.toggleZoomDock()" title="Collapse/Expand Zoom Bar">
             <i class="fa-solid fa-magnifying-glass" id="dockToggleIcon"></i>
         </button>
         <div class="dock-controls">
-            <button class="zoom-btn" onclick="stepZoom(-15)" title="Zoom Out (-)"><i class="fa-solid fa-minus"></i></button>
-            <span class="zoom-badge" id="dockZoomBadge" onclick="animateZoomTo(100)" title="Click to Reset to 100%">100%</span>
-            <button class="zoom-btn" onclick="stepZoom(15)" title="Zoom In (+)"><i class="fa-solid fa-plus"></i></button>
+            <button class="zoom-btn" onclick="window.stepZoom(-15)" title="Zoom Out (-)"><i class="fa-solid fa-minus"></i></button>
+            <span class="zoom-badge" id="dockZoomBadge" onclick="window.animateZoomTo(100)" title="Click to Reset to 100%">100%</span>
+            <button class="zoom-btn" onclick="window.stepZoom(15)" title="Zoom In (+)"><i class="fa-solid fa-plus"></i></button>
         </div>
     </div>
 
-    <!-- Toast Notification (Hidden properly via CSS) -->
+    <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">PDF Saved Permanently!</span>
     </div>
 
     <div class="app-wrapper">
 
-        <!-- ================= EXTERNAL HEADER INJECTION ================= -->
-        <div id="header-placeholder"></div>
+        <!-- ================= INJECTED HEADER HTML ================= -->
+        <header class="app-global-header">
+            <div class="header-main-row">
+                <div class="header-left-group">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="android-header-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+                    <span class="android-header-title"> <a href="index.html">Abdullahil Kuafi </a> </span>
+                </div>
+                <div class="header-actions-right">
+                    <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                        <span class="sync-dot" id="live-sync-dot"></span>
+                        <span id="live-sync-text">Live</span>
+                    </span>
+                    <div class="header-search-container" id="header-search-container">
+                        <input type="text" id="search-input" class="header-search-input" placeholder="Search apps..." oninput="handleSearch(this.value)">
+                    </div>
+                    <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
 
-        <!-- Collapsible Top Control Bar -->
+            <div class="header-notice-row" id="home-notice-showcase" onclick="switchPage('notices')">
+                <div class="notice-update-label">
+                    <span class="pulse-dot"></span> Update:
+                </div>
+                <div class="notice-marquee-container">
+                    <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                        Welcome to Abdullahil Kuafi's Smart Cloud Hub!
+                    </marquee>
+                </div>
+            </div>
+        </header>
+
+        <!-- Collapsible Top Control Bar (PDF Specific) -->
         <div class="top-toolbar" id="topToolbar">
             <div class="brand">
                 <div class="brand-icon"><i class="fa-solid fa-book-open-reader" style="color: white;"></i></div>
                 <div style="line-height: 1.1;">
                     <div>PDF Studio Pro</div>
-                    <small style="color: var(--text-muted); font-size: 0.7rem;">Smooth Zoom Reader</small>
+                    <small style="color: var(--text-secondary); font-size: 0.7rem;">Smooth Zoom Reader</small>
                 </div>
             </div>
 
             <!-- Instant Link Paste Bar -->
             <div class="quick-input-bar">
-                <i class="fa-solid fa-link" style="color: var(--accent-hover); margin-right: 8px;"></i>
-                <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') saveQuickLink()">
-                <button class="btn btn-primary btn-sm" onclick="saveQuickLink()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                <i class="fa-solid fa-link" style="color: #818cf8; margin-right: 8px;"></i>
+                <input type="text" id="quickUrlInput" placeholder="Paste PDF link & press Save..." onkeydown="if(event.key==='Enter') window.saveQuickLink()">
+                <button class="btn btn-primary btn-sm" onclick="window.saveQuickLink()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
             </div>
 
             <!-- Dedicated Smooth Zoom Bar in Header -->
             <div class="zoom-toolbar-pill">
-                <button class="zoom-btn" onclick="stepZoom(-15)" title="Smooth Zoom Out (Ctrl + -)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
-                <input type="range" class="zoom-slider-inline" id="topZoomSlider" min="50" max="250" value="100" oninput="setZoomImmediate(this.value)" title="Smooth Zoom Slider">
-                <span class="zoom-badge" id="topZoomBadge" onclick="animateZoomTo(100)" title="Click to Reset Zoom (100%)">100%</span>
-                <button class="zoom-btn" onclick="stepZoom(15)" title="Smooth Zoom In (Ctrl + +)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                <button class="zoom-btn" onclick="window.stepZoom(-15)" title="Smooth Zoom Out (Ctrl + -)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                <input type="range" class="zoom-slider-inline" id="topZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)" title="Smooth Zoom Slider">
+                <span class="zoom-badge" id="topZoomBadge" onclick="window.animateZoomTo(100)" title="Click to Reset Zoom (100%)">100%</span>
+                <button class="zoom-btn" onclick="window.stepZoom(15)" title="Smooth Zoom In (Ctrl + +)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
             </div>
 
             <div class="controls-group">
-                <button class="btn btn-primary" onclick="toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs"><i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span></button>
-                <button class="btn" onclick="toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
-                <button class="btn" onclick="toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
-                <button class="btn" onclick="rotatePDF()" title="Rotate Viewer 90°"><i class="fa-solid fa-rotate-right"></i></button>
-                <button class="btn" onclick="toggleDrawer('displayDrawer')" id="displayBtn" title="Zoom Presets & Eye Care Filters"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>Filters</span></button>
-                <button class="btn" onclick="toggleDrawer('notesDrawer')" id="notesBtn" title="Take Reading Notes"><i class="fa-solid fa-pen-to-square"></i> <span>Notes</span></button>
+                <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn" title="Add or Switch Saved PDFs"><i class="fa-solid fa-folder-plus"></i> <span>Saved PDFs</span></button>
+                <button class="btn" onclick="window.toggleMinimizePDF()" id="minimizeBtn" title="Collapse or Expand PDF Viewer"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
+                <button class="btn" onclick="window.toggleEdgeToEdge()" id="edgeBtn" title="Toggle Cinema Full-Width"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
+                <button class="btn" onclick="window.rotatePDF()" title="Rotate Viewer 90°"><i class="fa-solid fa-rotate-right"></i></button>
+                <button class="btn" onclick="window.toggleDrawer('displayDrawer')" id="displayBtn" title="Zoom Presets & Eye Care Filters"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>Filters</span></button>
+                <button class="btn" onclick="window.toggleDrawer('notesDrawer')" id="notesBtn" title="Take Reading Notes"><i class="fa-solid fa-pen-to-square"></i> <span>Notes</span></button>
                 <a class="btn" id="downloadBtn" href="#" target="_blank" title="Download Current PDF"><i class="fa-solid fa-download"></i></a>
-                <button class="btn" onclick="toggleFullScreen()" title="Fullscreen Mode"><i class="fa-solid fa-expand" id="fsIcon"></i></button>
-                <button class="btn" onclick="toggleToolbar()" title="Hide Toolbar"><i class="fa-solid fa-chevron-up"></i></button>
+                <button class="btn" onclick="window.toggleFullScreen()" title="Fullscreen Mode"><i class="fa-solid fa-expand" id="fsIcon"></i></button>
+                <button class="btn" onclick="window.toggleToolbar()" title="Hide Toolbar"><i class="fa-solid fa-chevron-up"></i></button>
             </div>
         </div>
 
@@ -270,18 +336,18 @@
             <div class="pdf-card" id="pdfCard">
                 <div class="card-header">
                     <div class="window-dots">
-                        <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
-                        <div class="dot green" onclick="toggleEdgeToEdge()" title="Expand Width"></div>
-                        <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
+                        <div class="dot yellow" onclick="window.toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
+                        <div class="dot green" onclick="window.toggleEdgeToEdge()" title="Expand Width"></div>
+                        <div class="dot purple" onclick="window.toggleToolbar()" title="Toggle Top Controls"></div>
                         <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Advanced Engineering Mathematics.pdf</span>
                     </div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted);"><span id="headerZoomReadout">Zoom: 100%</span></div>
+                    <div style="font-size: 0.75rem;"><span id="headerZoomReadout">Zoom: 100%</span></div>
                 </div>
 
                 <div class="iframe-wrapper" id="iframeWrapper">
                     <div class="loader-overlay" id="loader">
                         <div class="spinner"></div>
-                        <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your PDF preview...</span>
+                        <span style="font-size: 0.9rem; color: var(--text-secondary);">Loading your PDF preview...</span>
                     </div>
                     <div class="zoom-stage" id="zoomStage">
                         <!-- THE SPECIFIC GOOGLE DRIVE PDF LINK IS INJECTED HERE -->
@@ -294,70 +360,275 @@
 
     <!-- Drawers -->
 
-    <!-- Notices Drawer -->
+    <!-- Notices Drawer (Opens from footer link interception) -->
     <aside class="side-drawer" id="noticesDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: var(--accent);"></i> Recent Notices</span><button class="btn btn-sm" onclick="toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
+        <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: #6366f1;"></i> Recent Notices</span><button class="btn btn-sm" onclick="window.toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
             <i class="fa-regular fa-bell-slash" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
             <p>You have no new notifications right now.</p>
         </div>
     </aside>
 
-    <!-- Settings Drawer -->
+    <!-- Settings Drawer (Opens from footer link interception) -->
     <aside class="side-drawer" id="settingsDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: var(--accent);"></i> App Settings</span><button class="btn btn-sm" onclick="toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
+        <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: #6366f1;"></i> App Settings</span><button class="btn btn-sm" onclick="window.toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div style="color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
             <i class="fa-solid fa-sliders" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
             <p>Preferences and settings configuration will appear here.</p>
         </div>
     </aside>
 
     <aside class="side-drawer" id="libraryDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-bookmark" style="color: var(--accent);"></i> Add & Save PDF Link</span><button class="btn btn-sm" onclick="toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="drawer-header"><span><i class="fa-solid fa-bookmark" style="color: #6366f1;"></i> Add & Save PDF Link</span><button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div class="input-group"><label>PDF Name / Title (Optional)</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
         <div class="input-group"><label>PDF Link (or File ID)</label><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view"></div>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="addAndSavePDF()"><i class="fa-solid fa-floppy-disk"></i> Preview & Save Permanently</button>
-        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">Permanently Saved PDFs (<span id="savedCount">1</span>)</div>
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-floppy-disk"></i> Preview & Save Permanently</button>
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">Permanently Saved PDFs (<span id="savedCount">1</span>)</div>
         <div class="saved-list" id="savedListContainer"></div>
     </aside>
 
     <aside class="side-drawer" id="displayDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-sliders" style="color: var(--accent);"></i> Zoom & Reading Comfort</span><button class="btn btn-sm" onclick="toggleDrawer('displayDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="control-row"><label><span>Smooth PDF Zoom</span> <span id="drawerZoomVal">100%</span></label><input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="setZoomImmediate(this.value)"></div>
+        <div class="drawer-header"><span><i class="fa-solid fa-sliders" style="color: #6366f1;"></i> Zoom & Reading Comfort</span><button class="btn btn-sm" onclick="window.toggleDrawer('displayDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="control-row"><label><span>Smooth PDF Zoom</span> <span id="drawerZoomVal">100%</span></label><input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)"></div>
         <div class="preset-grid">
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(75)">75%</button>
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(100)">100%</button>
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(125)">125%</button>
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(150)">150%</button>
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(175)">175%</button>
-            <button class="btn btn-sm" style="justify-content:center;" onclick="animateZoomTo(200)">200%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(75)">75%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(100)">100%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(125)">125%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(150)">150%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(175)">175%</button>
+            <button class="btn btn-sm" style="justify-content:center;" onclick="window.animateZoomTo(200)">200%</button>
         </div>
-        <div class="control-row"><label><span>Viewer Card Width</span> <span id="widthVal">94%</span></label><input type="range" id="widthSlider" min="50" max="100" value="94" oninput="updateWidth(this.value)"></div>
-        <div class="control-row"><label><span>Brightness</span> <span id="brightVal">100%</span></label><input type="range" id="brightSlider" min="50" max="130" value="100" oninput="applyFilters()"></div>
-        <div class="control-row"><label><span>Contrast</span> <span id="contrastVal">100%</span></label><input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="applyFilters()"></div>
-        <div class="control-row"><label><span>Warm Sepia (Eye Care)</span> <span id="sepiaVal">0%</span></label><input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="applyFilters()"></div>
+        <div class="control-row"><label><span>Viewer Card Width</span> <span id="widthVal">94%</span></label><input type="range" id="widthSlider" min="50" max="100" value="94" oninput="window.updateWidth(this.value)"></div>
+        <div class="control-row"><label><span>Brightness</span> <span id="brightVal">100%</span></label><input type="range" id="brightSlider" min="50" max="130" value="100" oninput="window.applyFilters()"></div>
+        <div class="control-row"><label><span>Contrast</span> <span id="contrastVal">100%</span></label><input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="window.applyFilters()"></div>
+        <div class="control-row"><label><span>Warm Sepia (Eye Care)</span> <span id="sepiaVal">0%</span></label><input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="window.applyFilters()"></div>
         <div style="display: flex; gap: 8px; margin-top: 12px;">
-            <button class="btn" style="flex: 1; justify-content: center;" onclick="toggleInvert()"><i class="fa-solid fa-moon"></i> Invert Dark</button>
-            <button class="btn" style="flex: 1; justify-content: center;" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset All</button>
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="window.toggleInvert()"><i class="fa-solid fa-moon"></i> Invert Dark</button>
+            <button class="btn" style="flex: 1; justify-content: center;" onclick="window.resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset All</button>
         </div>
     </aside>
 
     <aside class="side-drawer" id="notesDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-pen-nib" style="color: var(--accent);"></i> Quick Reading Notes</span><button class="btn btn-sm" onclick="toggleDrawer('notesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="drawer-header"><span><i class="fa-solid fa-pen-nib" style="color: #6366f1;"></i> Quick Reading Notes</span><button class="btn btn-sm" onclick="window.toggleDrawer('notesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways while reading... (Auto-saved permanently in browser)"></textarea>
         <div style="display: flex; gap: 8px;">
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="downloadNotes()"><i class="fa-solid fa-file-arrow-down"></i> Save .txt</button>
-            <button class="btn" onclick="clearNotes()" title="Clear Notes"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="window.downloadNotes()"><i class="fa-solid fa-file-arrow-down"></i> Save .txt</button>
+            <button class="btn" onclick="window.clearNotes()" title="Clear Notes"><i class="fa-solid fa-trash"></i></button>
         </div>
     </aside>
 
-    <!-- ==================== EXTERNAL FOOTER INJECTION ==================== -->
-    <div id="footer-placeholder"></div>
+    <!-- ================= INJECTED FOOTER HTML ================= -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" id="nav-notices" onclick="switchPage('notices')">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span>Notices</span>
+        </button>
+        <button class="nav-item" id="nav-tools" onclick="switchPage('tools')">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
 
-    <!-- EXTERNAL SCRIPT (Handles Header/Auth) -->
-    <script type="module" src="script.js"></script>
+    <!-- ================= INJECTED FIREBASE/HUB SCRIPT MODULE ================= -->
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import {
+            getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged
+        } from "firebase/auth";
+        import {
+            getFirestore, doc, getDoc, setDoc, onSnapshot
+        } from "firebase/firestore";
 
-    <!-- NEW: DEDICATED PDF READER JAVASCRIPT (Guarantees all buttons work instantly) -->
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdOJKAtKvCMJERGXtJb2nyx3Tk7LYnA3I",
+            authDomain: "my-project-1-13e18.firebaseapp.com",
+            projectId: "my-project-1-13e18",
+            storageBucket: "my-project-1-13e18.firebasestorage.app",
+            messagingSenderId: "628695847732",
+            appId: "1:628695847732:web:03af3d8569762d29ce0b61"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+        googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+        let db = null;
+        let hubDocRef = null;
+        try {
+            db = getFirestore(app);
+            hubDocRef = doc(db, "kuafi_hub", "global_state");
+        } catch (e) {
+            console.warn("Firestore initialization warning:", e);
+        }
+
+        const FIREBASE_RTDB_REST_URL = `https://${firebaseConfig.projectId}-default-rtdb.firebaseio.com/kuafi_hub_global.json`;
+        const AUTO_POLL_INTERVAL_MS = 4500;
+        const ADMIN_GOOGLE_EMAILS = ['abdullahilkuafi@gmail.com', 'g4scumilla@gmail.com'];
+        const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
+        const THEME_STORAGE_KEY = 'kuafi_theme_mode';
+
+        let isAdmin = false;
+        let isGoogleLoggedIn = false;
+        let isPreviewMode = false;
+        let isPushing = false;
+        let currentFilter = 'fav';
+        let isRearrangeMode = false;
+
+        const DEFAULT_CATEGORIES = [
+            { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
+            { key: 'all', label: 'All Apps', icon: '', iconColor: '' },
+            { key: 'live', label: 'Active Links', icon: '', iconColor: '' },
+            { key: 'work', label: 'Work & Dev', icon: '', iconColor: '' },
+            { key: 'life', label: 'Lifestyle', icon: '', iconColor: '' }
+        ];
+
+        let appState = {
+            updatedAt: 0, adminPin: '1234', favorites: ['app-dev', 'app-finance', 'app-sports'],
+            cardOrder: [], cardsData: [], recycleBin: [], categories: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
+            notices: [{ text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }],
+            gridCols: 3, gridStyleChoice: '1', gridLayoutChoice: '1', accentPrimary: '#3ded97', accentSecondary: '#06b6d4',
+            scratchpad: '', accessMode: 'auto'
+        };
+
+        function extractInitialDomCards() { return []; } // Empty array fallback if grid isn't here
+        const INITIAL_20_CARDS = extractInitialDomCards();
+
+        function isUserActivelyEditingForm() {
+            const anyModalOpen = document.querySelector('.modal-backdrop.open') !== null;
+            const activeTag = document.activeElement ? document.activeElement.tagName : '';
+            return anyModalOpen || (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') || isPreviewMode || isPushing;
+        }
+
+        function showSyncToast(message = '✓ Successfully Synced to Cloud!') {
+            const toast = document.getElementById('sync-toast');
+            if (!toast) return;
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2800);
+        }
+
+        function applyCloudStateToUI(incomingState, forceRender = false) {
+            if (!incomingState || typeof incomingState !== 'object') return;
+            const incomingTime = Number(incomingState.updatedAt || 0);
+            const localTime = Number(appState.updatedAt || 0);
+            if (!forceRender && incomingTime > 0 && incomingTime <= localTime) return;
+
+            appState = { ...appState, ...incomingState };
+            
+            if (appState.accentPrimary && appState.accentSecondary) {
+                document.documentElement.style.setProperty('--accent', appState.accentPrimary);
+                document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            updateHomeNoticeShowcase();
+        }
+
+        function pulseSyncBadge(label = 'Live') {
+            const dot = document.getElementById('live-sync-dot');
+            const txt = document.getElementById('live-sync-text');
+            if (txt) txt.innerText = label;
+            if (dot) {
+                dot.classList.add('polling');
+                setTimeout(() => dot.classList.remove('polling'), 600);
+            }
+        }
+
+        // loadComponents is disabled because header/footer are now hardcoded in the file
+        async function loadComponents() { /* Disabled for merged single-file version */ }
+
+        async function initApp() {
+            await loadComponents();
+            
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+            document.body.classList.toggle('light-mode', savedTheme === 'light');
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { appState = { ...appState, ...JSON.parse(saved) }; } catch (e) {}
+            }
+
+            if (localStorage.getItem('kuafi_admin_unlocked') === 'true') isAdmin = true;
+
+            onAuthStateChanged(auth, (user) => {
+                isGoogleLoggedIn = !!user;
+            });
+
+            if (hubDocRef) {
+                onSnapshot(hubDocRef, (snap) => {
+                    if (snap.exists() && !isUserActivelyEditingForm()) {
+                        applyCloudStateToUI(snap.data());
+                        pulseSyncBadge('Live');
+                    }
+                }, (err) => console.warn("Firestore live listener standby:", err.message));
+            }
+
+            syncData(true);
+            setInterval(() => {
+                if (!document.hidden && !isUserActivelyEditingForm()) syncData(false);
+            }, AUTO_POLL_INTERVAL_MS);
+
+            updateHomeNoticeShowcase();
+        }
+
+        async function syncData(manual = false) {
+            pulseSyncBadge('Sync');
+            let latestCloudData = null;
+            if (hubDocRef) {
+                try { const snap = await getDoc(hubDocRef); if (snap.exists()) latestCloudData = snap.data(); } catch (e) {}
+            }
+            try {
+                const res = await fetch(FIREBASE_RTDB_REST_URL, { cache: 'no-store' });
+                if (res.ok) {
+                    const rtdbData = await res.json();
+                    if (rtdbData && typeof rtdbData === 'object' && Number(rtdbData.updatedAt || 0) > Number(latestCloudData?.updatedAt || 0)) {
+                        latestCloudData = rtdbData;
+                    }
+                }
+            } catch (e) {}
+            if (latestCloudData) applyCloudStateToUI(latestCloudData, manual);
+            setTimeout(() => pulseSyncBadge('Live'), 350);
+        }
+
+        function updateHomeNoticeShowcase() {
+            const notices = appState.notices || [];
+            const showcaseText = document.getElementById('home-notice-text');
+            const showcaseBanner = document.getElementById('home-notice-showcase');
+            if (!showcaseText || !showcaseBanner) return;
+
+            if (notices.length === 0) {
+                showcaseText.innerText = 'No global announcements right now.';
+                showcaseBanner.classList.remove('urgent');
+                return;
+            }
+            const item = notices[0];
+            showcaseBanner.classList.toggle('urgent', item.priority === 'urgent');
+            showcaseText.innerText = item.text;
+            showcaseText.style.animation = 'none';
+            setTimeout(() => showcaseText.style.animation = 'marquee 16s linear infinite', 10);
+        }
+
+        function toggleHeaderSearch() {
+            const c = document.getElementById('header-search-container');
+            if (c) { c.classList.toggle('open'); if (c.classList.contains('open')) document.getElementById('search-input')?.focus(); }
+        }
+
+        function handleSearch(query) { /* Placeholder for header search */ }
+
+        // --- EXPOSE GLOBALLY ---
+        Object.assign(window, {
+            toggleHeaderSearch, handleSearch, syncData, loadComponents
+        });
+
+        initApp();
+    </script>
+
+    <!-- ================= DEDICATED PDF READER JAVASCRIPT ================= -->
     <script>
         // PDF Loading
         window.hideLoader = function() {
@@ -373,7 +644,6 @@
         let isToolbarHidden = false;
         let isInverted = false;
 
-        // Make functions globally available for the inline HTML onclick="" events
         window.toggleDrawer = function(drawerId) {
             document.querySelectorAll('.side-drawer').forEach(d => {
                 if(d.id !== drawerId) d.classList.remove('open');
@@ -385,7 +655,7 @@
         window.updateZoomUI = function() {
             const stage = document.getElementById('zoomStage');
             if(stage) stage.style.transform = `scale(${currentZoom / 100}) rotate(${currentRotation}deg)`;
-            
+
             ['topZoomSlider', 'drawerZoomSlider'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.value = currentZoom;
@@ -396,166 +666,91 @@
             });
         };
 
-        window.setZoomImmediate = function(val) {
-            currentZoom = parseInt(val);
-            window.updateZoomUI();
-        };
-
-        window.stepZoom = function(delta) {
-            currentZoom += delta;
-            if(currentZoom < 50) currentZoom = 50;
-            if(currentZoom > 250) currentZoom = 250;
-            window.updateZoomUI();
-        };
-
-        window.animateZoomTo = function(val) {
-            currentZoom = val;
-            window.updateZoomUI();
-        };
-
-        window.rotatePDF = function() {
-            currentRotation = (currentRotation + 90) % 360;
-            window.updateZoomUI();
-        };
+        window.setZoomImmediate = function(val) { currentZoom = parseInt(val); window.updateZoomUI(); };
+        window.stepZoom = function(delta) { currentZoom += delta; if(currentZoom < 50) currentZoom = 50; if(currentZoom > 250) currentZoom = 250; window.updateZoomUI(); };
+        window.animateZoomTo = function(val) { currentZoom = val; window.updateZoomUI(); };
+        window.rotatePDF = function() { currentRotation = (currentRotation + 90) % 360; window.updateZoomUI(); };
 
         window.toggleMinimizePDF = function() {
             const card = document.getElementById('pdfCard');
             isMinimized = !isMinimized;
-            if(isMinimized) card.classList.add('minimized');
-            else card.classList.remove('minimized');
+            if(isMinimized) card.classList.add('minimized'); else card.classList.remove('minimized');
         };
 
         window.toggleEdgeToEdge = function() {
             const ws = document.getElementById('workspace');
             isEdgeToEdge = !isEdgeToEdge;
-            if(isEdgeToEdge) ws.classList.add('edge-to-edge');
-            else ws.classList.remove('edge-to-edge');
+            if(isEdgeToEdge) ws.classList.add('edge-to-edge'); else ws.classList.remove('edge-to-edge');
         };
 
         window.toggleToolbar = function() {
             const tb = document.getElementById('topToolbar');
             const pill = document.getElementById('expandToolbarBtn');
             isToolbarHidden = !isToolbarHidden;
-            if(isToolbarHidden) {
-                tb.classList.add('collapsed');
-                pill.classList.add('visible');
-            } else {
-                tb.classList.remove('collapsed');
-                pill.classList.remove('visible');
-            }
+            if(isToolbarHidden) { tb.classList.add('collapsed'); pill.classList.add('visible'); } 
+            else { tb.classList.remove('collapsed'); pill.classList.remove('visible'); }
         };
 
         window.toggleZoomDock = function() {
             const dock = document.getElementById('floatingZoomDock');
             const icon = document.getElementById('dockToggleIcon');
             dock.classList.toggle('minimized');
-            if(dock.classList.contains('minimized')) {
-                icon.classList.replace('fa-magnifying-glass', 'fa-up-right-and-down-left-from-center');
-            } else {
-                icon.classList.replace('fa-up-right-and-down-left-from-center', 'fa-magnifying-glass');
-            }
+            if(dock.classList.contains('minimized')) icon.classList.replace('fa-magnifying-glass', 'fa-up-right-and-down-left-from-center');
+            else icon.classList.replace('fa-up-right-and-down-left-from-center', 'fa-magnifying-glass');
         };
 
         window.toggleFullScreen = function() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log("Fullscreen error:", err.message);
-                });
-            } else {
-                document.exitFullscreen();
-            }
+                document.documentElement.requestFullscreen().catch(err => console.log("Fullscreen error:", err.message));
+            } else { document.exitFullscreen(); }
         };
 
         window.applyFilters = function() {
             const bright = document.getElementById('brightSlider').value;
             const contrast = document.getElementById('contrastSlider').value;
             const sepia = document.getElementById('sepiaSlider').value;
-            
             document.getElementById('brightVal').innerText = bright + '%';
             document.getElementById('contrastVal').innerText = contrast + '%';
             document.getElementById('sepiaVal').innerText = sepia + '%';
-            
             let filterString = `brightness(${bright}%) contrast(${contrast}%) sepia(${sepia}%)`;
-            if (isInverted) {
-                filterString += ' invert(90%) hue-rotate(180deg)';
-            }
+            if (isInverted) filterString += ' invert(90%) hue-rotate(180deg)';
             document.getElementById('pdfFrame').style.filter = filterString;
         };
 
-        window.toggleInvert = function() {
-            isInverted = !isInverted;
-            window.applyFilters();
-        };
-
-        window.resetFilters = function() {
-            document.getElementById('brightSlider').value = 100;
-            document.getElementById('contrastSlider').value = 100;
-            document.getElementById('sepiaSlider').value = 0;
-            isInverted = false;
-            window.applyFilters();
-        };
-
-        window.updateWidth = function(val) {
-            document.getElementById('widthVal').innerText = val + '%';
-            document.documentElement.style.setProperty('--viewer-width', val + '%');
-        };
-
-        window.showToast = function(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        };
-
-        window.addAndSavePDF = function() {
-            window.showToast("PDF Added to Library!");
-            window.toggleDrawer('libraryDrawer');
-        };
-        
-        window.saveQuickLink = function() {
-            window.showToast("Link Saved!");
-        };
-
-        window.clearNotes = function() {
-            if(confirm("Are you sure you want to clear your notes?")) {
-                document.getElementById('notesInput').value = '';
-            }
-        };
-
+        window.toggleInvert = function() { isInverted = !isInverted; window.applyFilters(); };
+        window.resetFilters = function() { document.getElementById('brightSlider').value = 100; document.getElementById('contrastSlider').value = 100; document.getElementById('sepiaSlider').value = 0; isInverted = false; window.applyFilters(); };
+        window.updateWidth = function(val) { document.getElementById('widthVal').innerText = val + '%'; document.documentElement.style.setProperty('--viewer-width', val + '%'); };
+        window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); };
+        window.addAndSavePDF = function() { window.showToast("PDF Added to Library!"); window.toggleDrawer('libraryDrawer'); };
+        window.saveQuickLink = function() { window.showToast("Link Saved!"); };
+        window.clearNotes = function() { if(confirm("Are you sure you want to clear your notes?")) document.getElementById('notesInput').value = ''; };
         window.downloadNotes = function() {
             const text = document.getElementById('notesInput').value;
             if(!text) return alert("Notes are empty!");
             const blob = new Blob([text], {type: "text/plain"});
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "Reading_Notes.txt";
-            a.click();
-            URL.revokeObjectURL(url);
+            const a = document.createElement('a'); a.href = url; a.download = "Reading_Notes.txt"; a.click(); URL.revokeObjectURL(url);
         };
 
-        // NEW: Intercept clicks on dynamic external Headers to stop redirecting
-        document.addEventListener('click', function(event) {
-            const link = event.target.closest('a');
-            if (!link) return;
-            
-            const href = link.getAttribute('href') || '';
-            const text = (link.innerText || '').toLowerCase();
-            const title = (link.title || '').toLowerCase();
-            
-            if (href.includes('index.html')) {
-                // If it's the Notices link
-                if (text.includes('notice') || title.includes('notice')) {
-                    event.preventDefault(); 
-                    window.toggleDrawer('noticesDrawer');
-                } 
-                // If it's the Settings link
-                else if (text.includes('setting') || title.includes('setting') || text.includes('gear')) {
-                    event.preventDefault(); 
-                    window.toggleDrawer('settingsDrawer');
-                }
+        // --- SMART ROUTING INTERCEPTORS ---
+        // Overrides Hub navigation logic to safely open side drawers instead of leaving the PDF app
+        window.switchPage = function(pageId) {
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+            const navBtn = document.getElementById('nav-' + pageId);
+            if (navBtn) navBtn.classList.add('active');
+
+            if (pageId === 'notices') {
+                window.toggleDrawer('noticesDrawer');
+            } else if (pageId === 'tools' || pageId === 'settings') {
+                window.toggleDrawer('settingsDrawer');
+            } else {
+                window.location.href = 'index.html#' + pageId; // Redirect back to hub for other pages
             }
-        });
+        };
+
+        window.goHomeWithFav = function() {
+            window.location.href = 'index.html'; 
+        };
     </script>
 </body>
 </html>
