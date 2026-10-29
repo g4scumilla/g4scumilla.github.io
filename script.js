@@ -52,6 +52,7 @@ let isPreviewMode = false;
 let isPushing = false;
 let currentFilter = 'fav';
 let isRearrangeMode = false;
+let INITIAL_20_CARDS = []; // Populated safely in initApp() after DOM loads
 
 const DEFAULT_CATEGORIES = [
     { key: 'fav', label: 'Favourites', icon: 'fa-solid fa-star', iconColor: '#f59e0b' },
@@ -106,8 +107,6 @@ function extractInitialDomCards() {
         };
     });
 }
-
-const INITIAL_20_CARDS = extractInitialDomCards();
 
 function isUserActivelyEditingForm() {
     const anyModalOpen = document.querySelector('.modal-backdrop.open') !== null;
@@ -188,38 +187,35 @@ function pulseSyncBadge(label = 'Live') {
 // ----- Asynchronous External Component Loading (Header & Footer) -----
 async function loadComponents() {
     try {
-        // Load Header
         const headerRes = await fetch('header.html');
         if (headerRes.ok) {
             const headerHtml = await headerRes.text();
             const headerPlaceholder = document.getElementById('header-placeholder');
-            if (headerPlaceholder) {
-                headerPlaceholder.outerHTML = headerHtml;
-            }
+            if (headerPlaceholder) headerPlaceholder.outerHTML = headerHtml;
         }
     } catch (e) {
-        console.error('Failed to load header:', e);
+        console.warn('Header injection warning (safe to ignore if header is embedded):', e);
     }
 
     try {
-        // Load Footer
         const footerRes = await fetch('footer.html');
         if (footerRes.ok) {
             const footerHtml = await footerRes.text();
             const footerPlaceholder = document.getElementById('footer-placeholder');
-            if (footerPlaceholder) {
-                footerPlaceholder.outerHTML = footerHtml;
-            }
+            if (footerPlaceholder) footerPlaceholder.outerHTML = footerHtml;
         }
     } catch (e) {
-        console.error('Failed to load footer:', e);
+        console.warn('Footer injection warning (safe to ignore if footer is embedded):', e);
     }
 }
 
 // ----- Initialization -----
 async function initApp() {
-    // Wait for the external header and footer to load into the DOM before initializing listeners
+    // Wait for the external components (if any) to inject so the DOM is fully ready
     await loadComponents();
+
+    // Now safe to read the DOM for fallback cards
+    INITIAL_20_CARDS = extractInitialDomCards();
 
     applySavedThemeOnLoad();
 
@@ -304,7 +300,7 @@ async function initApp() {
     renderNotices();
     updateAuthAndAdminUI();
 
-    // SMART ROUTING: Only execute tab rendering if #page-home exists on this page
+    // SMART ROUTING
     const homePage = document.getElementById('page-home');
     if (homePage) {
         const hash = window.location.hash.replace('#', '');
@@ -462,7 +458,7 @@ function updateAuthAndAdminUI() {
 // ----- Grid Category Filters -----
 function renderCategories() {
     const container = document.getElementById('filter-pills-container');
-    if (!container) return; // Prevent crash on non-index pages
+    if (!container) return; 
 
     container.innerHTML = '';
 
@@ -491,7 +487,6 @@ function renderCategories() {
             `;
             wrap.appendChild(adminBar);
         }
-
         container.appendChild(wrap);
     });
 
@@ -586,7 +581,7 @@ function renderServiceGrid() {
     const grid = document.getElementById('app-grid');
     const emptyMsg = document.getElementById('empty-fav-msg');
 
-    if (!grid) return; // Safely exit if grid doesn't exist on this page
+    if (!grid) return; 
 
     grid.querySelectorAll('.service-item').forEach(el => el.remove());
 
@@ -856,15 +851,11 @@ function emptyRecycleBin() {
 
 // ----- UI Core Behaviors & Smart Routing -----
 function goHomeWithFav() {
-    // 1. Check if we are on the main index page by looking for #page-home
     const homePage = document.getElementById('page-home');
     if (!homePage) {
-        // We are on a different page (like the PDF reader)! Redirect back to Home.
         window.location.href = 'index.html';
         return;
     }
-
-    // 2. If we are on index.html, switch the tab normally
     switchPage('home');
     const favPill = document.getElementById('pill-fav');
     if (typeof filterApps === 'function') {
@@ -875,14 +866,11 @@ function goHomeWithFav() {
 function switchPage(pageId) {
     const targetPage = document.getElementById('page-' + pageId);
 
-    // 1. Check if the requested tab exists on this page
     if (!targetPage) {
-        // We are on a different page! Redirect back to index and tell it which tab to open
         window.location.href = 'index.html#' + pageId;
         return;
     }
 
-    // 2. If the tab exists, switch to it smoothly
     document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
     targetPage.classList.add('active');
 
@@ -890,24 +878,20 @@ function switchPage(pageId) {
     const navBtn = document.getElementById('nav-' + pageId);
     if (navBtn) navBtn.classList.add('active');
 
-    // Show integrated header notice row only on Home page
     const noticeRow = document.getElementById('home-notice-showcase');
     if (noticeRow) {
         noticeRow.style.display = (pageId === 'home') ? 'flex' : 'none';
     }
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function toggleFav(e, cardId) {
     e.preventDefault();
     e.stopPropagation();
-
     if (!isAdmin) {
         showSyncToast('⚠️ Only Admins can modify Favourites.');
         return;
     }
-
     const idx = appState.favorites.indexOf(cardId);
     if (idx === -1) appState.favorites.push(cardId);
     else appState.favorites.splice(idx, 1);
@@ -936,7 +920,7 @@ function renderNotices() {
                                 <span class="notice-rank-pill ${isUrgent ? 'urgent' : ''}">
                                     <i class="fa-solid ${isUrgent ? 'fa-triangle-exclamation' : 'fa-bolt'}"></i> ${isUrgent ? 'Urgent' : 'Notice #' + (idx + 1)}
                                 </span>
-                                <span class="admin-posted-badge"><i class="fa-solid fa-shield-halved"></i> Admin (As posted by Admin)</span>
+                                <span class="admin-posted-badge"><i class="fa-solid fa-shield-halved"></i> Admin</span>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span class="notice-time-badge"><i class="fa-regular fa-clock"></i> ${n.time || 'Live'}</span>
@@ -965,7 +949,6 @@ function renderNotices() {
             }, 50);
         }
     }
-
     updateHomeNoticeShowcase();
 }
 
@@ -988,19 +971,13 @@ function updateHomeNoticeShowcase() {
         showcaseBanner.classList.remove('urgent');
         return;
     }
-
-    // Display the most recent notice text only
     const item = notices[0];
     const isUrgent = item.priority === 'urgent';
-
     showcaseBanner.classList.toggle('urgent', isUrgent);
     showcaseText.innerText = item.text;
 
-    // Reset and trigger animation to ensure smooth looping after an update
     showcaseText.style.animation = 'none';
-    setTimeout(() => {
-        showcaseText.style.animation = 'marquee 16s linear infinite';
-    }, 10);
+    setTimeout(() => { showcaseText.style.animation = 'marquee 16s linear infinite'; }, 10);
 }
 
 function saveNoticeItem() {
@@ -1026,7 +1003,6 @@ function saveNoticeItem() {
         });
         if (appState.notices.length > 30) appState.notices = appState.notices.slice(0, 30);
     }
-
     input.value = '';
     editIdxInput.value = '';
     document.getElementById('notice-btn-text').innerText = 'Publish Notice';
@@ -1102,9 +1078,7 @@ function logoutAdmin() {
     goHomeWithFav();
 }
 
-function handleSettingsCardClick() {
-    switchPage('tools');
-}
+function handleSettingsCardClick() { switchPage('tools'); }
 
 function toggleRearrangeMode(forceState) {
     isRearrangeMode = typeof forceState === 'boolean' ? forceState : !isRearrangeMode;
@@ -1233,7 +1207,6 @@ function openProfileModal() {
     document.getElementById('profile-phone-input').value = customProfile.phone || '';
     document.getElementById('profile-address-input').value = customProfile.address || '';
     document.getElementById('profile-district-input').value = customProfile.district || '';
-
     openModal('user-profile-modal');
 }
 
@@ -1247,9 +1220,7 @@ function saveUserProfileDetails() {
     const profileData = { name, phone, address, district };
     localStorage.setItem(`kuafi_user_profile_${email}`, JSON.stringify(profileData));
 
-    if (name) {
-        document.getElementById('google-user-name').innerText = name;
-    }
+    if (name) document.getElementById('google-user-name').innerText = name;
     document.getElementById('profile-details-preview').innerText = `${name || 'User'} • ${phone || 'No phone'} • ${district || 'No district'}`;
 
     closeModal('user-profile-modal');
@@ -1341,14 +1312,8 @@ function handleSearch(query) {
     });
 }
 
-function openSafeUrl(url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-}
-
-function copyPageUrl() {
-    navigator.clipboard?.writeText(window.location.href);
-    alert('Hub Link copied to clipboard!');
-}
+function openSafeUrl(url) { window.open(url, '_blank', 'noopener,noreferrer'); }
+function copyPageUrl() { navigator.clipboard?.writeText(window.location.href); alert('Hub Link copied to clipboard!'); }
 
 // ----- Cloud Push & Fetch -----
 async function pushStateToCloud(showAlert = false) {
@@ -1384,12 +1349,8 @@ async function pushStateToCloud(showAlert = false) {
     pulseSyncBadge('Live');
 
     const pill = document.getElementById('cloud-status-pill');
-    if (pill) {
-        pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally';
-    }
-    if (showAlert) {
-        showSyncToast('✓ Successfully Synced to Cloud for all users!');
-    }
+    if (pill) pill.innerText = syncedOk ? 'Synced to Cloud ✓' : 'Saved Locally';
+    if (showAlert) showSyncToast('✓ Successfully Synced to Cloud for all users!');
 }
 
 async function syncData(manual = false) {
@@ -1402,9 +1363,7 @@ async function syncData(manual = false) {
     if (hubDocRef) {
         try {
             const snap = await getDoc(hubDocRef);
-            if (snap.exists()) {
-                latestCloudData = snap.data();
-            }
+            if (snap.exists()) latestCloudData = snap.data();
         } catch (e) {}
     }
 
@@ -1415,16 +1374,12 @@ async function syncData(manual = false) {
             if (rtdbData && typeof rtdbData === 'object') {
                 const rtdbTime = Number(rtdbData.updatedAt || 0);
                 const fsTime = Number(latestCloudData?.updatedAt || 0);
-                if (rtdbTime > fsTime) {
-                    latestCloudData = rtdbData;
-                }
+                if (rtdbTime > fsTime) latestCloudData = rtdbData;
             }
         }
     } catch (e) {}
 
-    if (latestCloudData) {
-        applyCloudStateToUI(latestCloudData, manual);
-    }
+    if (latestCloudData) applyCloudStateToUI(latestCloudData, manual);
 
     setTimeout(() => {
         if (manual && icon) icon.classList.remove('fa-spin');
@@ -1433,70 +1388,28 @@ async function syncData(manual = false) {
 }
 
 // ----- Modals Toggles -----
-function openModal(id) {
-    document.getElementById(id)?.classList.add('open');
-}
+function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
-function closeModal(id) {
-    document.getElementById(id)?.classList.remove('open');
-}
-
-// ----- Attach functions to window for UI usage -----
-// This is the critical block that connects your HTML to your JS module
+// ==========================================
+// EXPORT FUNCTIONS TO GLOBAL WINDOW
+// Required for HTML onclick attributes to work
+// ==========================================
 Object.assign(window, {
-    toggleHeaderSearch,
-    handleSearch,
-    switchPage,
-    toggleRearrangeMode,
-    saveRearrangeAndSync,
-    savePreviewAndSync,
-    openCardModal,
-    openCategoryModal,
-    openRecycleBinModal,
-    filterApps,
-    toggleFav,
-    handleSettingsCardClick,
-    syncData,
-    goHomeWithFav,
-    saveNoticeItem,
-    editNoticePrompt,
-    deleteNotice,
-    clearAllNotices,
-    toggleNoticeExpand,
-    loginWithGoogle,
-    logoutGoogle,
-    openAdminModal,
-    verifyAdminPin,
-    logoutAdmin,
-    toggleTheme,
-    setAccessMode,
-    previewAndSaveGridCustomizer,
-    openRearrangeFromTools,
-    setAccent,
-    changeAdminPin,
-    openSafeUrl,
-    copyPageUrl,
-    pushStateToCloud,
-    resetCardOrder,
-    clearFavorites,
-    clearNotes,
-    openUserNotesModal,
-    saveUserPrivateNotes,
-    exportGlobalBackup,
-    openProfileModal,
-    saveUserProfileDetails,
-    closeModal,
-    saveServiceCard,
-    removeCardToBin,
-    restoreFromBin,
-    deletePermanentlyFromBin,
-    emptyRecycleBin,
-    moveCategory,
-    editCategoryPrompt,
-    deleteCategory,
-    saveCategoryItem,
-    resetDefaultCategories,
-    moveCardInCurrentView
+    toggleHeaderSearch, handleSearch, switchPage, toggleRearrangeMode,
+    saveRearrangeAndSync, savePreviewAndSync, openCardModal,
+    openCategoryModal, openRecycleBinModal, filterApps, toggleFav,
+    handleSettingsCardClick, syncData, goHomeWithFav, saveNoticeItem,
+    editNoticePrompt, deleteNotice, clearAllNotices, toggleNoticeExpand,
+    loginWithGoogle, logoutGoogle, openAdminModal, verifyAdminPin,
+    logoutAdmin, toggleTheme, setAccessMode, previewAndSaveGridCustomizer,
+    openRearrangeFromTools, setAccent, changeAdminPin, openSafeUrl,
+    copyPageUrl, pushStateToCloud, resetCardOrder, clearFavorites,
+    clearNotes, openUserNotesModal, saveUserPrivateNotes, exportGlobalBackup,
+    openProfileModal, saveUserProfileDetails, closeModal, saveServiceCard,
+    removeCardToBin, restoreFromBin, deletePermanentlyFromBin, emptyRecycleBin,
+    moveCategory, editCategoryPrompt, deleteCategory, saveCategoryItem,
+    resetDefaultCategories, moveCardInCurrentView
 });
 
 // Run application
