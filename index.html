@@ -116,7 +116,6 @@
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 16px;
             box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
-            /* Extending background subtly horizontally if needed */
         }
 
         body.light-mode .app-global-header {
@@ -128,7 +127,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 6px 8px 6px;
+            padding: 12px 6px 12px 6px;
+            border-bottom: 1px solid var(--border-color); /* Added clear distinguish line */
         }
 
         .header-left-group {
@@ -267,10 +267,11 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 0 6px 12px 6px;
+            padding: 10px 6px 12px 6px;
             cursor: pointer;
             overflow: hidden;
             transition: opacity 0.3s ease;
+            width: 100%;
         }
 
         .notice-update-label {
@@ -312,28 +313,22 @@
         .notice-marquee-container {
             flex-grow: 1;
             overflow: hidden;
-            white-space: nowrap;
             position: relative;
             display: flex;
             align-items: center;
+            width: 100%;
         }
 
         .notice-marquee-text {
-            display: inline-block;
             font-size: 13.5px;
             font-weight: 600;
             color: var(--text-primary);
-            padding-left: 100%; /* Start entirely off-screen to the right */
-            animation: marquee 16s linear infinite;
+            white-space: nowrap;
+            /* Removed animation from CSS, relying on <marquee> tag behavior */
         }
 
         .header-notice-row.urgent .notice-marquee-text {
             color: var(--danger);
-        }
-
-        @keyframes marquee {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
         }
 
         /* ==================== BANNERS & ADMIN UI ==================== */
@@ -2769,12 +2764,6 @@
 
         showcaseBanner.classList.toggle('urgent', isUrgent);
         showcaseText.innerText = item.text;
-
-        // Reset and trigger animation to ensure smooth looping after an update
-        showcaseText.style.animation = 'none';
-        setTimeout(() => {
-            showcaseText.style.animation = 'marquee 16s linear infinite';
-        }, 10);
     }
 
     function saveNoticeItem() {
