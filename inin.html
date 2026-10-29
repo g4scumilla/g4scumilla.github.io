@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Link to the universal CSS file (Required for external Header/Footer) -->
+    <!-- Link to the universal CSS file (Required for your external Header/Footer) -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Import Map for Firebase -->
@@ -79,7 +79,6 @@
         .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
         .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); flex-shrink: 0; }
 
-        /* Retained to prevent script.js crash */
         .quick-input-bar { display: flex; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--glass-border); border-radius: 10px; padding: 4px 4px 4px 12px; flex: 1; max-width: 340px; transition: border-color 0.2s; }
         .quick-input-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25); }
         .quick-input-bar input { background: transparent; border: none; color: var(--text-main); font-size: 0.8rem; width: 100%; outline: none; font-family: inherit; }
@@ -274,7 +273,7 @@
                         <div class="dot yellow" onclick="toggleMinimizePDF()" title="Collapse/Expand PDF"></div>
                         <div class="dot green" onclick="toggleEdgeToEdge()" title="Expand Width"></div>
                         <div class="dot purple" onclick="toggleToolbar()" title="Toggle Top Controls"></div>
-                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Default Document</span>
+                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Advanced Engineering Mathematics.pdf</span>
                     </div>
                     <div style="font-size: 0.75rem; color: var(--text-muted);"><span id="headerZoomReadout">Zoom: 100%</span></div>
                 </div>
@@ -285,8 +284,8 @@
                         <span style="font-size: 0.9rem; color: var(--text-muted);">Loading your PDF preview...</span>
                     </div>
                     <div class="zoom-stage" id="zoomStage">
-                        <!-- THE GOOGLE DRIVE PDF LINK IS INJECTED HERE (Formatted as /preview for proper embedding) -->
-                        <iframe id="pdfFrame" src="https://drive.google.com/file/d/1VSwckIpJOzUl0x3CfkkJtGslVT91KKy7/preview" allow="autoplay" onload="hideLoader()" title="PDF Document Viewer"></iframe>
+                        <!-- THE SPECIFIC GOOGLE DRIVE PDF LINK IS INJECTED HERE -->
+                        <iframe id="pdfFrame" src="https://drive.google.com/file/d/1VSwckIpJOzUl0x3CfkkJtGslVT91KKy7/preview" allow="autoplay" onload="window.hideLoader()" title="PDF Document Viewer"></iframe>
                     </div>
                 </div>
             </div>
@@ -295,7 +294,7 @@
 
     <!-- Drawers -->
 
-    <!-- Notices Drawer (Opens when intercepted from Profile Header) -->
+    <!-- Notices Drawer -->
     <aside class="side-drawer" id="noticesDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: var(--accent);"></i> Recent Notices</span><button class="btn btn-sm" onclick="toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
@@ -304,7 +303,7 @@
         </div>
     </aside>
 
-    <!-- Settings Drawer (Opens when intercepted from Profile Header) -->
+    <!-- Settings Drawer -->
     <aside class="side-drawer" id="settingsDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: var(--accent);"></i> App Settings</span><button class="btn btn-sm" onclick="toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
         <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 30px; margin-bottom: 30px;">
@@ -355,13 +354,188 @@
     <!-- ==================== EXTERNAL FOOTER INJECTION ==================== -->
     <div id="footer-placeholder"></div>
 
-    <!-- SINGLE JAVASCRIPT FILE (Loads both Hub and PDF Reader logic) -->
+    <!-- EXTERNAL SCRIPT (Handles Header/Auth) -->
     <script type="module" src="script.js"></script>
 
-    <!-- SCRIPT TO INTERCEPT DYNAMIC HEADER CLICKS -->
+    <!-- NEW: DEDICATED PDF READER JAVASCRIPT (Guarantees all buttons work instantly) -->
     <script>
+        // PDF Loading
+        window.hideLoader = function() {
+            const loader = document.getElementById('loader');
+            if (loader) loader.classList.add('hidden');
+        };
+
+        // UI State
+        let currentZoom = 100;
+        let currentRotation = 0;
+        let isMinimized = false;
+        let isEdgeToEdge = false;
+        let isToolbarHidden = false;
+        let isInverted = false;
+
+        // Make functions globally available for the inline HTML onclick="" events
+        window.toggleDrawer = function(drawerId) {
+            document.querySelectorAll('.side-drawer').forEach(d => {
+                if(d.id !== drawerId) d.classList.remove('open');
+            });
+            const drawer = document.getElementById(drawerId);
+            if(drawer) drawer.classList.toggle('open');
+        };
+
+        window.updateZoomUI = function() {
+            const stage = document.getElementById('zoomStage');
+            if(stage) stage.style.transform = `scale(${currentZoom / 100}) rotate(${currentRotation}deg)`;
+            
+            ['topZoomSlider', 'drawerZoomSlider'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.value = currentZoom;
+            });
+            ['topZoomBadge', 'dockZoomBadge', 'drawerZoomVal', 'headerZoomReadout'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.innerText = currentZoom + '%';
+            });
+        };
+
+        window.setZoomImmediate = function(val) {
+            currentZoom = parseInt(val);
+            window.updateZoomUI();
+        };
+
+        window.stepZoom = function(delta) {
+            currentZoom += delta;
+            if(currentZoom < 50) currentZoom = 50;
+            if(currentZoom > 250) currentZoom = 250;
+            window.updateZoomUI();
+        };
+
+        window.animateZoomTo = function(val) {
+            currentZoom = val;
+            window.updateZoomUI();
+        };
+
+        window.rotatePDF = function() {
+            currentRotation = (currentRotation + 90) % 360;
+            window.updateZoomUI();
+        };
+
+        window.toggleMinimizePDF = function() {
+            const card = document.getElementById('pdfCard');
+            isMinimized = !isMinimized;
+            if(isMinimized) card.classList.add('minimized');
+            else card.classList.remove('minimized');
+        };
+
+        window.toggleEdgeToEdge = function() {
+            const ws = document.getElementById('workspace');
+            isEdgeToEdge = !isEdgeToEdge;
+            if(isEdgeToEdge) ws.classList.add('edge-to-edge');
+            else ws.classList.remove('edge-to-edge');
+        };
+
+        window.toggleToolbar = function() {
+            const tb = document.getElementById('topToolbar');
+            const pill = document.getElementById('expandToolbarBtn');
+            isToolbarHidden = !isToolbarHidden;
+            if(isToolbarHidden) {
+                tb.classList.add('collapsed');
+                pill.classList.add('visible');
+            } else {
+                tb.classList.remove('collapsed');
+                pill.classList.remove('visible');
+            }
+        };
+
+        window.toggleZoomDock = function() {
+            const dock = document.getElementById('floatingZoomDock');
+            const icon = document.getElementById('dockToggleIcon');
+            dock.classList.toggle('minimized');
+            if(dock.classList.contains('minimized')) {
+                icon.classList.replace('fa-magnifying-glass', 'fa-up-right-and-down-left-from-center');
+            } else {
+                icon.classList.replace('fa-up-right-and-down-left-from-center', 'fa-magnifying-glass');
+            }
+        };
+
+        window.toggleFullScreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Fullscreen error:", err.message);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        };
+
+        window.applyFilters = function() {
+            const bright = document.getElementById('brightSlider').value;
+            const contrast = document.getElementById('contrastSlider').value;
+            const sepia = document.getElementById('sepiaSlider').value;
+            
+            document.getElementById('brightVal').innerText = bright + '%';
+            document.getElementById('contrastVal').innerText = contrast + '%';
+            document.getElementById('sepiaVal').innerText = sepia + '%';
+            
+            let filterString = `brightness(${bright}%) contrast(${contrast}%) sepia(${sepia}%)`;
+            if (isInverted) {
+                filterString += ' invert(90%) hue-rotate(180deg)';
+            }
+            document.getElementById('pdfFrame').style.filter = filterString;
+        };
+
+        window.toggleInvert = function() {
+            isInverted = !isInverted;
+            window.applyFilters();
+        };
+
+        window.resetFilters = function() {
+            document.getElementById('brightSlider').value = 100;
+            document.getElementById('contrastSlider').value = 100;
+            document.getElementById('sepiaSlider').value = 0;
+            isInverted = false;
+            window.applyFilters();
+        };
+
+        window.updateWidth = function(val) {
+            document.getElementById('widthVal').innerText = val + '%';
+            document.documentElement.style.setProperty('--viewer-width', val + '%');
+        };
+
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
+
+        window.addAndSavePDF = function() {
+            window.showToast("PDF Added to Library!");
+            window.toggleDrawer('libraryDrawer');
+        };
+        
+        window.saveQuickLink = function() {
+            window.showToast("Link Saved!");
+        };
+
+        window.clearNotes = function() {
+            if(confirm("Are you sure you want to clear your notes?")) {
+                document.getElementById('notesInput').value = '';
+            }
+        };
+
+        window.downloadNotes = function() {
+            const text = document.getElementById('notesInput').value;
+            if(!text) return alert("Notes are empty!");
+            const blob = new Blob([text], {type: "text/plain"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "Reading_Notes.txt";
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // NEW: Intercept clicks on dynamic external Headers to stop redirecting
         document.addEventListener('click', function(event) {
-            // Check if the click happened on a link inside the injected header
             const link = event.target.closest('a');
             if (!link) return;
             
@@ -369,20 +543,16 @@
             const text = (link.innerText || '').toLowerCase();
             const title = (link.title || '').toLowerCase();
             
-            // If the link points to index.html AND is a Notice or Setting button
             if (href.includes('index.html')) {
-                if (text.includes('notice') || title.includes('notice') ||
-                    text.includes('setting') || title.includes('setting')) {
-                    
-                    // 1. Prevent the redirect to the homepage
+                // If it's the Notices link
+                if (text.includes('notice') || title.includes('notice')) {
                     event.preventDefault(); 
-                    
-                    // 2. Open the corresponding side drawer on this page instead
-                    if (text.includes('notice') || title.includes('notice')) {
-                        if (typeof toggleDrawer === 'function') toggleDrawer('noticesDrawer');
-                    } else {
-                        if (typeof toggleDrawer === 'function') toggleDrawer('settingsDrawer');
-                    }
+                    window.toggleDrawer('noticesDrawer');
+                } 
+                // If it's the Settings link
+                else if (text.includes('setting') || title.includes('setting') || text.includes('gear')) {
+                    event.preventDefault(); 
+                    window.toggleDrawer('settingsDrawer');
                 }
             }
         });
