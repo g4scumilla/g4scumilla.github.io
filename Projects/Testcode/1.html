@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Abdullahil Kuafi | Smart Hub</title>
-    
+
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --danger: #f43f5e;
             --warning: #f59e0b;
-            
+
             --app-max-width: 440px;
             --grid-cols: 3;
             --grid-gap: 12px;
@@ -52,10 +52,10 @@
             --bg-elevated: #ffffff;
             --text-primary: #0f172a;
             --text-secondary: #64748b;
-            --border-color: rgba(15, 23, 42, 0.08);
+            --border-color: rgba(15, 23, 42, 0.18);
             --card-bg: rgba(255, 255, 255, 0.95);
-            --card-border: 1px solid rgba(15, 23, 42, 0.06);
-            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.06), inset 0 1px 0px rgba(255, 255, 255, 1);
+            --card-border: 1px solid var(--border-color);
+            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.08), inset 0 1px 0px rgba(255, 255, 255, 1);
         }
 
         /* ==================== BASE STYLES ==================== */
@@ -114,10 +114,11 @@
             padding: 12px 6px;
             background: rgba(8, 11, 18, 0.75);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 16px;
         }
-        
+
         body.light-mode .android-top-header {
             background: rgba(241, 245, 249, 0.82);
         }
@@ -253,7 +254,15 @@
             border-color: var(--accent);
         }
 
-        /* ==================== COMPACT NOTICE SHOWCASE ==================== */
+        /* ==================== HOME PAGE MARQUEE NOTICE ==================== */
+        #home-notice-showcase {
+            position: sticky;
+            top: 76px; /* Locks just below the top header */
+            z-index: 98;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
         .notice-showcase {
             position: relative;
             border-radius: 18px;
@@ -266,13 +275,8 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .notice-showcase.urgent {
-            border-color: rgba(244, 63, 94, 0.4);
-            background: linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%), var(--bg-card);
-            box-shadow: 0 12px 30px -8px rgba(244, 63, 94, 0.15);
+            gap: 12px;
+            overflow: hidden;
         }
 
         .notice-showcase::before {
@@ -285,30 +289,31 @@
             background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
         }
 
+        .notice-showcase.urgent {
+            border-color: rgba(244, 63, 94, 0.4);
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%), var(--bg-card);
+            box-shadow: 0 12px 30px -8px rgba(244, 63, 94, 0.15);
+        }
+
         .notice-showcase.urgent::before {
             background: linear-gradient(180deg, var(--danger), var(--warning));
         }
 
-        .notice-live-badge {
+        .notice-update-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             flex-shrink: 0;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            background: rgba(61, 237, 151, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(61, 237, 151, 0.35);
+            z-index: 2;
         }
 
-        .notice-showcase.urgent .notice-live-badge {
-            background: rgba(244, 63, 94, 0.15);
+        .notice-showcase.urgent .notice-update-label {
             color: var(--danger);
-            border-color: rgba(244, 63, 94, 0.35);
         }
 
         .pulse-dot {
@@ -330,39 +335,28 @@
             50% { transform: scale(1.45); opacity: 0.55; }
         }
 
-        .notice-showcase-body {
+        .notice-marquee-container {
             flex-grow: 1;
-            min-width: 0; 
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .notice-marquee-text {
+            display: inline-block;
             font-size: 13.5px;
             font-weight: 600;
             color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            padding-left: 100%; 
+            animation: marquee 16s linear infinite;
         }
 
-        .notice-showcase-controls {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        @keyframes marquee {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
         }
-
-        .notice-nav-btn {
-            width: 24px;
-            height: 24px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: rgba(255,255,255,0.05);
-            color: var(--text-primary);
-            font-size: 10px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .notice-nav-btn:hover { background: rgba(255,255,255,0.1); }
 
         /* ==================== BANNERS & ADMIN UI ==================== */
         .preview-banner, .rearrange-banner {
@@ -818,7 +812,7 @@
         }
 
         .notice-limit-hint { font-size: 11.5px; color: var(--text-secondary); }
-        
+
         .notices-list {
             display: flex;
             flex-direction: column;
@@ -921,7 +915,7 @@
         .user-profile-row { display: flex; align-items: center; gap: 12px; }
         .user-profile-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
         .user-status-pill { display: inline-block; font-size: 10.5px; color: var(--accent); margin-top: 4px; font-weight: 600;}
-        
+
         .color-swatches-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -940,9 +934,9 @@
         }
 
         .swatch.active { border-color: var(--text-primary); transform: scale(1.15); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        
+
         .mini-tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        
+
         .mini-tool-btn {
             padding: 14px;
             border-radius: 14px;
@@ -1002,7 +996,7 @@
 
         /* ==================== BOTTOM NAVIGATION ==================== */
         .bottom-safe-spacer { height: 90px; }
-        
+
         .bottom-nav {
             position: fixed;
             bottom: 14px;
@@ -1040,7 +1034,7 @@
         }
 
         .nav-item i { font-size: 17px; }
-        
+
         .nav-item.active {
             color: var(--accent);
             background: rgba(61, 237, 151, 0.1);
@@ -1060,7 +1054,7 @@
         }
 
         .modal-backdrop.open { display: flex; }
-        
+
         .modal-card {
             width: 100%;
             max-width: 420px;
@@ -1083,7 +1077,7 @@
         }
 
         .form-group { margin-bottom: 12px; }
-        
+
         .form-group label {
             display: block;
             font-size: 11.5px;
@@ -1161,17 +1155,15 @@
     <!-- ==================== HOME PAGE ==================== -->
     <div id="page-home" class="page-view active">
 
-        <!-- COMPACT NOTICE SHOWCASE BANNER -->
+        <!-- COMPACT MARQUEE NOTICE BANNER (STICKY) -->
         <div class="notice-showcase" id="home-notice-showcase" onclick="switchPage('notices')">
-            <div class="notice-live-badge" id="home-notice-badge">
-                <span class="pulse-dot"></span> Notice
+            <div class="notice-update-label">
+                <span class="pulse-dot"></span> Update:
             </div>
-            <div class="notice-showcase-body" id="home-notice-text">
-                Welcome to Abdullahil Kuafi's Smart Cloud Hub!
-            </div>
-            <div class="notice-showcase-controls" onclick="event.stopPropagation()">
-                <button class="notice-nav-btn" onclick="cycleHomeNotice(-1)" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="notice-nav-btn" onclick="cycleHomeNotice(1)" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="notice-marquee-container">
+                <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                    Welcome to Abdullahil Kuafi's Smart Cloud Hub!
+                </marquee>
             </div>
         </div>
 
@@ -1606,16 +1598,6 @@
 
             <div class="setting-row">
                 <div class="setting-info">
-                    <h4>Export Global Cloud Backup</h4>
-                    <p>Download complete system state JSON for archiving</p>
-                </div>
-                <button class="btn-action" onclick="exportGlobalBackup()">
-                    <i class="fa-solid fa-file-arrow-down"></i> Export System
-                </button>
-            </div>
-
-            <div class="setting-row">
-                <div class="setting-info">
                     <h4>Change Admin PIN</h4>
                     <p>Update the PIN stored in Cloud for Admin Mode</p>
                 </div>
@@ -1941,7 +1923,6 @@
     let isPreviewMode = false;
     let isPushing = false;
     let currentFilter = 'fav';
-    let homeNoticeIdx = 0;
     let isRearrangeMode = false;
 
     const DEFAULT_CATEGORIES = [
@@ -1988,7 +1969,7 @@
             const c1Match = style.match(/--c1:\s*([^;]+)/);
             const c2Match = style.match(/--c2:\s*([^;]+)/);
             const rgbMatch = style.match(/--c-rgb:\s*([^;]+)/);
-            
+
             return {
                 id, title, sub, href, cat, live, icon, onclickAttr,
                 c1: c1Match ? c1Match[1].trim() : '#3b82f6',
@@ -2019,13 +2000,13 @@
         if (!incomingState || typeof incomingState !== 'object') return;
         const incomingTime = Number(incomingState.updatedAt || 0);
         const localTime = Number(appState.updatedAt || 0);
-        
+
         if (!forceRender && incomingTime > 0 && incomingTime <= localTime) {
             return;
         }
 
         appState = { ...appState, ...incomingState };
-        
+
         if (!appState.cardsData || appState.cardsData.length === 0) {
             appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
         }
@@ -2038,19 +2019,19 @@
             const gridSelect = document.getElementById('grid-cols-select');
             if (gridSelect) gridSelect.value = String(appState.gridCols);
         }
-        
+
         if (appState.gridStyleChoice) {
             const styleSelect = document.getElementById('grid-style-select');
             if (styleSelect) styleSelect.value = String(appState.gridStyleChoice);
             applyCardGridStyleVars(appState.gridStyleChoice);
         }
-        
+
         if (appState.gridLayoutChoice) {
             const layoutSelect = document.getElementById('grid-layout-select');
             if (layoutSelect) layoutSelect.value = String(appState.gridLayoutChoice);
             applyCardGridLayoutVars(appState.gridLayoutChoice);
         }
-        
+
         if (appState.accentPrimary && appState.accentSecondary) {
             document.documentElement.style.setProperty('--accent', appState.accentPrimary);
             document.documentElement.style.setProperty('--accent-secondary', appState.accentSecondary);
@@ -2087,7 +2068,7 @@
                 appState = { ...appState, ...parsed };
             } catch (e) {}
         }
-        
+
         if (!appState.cardsData || appState.cardsData.length === 0) {
             appState.cardsData = JSON.parse(JSON.stringify(INITIAL_20_CARDS));
         }
@@ -2259,13 +2240,13 @@
         try {
             await signOut(auth);
         } catch (e) {}
-        
+
         isGoogleLoggedIn = false;
         localStorage.removeItem('kuafi_google_user');
-        
+
         document.getElementById('google-logged-out-view').style.display = 'flex';
         document.getElementById('google-logged-in-view').style.display = 'none';
-        
+
         updateAuthAndAdminUI();
         filterApps(currentFilter);
     }
@@ -2398,14 +2379,14 @@
         const label = document.getElementById('cat-label-input').value.trim();
         const key = document.getElementById('cat-key-input').value.trim().toLowerCase().replace(/\s+/g, '-');
         if (!label || !key) return alert('Please enter both a category name and key.');
-        
+
         const existing = appState.categories.find(c => c.key === key);
         if (existing) {
             existing.label = label;
         } else {
             appState.categories.push({ key, label, icon: '', iconColor: '' });
         }
-        
+
         renderCategories();
         openCategoryModal();
         pushStateToCloud(false);
@@ -2431,7 +2412,7 @@
             a.setAttribute('href', card.href || '#');
             a.setAttribute('data-id', card.id);
             a.setAttribute('data-cat', card.cat || 'work');
-            
+
             if (card.live) a.setAttribute('data-live', 'true');
             if (card.href && card.href.startsWith('http')) {
                 a.setAttribute('rel', 'noopener noreferrer');
@@ -2512,13 +2493,13 @@
 
         const posInVisible = visibleIds.indexOf(cardId);
         const targetVisiblePos = posInVisible + direction;
-        
+
         if (posInVisible === -1 || targetVisiblePos < 0 || targetVisiblePos >= visibleIds.length) return;
 
         const swapId = visibleIds[targetVisiblePos];
         const idxA = appState.cardsData.findIndex(c => c.id === cardId);
         const idxB = appState.cardsData.findIndex(c => c.id === swapId);
-        
+
         if (idxA === -1 || idxB === -1) return;
 
         const temp = appState.cardsData[idxA];
@@ -2709,7 +2690,7 @@
     function toggleFav(e, cardId) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (!isAdmin) {
             showSyncToast('⚠️ Only Admins can modify Favourites.');
             return;
@@ -2785,30 +2766,22 @@
 
     function updateHomeNoticeShowcase() {
         const notices = appState.notices || [];
-        const showcase = document.getElementById('home-notice-showcase');
-        if (!showcase) return;
+        const showcaseText = document.getElementById('home-notice-text');
+        const showcaseBanner = document.getElementById('home-notice-showcase');
+        if (!showcaseText || !showcaseBanner) return;
 
         if (notices.length === 0) {
-            document.getElementById('home-notice-text').innerText = 'No global announcements right now.';
-            showcase.classList.remove('urgent');
-            document.getElementById('home-notice-badge').innerHTML = '<span class="pulse-dot"></span> Notice';
+            showcaseText.innerText = 'No global announcements right now.';
+            showcaseBanner.classList.remove('urgent');
             return;
         }
 
-        if (homeNoticeIdx >= notices.length) homeNoticeIdx = 0;
-        if (homeNoticeIdx < 0) homeNoticeIdx = notices.length - 1;
-        
-        const item = notices[homeNoticeIdx];
+        // Display the most recent notice text only
+        const item = notices[0];
         const isUrgent = item.priority === 'urgent';
 
-        showcase.classList.toggle('urgent', isUrgent);
-        document.getElementById('home-notice-badge').innerHTML = `<span class="pulse-dot"></span> ${isUrgent ? 'Urgent' : 'Notice'}`;
-        document.getElementById('home-notice-text').innerText = item.text;
-    }
-
-    function cycleHomeNotice(step) {
-        homeNoticeIdx += step;
-        updateHomeNoticeShowcase();
+        showcaseBanner.classList.toggle('urgent', isUrgent);
+        showcaseText.innerText = item.text;
     }
 
     function saveNoticeItem() {
@@ -2838,7 +2811,6 @@
         input.value = '';
         editIdxInput.value = '';
         document.getElementById('notice-btn-text').innerText = 'Publish Notice';
-        homeNoticeIdx = 0;
         renderNotices();
         pushStateToCloud(true);
     }
@@ -2959,7 +2931,7 @@
 
         isPreviewMode = true;
         isRearrangeMode = false;
-        
+
         document.body.classList.remove('rearrange-active');
         document.getElementById('rearrange-banner').classList.remove('active');
         document.getElementById('preview-banner').classList.add('active');
@@ -2969,17 +2941,16 @@
     }
 
     function applyCardGridStyleVars(styleKey) {
+        const isLight = document.body.classList.contains('light-mode');
         let radius = '18px';
-        let border = '1px solid rgba(255, 255, 255, 0.1)';
+        let border = '1px solid var(--border-color)';
         let bg = 'var(--card-bg)';
-        let shadow = '0 12px 32px -8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255, 255, 255, 0.06)';
+        let shadow = isLight ? '0 10px 25px rgba(15, 23, 42, 0.08), inset 0 1px 0px rgba(255, 255, 255, 1)' : '0 12px 32px -8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255, 255, 255, 0.06)';
         let gap = '12px';
         let padding = '12px 8px 14px';
 
-        const isLight = document.body.classList.contains('light-mode');
-
         switch (styleKey) {
-            case '1': radius = '20px'; border = '1px solid rgba(120,120,120,0.18)'; bg = isLight ? 'rgba(255,255,255,0.85)' : 'rgba(25,35,55,0.7)'; shadow = '0 12px 30px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255, 255, 255, 0.06)'; gap = '12px'; padding = '14px 10px 16px'; break;
+            case '1': radius = '20px'; border = '1px solid var(--border-color)'; shadow = isLight ? '0 12px 30px rgba(0,0,0,0.08), inset 0 1px 0px rgba(255, 255, 255, 1)' : '0 12px 30px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255, 255, 255, 0.06)'; gap = '12px'; padding = '14px 10px 16px'; break;
             case '2': radius = '16px'; border = '1.5px solid var(--accent)'; bg = 'var(--card-bg)'; shadow = '0 0 15px rgba(61,237,151,0.25)'; gap = '10px'; padding = '12px 8px 14px'; break;
             case '3': radius = '28px'; border = '1px solid var(--border-color)'; bg = 'var(--card-bg)'; shadow = '0 6px 18px rgba(0,0,0,0.12)'; gap = '12px'; padding = '16px 10px 18px'; break;
             case '4': radius = '16px'; border = '2px solid transparent'; bg = 'linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box'; shadow = '0 10px 24px rgba(0,0,0,0.18)'; gap = '10px'; padding = '12px 8px 14px'; break;
@@ -3037,13 +3008,13 @@
     function openProfileModal() {
         const email = auth.currentUser?.email || 'default';
         const customProfile = JSON.parse(localStorage.getItem(`kuafi_user_profile_${email}`) || '{}');
-        
+
         document.getElementById('profile-email-input').value = auth.currentUser?.email || 'Not available';
         document.getElementById('profile-name-input').value = customProfile.name || auth.currentUser?.displayName || '';
         document.getElementById('profile-phone-input').value = customProfile.phone || '';
         document.getElementById('profile-address-input').value = customProfile.address || '';
         document.getElementById('profile-district-input').value = customProfile.district || '';
-        
+
         openModal('user-profile-modal');
     }
 
@@ -3250,7 +3221,6 @@
     Object.assign(window, {
         toggleHeaderSearch,
         handleSearch,
-        cycleHomeNotice,
         switchPage,
         toggleRearrangeMode,
         saveRearrangeAndSync,
