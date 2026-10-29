@@ -1,0 +1,74 @@
+<!-- ==================== FOOTER CSS ==================== -->
+<style>
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+        position: fixed;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 28px);
+        max-width: calc(var(--app-max-width, 440px) - 28px);
+        background: rgba(18, 25, 41, 0.85);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        display: flex;
+        justify-content: space-around;
+        padding: 8px 6px;
+        z-index: 200;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+
+    body.light-mode .bottom-nav {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+    }
+
+    .nav-item {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        padding: 6px 16px;
+        border-radius: 16px;
+        transition: all 0.2s;
+        text-decoration: none; /* In case anchor tags are used */
+    }
+
+    .nav-item i {
+        font-size: 17px;
+    }
+
+    .nav-item:hover {
+        color: var(--text-primary);
+    }
+
+    .nav-item.active {
+        color: var(--accent);
+        background: rgba(61, 237, 151, 0.1);
+    }
+</style>
+
+<!-- ==================== FOOTER HTML ==================== -->
+<nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="goHomeWithFav()">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </button>
+    <button class="nav-item" id="nav-notices" onclick="switchPage('notices')">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Notices</span>
+    </button>
+    <button class="nav-item" id="nav-tools" onclick="switchPage('tools')">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Settings</span>
+    </button>
+</nav>
