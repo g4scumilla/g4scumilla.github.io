@@ -191,7 +191,7 @@ async function loadHeader() {
         const res = await fetch('header.html');
         if (res.ok) {
             const html = await res.text();
-            document.getElementById('header-placeholder').innerHTML = html;
+            document.getElementById('header-placeholder').outerHTML = html;
         }
     } catch (e) {
         console.error('Failed to load header:', e);
