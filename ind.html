@@ -130,7 +130,7 @@
         .zoom-btn:hover { background: #6366f1; transform: scale(1.05); }
 
         /* Main Workspace & Pinch Zoom Container */
-        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; touch-action: none; }
+        .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
         .workspace.edge-to-edge { padding: 0; padding-bottom: 85px; }
         .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
         .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
@@ -551,7 +551,7 @@
         initApp();
     </script>
 
-    <!-- ================= PDF READER LOGIC (WITH PINCH-TO-ZOOM) ================= -->
+    <!-- ================= PDF READER LOGIC (FULL TOUCH PINCH ZOOM) ================= -->
     <script>
         window.hideLoader = function() {
             const loader = document.getElementById('loader');
@@ -790,7 +790,7 @@
             }
         };
 
-        // --- UI & ZOOM CONTROLS (WITH PINCH-TO-ZOOM SUPPORT) --- //
+        // --- UI & ZOOM CONTROLS --- //
         let currentZoom = 100;
         let currentRotation = 0;
         let isMinimized = false;
@@ -876,13 +876,13 @@
             }
         });
 
-        // --- MOBILE TOUCH PINCH-TO-ZOOM HANDLING ---
+        // --- ENHANCED SMOOTH FINGER PINCH-TO-ZOOM HANDLING ---
         let initialPinchDistance = null;
         let startZoom = 100;
 
-        const workspaceEl = document.getElementById('workspace');
-        if (workspaceEl) {
-            workspaceEl.addEventListener('touchstart', (e) => {
+        const iframeWrapperEl = document.getElementById('iframeWrapper');
+        if (iframeWrapperEl) {
+            iframeWrapperEl.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 2) {
                     initialPinchDistance = Math.hypot(
                         e.touches[0].clientX - e.touches[1].clientX,
@@ -892,7 +892,7 @@
                 }
             }, { passive: true });
 
-            workspaceEl.addEventListener('touchmove', (e) => {
+            iframeWrapperEl.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 2 && initialPinchDistance !== null) {
                     const currentPinchDistance = Math.hypot(
                         e.touches[0].clientX - e.touches[1].clientX,
@@ -907,7 +907,7 @@
                 }
             }, { passive: true });
 
-            workspaceEl.addEventListener('touchend', (e) => {
+            iframeWrapperEl.addEventListener('touchend', (e) => {
                 if (e.touches.length < 2) {
                     initialPinchDistance = null;
                 }
