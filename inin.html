@@ -286,7 +286,6 @@
             </div>
 
             <div class="controls-group">
-                <!-- MODIFIED: Changed icon to fa-toolbox -->
                 <button class="btn btn-primary" onclick="window.toggleDrawer('libraryDrawer')" id="libraryBtn"><i class="fa-solid fa-toolbox"></i> <span>Saved PDFs</span></button>
                 <button class="btn" onclick="window.toggleMinimizePDF()"><i class="fa-solid fa-compress"></i> <span>Collapse</span></button>
                 <button class="btn" onclick="window.toggleEdgeToEdge()"><i class="fa-solid fa-arrows-left-right"></i> <span>Cinema</span></button>
@@ -341,25 +340,35 @@
         </div>
     </aside>
 
-    <!-- PDF Library Drawer -->
+    <!-- ADVANCED PDF LIBRARY DRAWER (WITH FOLDERS) -->
     <aside class="side-drawer" id="libraryDrawer">
-        <!-- MODIFIED: Changed icon to fa-toolbox -->
-        <div class="drawer-header"><span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span><button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span>
+            <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         
         <input type="hidden" id="editPdfId" value="">
+        
+        <!-- Breadcrumbs / Folder Nav -->
+        <div id="libraryBreadcrumb" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <span id="currentFolderName"><i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library</span>
+            <button class="btn btn-sm" onclick="window.createNewFolder()" title="Create New Folder"><i class="fa-solid fa-folder-plus"></i></button>
+        </div>
         
         <div class="input-group"><label>PDF Name / Title (Optional)</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
         <div class="input-group"><label>PDF Link (or File ID)</label><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view"></div>
         
         <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()">
-            <i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Permanently</span>
+            <i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Here</span>
         </button>
         
-        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 6px;">
-            Permanently Saved PDFs (<span id="savedCount">0</span>)
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
+            <span>Saved Items (<span id="savedCount">0</span>)</span>
         </div>
+        
+        <!-- Dynamic list of Folders and PDFs will render here -->
         <div class="saved-list" id="savedListContainer">
-            <div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Loading PDFs from Cloud...</div>
+            <div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Loading Library...</div>
         </div>
     </aside>
 
@@ -438,10 +447,12 @@
         const STORAGE_KEY = 'kuafi_hub_cloud_state_v2';
         const THEME_STORAGE_KEY = 'kuafi_theme_mode';
 
+        // Updated global state to hold Folders
         let appState = {
             updatedAt: 0, 
             adminPin: '1234',
-            savedPDFs: [],
+            savedFolders: [], // <--- NEW: Holds folder objects {id, name}
+            savedPDFs: [],    // Will now contain {id, title, url, folderId}
             notices: [{ text: 'Welcome to Abdullahil Kuafi Smart Hub — Live Cloud Synced!', time: 'Just now', priority: 'normal' }]
         };
 
@@ -514,6 +525,8 @@
                 try { appState = { ...appState, ...JSON.parse(saved) }; } catch (e) {}
             }
             
+            // Ensure folder structure exists
+            if (!appState.savedFolders) appState.savedFolders = [];
             window.appState = appState; 
 
             if (hubDocRef) {
@@ -534,7 +547,7 @@
         initApp();
     </script>
 
-    <!-- ================= PDF READER LOGIC (UI, Zoom, Library CRUD) ================= -->
+    <!-- ================= PDF READER LOGIC (UI, Zoom, FOLDERS, Library CRUD) ================= -->
     <script>
         window.hideLoader = function() {
             const loader = document.getElementById('loader');
@@ -548,22 +561,15 @@
             return url;
         };
 
-        window.renderSavedPDFs = function() {
-            const container = document.getElementById('savedListContainer');
-            const countEl = document.getElementById('savedCount');
-            const pdfs = window.appState?.savedPDFs || [];
-            
-            if (countEl) countEl.innerText = pdfs.length;
+        // --- NEW: FOLDER NAVIGATION STATE --- //
+        window.currentFolderId = null;
 
-            if (pdfs.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">No PDFs saved yet. Use the form above to add one!</div>';
-                return;
-            }
-
-            container.innerHTML = pdfs.map(pdf => `
+        // HELPER: Generates the HTML for a single PDF item
+        function generatePdfHtml(pdf) {
+            return `
                 <div class="saved-item">
                     <div class="saved-item-info" onclick="window.loadPDF('${pdf.id}')">
-                        <div class="saved-item-title">${pdf.title}</div>
+                        <div class="saved-item-title"><i class="fa-solid fa-file-pdf" style="color: #f43f5e; margin-right: 6px;"></i>${pdf.title}</div>
                         <div class="saved-item-id" style="display:flex; align-items:center; gap:4px; margin-top:2px;">
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i> Click to Read
                         </div>
@@ -573,9 +579,112 @@
                         <button class="icon-btn delete" onclick="window.deleteSavedPDF('${pdf.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
-            `).join('');
+            `;
+        }
+
+        window.renderSavedPDFs = function() {
+            const container = document.getElementById('savedListContainer');
+            const countEl = document.getElementById('savedCount');
+            const breadcrumbText = document.getElementById('currentFolderName');
+            
+            const pdfs = window.appState?.savedPDFs || [];
+            const folders = window.appState?.savedFolders || [];
+            
+            let html = '';
+            let itemCount = 0;
+
+            if (window.currentFolderId) {
+                // WE ARE INSIDE A FOLDER
+                const currentFolder = folders.find(f => f.id === window.currentFolderId);
+                breadcrumbText.innerHTML = `<button class="btn btn-sm" style="display:inline-flex; width:auto; padding:4px 8px; font-size:0.75rem; margin-right:8px;" onclick="window.goBackToRoot()"><i class="fa-solid fa-arrow-left"></i> Back</button> ${currentFolder ? currentFolder.name : 'Unknown Folder'}`;
+                
+                const folderPdfs = pdfs.filter(p => p.folderId === window.currentFolderId);
+                itemCount = folderPdfs.length;
+
+                if (itemCount === 0) {
+                    html += '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">This folder is empty. Use the form above to add a PDF here!</div>';
+                } else {
+                    html += folderPdfs.map(pdf => generatePdfHtml(pdf)).join('');
+                }
+            } else {
+                // WE ARE IN THE ROOT LIBRARY
+                breadcrumbText.innerHTML = `<i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library`;
+                
+                const rootPdfs = pdfs.filter(p => !p.folderId);
+                itemCount = folders.length + rootPdfs.length;
+                
+                // Render Folders First
+                if (folders.length > 0) {
+                    html += folders.map(folder => `
+                        <div class="saved-item" style="border-left: 3px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+                            <div class="saved-item-info" onclick="window.openFolder('${folder.id}')">
+                                <div class="saved-item-title" style="display:flex; align-items:center; gap:8px;">
+                                    <i class="fa-solid fa-folder" style="color: #6366f1; font-size: 1.1rem;"></i> ${folder.name}
+                                </div>
+                                <div class="saved-item-id">${pdfs.filter(p => p.folderId === folder.id).length} PDFs inside</div>
+                            </div>
+                            <div style="display:flex; gap:4px;">
+                                <button class="icon-btn delete" onclick="window.deleteFolder('${folder.id}')" title="Delete Folder & Contents"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                
+                // Render Root PDFs below folders
+                if (rootPdfs.length > 0) {
+                    html += rootPdfs.map(pdf => generatePdfHtml(pdf)).join('');
+                }
+
+                if (itemCount === 0) {
+                    html += '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">No items saved yet. Create a folder or add a PDF!</div>';
+                }
+            }
+            
+            if (countEl) countEl.innerText = itemCount;
+            container.innerHTML = html;
         };
 
+        // FOLDER ACTIONS
+        window.createNewFolder = function() {
+            const name = prompt("Enter a name for the new folder:");
+            if (!name || !name.trim()) return;
+            
+            if (!window.appState.savedFolders) window.appState.savedFolders = [];
+            
+            window.appState.savedFolders.push({
+                id: 'folder-' + Date.now(),
+                name: name.trim()
+            });
+            
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Folder Created!");
+        };
+
+        window.openFolder = function(id) {
+            window.currentFolderId = id;
+            window.renderSavedPDFs();
+        };
+
+        window.goBackToRoot = function() {
+            window.currentFolderId = null;
+            window.renderSavedPDFs();
+        };
+
+        window.deleteFolder = function(id) {
+            if (!confirm("⚠️ WARNING: Are you sure you want to delete this folder? ALL PDFs inside it will be permanently deleted!")) return;
+            
+            // Delete folder
+            window.appState.savedFolders = window.appState.savedFolders.filter(f => f.id !== id);
+            // Delete PDFs inside that folder
+            window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.folderId !== id);
+            
+            if (window.pushStateToCloud) window.pushStateToCloud(false);
+            window.renderSavedPDFs();
+            window.showToast("Folder and its contents deleted");
+        };
+
+        // PDF CRUD ACTIONS
         window.addAndSavePDF = function() {
             const titleInput = document.getElementById('pdfTitleInput');
             const urlInput = document.getElementById('pdfUrlInput');
@@ -595,15 +704,24 @@
             const editId = editIdInput.value;
             
             if (editId) {
+                // Update Existing PDF
                 const idx = window.appState.savedPDFs.findIndex(p => p.id === editId);
                 if (idx !== -1) {
-                    window.appState.savedPDFs[idx] = { id: editId, title, url };
+                    // Preserve its existing folder location when editing!
+                    const existingFolderId = window.appState.savedPDFs[idx].folderId;
+                    window.appState.savedPDFs[idx] = { id: editId, title, url, folderId: existingFolderId };
                     window.showToast("PDF Updated Successfully!");
                 }
             } else {
+                // Add New PDF (Saves to active currentFolderId)
                 const newId = 'pdf-' + Date.now();
-                window.appState.savedPDFs.push({ id: newId, title, url });
-                window.showToast("PDF Saved Permanently to Cloud!");
+                window.appState.savedPDFs.push({ 
+                    id: newId, 
+                    title, 
+                    url, 
+                    folderId: window.currentFolderId // Logs it to the current folder context
+                });
+                window.showToast("PDF Saved Permanently!");
             }
 
             if (window.pushStateToCloud) window.pushStateToCloud(false);
@@ -615,7 +733,7 @@
             titleInput.value = '';
             urlInput.value = '';
             editIdInput.value = '';
-            document.getElementById('savePdfBtnText').innerText = "Preview & Save Permanently";
+            document.getElementById('savePdfBtnText').innerText = "Preview & Save Here";
 
             window.renderSavedPDFs();
         };
@@ -631,7 +749,7 @@
         };
 
         window.deleteSavedPDF = function(id) {
-            if (!confirm("Are you sure you want to delete this PDF from your Cloud Library?")) return;
+            if (!confirm("Are you sure you want to delete this PDF from your Library?")) return;
             
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.id !== id);
             if (window.pushStateToCloud) window.pushStateToCloud(false);
@@ -656,6 +774,7 @@
             
             document.getElementById('pdfUrlInput').value = input.value;
             document.getElementById('pdfTitleInput').value = 'Quick Saved PDF';
+            // It will save to whatever folder is currently open automatically!
             window.addAndSavePDF();
             input.value = '';
         };
@@ -672,6 +791,14 @@
             document.querySelectorAll('.side-drawer').forEach(d => { if(d.id !== drawerId) d.classList.remove('open'); });
             const drawer = document.getElementById(drawerId);
             if(drawer) drawer.classList.toggle('open');
+            
+            // If they open the library drawer, clear any edit states so it says "Save" not "Update"
+            if (drawerId === 'libraryDrawer') {
+                document.getElementById('pdfTitleInput').value = '';
+                document.getElementById('pdfUrlInput').value = '';
+                document.getElementById('editPdfId').value = '';
+                document.getElementById('savePdfBtnText').innerText = "Preview & Save Here";
+            }
         };
 
         window.updateZoomUI = function() {
