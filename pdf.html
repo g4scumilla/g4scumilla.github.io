@@ -21,47 +21,54 @@
 
     <!-- ==================== MERGED STYLES ==================== -->
     <style>
-        /* --- 1. GLOBAL STYLE.CSS --- */
+        /* --- 1. GLOBAL CSS VARIABLES --- */
         :root {
             --bg-main: #080b12;
-            --bg-card: rgba(22, 29, 47, 0.65);
-            --bg-elevated: #151b2b;
+            --bg-card: rgba(30, 41, 59, 0.85);
+            --bg-elevated: rgba(15, 23, 42, 0.88);
+            --bg-input: rgba(15, 23, 42, 0.75);
+            --bg-btn: rgba(255, 255, 255, 0.06);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
+            --text-title: #ffffff;
             --accent: #3ded97;
-            --accent-secondary: #06b6d4;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.12);
             --danger: #f43f5e;
             --app-max-width: 440px;
             --viewer-width: 94%;
         }
+
+        /* --- THE REAL LIGHT MODE --- */
         body.light-mode {
             --bg-main: #f1f5f9;
-            --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-elevated: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-elevated: #f8fafc;
+            --bg-input: #ffffff;
+            --bg-btn: #e2e8f0;
             --text-primary: #0f172a;
             --text-secondary: #64748b;
-            --border-color: rgba(15, 23, 42, 0.18);
+            --text-title: #0f172a;
+            --border-color: rgba(15, 23, 42, 0.15);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         /* --- 2. EXACT HEADER.HTML STYLES --- */
         .app-global-header {
             position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column;
-            background: rgba(8, 11, 18, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25); flex-shrink: 0;
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); margin-bottom: 16px; box-shadow: 0 8px 24px -6px rgba(0,0,0,0.15); flex-shrink: 0;
         }
-        body.light-mode .app-global-header { background: rgba(241, 245, 249, 0.85); box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08); }
         .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 6px 12px 6px; border-bottom: 1px solid var(--border-color); }
         .header-left-group { display: flex; align-items: center; gap: 12px; }
         .android-header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25); }
-        .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; }
+        .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; color: var(--text-title); }
         .android-header-title a { color: inherit; text-decoration: none; }
         .header-actions-right { display: flex; align-items: center; gap: 8px; }
         .header-search-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .header-search-container.open { width: 170px; }
-        .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-size: 12px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
-        .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: 12px; outline: none; }
+        .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-btn); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .header-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(61, 237, 151, 0.05); }
         .live-sync-indicator { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(61, 237, 151, 0.1); color: var(--accent); border: 1px solid rgba(61, 237, 151, 0.25); }
         body.is-admin .live-sync-indicator { display: inline-flex; }
@@ -78,80 +85,87 @@
         .header-notice-row.urgent .notice-marquee-text { color: var(--danger); }
 
         /* --- 3. FOOTER.CSS --- */
-        .bottom-nav { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(var(--app-max-width, 440px) - 28px); background: rgba(18, 25, 41, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px; display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
-        body.light-mode .bottom-nav { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1); }
+        .bottom-nav { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(var(--app-max-width, 440px) - 28px); background: var(--bg-card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: 24px; display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
         .nav-item { background: none; border: none; color: var(--text-secondary); font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; padding: 6px 16px; border-radius: 16px; transition: all 0.2s; text-decoration: none; }
         .nav-item i { font-size: 17px; }
         .nav-item:hover { color: var(--text-primary); }
         .nav-item.active { color: var(--accent); background: rgba(61, 237, 151, 0.1); }
 
         /* --- 4. PDF READER SPECIFIC STYLES OVERRIDES --- */
-        body, html { width: 100%; height: 100%; background: var(--bg-main); background-image: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617); color: var(--text-primary); overflow: hidden; user-select: none; margin: 0; padding: 0; }
-        body.light-mode { background-image: radial-gradient(circle at top left, #e2e8f0, #f1f5f9 50%, #ffffff); }
+        body, html { width: 100%; height: 100%; background: var(--bg-main); color: var(--text-primary); overflow: hidden; user-select: none; margin: 0; padding: 0; }
+        
         .app-wrapper { display: flex; flex-direction: column; width: 100vw; height: 100vh; position: relative; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .top-toolbar { display: flex; align-items: center; justify-content: flex-end; padding: 10px 18px; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.12); z-index: 99; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0; }
+        
+        /* Updated dynamic backgrounds */
+        .top-toolbar { display: flex; align-items: center; justify-content: flex-end; padding: 10px 18px; background: var(--bg-card); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); z-index: 99; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0; }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
-        .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; font-family: 'Inter', sans-serif;}
+        
+        .zoom-badge { font-size: 0.78rem; font-weight: 600; color: #6366f1; min-width: 46px; text-align: center; padding: 4px 6px; border-radius: 6px; cursor: pointer; background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.35); transition: all 0.2s; font-family: 'Inter', sans-serif;}
+        
         .controls-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; width: 100%; justify-content: flex-end; }
-        .btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-primary); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; font-family: 'Inter', sans-serif;}
-        .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
+        .btn { background: var(--bg-btn); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 11px; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; text-decoration: none; white-space: nowrap; font-family: 'Inter', sans-serif;}
+        .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
         .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
 
-        /* Floating Components */
-        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* Floating Components updated */
+        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); }
-        .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.16); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: var(--bg-elevated); backdrop-filter: blur(16px); border: 1px solid var(--border-color); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .floating-zoom-dock.minimized .dock-controls { display: none; }
         .dock-controls { display: flex; align-items: center; gap: 8px; }
         .toast { position: fixed; bottom: 85px; left: 30px; background: rgba(16, 185, 129, 0.95); backdrop-filter: blur(10px); color: white; padding: 12px 20px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 9999; transform: translateY(150px); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .toast.show { transform: translateY(0); opacity: 1; }
-        .zoom-btn { background: rgba(255, 255, 255, 0.07); border: 1px solid transparent; color: var(--text-primary); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
+        .zoom-btn { background: var(--bg-btn); border: 1px solid transparent; color: var(--text-primary); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
 
-        /* Main Workspace */
+        /* Main Workspace updated */
         .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
         .workspace.edge-to-edge { padding: 0; padding-bottom: 85px; }
-        .pdf-card { width: var(--viewer-width); height: 100%; background: #1e293b; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
+        .pdf-card { width: var(--viewer-width); height: 100%; background: var(--bg-main); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
         .workspace.edge-to-edge .pdf-card { width: 100% !important; border-radius: 0; border: none; }
         .pdf-card.minimized { height: 46px !important; width: 480px !important; border-radius: 14px; }
-        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: rgba(15, 23, 42, 0.92); border-bottom: 1px solid rgba(255, 255, 255, 0.12); font-size: 0.8rem; color: var(--text-secondary); flex-shrink: 0; font-family: 'Inter', sans-serif;}
+        
+        .card-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; background: var(--bg-elevated); border-bottom: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-secondary); flex-shrink: 0; font-family: 'Inter', sans-serif;}
         .window-dots { display: flex; gap: 8px; align-items: center; }
         .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
+        .dot:hover { transform: scale(1.2); }
         .dot.yellow { background: #f59e0b; }
         .dot.green { background: #10b981; }
         .dot.purple { background: #6366f1; }
 
-        .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow: auto; background: #0f172a; scroll-behavior: auto; }
+        .iframe-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow: auto; background: var(--bg-main); scroll-behavior: auto; }
         .iframe-wrapper::-webkit-scrollbar { height: 10px; width: 10px;}
-        .iframe-wrapper::-webkit-scrollbar-track { background: #0f172a; }
+        .iframe-wrapper::-webkit-scrollbar-track { background: var(--bg-main); }
         .iframe-wrapper::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
         .zoom-stage { width: 100%; height: 100%; position: relative; transform-origin: center center; transition: transform 0.3s ease; }
         iframe { width: 100%; height: 100%; border: none; display: block; transition: filter 0.25s ease; }
 
         /* Loader */
-        .loader-overlay { position: absolute; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; z-index: 10; transition: opacity 0.4s ease; }
+        .loader-overlay { position: absolute; inset: 0; background: var(--bg-main); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; z-index: 10; transition: opacity 0.4s ease; }
         .loader-overlay.hidden { opacity: 0; pointer-events: none; }
         .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.9s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Side Drawers */
-        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;}
+        /* Side Drawers updated */
+        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;}
         .side-drawer.open { transform: translateX(0); }
-        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); font-weight: 600; font-size: 0.95rem; }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); font-weight: 600; font-size: 0.95rem; }
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
+        
+        /* Inputs & Lists updated */
         .input-group { margin-bottom: 12px; }
         .input-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; }
-        .text-input { width: 100%; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; }
+        .text-input { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; }
         .saved-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
-        .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
         .saved-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; flex: 1; margin-right: 8px; }
-        .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; display: flex; align-items: center; }
+        .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-title); display: flex; align-items: center; }
         .saved-item-id { font-size: 0.7rem; color: #6366f1; font-weight: 500;}
-        .icon-btn { background: rgba(255, 255, 255, 0.06); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .icon-btn.delete:hover { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
+        .icon-btn { background: var(--bg-btn); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn.delete:hover { color: white; background: var(--danger); }
         .control-row { margin-bottom: 15px; }
         .control-row label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
         input[type="range"] { width: 100%; accent-color: #6366f1; cursor: pointer; }
-        .notes-area { width: 100%; height: 220px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; color: var(--text-primary); padding: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
+        .notes-area { width: 100%; height: 220px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary); padding: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem; resize: none; outline: none; margin-bottom: 12px; }
 
         body.is-true-fullscreen .app-global-header, body.is-true-fullscreen .top-toolbar, body.is-true-fullscreen .bottom-nav, body.is-true-fullscreen .floating-zoom-dock, body.is-true-fullscreen .toolbar-toggle-pill { display: none !important; }
         body.is-true-fullscreen .app-wrapper { height: 100vh !important; width: 100vw !important; }
@@ -224,7 +238,7 @@
                         <div class="dot yellow" onclick="window.toggleMinimizePDF()"></div>
                         <div class="dot green" onclick="window.toggleEdgeToEdge()"></div>
                         <div class="dot purple" onclick="window.toggleToolbar()"></div>
-                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600; color: #e2e8f0;">Loading Library...</span>
+                        <span id="docTitleDisplay" style="margin-left: 8px; font-weight: 600;">Loading Library...</span>
                     </div>
                     <div style="font-size: 0.75rem;"><span id="headerZoomReadout">Zoom: 100%</span></div>
                 </div>
@@ -268,9 +282,9 @@
 
         <div class="input-group"><label>Online PDF Name / Title</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
         <div class="input-group"><label>Google Drive PDF Link</label><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view"></div>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Cloud Link Here</span></button>
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Cloud Link</span></button>
 
-        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
             <span>Saved Items (<span id="savedCount">0</span>)</span>
         </div>
         <div class="saved-list" id="savedListContainer"><div style="text-align:center; padding: 20px;">Loading Library...</div></div>
@@ -424,14 +438,12 @@
             const localId = 'local-pdf-' + Date.now();
 
             try {
-                // Save massive PDF file into device IndexedDB permanently
                 await saveLocalPdfToDB(localId, file);
 
-                // Add pointer reference to Cloud Library
                 const newPdf = {
                     id: 'pdf-' + Date.now(),
-                    title: "📱 " + customName, // 📱 Emoji helps identify offline files
-                    url: 'local:' + localId,   // Special prefix to trigger local DB retrieval
+                    title: "📱 " + customName,
+                    url: 'local:' + localId,
                     folderId: window.currentFolderId
                 };
 
@@ -440,8 +452,6 @@
 
                 if (window.pushStateToCloud) window.pushStateToCloud(false);
                 window.renderSavedPDFs();
-                
-                // Immediately Load it
                 window.loadPDF(newPdf.id);
 
             } catch(err) {
@@ -495,7 +505,7 @@
 
                 if (folders.length > 0) {
                     html += folders.map(folder => `
-                        <div class="saved-item" style="border-left: 3px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+                        <div class="saved-item" style="border-left: 3px solid #6366f1; background: var(--bg-elevated);">
                             <div class="saved-item-info" onclick="window.currentFolderId='${folder.id}'; window.renderSavedPDFs();">
                                 <div class="saved-item-title"><i class="fa-solid fa-folder" style="color: #6366f1; font-size: 1.1rem; margin-right:8px;"></i> ${folder.name}</div>
                                 <div class="saved-item-id">${pdfs.filter(p => p.folderId === folder.id).length} PDFs inside</div>
@@ -523,11 +533,8 @@
 
         window.deleteFolder = function(id) {
             if (!confirm("⚠️ Delete this folder and all its contents?")) return;
-            
-            // Delete associated offline PDFs from local DB first
             const pdfsToDelete = window.appState.savedPDFs.filter(p => p.folderId === id);
             pdfsToDelete.forEach(pdf => { if (pdf.url.startsWith('local:')) deleteLocalPdfFromDB(pdf.url.split('local:')[1]); });
-
             window.appState.savedFolders = window.appState.savedFolders.filter(f => f.id !== id);
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.folderId !== id);
             if (window.pushStateToCloud) window.pushStateToCloud(false);
@@ -541,14 +548,11 @@
             let title = document.getElementById('pdfTitleInput').value.trim() || "Untitled Document";
             let url = document.getElementById('pdfUrlInput').value.trim();
             if (!url) return alert("Please enter a valid PDF link.");
-            
             url = window.formatPdfUrl(url);
             if (!window.appState) return;
             if (!window.appState.savedPDFs) window.appState.savedPDFs = [];
-
             const newlyCreatedId = 'pdf-' + Date.now();
             window.appState.savedPDFs.push({ id: newlyCreatedId, title, url, folderId: window.currentFolderId });
-
             if (window.pushStateToCloud) window.pushStateToCloud(false);
             window.loadPDF(newlyCreatedId, true);
             document.getElementById('pdfTitleInput').value = ''; document.getElementById('pdfUrlInput').value = '';
@@ -559,10 +563,7 @@
         window.deleteSavedPDF = function(id) {
             if (!confirm("Are you sure you want to delete this PDF?")) return;
             const pdf = window.appState.savedPDFs.find(p => p.id === id);
-            
-            // If offline, scrub from phone storage
             if (pdf && pdf.url.startsWith('local:')) deleteLocalPdfFromDB(pdf.url.split('local:')[1]);
-
             window.appState.savedPDFs = window.appState.savedPDFs.filter(p => p.id !== id);
             if (window.appState.defaultPdfId === id) window.appState.defaultPdfId = null;
             if (window.pushStateToCloud) window.pushStateToCloud(false);
@@ -578,7 +579,6 @@
             document.getElementById('loader').classList.remove('hidden'); 
             const frame = document.getElementById('pdfFrame');
 
-            // Route 1: It is a local file saved on this Android device
             if (pdf.url.startsWith('local:')) {
                 const localId = pdf.url.split('local:')[1];
                 try {
@@ -623,9 +623,7 @@
                     frame.srcdoc = viewerHTML;
 
                 } catch(e) { alert("Failed loading device file."); document.getElementById('loader').classList.add('hidden'); return; }
-            } 
-            // Route 2: It is a Google Drive Cloud Link
-            else {
+            } else {
                 frame.removeAttribute('srcdoc'); 
                 frame.src = pdf.url; 
             }
