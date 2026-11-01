@@ -266,26 +266,43 @@
         <div style="color: var(--text-secondary); text-align: center; margin-top: 30px;"><p>Settings appear here.</p></div>
     </aside>
 
+    <!-- ======== NEW REDESIGNED PDF LIBRARY DRAWER ======== -->
     <aside class="side-drawer" id="libraryDrawer">
-        <div class="drawer-header"><span><i class="fa-solid fa-toolbox" style="color: #6366f1;"></i> PDF Library Manager</span><button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <input type="hidden" id="editPdfId" value="">
-        <div id="libraryBreadcrumb" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-            <span id="currentFolderName"><i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library</span>
-            <button class="btn btn-sm" onclick="window.createNewFolder()" title="Create New Folder"><i class="fa-solid fa-folder-plus"></i></button>
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-book-open-reader" style="color: #6366f1;"></i> PDF Library Manager</span>
+            <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
         </div>
         
-        <!-- Offline Permanent PDF Upload Button -->
-        <input type="file" id="localPdfInput" accept="application/pdf" style="display:none;" onchange="window.saveAndLoadLocalPDF(event)">
-        <button class="btn" style="width: 100%; justify-content: center; margin-bottom: 12px; background: rgba(61, 237, 151, 0.1); border-color: rgba(61, 237, 151, 0.3); color: var(--accent);" onclick="document.getElementById('localPdfInput').click()">
-            <i class="fa-solid fa-download"></i> Save Local PDF to Folder (Offline)
-        </button>
+        <input type="hidden" id="editPdfId" value="">
+        
+        <div id="libraryBreadcrumb" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <span id="currentFolderName"><i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library</span>
+        </div>
+        
+        <!-- Offline Library Section -->
+        <div style="background: var(--bg-elevated); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase;"><i class="fa-solid fa-mobile-screen" style="margin-right: 4px;"></i> Offline Device Library</div>
+            <div style="display: flex; gap: 8px;">
+                <input type="file" id="localPdfInput" accept="application/pdf" style="display:none;" onchange="window.saveAndLoadLocalPDF(event)">
+                <button class="btn" style="flex: 2; justify-content: center; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #059669; font-weight: 600;" onclick="document.getElementById('localPdfInput').click()">
+                    <i class="fa-solid fa-file-arrow-up"></i> Add PDF
+                </button>
+                <button class="btn" style="flex: 1.5; justify-content: center; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #6366f1; font-weight: 600;" onclick="window.createNewFolder()">
+                    <i class="fa-solid fa-folder-plus"></i> New Folder
+                </button>
+            </div>
+        </div>
 
-        <div class="input-group"><label>Online PDF Name / Title</label><input type="text" class="text-input" id="pdfTitleInput" placeholder="e.g., Chapter 1 Study Guide"></div>
-        <div class="input-group"><label>Google Drive PDF Link</label><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/file/d/.../view"></div>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-floppy-disk"></i> <span id="savePdfBtnText">Preview & Save Cloud Link</span></button>
+        <!-- Cloud Library Section -->
+        <div style="background: var(--bg-elevated); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase;"><i class="fa-solid fa-cloud" style="margin-right: 4px;"></i> Google Drive Links</div>
+            <div class="input-group" style="margin-bottom: 8px;"><input type="text" class="text-input" id="pdfTitleInput" placeholder="Name / Title (Optional)"></div>
+            <div class="input-group" style="margin-bottom: 8px;"><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/..."></div>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-cloud-arrow-up"></i> <span id="savePdfBtnText">Save Cloud Link</span></button>
+        </div>
 
         <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
-            <span>Saved Items (<span id="savedCount">0</span>)</span>
+            <span>Current Folder Contents (<span id="savedCount">0</span>)</span>
         </div>
         <div class="saved-list" id="savedListContainer"><div style="text-align:center; padding: 20px;">Loading Library...</div></div>
     </aside>
