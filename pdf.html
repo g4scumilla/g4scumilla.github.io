@@ -106,9 +106,10 @@
         .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
         .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
 
-        /* Floating Components */
-        .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); }
+        /* Floating Components FIX: Pill is now fully invisible when not active */
+        .toolbar-toggle-pill { position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); opacity: 0; pointer-events: none; z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+        
         .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: var(--bg-elevated); backdrop-filter: blur(16px); border: 1px solid var(--border-color); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .floating-zoom-dock.minimized .dock-controls { display: none; }
         .dock-controls { display: flex; align-items: center; gap: 8px; }
