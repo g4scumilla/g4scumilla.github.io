@@ -53,7 +53,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        /* --- 2. EXACT HEADER.HTML STYLES --- */
+        /* --- 2. HEADER STYLES --- */
         .app-global-header {
             position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column;
             background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -84,7 +84,7 @@
         .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
         .header-notice-row.urgent .notice-marquee-text { color: var(--danger); }
 
-        /* --- 3. FOOTER.CSS --- */
+        /* --- 3. FOOTER STYLES --- */
         .bottom-nav { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(var(--app-max-width, 440px) - 28px); background: var(--bg-card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: 24px; display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
         .nav-item { background: none; border: none; color: var(--text-secondary); font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; padding: 6px 16px; border-radius: 16px; transition: all 0.2s; text-decoration: none; }
         .nav-item i { font-size: 17px; }
@@ -96,7 +96,6 @@
         
         .app-wrapper { display: flex; flex-direction: column; width: 100vw; height: 100vh; position: relative; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Updated dynamic backgrounds */
         .top-toolbar { display: flex; align-items: center; justify-content: flex-end; padding: 10px 18px; background: var(--bg-card); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); z-index: 99; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); max-height: 90px; opacity: 1; gap: 10px; flex-shrink: 0; }
         .top-toolbar.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom: none; opacity: 0; pointer-events: none; }
         
@@ -107,7 +106,7 @@
         .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
         .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
 
-        /* Floating Components updated */
+        /* Floating Components */
         .toolbar-toggle-pill { position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-150%); z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); }
         .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: var(--bg-elevated); backdrop-filter: blur(16px); border: 1px solid var(--border-color); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -117,7 +116,7 @@
         .toast.show { transform: translateY(0); opacity: 1; }
         .zoom-btn { background: var(--bg-btn); border: 1px solid transparent; color: var(--text-primary); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s ease; }
 
-        /* Main Workspace updated */
+        /* Main Workspace */
         .workspace { flex: 1; display: flex; position: relative; overflow: hidden; justify-content: center; align-items: center; padding: 12px; transition: padding 0.3s ease; padding-bottom: 85px; }
         .workspace.edge-to-edge { padding: 0; padding-bottom: 85px; }
         .pdf-card { width: var(--viewer-width); height: 100%; background: var(--bg-main); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; transition: width 0.3s ease, height 0.35s ease, border-radius 0.3s ease; }
@@ -145,22 +144,34 @@
         .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.9s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Side Drawers updated */
-        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); overflow-y: auto; background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 16px; padding: 20px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;}
+        /* --- REDESIGNED DRAWERS (Sticky Headers) --- */
+        .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 16px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
         .side-drawer.open { transform: translateX(0); }
-        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); font-weight: 600; font-size: 0.95rem; }
+        .drawer-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.95rem; background: var(--bg-card); z-index: 2; flex-shrink: 0; }
+        .drawer-content { padding: 16px 20px; overflow-y: auto; flex: 1; }
+
+        /* Library Tabs */
+        .lib-tabs { display: flex; background: var(--bg-input); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--border-color); }
+        .lib-tab { flex: 1; text-align: center; padding: 8px 0; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .lib-tab.active { background: var(--bg-elevated); color: var(--text-primary); box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
+        .lib-pane { display: none; animation: fadeIn 0.3s ease; }
+        .lib-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Inputs & Lists */
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
-        
-        /* Inputs & Lists updated */
         .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; }
-        .text-input { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; }
-        .saved-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
+        .input-group label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 5px; font-weight: 500; }
+        .text-input { width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 9px 12px; font-size: 0.83rem; font-family: 'Inter', sans-serif; outline: none; transition: border 0.2s; }
+        .text-input:focus { border-color: #6366f1; }
+        .saved-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; }
         .saved-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-        .saved-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; flex: 1; margin-right: 8px; }
+        .saved-item:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: var(--accent); }
+        .saved-item-info { display: flex; flex-direction: column; gap: 3px; overflow: hidden; flex: 1; margin-right: 8px; }
         .saved-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-title); display: flex; align-items: center; }
-        .saved-item-id { font-size: 0.7rem; color: #6366f1; font-weight: 500;}
-        .icon-btn { background: var(--bg-btn); border: none; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .saved-item-id { font-size: 0.7rem; color: #6366f1; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+        .icon-btn { background: var(--bg-btn); border: 1px solid transparent; color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .icon-btn:hover { color: var(--text-primary); background: var(--border-color); }
         .icon-btn.delete:hover { color: white; background: var(--danger); }
         .control-row { margin-bottom: 15px; }
         .control-row label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
@@ -255,73 +266,89 @@
         </main>
     </div>
 
-    <!-- Drawers -->
+    <!-- Notices Drawer -->
     <aside class="side-drawer" id="noticesDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-bell" style="color: #6366f1;"></i> Recent Notices</span><button class="btn btn-sm" onclick="window.toggleDrawer('noticesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div style="color: var(--text-secondary); text-align: center; margin-top: 30px;"><p>No new notifications.</p></div>
+        <div class="drawer-content" style="text-align: center; color: var(--text-secondary); margin-top: 30px;"><p>No new notifications.</p></div>
     </aside>
 
+    <!-- Settings Drawer -->
     <aside class="side-drawer" id="settingsDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-gear" style="color: #6366f1;"></i> App Settings</span><button class="btn btn-sm" onclick="window.toggleDrawer('settingsDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div style="color: var(--text-secondary); text-align: center; margin-top: 30px;"><p>Settings appear here.</p></div>
+        <div class="drawer-content" style="text-align: center; color: var(--text-secondary); margin-top: 30px;"><p>Settings appear here.</p></div>
     </aside>
 
     <!-- ======== NEW REDESIGNED PDF LIBRARY DRAWER ======== -->
     <aside class="side-drawer" id="libraryDrawer">
-        <div class="drawer-header">
-            <span><i class="fa-solid fa-book-open-reader" style="color: #6366f1;"></i> PDF Library Manager</span>
-            <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        
-        <input type="hidden" id="editPdfId" value="">
-        
-        <div id="libraryBreadcrumb" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-            <span id="currentFolderName"><i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library</span>
-        </div>
-        
-        <!-- Offline Library Section -->
-        <div style="background: var(--bg-elevated); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; margin-bottom: 16px;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase;"><i class="fa-solid fa-mobile-screen" style="margin-right: 4px;"></i> Offline Device Library</div>
-            <div style="display: flex; gap: 8px;">
-                <input type="file" id="localPdfInput" accept="application/pdf" style="display:none;" onchange="window.saveAndLoadLocalPDF(event)">
-                <button class="btn" style="flex: 2; justify-content: center; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #059669; font-weight: 600;" onclick="document.getElementById('localPdfInput').click()">
-                    <i class="fa-solid fa-file-arrow-up"></i> Add PDF
-                </button>
-                <button class="btn" style="flex: 1.5; justify-content: center; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #6366f1; font-weight: 600;" onclick="window.createNewFolder()">
-                    <i class="fa-solid fa-folder-plus"></i> New Folder
-                </button>
+        <!-- Sticky Header & Breadcrumbs -->
+        <div class="drawer-header" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <span><i class="fa-solid fa-book-open-reader" style="color: #6366f1; margin-right:6px;"></i> PDF Library</span>
+                <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <!-- Dynamic Navigation Bar injected here -->
+            <div id="libraryBreadcrumb" style="display: flex; justify-content: space-between; width: 100%; align-items: center; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                <!-- Filled via JS -->
             </div>
         </div>
+        
+        <!-- Scrollable Drawer Content -->
+        <div class="drawer-content">
+            <input type="hidden" id="editPdfId" value="">
+            
+            <!-- Sleek Tabbed Upload Section -->
+            <div style="background: var(--bg-elevated); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; margin-bottom: 16px;">
+                <div class="lib-tabs">
+                    <div class="lib-tab active" onclick="window.switchLibTab('offline')" id="tab-btn-offline"><i class="fa-solid fa-mobile-screen"></i> Device PDF</div>
+                    <div class="lib-tab" onclick="window.switchLibTab('cloud')" id="tab-btn-cloud"><i class="fa-solid fa-cloud"></i> Cloud Link</div>
+                </div>
 
-        <!-- Cloud Library Section -->
-        <div style="background: var(--bg-elevated); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; margin-bottom: 16px;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase;"><i class="fa-solid fa-cloud" style="margin-right: 4px;"></i> Google Drive Links</div>
-            <div class="input-group" style="margin-bottom: 8px;"><input type="text" class="text-input" id="pdfTitleInput" placeholder="Name / Title (Optional)"></div>
-            <div class="input-group" style="margin-bottom: 8px;"><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/..."></div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-cloud-arrow-up"></i> <span id="savePdfBtnText">Save Cloud Link</span></button>
-        </div>
+                <!-- Offline Pane -->
+                <div class="lib-pane active" id="pane-offline">
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4; text-align: center;">Save a PDF from your phone. It is stored inside this app for offline reading.</p>
+                    <input type="file" id="localPdfInput" accept="application/pdf" style="display:none;" onchange="window.saveAndLoadLocalPDF(event)">
+                    <button class="btn" style="width: 100%; justify-content: center; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #059669; font-weight: 600; padding: 10px;" onclick="document.getElementById('localPdfInput').click()">
+                        <i class="fa-solid fa-file-arrow-up"></i> Upload & Save Local PDF
+                    </button>
+                </div>
 
-        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; display:flex; justify-content: space-between; align-items:center;">
-            <span>Current Folder Contents (<span id="savedCount">0</span>)</span>
+                <!-- Cloud Pane -->
+                <div class="lib-pane" id="pane-cloud">
+                    <div class="input-group" style="margin-bottom: 10px;"><input type="text" class="text-input" id="pdfTitleInput" placeholder="Name / Title (Optional)"></div>
+                    <div class="input-group" style="margin-bottom: 10px;"><input type="text" class="text-input" id="pdfUrlInput" placeholder="https://drive.google.com/..."></div>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px;" onclick="window.addAndSavePDF()"><i class="fa-solid fa-cloud-arrow-up"></i> <span id="savePdfBtnText">Save Cloud Link</span></button>
+                </div>
+            </div>
+
+            <!-- List Section -->
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display:flex; justify-content: space-between; align-items:center; text-transform: uppercase; letter-spacing: 0.5px;">
+                <span>Current Contents (<span id="savedCount">0</span>)</span>
+            </div>
+            <div class="saved-list" id="savedListContainer"><div style="text-align:center; padding: 20px;">Loading Library...</div></div>
         </div>
-        <div class="saved-list" id="savedListContainer"><div style="text-align:center; padding: 20px;">Loading Library...</div></div>
     </aside>
 
+    <!-- Filters Drawer -->
     <aside class="side-drawer" id="displayDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-sliders" style="color: #6366f1;"></i> Zoom & Filters</span><button class="btn btn-sm" onclick="window.toggleDrawer('displayDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="control-row"><label><span>Smooth Zoom</span> <span id="drawerZoomVal">100%</span></label><input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)"></div>
-        <div class="preset-grid"><button class="btn btn-sm" onclick="window.animateZoomTo(75)">75%</button><button class="btn btn-sm" onclick="window.animateZoomTo(100)">100%</button><button class="btn btn-sm" onclick="window.animateZoomTo(125)">125%</button></div>
-        <div class="control-row"><label><span>Viewer Width</span> <span id="widthVal">94%</span></label><input type="range" id="widthSlider" min="50" max="100" value="94" oninput="window.updateWidth(this.value)"></div>
-        <div class="control-row"><label><span>Brightness</span> <span id="brightVal">100%</span></label><input type="range" id="brightSlider" min="50" max="130" value="100" oninput="window.applyFilters()"></div>
-        <div class="control-row"><label><span>Contrast</span> <span id="contrastVal">100%</span></label><input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="window.applyFilters()"></div>
-        <div class="control-row"><label><span>Warm Sepia</span> <span id="sepiaVal">0%</span></label><input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="window.applyFilters()"></div>
-        <div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn" style="flex: 1; justify-content: center;" onclick="window.toggleInvert()"><i class="fa-solid fa-moon"></i> Invert Dark</button><button class="btn" style="flex: 1; justify-content: center;" onclick="window.resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset All</button></div>
+        <div class="drawer-content">
+            <div class="control-row"><label><span>Smooth Zoom</span> <span id="drawerZoomVal">100%</span></label><input type="range" id="drawerZoomSlider" min="50" max="250" value="100" oninput="window.setZoomImmediate(this.value)"></div>
+            <div class="preset-grid"><button class="btn btn-sm" onclick="window.animateZoomTo(75)">75%</button><button class="btn btn-sm" onclick="window.animateZoomTo(100)">100%</button><button class="btn btn-sm" onclick="window.animateZoomTo(125)">125%</button></div>
+            <div class="control-row"><label><span>Viewer Width</span> <span id="widthVal">94%</span></label><input type="range" id="widthSlider" min="50" max="100" value="94" oninput="window.updateWidth(this.value)"></div>
+            <div class="control-row"><label><span>Brightness</span> <span id="brightVal">100%</span></label><input type="range" id="brightSlider" min="50" max="130" value="100" oninput="window.applyFilters()"></div>
+            <div class="control-row"><label><span>Contrast</span> <span id="contrastVal">100%</span></label><input type="range" id="contrastSlider" min="70" max="150" value="100" oninput="window.applyFilters()"></div>
+            <div class="control-row"><label><span>Warm Sepia</span> <span id="sepiaVal">0%</span></label><input type="range" id="sepiaSlider" min="0" max="80" value="0" oninput="window.applyFilters()"></div>
+            <div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn" style="flex: 1; justify-content: center;" onclick="window.toggleInvert()"><i class="fa-solid fa-moon"></i> Invert Dark</button><button class="btn" style="flex: 1; justify-content: center;" onclick="window.resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset All</button></div>
+        </div>
     </aside>
 
+    <!-- Notes Drawer -->
     <aside class="side-drawer" id="notesDrawer">
         <div class="drawer-header"><span><i class="fa-solid fa-pen-nib" style="color: #6366f1;"></i> Quick Reading Notes</span><button class="btn btn-sm" onclick="window.toggleDrawer('notesDrawer')"><i class="fa-solid fa-xmark"></i></button></div>
-        <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways..."></textarea>
-        <div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="window.downloadNotes()"><i class="fa-solid fa-file-arrow-down"></i> Save .txt</button><button class="btn" onclick="window.clearNotes()"><i class="fa-solid fa-trash"></i></button></div>
+        <div class="drawer-content">
+            <textarea class="notes-area" id="notesInput" placeholder="Write key takeaways..."></textarea>
+            <div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="window.downloadNotes()"><i class="fa-solid fa-file-arrow-down"></i> Save .txt</button><button class="btn" onclick="window.clearNotes()"><i class="fa-solid fa-trash"></i></button></div>
+        </div>
     </aside>
 
     <nav class="bottom-nav">
@@ -443,12 +470,23 @@
         window.hideLoader = function() { const loader = document.getElementById('loader'); if (loader) loader.classList.add('hidden'); };
         window.formatPdfUrl = function(url) { if (url.includes('drive.google.com')) { return url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview'); } return url; };
         
-        // --- 1. NEW OFFLINE PDF HANDLER (SAVE + LOAD) --- //
+        // --- NEW TAB SWITCHER ---
+        window.switchLibTab = function(tab) {
+            document.getElementById('tab-btn-offline').classList.remove('active');
+            document.getElementById('tab-btn-cloud').classList.remove('active');
+            document.getElementById('pane-offline').classList.remove('active');
+            document.getElementById('pane-cloud').classList.remove('active');
+
+            document.getElementById('tab-btn-' + tab).classList.add('active');
+            document.getElementById('pane-' + tab).classList.add('active');
+        };
+
+        // --- OFFLINE PDF HANDLER ---
         window.saveAndLoadLocalPDF = async function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            let customName = prompt("Enter a name for this offline PDF in your library:", file.name);
+            let customName = prompt("Enter a name for this offline PDF:", file.name);
             if (!customName) customName = file.name;
 
             document.getElementById('loader').classList.remove('hidden');
@@ -489,13 +527,13 @@
                             <i class="fa-solid fa-file-pdf" style="color: #f43f5e; margin-right: 6px;"></i>${pdf.title}
                             ${isDefault ? '<span style="margin-left:8px; font-size:0.65rem; background:var(--accent); color:#000; padding:2px 6px; border-radius:4px;">Default</span>' : ''}
                         </div>
-                        <div class="saved-item-id" style="display:flex; align-items:center; gap:4px; margin-top:2px;">
+                        <div class="saved-item-id">
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i> Click to Read
                         </div>
                     </div>
                     <div style="display:flex; gap:4px;">
-                        <button class="icon-btn" onclick="window.setDefaultPDF('${pdf.id}')"><i class="fa-solid fa-thumbtack" ${isDefault ? 'style="color:#3ded97;"' : ''}></i></button>
-                        <button class="icon-btn delete" onclick="window.deleteSavedPDF('${pdf.id}')"><i class="fa-solid fa-trash"></i></button>
+                        <button class="icon-btn" onclick="window.setDefaultPDF('${pdf.id}')" title="Pin as Default"><i class="fa-solid fa-thumbtack" ${isDefault ? 'style="color:#3ded97;"' : ''}></i></button>
+                        <button class="icon-btn delete" onclick="window.deleteSavedPDF('${pdf.id}')" title="Delete File"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `;
@@ -504,19 +542,31 @@
         window.renderSavedPDFs = function() {
             const container = document.getElementById('savedListContainer');
             const countEl = document.getElementById('savedCount');
+            const breadcrumbBar = document.getElementById('libraryBreadcrumb');
             const pdfs = window.appState?.savedPDFs || [];
             const folders = window.appState?.savedFolders || [];
             let html = '', itemCount = 0;
 
             if (window.currentFolderId) {
                 const currentFolder = folders.find(f => f.id === window.currentFolderId);
-                document.getElementById('currentFolderName').innerHTML = `<button class="btn btn-sm" style="display:inline-flex; width:auto; padding:4px 8px; font-size:0.75rem; margin-right:8px;" onclick="window.currentFolderId=null; window.renderSavedPDFs();"><i class="fa-solid fa-arrow-left"></i> Back</button> ${currentFolder ? currentFolder.name : 'Folder'}`;
+                breadcrumbBar.innerHTML = `
+                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-title); display: flex; align-items: center; gap: 8px;">
+                        <button class="icon-btn" style="width: 26px; height: 26px; border: 1px solid var(--border-color);" onclick="window.currentFolderId=null; window.renderSavedPDFs();"><i class="fa-solid fa-arrow-left"></i></button> 
+                        ${currentFolder ? currentFolder.name : 'Folder'}
+                    </span>
+                    <button class="btn btn-sm" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #6366f1;" onclick="window.createNewFolder()"><i class="fa-solid fa-folder-plus"></i> New Folder</button>
+                `;
                 const folderPdfs = pdfs.filter(p => p.folderId === window.currentFolderId);
                 itemCount = folderPdfs.length;
                 if (itemCount === 0) html += '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">This folder is empty.</div>';
                 else html += folderPdfs.map(generatePdfHtml).join('');
             } else {
-                document.getElementById('currentFolderName').innerHTML = `<i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library`;
+                breadcrumbBar.innerHTML = `
+                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-title); display: flex; align-items: center;">
+                        <i class="fa-solid fa-folder-tree" style="margin-right:8px; color: #6366f1;"></i> Root Library
+                    </span>
+                    <button class="btn btn-sm" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #6366f1;" onclick="window.createNewFolder()"><i class="fa-solid fa-folder-plus"></i> New Folder</button>
+                `;
                 const rootPdfs = pdfs.filter(p => !p.folderId);
                 itemCount = folders.length + rootPdfs.length;
 
@@ -588,7 +638,7 @@
             window.showToast("PDF Deleted");
         };
 
-        // --- 2. UPDATED PDF LOADER ROUTER (HANDLES BOTH CLOUD & OFFLINE) --- //
+        // --- PDF LOADER ROUTER ---
         window.loadPDF = async function(id, preventDrawerToggle = false) {
             const pdf = window.appState.savedPDFs.find(p => p.id === id);
             if (!pdf) return;
@@ -616,11 +666,11 @@
                     <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>body{background:${bgColor};margin:0;display:flex;flex-direction:column;align-items:center;}
                     canvas{max-width:100%;margin:15px 0;box-shadow:0 8px 24px rgba(0,0,0,0.4);border-radius:8px;}
-                    #controls{position:fixed;bottom:16px;background:${controlBg};padding:10px 20px;border-radius:99px;display:flex;gap:16px;color:${textColor};z-index:100;}
+                    #controls{position:fixed;bottom:16px;background:${controlBg};padding:10px 20px;border-radius:99px;display:flex;gap:16px;color:${textColor};z-index:100;border:1px solid rgba(128,128,128,0.2);}
                     button{background:#6366f1;border:none;color:white;padding:8px 16px;border-radius:99px;font-weight:600;} button:disabled{background:#475569;}
                     </style><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"><\/script></head><body>
                     <div id="pdf-render-container" style="width:100%;display:flex;flex-direction:column;align-items:center;padding-bottom:80px;"></div>
-                    <div id="controls"><button id="prevBtn"><</button><span style="white-space:nowrap;margin-top:6px;">Pg <span id="pageNum">1</span> / <span id="pageCount">?</span></span><button id="nextBtn">></button></div>
+                    <div id="controls"><button id="prevBtn"><</button><span style="white-space:nowrap;margin-top:6px;font-weight:700;">Pg <span id="pageNum">1</span> / <span id="pageCount">?</span></span><button id="nextBtn">></button></div>
                     <script>
                         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
                         let pdfDoc=null,pageNum=1,pageRendering=false,pageNumPending=null,container=document.getElementById('pdf-render-container');
