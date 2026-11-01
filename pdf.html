@@ -697,6 +697,7 @@
         }
 
         async function initApp() {
+            // Updated default to light theme
             const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
             document.body.classList.toggle('light-mode', savedTheme === 'light');
 
@@ -740,28 +741,135 @@
             return url;
         };
         
-        // Offline PDF Loading logic
+        // --- OFFLINE PDF LOADER FIX --- //
         window.loadLocalPDF = function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const fileUrl = URL.createObjectURL(file);
+            
+            // 1. Create a blob URL and store it in the parent window 
+            // so the injected iframe can access it cross-origin safely.
+            window.currentLocalBlobUrl = URL.createObjectURL(file);
 
             document.getElementById('loader').classList.remove('hidden');
-            document.getElementById('pdfFrame').src = fileUrl;
-            document.getElementById('docTitleDisplay').innerText = "📱 " + file.name;
-
-            window.toggleDrawer('libraryDrawer');
-            window.showToast("Offline PDF Loaded!");
             
-            // Clear input so the same file can be chosen again if needed
-            event.target.value = '';
+            // 2. Match the offline viewer's UI to your current app theme
+            const isLight = document.body.classList.contains('light-mode');
+            const bgColor = isLight ? '#f1f5f9' : '#0f172a';
+            const textColor = isLight ? '#0f172a' : '#f8fafc';
+            const controlBg = isLight ? 'rgba(255,255,255,0.95)' : 'rgba(30,41,59,0.95)';
+            const borderColor = isLight ? 'rgba(15,23,42,0.15)' : 'rgba(255,255,255,0.15)';
+
+            // 3. Inject a lightweight PDF.js reader directly into the iframe (Bypasses Android limitations)
+            const viewerHTML = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body { background-color: ${bgColor}; margin: 0; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; font-family: sans-serif; user-select: none; }
+                    canvas { max-width: 100%; height: auto; margin: 15px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-radius: 8px; }
+                    #controls { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: ${controlBg}; padding: 10px 20px; border-radius: 999px; display: flex; gap: 16px; color: ${textColor}; z-index: 100; backdrop-filter: blur(10px); border: 1px solid ${borderColor}; box-shadow: 0 10px 25px rgba(0,0,0,0.4); align-items: center; }
+                    button { background: #6366f1; border: none; color: white; padding: 8px 16px; border-radius: 999px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+                    button:active { transform: scale(0.95); }
+                    button:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; transform: none; }
+                </style>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"><\/script>
+            </head>
+            <body>
+                <div id="pdf-render-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px;"></div>
+                <div id="controls">
+                    <button id="prevBtn">< Prev</button>
+                    <span style="font-size: 0.9rem; font-weight: 700; white-space: nowrap;">Pg <span id="pageNum">1</span> / <span id="pageCount">?</span></span>
+                    <button id="nextBtn">Next ></button>
+                </div>
+
+                <script>
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    
+                    let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null,
+                        container = document.getElementById('pdf-render-container');
+
+                    function renderPage(num) {
+                        pageRendering = true;
+                        pdfDoc.getPage(num).then(function(page) {
+                            const unscaledViewport = page.getViewport({scale: 1.0});
+                            const containerWidth = window.innerWidth * 0.96;
+                            const calculatedScale = containerWidth / unscaledViewport.width;
+                            // Scale up for high-DPI mobile screens so text stays crisp
+                            const finalScale = Math.max(calculatedScale, 1.2) * (window.devicePixelRatio || 1);
+
+                            const viewport = page.getViewport({scale: finalScale});
+                            
+                            container.innerHTML = ''; 
+                            const canvas = document.createElement('canvas');
+                            container.appendChild(canvas);
+                            const ctx = canvas.getContext('2d');
+                            
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+                            canvas.style.width = (viewport.width / (window.devicePixelRatio || 1)) + 'px';
+                            canvas.style.height = (viewport.height / (window.devicePixelRatio || 1)) + 'px';
+
+                            page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() {
+                                pageRendering = false;
+                                if (pageNumPending !== null) {
+                                    renderPage(pageNumPending);
+                                    pageNumPending = null;
+                                }
+                            });
+                        });
+                        document.getElementById('pageNum').textContent = num;
+                        document.getElementById('prevBtn').disabled = num <= 1;
+                        document.getElementById('nextBtn').disabled = num >= pdfDoc.numPages;
+                    }
+
+                    function queueRenderPage(num) {
+                        if (pageRendering) pageNumPending = num; else renderPage(num);
+                    }
+
+                    document.getElementById('prevBtn').addEventListener('click', () => {
+                        if (pageNum <= 1) return;
+                        pageNum--; queueRenderPage(pageNum); window.scrollTo(0,0);
+                    });
+
+                    document.getElementById('nextBtn').addEventListener('click', () => {
+                        if (pageNum >= pdfDoc.numPages) return;
+                        pageNum++; queueRenderPage(pageNum); window.scrollTo(0,0);
+                    });
+
+                    // Grab the blob URL passed from your parent app
+                    const url = window.parent.currentLocalBlobUrl;
+                    
+                    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+                        pdfDoc = pdfDoc_;
+                        document.getElementById('pageCount').textContent = pdfDoc.numPages;
+                        renderPage(pageNum);
+                        if(window.parent && window.parent.hideLoader) window.parent.hideLoader();
+                    }).catch(err => {
+                        container.innerHTML = '<p style="color:red; margin-top:20px; text-align:center; padding:20px;">Failed to read PDF.<br><br>' + err.message + '</p>';
+                        if(window.parent && window.parent.hideLoader) window.parent.hideLoader();
+                    });
+                <\/script>
+            </body>
+            </html>
+            `;
+
+            const frame = document.getElementById('pdfFrame');
+            frame.removeAttribute('src'); // Clear online links
+            frame.srcdoc = viewerHTML;    // Inject the new offline reader
+
+            document.getElementById('docTitleDisplay').innerText = "📱 " + file.name;
+            window.toggleDrawer('libraryDrawer');
+            window.showToast("Offline PDF Ready!");
+            
+            event.target.value = ''; // Reset file input
         };
 
         window.currentFolderId = null;
 
         function generatePdfHtml(pdf) {
             const isDefault = window.appState.defaultPdfId === pdf.id;
-
             return `
                 <div class="saved-item">
                     <div class="saved-item-info" onclick="window.loadPDF('${pdf.id}')">
@@ -948,14 +1056,18 @@
             window.showToast("PDF Deleted");
         };
 
+        // --- ONLINE PDF LOADER FIX --- //
         window.loadPDF = function(id, preventDrawerToggle = false) {
             const pdf = window.appState.savedPDFs.find(p => p.id === id);
             if (!pdf) return;
 
             document.getElementById('loader').classList.remove('hidden'); 
-            document.getElementById('pdfFrame').src = pdf.url;
+            
+            const frame = document.getElementById('pdfFrame');
+            frame.removeAttribute('srcdoc'); // Purge offline reader if it was active
+            frame.src = pdf.url; // Load Google Drive URL securely
+            
             document.getElementById('docTitleDisplay').innerText = pdf.title;
-
             localStorage.setItem('kuafi_last_pdf_id', id);
 
             if (!preventDrawerToggle) {
@@ -978,7 +1090,7 @@
             if (targetId) {
                 window.loadPDF(targetId, true);
             } else {
-                document.getElementById('docTitleDisplay').innerText = "Advanced Engineering Mathematics.pdf";
+                document.getElementById('docTitleDisplay').innerText = "Select a PDF from your Library";
             }
         };
 
