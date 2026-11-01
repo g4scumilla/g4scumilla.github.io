@@ -106,9 +106,19 @@
         .btn.active, .btn-primary { background: #6366f1; border-color: #818cf8; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35); }
         .btn-sm { padding: 6px 10px; font-size: 0.76rem; border-radius: 7px; }
 
-        /* Floating Components FIX: Pill is now fully invisible when not active */
-        .toolbar-toggle-pill { position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); opacity: 0; pointer-events: none; z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .toolbar-toggle-pill.visible { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+        /* Floating Components (Show Controls Pill Fix) */
+        .toolbar-toggle-pill { 
+            position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); 
+            opacity: 0; pointer-events: none;
+            z-index: 150; background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); 
+            color: var(--text-primary); padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 0.8rem; 
+            font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); 
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .toolbar-toggle-pill.visible { 
+            transform: translateX(-50%) translateY(0); 
+            opacity: 1; pointer-events: auto;
+        }
         
         .floating-zoom-dock { position: fixed; bottom: 85px; right: 24px; z-index: 130; display: flex; align-items: center; gap: 8px; background: var(--bg-elevated); backdrop-filter: blur(16px); border: 1px solid var(--border-color); padding: 7px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .floating-zoom-dock.minimized .dock-controls { display: none; }
@@ -145,11 +155,17 @@
         .spinner { width: 44px; height: 44px; border: 3px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.9s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- REDESIGNED DRAWERS (Sticky Headers) --- */
+        /* --- REDESIGNED DRAWERS --- */
         .side-drawer { position: fixed; top: 170px; right: 20px; width: 350px; max-height: calc(100vh - 195px); background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 16px; z-index: 140; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
         .side-drawer.open { transform: translateX(0); }
         .drawer-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.95rem; background: var(--bg-card); z-index: 2; flex-shrink: 0; }
-        .drawer-content { padding: 16px 20px; overflow-y: auto; flex: 1; }
+        
+        /* Smooth Scrolling Enabled Here */
+        .drawer-content { 
+            padding: 16px 20px; overflow-y: auto; flex: 1; 
+            scroll-behavior: smooth; 
+            -webkit-overflow-scrolling: touch; 
+        }
 
         /* Library Tabs */
         .lib-tabs { display: flex; background: var(--bg-input); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--border-color); }
@@ -285,8 +301,14 @@
         <div class="drawer-header" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 12px;">
             <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                 <span><i class="fa-solid fa-book-open-reader" style="color: #6366f1; margin-right:6px;"></i> PDF Library</span>
-                <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
+                
+                <!-- NEW: Smooth Scroll & Close Buttons -->
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-sm" onclick="window.scrollToFolders()" title="Jump to Folders"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="btn btn-sm" onclick="window.toggleDrawer('libraryDrawer')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
             </div>
+            
             <!-- Dynamic Navigation Bar injected here -->
             <div id="libraryBreadcrumb" style="display: flex; justify-content: space-between; width: 100%; align-items: center; border-top: 1px solid var(--border-color); padding-top: 10px;">
                 <!-- Filled via JS -->
@@ -321,10 +343,11 @@
                 </div>
             </div>
 
-            <!-- List Section -->
-            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display:flex; justify-content: space-between; align-items:center; text-transform: uppercase; letter-spacing: 0.5px;">
+            <!-- Target Anchor for Smooth Scrolling -->
+            <div id="libraryContentsHeader" style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display:flex; justify-content: space-between; align-items:center; text-transform: uppercase; letter-spacing: 0.5px;">
                 <span>Current Contents (<span id="savedCount">0</span>)</span>
             </div>
+            
             <div class="saved-list" id="savedListContainer"><div style="text-align:center; padding: 20px;">Loading Library...</div></div>
         </div>
     </aside>
@@ -471,6 +494,15 @@
         window.hideLoader = function() { const loader = document.getElementById('loader'); if (loader) loader.classList.add('hidden'); };
         window.formatPdfUrl = function(url) { if (url.includes('drive.google.com')) { return url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview'); } return url; };
         
+        // --- NEW SMOOTH SCROLL LOGIC ---
+        window.scrollToFolders = function() {
+            const dc = document.querySelector('#libraryDrawer .drawer-content');
+            const target = document.getElementById('libraryContentsHeader');
+            if (dc && target) {
+                dc.scrollTo({ top: target.offsetTop - 16, behavior: 'smooth' });
+            }
+        };
+
         // --- NEW TAB SWITCHER ---
         window.switchLibTab = function(tab) {
             document.getElementById('tab-btn-offline').classList.remove('active');
@@ -508,7 +540,11 @@
 
                 if (window.pushStateToCloud) window.pushStateToCloud(false);
                 window.renderSavedPDFs();
-                window.loadPDF(newPdf.id);
+                
+                // Auto Scroll Down!
+                setTimeout(window.scrollToFolders, 100);
+
+                window.loadPDF(newPdf.id, true); // True keeps drawer open so user can see it!
 
             } catch(err) {
                 alert("Storage Error: Your device doesn't have enough space or blocked IndexedDB saving.");
@@ -596,6 +632,9 @@
             window.appState.savedFolders.push({ id: 'folder-' + Date.now(), name: name.trim() });
             if (window.pushStateToCloud) window.pushStateToCloud(false);
             window.renderSavedPDFs();
+            
+            // Auto Scroll Down!
+            setTimeout(window.scrollToFolders, 100);
             window.showToast("Folder Created!");
         };
 
@@ -622,9 +661,14 @@
             const newlyCreatedId = 'pdf-' + Date.now();
             window.appState.savedPDFs.push({ id: newlyCreatedId, title, url, folderId: window.currentFolderId });
             if (window.pushStateToCloud) window.pushStateToCloud(false);
-            window.loadPDF(newlyCreatedId, true);
+            
             document.getElementById('pdfTitleInput').value = ''; document.getElementById('pdfUrlInput').value = '';
             window.renderSavedPDFs();
+            
+            // Auto Scroll Down!
+            setTimeout(window.scrollToFolders, 100);
+            
+            window.loadPDF(newlyCreatedId, true);
             window.showToast("Cloud PDF Saved!");
         };
 
