@@ -246,7 +246,7 @@
                 <i class="fas fa-plus text-2xl"></i>
             </button>
 
-            <!-- Debit/Balance Card (Always Dark for premium feel) -->
+            <!-- Debit/Balance Card -->
             <div class="flex justify-center mb-8 group perspective mt-2">
                 <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-[0_15px_35px_-5px_rgba(15,23,42,0.3)] relative overflow-hidden text-white border border-[rgba(255,255,255,0.1)] flex flex-col justify-between transform transition-transform duration-500">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
@@ -326,7 +326,6 @@
 
         <!-- NEW ENTRY PAGE -->
         <div id="entry-page" class="page pt-4">
-            
             <div class="sticky-page-header">
                 <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
@@ -412,6 +411,18 @@
             </div>
             
             <div class="tools-section-card">
+
+                <div onclick="showPage('summary-page'); renderBalanceSummary();" class="setting-row">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon !bg-[rgba(14,165,233,0.1)] !text-[var(--accent-secondary)]"><i class="fas fa-chart-pie"></i></div>
+                        <div>
+                            <h4>Balance Summary</h4>
+                            <p>View all staff & central balances</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
+
                 <div onclick="showPage('reports-page')" class="setting-row">
                     <div class="setting-info flex items-center gap-4">
                         <div class="setting-icon"><i class="fas fa-file-invoice"></i></div>
@@ -456,7 +467,6 @@
                     <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
                 </div>
 
-                <!-- Admin Notice Tool (Hidden for regular users) -->
                 <div id="admin-notice-tool" class="setting-row hidden" onclick="showPage('notice-mgmt-page')">
                     <div class="setting-info flex items-center gap-4">
                         <div class="setting-icon !bg-[rgba(245,158,11,0.1)] !text-[var(--warning)]"><i class="fas fa-bullhorn"></i></div>
@@ -472,6 +482,35 @@
             <button onclick="handleLogout()" class="btn-action btn-danger py-4 mt-6 rounded-[20px]">
                 <i class="fa-solid fa-power-off"></i> Terminate Session
             </button>
+        </div>
+
+        <!-- BALANCE SUMMARY PAGE -->
+        <div id="summary-page" class="page pt-4">
+            <div class="sticky-page-header">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">Balance Summary</h2>
+            </div>
+
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[24px] shadow-[var(--card-shadow)] overflow-hidden mb-24">
+                <div class="bg-[var(--bg-main)] px-4 py-3 border-b border-[var(--border-color)] flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Personnel</span>
+                    <span class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Current Balance</span>
+                </div>
+                <div id="summary-list" class="divide-y divide-[var(--border-color)]">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Fixed Bottom Central Balance -->
+            <div class="fixed bottom-20 left-1/2 -translate-x-1/2 w-[calc(100%-28px)] max-w-[calc(var(--app-max-width)-28px)] bg-[var(--text-primary)] text-[var(--bg-main)] rounded-2xl p-4 shadow-2xl flex justify-between items-center z-40">
+                <div>
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Total Central Balance</h3>
+                    <p class="text-[9px] text-slate-500 mt-0.5">Calculated from raw master logs</p>
+                </div>
+                <p class="text-xl font-black" id="summary-central-bal">0.00</p>
+            </div>
         </div>
 
         <!-- NOTICE MANAGEMENT PAGE -->
@@ -825,7 +864,6 @@
                 document.body.classList.add('is-admin');
                 document.getElementById('global-header').style.display = 'flex';
                 
-                // Show Notice Management ONLY to the admin account
                 if (user.email === 'themadkafi@gmail.com') {
                     document.getElementById('admin-notice-tool').classList.remove('hidden');
                 } else {
@@ -1239,6 +1277,37 @@
             document.getElementById('te').className = `flex-1 py-3 rounded-xl font-bold border flex flex-col items-center gap-1 transition-all ${t === 'expense' ? 'bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.3)] text-[var(--danger)] shadow-[0_4px_15px_rgba(239,68,68,0.1)]' : 'bg-[var(--bg-main)] border-[var(--border-color)] text-[var(--text-secondary)]'}`;
         };
 
+        // BALANCE SUMMARY LOGIC
+        window.renderBalanceSummary = () => {
+            const container = document.getElementById('summary-list');
+            let html = '';
+            const staffKeys = Object.keys(staffData).sort();
+            
+            Object.keys(staffData).forEach(id => {
+                const u = staffData[id];
+                const gid = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+                
+                html += `
+                <div class="flex justify-between items-center p-4 border-b border-[var(--border-color)] bg-[var(--bg-card)]">
+                    <div>
+                        <p class="text-[13px] font-bold text-[var(--text-primary)]">${u.name}</p>
+                        <p class="text-[10px] text-[var(--text-secondary)] font-bold tracking-widest uppercase mt-0.5">${gid}</p>
+                    </div>
+                    <p class="text-[14px] font-black ${u.balance >= 0 ? 'text-[var(--accent)]' : 'text-[var(--danger)]'}">${fmt(u.balance)}</p>
+                </div>`;
+            });
+            
+            container.innerHTML = html || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Data Available</p>';
+            
+            // Calculate strictly from active logs
+            let safeCb = 0;
+            logsList.forEach(l => {
+                if(l.type === 'income') safeCb += l.amount;
+                else safeCb -= l.amount;
+            });
+            document.getElementById('summary-central-bal').innerText = fmt(safeCb);
+        };
+
         const startSync = (uid) => {
             
             // Notice Listener
@@ -1309,12 +1378,24 @@
                 document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
                 document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
                 document.getElementById('r-staff').innerHTML = opts;
+                
+                // Live update summary if open
+                if(document.getElementById('summary-page').classList.contains('active')) {
+                    renderBalanceSummary();
+                }
+                
                 renderHome();
             });
 
             onValue(ref(db, `users/${uid}/logs`), s => {
                 const d = s.val() || {};
                 logsList = Object.keys(d).map(k => ({...d[k], key: k})).sort((a,b) => (a.ts || 0) - (b.ts || 0));
+                
+                // Live update summary if open
+                if(document.getElementById('summary-page').classList.contains('active')) {
+                    renderBalanceSummary();
+                }
+                
                 renderHome();
             });
         };
@@ -1389,7 +1470,7 @@
                     <div class="flex justify-between items-center mt-2 pt-2 border-t border-dashed border-[var(--border-color)]">
                         <div class="flex flex-col">
                             <span class="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">${l.date}</span>
-                            <span class="text-[9px] font-mono text-[var(--text-primary)] mt-0.5">${getTxnId(l.key)} • ${g4sUserId}</span>
+                            <span class="text-[9px] font-mono text-[var(--text-primary)] mt-0.5">${getTxnId(l.key)}</span>
                         </div>
                         <button onclick="shareTransaction('${l.key}')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide flex items-center gap-1.5 transition-colors ${isInc ? 'bg-[rgba(16,185,129,0.08)] text-[var(--accent)] hover:bg-[rgba(16,185,129,0.15)]' : 'bg-[rgba(239,68,68,0.08)] text-[var(--danger)] hover:bg-[rgba(239,68,68,0.15)]'}">
                             <i class="fa-solid fa-share-nodes"></i> Share
