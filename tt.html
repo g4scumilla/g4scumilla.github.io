@@ -11,50 +11,77 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+        /* ==================== CSS VARIABLES ==================== */
         :root {
-            --border-color: rgba(255, 255, 255, 0.15);
-            --accent: #3ded97;
-            --bg-elevated: rgba(255, 255, 255, 0.1);
+            --bg-main: #080b12;
+            --bg-card: rgba(22, 29, 47, 0.65);
+            --bg-elevated: #151b2b;
             --text-primary: #f8fafc;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --danger: #ef4444;
+            --text-secondary: #94a3b8;
+            --accent: #3ded97;
+            --accent-secondary: #06b6d4;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+
+            --app-max-width: 440px;
+            --grid-cols: 3;
+            --grid-gap: 12px;
+            --card-radius: 18px;
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --card-bg: var(--bg-card);
+            --card-shadow: 0 12px 32px -8px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+            --card-padding: 12px 8px 14px;
+            --card-align: center;
         }
 
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif; 
-            background-color: #05a04e; 
-            color: #1a231e; 
+        /* Light Mode Overrides */
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: rgba(15, 23, 42, 0.18);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: 1px solid rgba(15, 23, 42, 0.06);
+            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.06), inset 0 1px 0px rgba(255, 255, 255, 1);
+        }
+
+        /* ==================== BASE STYLES ==================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: var(--bg-main);
+            background-image: radial-gradient(circle at 50% 0%, rgba(30, 45, 75, 0.4) 0%, transparent 65%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            background-attachment: fixed;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+        body.light-mode { background-image: radial-gradient(circle at 50% 0%, rgba(226, 232, 240, 0.8) 0%, transparent 65%); }
+
+        @media (min-width: 640px)  { body { --app-max-width: 780px; } }
+        @media (min-width: 1024px) { body { --app-max-width: 1080px; } }
+        @media (min-width: 1366px) { body { --app-max-width: 1380px; } }
+
+        .app-shell {
+            width: 100%;
+            max-width: var(--app-max-width);
             min-height: 100vh;
             position: relative;
+            padding: 0 14px;
+            transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 3D Sphere Background Wallpaper matching image */
-        .wallpaper-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            background: radial-gradient(circle at 20% 20%, #0cb85d 0%, #048842 100%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-        }
-
-        .orb-blue { top: -80px; right: -40px; width: 260px; height: 260px; background: radial-gradient(circle at 35% 30%, #3faaff, #005bbd, #002d75); box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35); }
-        .orb-center { top: 25%; left: 50%; transform: translateX(-50%); width: 380px; height: 380px; background: radial-gradient(circle at 35% 30%, #f0f7fa 0%, #b3cddb 45%, #59798e 80%, #2c4250 100%); box-shadow: inset -15px -15px 30px rgba(0, 0, 0, 0.25); }
-        .orb-orange { bottom: 15%; right: -60px; width: 250px; height: 250px; background: radial-gradient(circle at 35% 30%, #ffc83b, #ff5500, #b82000); box-shadow: inset -12px -12px 25px rgba(0, 0, 0, 0.35); }
-        .orb-pink { bottom: -80px; left: -60px; width: 320px; height: 320px; background: radial-gradient(circle at 35% 30%, #ffe3e8, #ff9eb0, #d95b72, #8c2337); box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.2); }
-        .orb-red-1 { top: 22%; left: -35px; width: 120px; height: 120px; background: radial-gradient(circle at 35% 30%, #ff5252, #cc0000, #730000); box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4); }
-        .orb-red-2 { bottom: 0%; right: 18%; width: 130px; height: 130px; background: radial-gradient(circle at 35% 30%, #ff4d4d, #d90000, #7a0000); box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.4); }
-
-        .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; }
+        .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; padding-bottom: 120px; }
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ==================== GLOBAL UNIFIED HEADER ==================== */
+        /* ==================== GLOBAL HEADER ==================== */
         .app-global-header {
             position: sticky;
             top: 0;
@@ -67,680 +94,590 @@
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 16px;
             box-shadow: 0 8px 24px -6px rgba(0,0,0,0.25);
+            margin-left: -14px;
+            margin-right: -14px;
         }
 
-        body.light-mode .app-global-header {
-            background: rgba(241, 245, 249, 0.85);
-            box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
-        }
+        body.light-mode .app-global-header { background: rgba(241, 245, 249, 0.85); box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08); }
 
-        .header-main-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 6px 12px 6px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
+        .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
         .header-left-group { display: flex; align-items: center; gap: 12px; }
-
-        .android-header-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent);
-            box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25);
-        }
-
-        .android-header-title {
-            font-size: 16.5px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            color: var(--text-primary);
-        }
-        
-        .android-header-title a { color: inherit; text-decoration: none; }
-
+        .android-header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(61, 237, 151, 0.25); }
+        .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; }
         .header-actions-right { display: flex; align-items: center; gap: 8px; }
 
-        .header-search-container {
-            width: 0;
-            overflow: hidden;
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
+        .header-search-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .header-search-container.open { width: 170px; }
+        .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-size: 12px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .header-search-input::placeholder { color: var(--text-secondary); }
 
-        .header-search-input {
-            width: 100%;
-            padding: 7px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            font-size: 12px;
-            outline: none;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .header-search-input::placeholder { color: rgba(255,255,255,0.6); }
+        .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .header-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(61, 237, 151, 0.05); }
 
-        .header-icon-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .header-icon-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(61, 237, 151, 0.05);
-        }
-
-        .live-sync-indicator {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 10.5px;
-            font-weight: 700;
-            background: rgba(61, 237, 151, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(61, 237, 151, 0.25);
-        }
-
+        .live-sync-indicator { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(61, 237, 151, 0.1); color: var(--accent); border: 1px solid rgba(61, 237, 151, 0.25); }
         body.is-admin .live-sync-indicator { display: inline-flex; }
 
-        .sync-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--accent);
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-
+        .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease, background 0.2s ease; }
         .sync-dot.polling { transform: scale(1.6); box-shadow: 0 0 10px var(--accent); }
 
-        /* ==================== HEADER NOTICE ROW ==================== */
-        .header-notice-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 6px 12px 6px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: opacity 0.3s ease;
-            width: 100%;
-        }
-
-        .notice-update-label {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            z-index: 2;
-        }
-
-        .header-notice-row.urgent .notice-update-label { color: var(--danger); }
-
-        .pulse-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 8px var(--accent);
-            animation: pulseGlow 1.5s infinite;
-        }
-
-        .header-notice-row.urgent .pulse-dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
-
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.45); opacity: 0.55; }
-        }
-
+        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; overflow: hidden; transition: opacity 0.3s ease; width: 100%; }
+        .notice-update-label { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; z-index: 2; }
+        .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
         .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; }
         .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
-        .header-notice-row.urgent .notice-marquee-text { color: var(--danger); }
 
-        /* UI Theme Glass Overrides */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; 
-            width: 100%; 
-            background: rgba(242, 248, 238, 0.92) !important; 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.6) !important; 
-            z-index: 50; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 12px 0 25px 0; 
-        }
+        /* ==================== BUTTONS & INPUTS ==================== */
+        .btn-action { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--accent); background: var(--accent); color: #0b0f19; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; width: 100%; }
+        .btn-action:hover { box-shadow: 0 4px 16px rgba(61,237,151,0.25); transform: translateY(-2px); }
+        .btn-outline { background: var(--bg-elevated); border-color: var(--border-color); color: var(--text-primary); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+        .btn-danger { background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3); color: var(--danger); }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(10, 25, 18, 0.6); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; }
-        .modal.active { display: flex; }
-        .modal-content { 
-            background: rgba(245, 249, 243, 0.95) !important; 
-            backdrop-filter: blur(20px);
-            width: 100%; 
-            border-top-left-radius: 32px; 
-            border-top-right-radius: 32px; 
-            padding: 24px; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            position: relative; 
-            border-top: 1px solid rgba(255,255,255,0.8);
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
+        .form-input, .form-select { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-size: 13px; outline: none; transition: all 0.2s; font-weight: 600; }
+        .form-input:focus, .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(61,237,151,0.1); }
+        .form-input::placeholder { color: rgba(148, 163, 184, 0.4); font-weight: 400; }
 
-        .nexus-card { 
-            background: rgba(242, 248, 238, 0.92); 
-            backdrop-filter: blur(12px);
-            border-radius: 20px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
-            border: 1px solid rgba(255, 255, 255, 0.7); 
-            overflow: hidden; 
-            margin-bottom: 16px; 
-        }
+        /* ==================== NEXUS CARDS & LISTS ==================== */
+        .nexus-card { background: var(--bg-card); border-radius: var(--card-radius); border: var(--card-border); overflow: hidden; margin-bottom: 16px; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
+        .nexus-card:hover { border-color: rgba(61, 237, 151, 0.3); }
+        .nexus-header { background: var(--bg-elevated); padding: 12px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); align-items: center; }
+        .nexus-header-label { font-size: 10.5px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+        .nexus-header-val { font-size: 11px; font-weight: 700; color: var(--text-primary); font-family: monospace; }
+        .nexus-body { padding: 12px 16px; }
+        .nexus-row { display: flex; font-size: 12px; padding: 8px 0; align-items: flex-start; border-bottom: 1px dashed rgba(255,255,255,0.06); }
+        .nexus-row:last-child { border-bottom: none; padding-bottom: 4px; }
+        .nexus-key { width: 110px; color: var(--text-secondary); font-weight: 600; flex-shrink: 0; }
+        .nexus-val { flex: 1; color: var(--text-primary); font-weight: 700; }
+        .nexus-footer { display: flex; text-align: center; border-top: 1px solid var(--border-color); background: var(--bg-elevated); }
+        .nexus-footer > span { flex: 1; padding: 12px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+        .nexus-footer > span:hover { background: rgba(255,255,255,0.03); }
 
-        .bg-white {
-            background-color: rgba(242, 248, 238, 0.92) !important;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
+        /* ==================== TOOLS SECTION ==================== */
+        .tools-section-card { background: var(--bg-card); border: var(--card-border); border-radius: var(--card-radius); padding: 16px; margin-bottom: 16px; box-shadow: var(--card-shadow); }
+        .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-top: 1px dashed var(--border-color); cursor: pointer; transition: opacity 0.2s; }
+        .setting-row:first-of-type { border-top: none; padding-top: 4px; }
+        .setting-row:hover { opacity: 0.8; }
+        .setting-info h4 { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+        .setting-info p { font-size: 11.5px; color: var(--text-secondary); }
+        .setting-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(61,237,151,0.1); color: var(--accent); display: flex; items-center; justify-content: center; align-items: center; font-size: 16px; }
 
-        .bg-slate-50, .bg-slate-100 { background-color: rgba(255, 255, 255, 0.75) !important; }
+        /* ==================== MODALS ==================== */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 500; padding: 16px; }
+        .modal-backdrop.active { display: flex; }
+        .modal-card { width: 100%; max-width: 420px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 24px; padding: 24px; max-height: 88vh; overflow-y: auto; box-shadow: 0 16px 40px rgba(0,0,0,0.5); position: relative; }
+        .modal-card.no-pad { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
 
-        .nexus-header { background-color: rgba(254, 226, 226, 0.85); padding: 8px 12px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(254, 205, 211, 0.8); }
-        .nexus-header-label { font-size: 10px; font-weight: 800; color: #be123c; text-transform: uppercase; letter-spacing: 0.5px; }
-        .nexus-header-val { font-size: 10px; font-weight: 700; color: #334155; }
-        .nexus-body { padding: 12px; }
-        .nexus-row { display: flex; font-size: 11px; padding: 6px 0; align-items: flex-start; border-bottom: 1px solid rgba(0,0,0,0.04); }
-        .nexus-row:last-child { border-bottom: none; }
-        .nexus-key { width: 105px; color: #475569; font-weight: 600; flex-shrink: 0; }
-        .nexus-val { flex: 1; color: #0f172a; font-weight: 700; }
-        .nexus-footer { text-align: center; padding: 8px; border-top: 1px solid rgba(0,0,0,0.04); }
-        .nexus-link { color: #e11d48; font-size: 11px; font-weight: 700; text-decoration: underline; cursor: pointer; }
-        .report-scroll-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        /* ==================== BOTTOM NAV ==================== */
+        .bottom-nav { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(var(--app-max-width) - 28px); background: rgba(18, 25, 41, 0.85); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 24px; display: flex; justify-content: space-around; padding: 8px 6px; z-index: 200; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        .nav-item { background: none; border: none; color: var(--text-secondary); font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 8px 16px; border-radius: 16px; transition: all 0.2s; }
+        .nav-item i { font-size: 18px; margin-bottom: 2px; }
+        .nav-item.active { color: var(--accent); background: rgba(61, 237, 151, 0.1); }
 
-        /* Search results styling */
-        .search-item { transition: all 0.2s; border-left: 3px solid transparent; }
-        .search-item:active { background: rgba(226, 232, 240, 0.8); border-left-color: #2563eb; }
-
-        tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-        .summary-group { page-break-inside: avoid !important; break-inside: avoid !important; }
-
-        /* DESKTOP MODE POLISH */
-        @media (min-width: 768px) {
-            body { display: flex; justify-content: center; align-items: flex-start; background-attachment: fixed; overflow-y: auto; }
-            .page { width: 100%; max-width: 600px; margin: 40px auto 100px auto !important; border-radius: 32px !important; background: rgba(255, 255, 255, 0.25) !important; backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); min-height: calc(100vh - 140px); padding-bottom: 40px !important; }
-            #login-page { min-height: auto; margin-top: 10vh !important; }
-            .app-global-header { max-width: 600px; margin: 0 auto 16px auto; border-radius: 0 0 24px 24px; }
-            .bottom-nav { max-width: 600px; left: 50%; transform: translateX(-50%); border-radius: 32px 32px 0 0; }
-            .modal { align-items: center; }
-            .modal-content { max-width: 600px; border-radius: 32px !important; margin: 0 auto; }
-        }
+        /* Helpers */
+        .text-accent { color: var(--accent); }
+        .bg-accent { background: var(--accent); }
+        
+        /* PDF specific overrides - strictly white backgrounds */
+        #pdf-content, #memo-pdf-content { background: #ffffff !important; color: #000000 !important; }
+        #pdf-content *, #memo-pdf-content * { color: inherit; border-color: #e2e8f0; }
+        #pdf-content .nexus-card, #memo-pdf-content .nexus-card { background: #ffffff; border: 1px solid #cbd5e1; box-shadow: none; border-radius: 8px; }
+        #pdf-content .nexus-header, #memo-pdf-content .nexus-header { background: #f8fafc; border-bottom: 1px solid #cbd5e1; }
+        #pdf-content .nexus-row, #memo-pdf-content .nexus-row { border-bottom: 1px solid #f1f5f9; }
+        
+        /* Stop tailwind classes breaking the new theme */
+        .search-item { transition: all 0.2s; border-left: 3px solid transparent; padding: 12px; border-bottom: 1px dashed var(--border-color); }
+        .search-item:hover { background: var(--bg-elevated); border-left-color: var(--accent); cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- Dynamic 3D Wallpaper Layer -->
-    <div class="wallpaper-bg">
-        <div class="orb orb-blue"></div>
-        <div class="orb orb-center"></div>
-        <div class="orb orb-orange"></div>
-        <div class="orb orb-pink"></div>
-        <div class="orb orb-red-1"></div>
-        <div class="orb orb-red-2"></div>
-    </div>
-
-    <div id="auth-guard" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center">
+    <div id="auth-guard" class="fixed inset-0 bg-[var(--bg-main)] z-[9999] flex items-center justify-center">
         <div class="flex flex-col items-center">
-            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Securing Connection...</p>
+            <div class="w-12 h-12 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">Securing Connection...</p>
         </div>
     </div>
 
-    <!-- NEW GLOBAL HEADER -->
-    <header class="app-global-header" id="global-header" style="display: none;">
-        <div class="header-main-row">
-            <div class="header-left-group">
-                <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
-                     alt="Abdullahil Kuafi" 
-                     class="android-header-avatar"
-                     onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
-                <span class="android-header-title"> <a href="index">Abdullahil Kuafi </a> </span>
-            </div>
-            <div class="header-actions-right">
-                <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
-                    <span class="sync-dot" id="live-sync-dot"></span>
-                    <span id="live-sync-text">Live</span>
-                </span>
-                <div class="header-search-container" id="header-search-container">
-                    <input type="text" id="search-input" class="header-search-input" placeholder="Search transactions..." oninput="handleSearch(this.value)">
+    <div class="app-shell">
+
+        <!-- GLOBAL HEADER -->
+        <header class="app-global-header" id="global-header" style="display: none;">
+            <div class="header-main-row">
+                <div class="header-left-group">
+                    <img src="https://G4scumilla.github.io/Files/Img/IMG_20260426_004707.png" 
+                         alt="Abdullahil Kuafi" 
+                         class="android-header-avatar"
+                         onerror="this.src='https://ui-avatars.com/api/?name=Abdullahil+Kuafi&background=3ded97&color=0b0f19&size=64'">
+                    <span class="android-header-title text-[var(--text-primary)]"> Abdullahil Kuafi </span>
                 </div>
-                <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="header-actions-right">
+                    <span class="live-sync-indicator" title="Auto Cloud Sync Every 4.5s">
+                        <span class="sync-dot" id="live-sync-dot"></span>
+                        <span id="live-sync-text">Live</span>
+                    </span>
+                    <div class="header-search-container" id="header-search-container">
+                        <input type="text" id="search-input" class="header-search-input" placeholder="Search logs..." oninput="handleSearch(this.value)">
+                    </div>
+                    <button class="header-icon-btn" onclick="toggleHeaderSearch()" title="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-notice-row" id="home-notice-showcase" onclick="alert('System is running optimally on FinanceFlow Pro.')">
+                <div class="notice-update-label">
+                    <span class="pulse-dot"></span> Update:
+                </div>
+                <div class="notice-marquee-container">
+                    <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                        FinanceFlow Pro Imprest Vault is active and securely synced.
+                    </marquee>
+                </div>
+            </div>
+        </header>
+
+        <!-- LOGIN -->
+        <div id="login-page" class="page flex-col items-center justify-center p-2 pt-16">
+            <div class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] p-8 rounded-[32px] shadow-[var(--card-shadow)] text-center">
+                <div class="w-20 h-20 bg-[rgba(61,237,151,0.1)] rounded-3xl mx-auto flex items-center justify-center mb-6 border border-[rgba(61,237,151,0.2)] shadow-[0_0_20px_rgba(61,237,151,0.1)]">
+                    <i class="fa-solid fa-building-columns text-4xl text-[var(--accent)]"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-8 text-[var(--text-primary)]">FinanceFlow Pro</h2>
+                
+                <div class="form-group relative text-left">
+                    <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"></i>
+                    <input id="email" type="email" placeholder="System Email" class="form-input !pl-11">
+                </div>
+                
+                <div class="form-group relative text-left mb-8">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"></i>
+                    <input id="password" type="password" placeholder="Vault Password" class="form-input !pl-11">
+                </div>
+                
+                <button onclick="handleLogin()" class="btn-action">
+                    <i class="fa-solid fa-right-to-bracket"></i> Unlock Vault
                 </button>
             </div>
         </div>
 
-        <div class="header-notice-row" id="home-notice-showcase" onclick="switchPage('notices')">
-            <div class="notice-update-label">
-                <span class="pulse-dot"></span> Update:
-            </div>
-            <div class="notice-marquee-container">
-                <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
-                    Welcome to Abdullahil Kuafi's Smart Cloud Hub!
-                </marquee>
-            </div>
-        </div>
-    </header>
-
-    <!-- LOGIN -->
-    <div id="login-page" class="page flex-col items-center justify-center p-6">
-        <div class="w-full max-sm bg-white p-8 rounded-[32px] shadow-2xl text-center">
-            <i class="fa-solid fa-building-columns text-5xl text-blue-600 mb-6"></i>
-            <h2 class="text-2xl font-bold mb-8">FinanceFlow Pro</h2>
-            <div class="relative mb-4">
-                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input id="email" type="email" placeholder="Email" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-            </div>
-            <div class="relative mb-8">
-                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input id="password" type="password" placeholder="Password" class="w-full p-4 pl-12 bg-slate-100 rounded-2xl outline-none">
-            </div>
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        <!-- DASHBOARD -->
+        <div id="dashboard-page" class="page pt-2">
+            
+            <!-- Floating Action Button for New Entry -->
+            <button onclick="showPage('entry-page')" class="fixed bottom-24 right-4 w-14 h-14 bg-[var(--accent)] rounded-full flex items-center justify-center text-[#080b12] shadow-[0_4px_20px_rgba(61,237,151,0.4)] z-40 transition-transform active:scale-95 border border-[rgba(255,255,255,0.4)]">
+                <i class="fas fa-plus text-2xl"></i>
             </button>
-        </div>
-    </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard-page" class="page p-5 pb-24">
-        
-        <!-- Floating Action Button for New Entry -->
-        <button onclick="showPage('entry-page')" class="fixed bottom-24 right-6 w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-200/50 z-40 transition-transform active:scale-95">
-            <i class="fas fa-plus text-xl"></i>
-        </button>
-
-        <!-- Debit/Balance Card -->
-        <div class="flex justify-center mb-8 group perspective mt-2">
-            <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-white/10 flex flex-col justify-between transform transition-transform duration-500 group-hover:scale-[1.02] group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
-                <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/20 rounded-full blur-[50px] -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
-
-                <div class="flex justify-between items-start z-10">
-                    <div>
-                        <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
-                        <div class="flex items-center gap-1.5 mt-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
-                            <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Active Vault</span>
+            <!-- Debit/Balance Card -->
+            <div class="flex justify-center mb-8 group perspective">
+                <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-2xl relative overflow-hidden text-white border border-[rgba(255,255,255,0.15)] flex flex-col justify-between transform transition-transform duration-500">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+                    <div class="absolute -right-10 -top-10 w-48 h-48 bg-[var(--accent)] rounded-full blur-[60px] opacity-10"></div>
+                    
+                    <div class="flex justify-between items-start z-10">
+                        <div>
+                            <h3 class="text-[10px] font-black tracking-[0.25em] text-slate-300 uppercase">G4S Imprest</h3>
+                            <div class="flex items-center gap-1.5 mt-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent)]"></span>
+                                <span class="text-[8px] font-bold text-[var(--accent)] uppercase tracking-widest">Active Vault</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
+                            <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-wifi rotate-90 text-slate-400 text-sm opacity-80"></i>
-                        <i class="fa-brands fa-cc-visa text-3xl text-white/90 drop-shadow-sm"></i>
-                    </div>
-                </div>
 
-                <div class="z-10 mt-1">
-                    <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm flex items-center justify-center border border-yellow-300/30 relative overflow-hidden">
-                        <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
-                            <path d="M0 10h40v2H0zM0 20h40v2H0zM10 0v40h2V0zM30 0v40h2V0z" fill="#000" fill-rule="evenodd"/>
-                        </svg>
-                        <div class="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent"></div>
+                    <div class="z-10 mt-1">
+                        <div class="w-9 h-7 rounded bg-gradient-to-br from-[#e5b746] to-[#b38522] shadow-sm border border-yellow-300/30 flex items-center justify-center relative overflow-hidden">
+                            <svg width="100%" height="100%" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 opacity-40">
+                                <path d="M0 10h40v2H0zM0 20h40v2H0zM10 0v40h2V0zM30 0v40h2V0z" fill="#000" fill-rule="evenodd"/>
+                            </svg>
+                        </div>
                     </div>
-                </div>
 
-                <div class="z-10 mt-2">
-                    <p class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
-                        Available Balance 
-                        <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal flex items-center gap-1"></span>
-                    </p>
-                    <div class="flex items-baseline gap-1.5">
-                        <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
-                        <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
+                    <div class="z-10 mt-2">
+                        <p class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
+                            Available Balance 
+                            <span id="debt-status" class="hidden px-1.5 py-0.5 rounded text-[9px] font-bold tracking-normal flex items-center gap-1"></span>
+                        </p>
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-sm font-bold text-slate-400" id="card-curr-label">BDT</span>
+                            <h2 class="text-3xl font-black tracking-tight text-white drop-shadow-md" id="cb-display">0.00</h2>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
-                    <div>
-                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
-                        <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">Abdullahil Kuafi</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Valid Thru</p>
-                        <p class="text-[11px] font-bold text-slate-200 tracking-wider font-mono">12/28</p>
+                    <div class="flex justify-between items-end z-10 mt-3 pt-3 border-t border-white/10">
+                        <div>
+                            <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Card Holder</p>
+                            <p class="text-[11px] font-bold text-slate-200 tracking-widest uppercase font-mono">Abdullahil Kuafi</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Valid Thru</p>
+                            <p class="text-[11px] font-bold text-slate-200 tracking-wider font-mono">12/28</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="border border-slate-200 rounded-[28px] p-5 mb-8 bg-white">
-            <h3 class="font-black text-slate-800 tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
-                <i class="fa-solid fa-calendar-day text-blue-600"></i>
-                <span id="month-label">May 2026</span>
-            </h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="nexus-card !mb-0 text-center shadow-sm">
-                    <div class="nexus-header !bg-teal-50 !border-teal-100 justify-center">
-                        <span class="nexus-header-label !text-teal-700 !text-[8px]">Monthly In</span>
+            <!-- Month Summary -->
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[24px] p-5 mb-8 shadow-[var(--card-shadow)]">
+                <h3 class="font-black text-[var(--text-primary)] tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
+                    <i class="fa-solid fa-calendar-day text-[var(--accent)]"></i>
+                    <span id="month-label">May 2026</span>
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-[rgba(61,237,151,0.05)] border border-[rgba(61,237,151,0.2)] rounded-xl p-3 text-center">
+                        <span class="text-[8px] font-bold text-[var(--accent)] uppercase tracking-wider block mb-1">Monthly In</span>
+                        <p class="text-xs font-black text-[var(--text-primary)] whitespace-nowrap" id="month-received">0.00</p>
                     </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-xs font-black text-teal-600 whitespace-nowrap" id="month-received">0.00</p>
-                    </div>
-                </div>
-                <div class="nexus-card !mb-0 text-center shadow-sm">
-                    <div class="nexus-header !bg-orange-50 !border-orange-100 justify-center">
-                        <span class="nexus-header-label !text-orange-700 !text-[8px]">Monthly Out</span>
-                    </div>
-                    <div class="nexus-body !p-3">
-                        <p class="text-xs font-black text-orange-600 whitespace-nowrap" id="month-advanced">0.00</p>
+                    <div class="bg-[rgba(244,63,94,0.05)] border border-[rgba(244,63,94,0.2)] rounded-xl p-3 text-center">
+                        <span class="text-[8px] font-bold text-[var(--danger)] uppercase tracking-wider block mb-1">Monthly Out</span>
+                        <p class="text-xs font-black text-[var(--text-primary)] whitespace-nowrap" id="month-advanced">0.00</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <button onclick="toggleRecentLogs()" class="w-full flex items-center justify-between font-bold text-slate-900 mb-4 px-1 uppercase text-xs tracking-wide outline-none">
-            <span class="flex items-center gap-1.5">
-                <i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Recent Transactions
-            </span>
-            <i id="recent-logs-icon" class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-300"></i>
-        </button>
-        <div id="recent-logs" class="space-y-4 hidden"></div>
-    </div>
-
-    <!-- NEW ENTRY PAGE -->
-    <div id="entry-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-6 mt-2">
-            <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                <i class="fas fa-arrow-left"></i>
+            <button onclick="toggleRecentLogs()" class="w-full flex items-center justify-between font-bold text-[var(--text-primary)] mb-4 px-2 uppercase text-[11px] tracking-widest outline-none bg-transparent border-none">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-[var(--accent)]"></i> Recent Activity
+                </span>
+                <i id="recent-logs-icon" class="fa-solid fa-chevron-down text-[var(--text-secondary)] transition-transform duration-300"></i>
             </button>
-            <h2 class="text-2xl font-bold text-slate-900">Post Transaction</h2>
+            <div id="recent-logs" class="space-y-4 hidden"></div>
         </div>
 
-        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100 mb-6">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Select Personnel</p>
-
-            <div class="relative mb-4">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="staff-search" type="text" placeholder="Search by name, ID or post..." 
-                       oninput="filterStaffSearch()"
-                       class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
-            </div>
-
-            <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-white border border-slate-100 rounded-2xl shadow-inner p-2 space-y-1"></div>
-
-            <div id="selected-staff-view" class="hidden mb-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex justify-between items-center">
-                <div>
-                    <p id="sel-name" class="text-xs font-black text-blue-800"></p>
-                    <p id="sel-id" class="text-[9px] font-bold text-blue-400 uppercase tracking-tighter"></p>
-                </div>
-                <input type="hidden" id="m-staff-id">
-                <button onclick="clearSelection()" class="text-blue-300 hover:text-blue-500"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
-            </div>
-
-            <div class="relative mb-4">
-                <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-bold text-center py-4 bg-transparent text-teal-600 outline-none">
-                <p class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 uppercase">Amount</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <select id="m-cat" class="p-4 bg-slate-50 rounded-xl outline-none text-xs font-bold border-none">
-                    <option>Advance</option><option>Voucher</option><option>Return</option><option>Others</option>
-                </select>
-                <input id="m-date" type="date" class="p-4 bg-slate-50 rounded-xl outline-none text-xs border-none">
-            </div>
-
-            <textarea id="m-note" placeholder="Note / Narration..." class="w-full p-4 mb-6 bg-slate-50 rounded-xl outline-none h-20 text-xs border-none"></textarea>
-
-            <div class="flex gap-3 mb-6">
-                <button onclick="setT('income')" id="ti" class="flex-1 py-4 rounded-2xl font-bold bg-slate-100 text-teal-600 flex flex-col items-center gap-1"><i class="fa-solid fa-plus-circle"></i><span class="text-[10px]">অফিসে জমা</span></button>
-                <button onclick="setT('expense')" id="te" class="flex-1 py-4 rounded-2xl font-bold bg-orange-500 text-white flex flex-col items-center gap-1 shadow-lg shadow-orange-100"><i class="fa-solid fa-minus-circle"></i><span class="text-[10px]">অফিস থেকে উত্তোলন</span></button>
-            </div>
-
-            <button onclick="postTxn()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-xl"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Entry</button>
-        </div>
-    </div>
-
-    <!-- STAFF ACCOUNTS PAGE -->
-    <div id="users-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-8 mt-2">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100"><i class="fa-solid fa-users-viewfinder"></i></div>
-            <div>
-                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Directory</p>
-                <h2 class="text-lg font-bold text-slate-900">Staff Accounts</h2>
-            </div>
-        </div>
-        <div id="staff-list" class="space-y-4"></div>
-    </div>
-
-    <!-- TOOLS PAGE -->
-    <div id="settings-page" class="page p-5 pb-24">
-        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900 mt-2"><i class="fa-solid fa-gears text-blue-600"></i> Tools</h2>
-        <div class="space-y-4">
-            <button onclick="showPage('reports-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-file-invoice text-blue-600"></i> Ledger Reports</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('trxid-lookup-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-search text-blue-600"></i> TRXID Lookup</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('staff-mgmt-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-600"></i> Staff Management</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="showPage('history-page')" class="w-full p-4 bg-white rounded-xl text-left font-semibold flex justify-between items-center shadow-sm border border-slate-50">
-                <span class="flex items-center gap-3"><i class="fas fa-list-check text-blue-600"></i> Transaction History</span>
-                <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
-            </button>
-            <button onclick="handleLogout()" class="w-full p-5 bg-red-50 text-red-600 font-bold rounded-[24px] flex items-center justify-center gap-2 mt-4"><i class="fa-solid fa-power-off"></i> Sign Out System</button>
-        </div>
-    </div>
-
-    <!-- TRXID LOOKUP PAGE -->
-    <div id="trxid-lookup-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+        <!-- NEW ENTRY PAGE -->
+        <div id="entry-page" class="page pt-4">
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
                     <i class="fas fa-arrow-left"></i>
                 </button>
-                <h2 class="text-2xl font-bold text-slate-900">TRXID Lookup</h2>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">Post Transaction</h2>
             </div>
-        </div>
-        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-3 px-1">Enter Transaction ID</p>
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="w-full p-4 pl-10 bg-slate-50 rounded-2xl outline-none text-xs font-bold border-none">
-            </div>
-        </div>
-        <div id="lookup-results" class="space-y-4"></div>
-    </div>
 
-    <!-- STAFF MANAGEMENT PAGE -->
-    <div id="staff-mgmt-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center justify-between">
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-6 rounded-[28px] shadow-[var(--card-shadow)] mb-6">
+                
+                <div class="form-group relative">
+                    <label class="form-label">Search Personnel</label>
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-[38px] text-[var(--text-secondary)] text-xs"></i>
+                    <input id="staff-search" type="text" placeholder="Search by name or ID..." oninput="filterStaffSearch()" class="form-input !pl-10">
+                </div>
+
+                <div id="search-results" class="hidden max-h-48 overflow-y-auto mb-4 bg-[var(--bg-elevated)] border border-[var(--border-color)] rounded-xl shadow-inner divide-y divide-[var(--border-color)]"></div>
+
+                <div id="selected-staff-view" class="hidden mb-4 p-4 bg-[rgba(61,237,151,0.1)] border border-[rgba(61,237,151,0.3)] rounded-xl flex justify-between items-center">
+                    <div>
+                        <p id="sel-name" class="text-xs font-black text-[var(--accent)]"></p>
+                        <p id="sel-id" class="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-tighter mt-1"></p>
+                    </div>
+                    <input type="hidden" id="m-staff-id">
+                    <button onclick="clearSelection()" class="text-[var(--text-secondary)] hover:text-[var(--danger)] transition-colors"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
+                </div>
+
+                <div class="form-group text-center my-6 relative">
+                    <label class="form-label !mb-0 absolute top-0 left-1/2 -translate-x-1/2">Amount</label>
+                    <input id="m-amt" type="number" placeholder="0.00" class="w-full text-4xl font-black text-center py-6 bg-transparent text-[var(--accent)] outline-none placeholder:text-[rgba(61,237,151,0.2)]">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select id="m-cat" class="form-select">
+                            <option>Advance</option><option>Voucher</option><option>Return</option><option>Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input id="m-date" type="date" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Narration</label>
+                    <textarea id="m-note" placeholder="Optional notes..." class="form-input h-20 resize-none"></textarea>
+                </div>
+
+                <div class="flex gap-3 mb-6">
+                    <button onclick="setT('income')" id="ti" class="flex-1 py-3 rounded-xl font-bold bg-[var(--bg-elevated)] border border-[var(--border-color)] text-[var(--text-secondary)] flex flex-col items-center gap-1 transition-all">
+                        <i class="fa-solid fa-plus-circle text-lg"></i><span class="text-[10px]">অফিসে জমা</span>
+                    </button>
+                    <button onclick="setT('expense')" id="te" class="flex-1 py-3 rounded-xl font-bold bg-[rgba(244,63,94,0.15)] border border-[rgba(244,63,94,0.4)] text-[var(--danger)] shadow-[0_4px_15px_rgba(244,63,94,0.15)] flex flex-col items-center gap-1 transition-all">
+                        <i class="fa-solid fa-minus-circle text-lg"></i><span class="text-[10px]">অফিস থেকে উত্তোলন</span>
+                    </button>
+                </div>
+
+                <button onclick="postTxn()" class="btn-action py-4">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Execute Transaction
+                </button>
+            </div>
+        </div>
+
+        <!-- STAFF ACCOUNTS PAGE -->
+        <div id="users-page" class="page pt-4">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-12 h-12 bg-[rgba(61,237,151,0.1)] border border-[rgba(61,237,151,0.3)] rounded-xl flex items-center justify-center text-[var(--accent)] shadow-lg"><i class="fa-solid fa-users-viewfinder text-xl"></i></div>
+                <div>
+                    <p class="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">Directory</p>
+                    <h2 class="text-xl font-bold text-[var(--text-primary)]">Staff Accounts</h2>
+                </div>
+            </div>
+            <div id="staff-list" class="space-y-4"></div>
+        </div>
+
+        <!-- TOOLS PAGE -->
+        <div id="settings-page" class="page pt-4">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-3 text-[var(--text-primary)]">
+                <i class="fa-solid fa-gears text-[var(--accent)]"></i> System Tools
+            </h2>
+            
+            <div class="tools-section-card">
+                <div onclick="showPage('reports-page')" class="setting-row">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon"><i class="fas fa-file-invoice"></i></div>
+                        <div>
+                            <h4>Ledger Reports</h4>
+                            <p>Generate & export statements</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
+                
+                <div onclick="showPage('trxid-lookup-page')" class="setting-row">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon"><i class="fas fa-search"></i></div>
+                        <div>
+                            <h4>TRXID Lookup</h4>
+                            <p>Find specific transaction memos</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
+                
+                <div onclick="showPage('staff-mgmt-page')" class="setting-row">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon"><i class="fas fa-user-plus"></i></div>
+                        <div>
+                            <h4>Staff Management</h4>
+                            <p>Add or edit personnel profiles</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
+                
+                <div onclick="showPage('history-page')" class="setting-row">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon"><i class="fas fa-list-check"></i></div>
+                        <div>
+                            <h4>Transaction History</h4>
+                            <p>View and reverse raw logs</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
+            </div>
+            
+            <button onclick="handleLogout()" class="btn-action btn-danger py-4 mt-6 rounded-[20px]">
+                <i class="fa-solid fa-power-off"></i> Terminate Session
+            </button>
+        </div>
+
+        <!-- TRXID LOOKUP PAGE -->
+        <div id="trxid-lookup-page" class="page pt-4">
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">TRXID Lookup</h2>
+            </div>
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-[24px] shadow-[var(--card-shadow)] mb-6">
+                <div class="form-group relative !mb-0">
+                    <label class="form-label">Enter Transaction ID</label>
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-[36px] text-[var(--text-secondary)] text-xs"></i>
+                    <input id="lookup-trxid" type="text" placeholder="e.g., G4SXXXXXX" oninput="lookupTransaction()" class="form-input !pl-10 font-mono uppercase">
+                </div>
+            </div>
+            <div id="lookup-results" class="space-y-4"></div>
+        </div>
+
+        <!-- STAFF MANAGEMENT PAGE -->
+        <div id="staff-mgmt-page" class="page pt-4">
+            <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
-                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
                         <i class="fas fa-arrow-left"></i>
                     </button>
-                    <h2 class="text-2xl font-bold text-slate-900">Manage Staff</h2>
+                    <h2 class="text-xl font-bold text-[var(--text-primary)]">Manage Staff</h2>
                 </div>
-                <button onclick="toggleAddStaff()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase shadow-lg shadow-blue-100">+ Add New</button>
+                <button onclick="toggleAddStaff()" class="btn-action !w-auto !py-2 !px-3 !text-[10px] !rounded-lg uppercase tracking-wider">
+                    + Add New
+                </button>
             </div>
+
+            <div id="add-staff-form" class="hidden bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-[24px] shadow-[var(--card-shadow)] mb-6">
+                <h3 class="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-4 border-b border-[var(--border-color)] pb-2">Registration Form</h3>
+                <div class="form-group"><input id="u-name" type="text" placeholder="Full Name" class="form-input"></div>
+                <div class="form-group"><input id="u-des" type="text" placeholder="Designation" class="form-input"></div>
+                <div class="form-group"><input id="u-phone" type="tel" placeholder="Phone Number" class="form-input"></div>
+                <div class="form-group"><input id="u-email" type="email" placeholder="Email Address" class="form-input"></div>
+                <button onclick="saveUser()" class="btn-action mt-2">Register Personnel</button>
+            </div>
+
+            <div id="mgmt-staff-list" class="space-y-4"></div>
         </div>
 
-        <div id="add-staff-form" class="hidden space-y-2 mb-8 bg-white p-5 rounded-[28px] border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase mb-2">Registration Form</p>
-            <input id="u-name" type="text" placeholder="Full Name" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-des" type="text" placeholder="Designation" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-phone" type="tel" placeholder="Phone Number" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <input id="u-email" type="email" placeholder="Email Address" class="w-full p-3 bg-slate-50 rounded-xl text-xs outline-none border-none">
-            <button onclick="saveUser()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold text-xs uppercase mt-2">Register Staff</button>
-        </div>
-
-        <div id="mgmt-staff-list" class="space-y-4"></div>
-    </div>
-
-    <!-- TRANSACTION HISTORY PAGE -->
-    <div id="history-page" class="page p-5 pb-24">
-        <div class="sticky top-0 bg-transparent z-10 pt-2 pb-6 -mx-5 px-5 mb-2 backdrop-blur-md">
-            <div class="flex items-center gap-3 mb-4">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
+        <!-- TRANSACTION HISTORY PAGE -->
+        <div id="history-page" class="page pt-4">
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
                     <i class="fas fa-arrow-left"></i>
                 </button>
-                <h2 class="text-2xl font-bold text-slate-900">Transaction History</h2>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">Master History</h2>
             </div>
-            <div class="bg-white p-4 rounded-[24px] shadow-sm border border-slate-100 flex gap-3">
-                <div class="flex-1 space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
-                    <input type="date" id="hist-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-4 rounded-[20px] shadow-[var(--card-shadow)] mb-6 grid grid-cols-2 gap-3">
+                <div class="form-group !mb-0">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" id="hist-start" class="form-input !py-2 !px-3 !text-xs" onchange="renderHistory()">
                 </div>
-                <div class="flex-1 space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
-                    <input type="date" id="hist-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none" onchange="renderHistory()">
+                <div class="form-group !mb-0">
+                    <label class="form-label">End Date</label>
+                    <input type="date" id="hist-end" class="form-input !py-2 !px-3 !text-xs" onchange="renderHistory()">
                 </div>
             </div>
+            <div id="mgmt-txn-list" class="space-y-4"></div>
         </div>
-        <div id="mgmt-txn-list" class="space-y-4"></div>
-    </div>
 
-    <!-- REPORTS PAGE -->
-    <div id="reports-page" class="page p-5 pb-24">
-        <div class="flex items-center gap-3 mb-6 mt-2">
-            <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-600">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2 class="text-2xl font-bold text-slate-900">Ledger Reports</h2>
-        </div>
-        <div class="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 mb-6 space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Start Date</p>
-                    <input type="date" id="r-start" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+        <!-- REPORTS PAGE -->
+        <div id="reports-page" class="page pt-4">
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">Ledger Reports</h2>
+            </div>
+            
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-[24px] shadow-[var(--card-shadow)] mb-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="form-group !mb-0">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" id="r-start" class="form-input">
+                    </div>
+                    <div class="form-group !mb-0">
+                        <label class="form-label">End Date</label>
+                        <input type="date" id="r-end" class="form-input">
+                    </div>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-[8px] font-bold text-slate-500 uppercase px-1">End Date</p>
-                    <input type="date" id="r-end" class="w-full text-xs bg-slate-50 p-3 rounded-xl border-none">
+                <div class="form-group !mb-0">
+                    <label class="form-label">Select Target</label>
+                    <select id="r-staff" class="form-select"></select>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button onclick="generateReport()" class="btn-action flex-1"><i class="fa-solid fa-bolt"></i> Generate</button>
+                    <button onclick="exportPDF()" id="pdf-btn" class="hidden btn-action !w-auto !bg-[rgba(244,63,94,0.15)] !border-[rgba(244,63,94,0.4)] !text-[var(--danger)]">
+                        <i class="fas fa-file-pdf"></i>
+                    </button>
                 </div>
             </div>
-            <div class="space-y-1">
-                <p class="text-[8px] font-bold text-slate-500 uppercase px-1">Select Personnel</p>
-                <select id="r-staff" class="w-full p-4 bg-slate-50 rounded-xl text-xs border-none"></select>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="generateReport()" class="flex-1 bg-blue-600 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Filter Data</button>
-                <button onclick="exportPDF()" id="pdf-btn" class="hidden bg-red-500 text-white p-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2"><i class="fas fa-file-pdf"></i> PDF</button>
-            </div>
-        </div>
-        <div id="report-view" class="hidden">
-            <div class="report-scroll-container">
-                <div id="pdf-content" class="bg-white p-6 text-[10px] min-w-[650px] relative">
-                    <div class="flex justify-between items-start mb-2">
-                        <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                        <div class="text-right flex-1">
-                            <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                            <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                            <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+            
+            <div id="report-view" class="hidden bg-white rounded-xl overflow-hidden shadow-lg border border-slate-300">
+                <div class="report-scroll-container">
+                    <div id="pdf-content" class="p-6 text-[10px] min-w-[650px] relative font-sans">
+                        <div class="flex justify-between items-start mb-2">
+                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
+                            <div class="text-right flex-1">
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest text-slate-800">Imprest Account, G4S Cumilla Branch</h1>
+                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                            </div>
+                        </div>
+                        <p id="report-duration" class="text-center text-[10px] text-slate-700 mb-4 font-bold border-b border-slate-200 pb-2"></p>
+
+                        <div id="individual-header-meta" class="mb-4 p-4 border border-slate-300 rounded-lg bg-slate-50 hidden text-slate-800"></div>
+
+                        <table class="w-full border-collapse border border-slate-300">
+                            <thead>
+                                <tr class="bg-slate-100 text-[8px] text-slate-700 border-b border-slate-300" id="report-table-header"></tr>
+                            </thead>
+                            <tbody id="report-body" class="text-slate-800"></tbody>
+                        </table>
+
+                        <div class="summary-group mt-6 border-t-2 border-slate-400 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
+
+                        <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center text-center">
+                            <p class="text-xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
+                            <p class="text-[9px] font-bold text-slate-500 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                         </div>
                     </div>
-                    <p id="report-duration" class="text-center text-[10px] text-slate-500 mb-4 font-semibold"></p>
-
-                    <div id="individual-header-meta" class="mb-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50 hidden text-slate-700"></div>
-
-                    <table class="w-full border-collapse border border-slate-200">
-                        <thead>
-                            <tr class="bg-slate-100 text-[8px]" id="report-table-header"></tr>
-                        </thead>
-                        <tbody id="report-body"></tbody>
-                    </table>
-
-                    <div class="summary-group mt-6 border-t-2 pt-4 space-y-1 font-bold text-right" id="report-summary"></div>
-
-                    <div class="summary-group mt-12 pb-4 flex flex-col items-center justify-center opacity-20 pointer-events-none text-center">
-                        <p class="text-2xl font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-400 pb-1">Abdullahil Kuafi</p>
-                        <p class="text-xs font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- EDIT STAFF MODAL -->
-    <div id="edit-staff-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex items-center gap-2 mb-6 text-slate-500"><i class="fa-solid fa-user-pen"></i><p class="text-[10px] font-bold uppercase">Edit Staff Profile</p></div>
-            <div class="space-y-4">
-                <div>
-                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Full Name</p>
-                    <input id="edit-u-name" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+        <!-- EDIT STAFF MODAL -->
+        <div id="edit-staff-modal" class="modal-backdrop">
+            <div class="modal-card">
+                <div class="modal-title text-[var(--text-primary)] border-b border-[var(--border-color)] pb-3 mb-4">
+                    <span><i class="fa-solid fa-user-pen text-[var(--accent)] mr-2"></i> Edit Profile</span>
+                    <button onclick="closeModal('edit-staff-modal')" class="text-[var(--text-secondary)] hover:text-[var(--danger)]"><i class="fa-solid fa-xmark text-lg"></i></button>
                 </div>
-                <div>
-                    <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Designation</p>
-                    <input id="edit-u-des" type="text" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input id="edit-u-name" type="text" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Designation</label>
+                    <input id="edit-u-des" type="text" class="form-input">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Phone</p>
-                        <input id="edit-u-phone" type="tel" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input id="edit-u-phone" type="tel" class="form-input">
                     </div>
-                    <div>
-                        <p class="text-[8px] font-bold text-slate-500 uppercase mb-1 px-1">Email</p>
-                        <input id="edit-u-email" type="email" class="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold border-none text-sm">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input id="edit-u-email" type="email" class="form-input">
                     </div>
                 </div>
-            </div>
-            <button onclick="updateStaff()" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold flex items-center justify-center gap-2 mt-8 shadow-lg shadow-blue-100"><i class="fa-solid fa-check-circle"></i> Save Changes</button>
-            <button onclick="closeModal('edit-staff-modal')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase">Cancel</button>
-        </div>
-    </div>
-
-    <!-- TRANSACTION MEMO MODAL -->
-    <div id="memo-modal" class="modal">
-        <div class="modal-content !p-0 flex flex-col !overflow-hidden">
-            <div class="flex justify-between items-center p-5 border-b border-slate-200/60 sticky top-0 z-20">
-                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-receipt text-blue-600 mr-2"></i> Memo Preview</h3>
-                <button onclick="closeModal('memo-modal')" class="w-8 h-8 flex items-center justify-center bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-rose-600 rounded-full transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="p-6 overflow-y-auto flex-1">
-                <div id="memo-content-container"></div>
-            </div>
-
-            <div class="flex gap-2 p-4 border-t border-slate-200/60 sticky bottom-0 z-20 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.02)]">
-                <button onclick="shareMemoImage()" class="flex-1 bg-blue-600 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-blue-200"><i class="fa-solid fa-share-nodes"></i> Share Image</button>
-                <button onclick="shareMemoPDF()" class="flex-1 bg-rose-500 text-white py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-lg shadow-rose-200"><i class="fas fa-file-pdf"></i> Share PDF</button>
-                <button onclick="closeModal('memo-modal')" class="flex-1 bg-slate-200 text-slate-700 py-3 px-1 rounded-xl font-bold text-[10px] flex items-center justify-center gap-1.5 shadow-sm hover:bg-slate-300 transition-colors"><i class="fa-solid fa-forward"></i> Skip Share</button>
+                <div class="modal-actions">
+                    <button onclick="updateStaff()" class="btn-action"><i class="fa-solid fa-check"></i> Save Data</button>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- TRANSACTION MEMO MODAL -->
+        <div id="memo-modal" class="modal-backdrop">
+            <div class="modal-card no-pad">
+                <div class="flex justify-between items-center p-4 border-b border-[var(--border-color)] bg-[var(--bg-elevated)] z-20">
+                    <h3 class="font-bold text-[var(--text-primary)] text-sm"><i class="fa-solid fa-receipt text-[var(--accent)] mr-2"></i> Memo Preview</h3>
+                    <button onclick="closeModal('memo-modal')" class="text-[var(--text-secondary)] hover:text-[var(--danger)] transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="p-4 overflow-y-auto flex-1 bg-[var(--bg-main)]">
+                    <div id="memo-content-container"></div>
+                </div>
+
+                <div class="flex gap-2 p-3 border-t border-[var(--border-color)] bg-[var(--bg-elevated)] z-20">
+                    <button onclick="shareMemoImage()" class="btn-action flex-1 !py-2 !text-[10px] !px-1"><i class="fa-solid fa-image"></i> Share Image</button>
+                    <button onclick="shareMemoPDF()" class="btn-action btn-outline flex-1 !py-2 !text-[10px] !px-1 text-[var(--accent)]"><i class="fas fa-file-pdf"></i> Share PDF</button>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End App Shell -->
 
     <!-- BOTTOM NAV -->
     <nav id="navbar" class="bottom-nav hidden">
-        <button onclick="showPage('dashboard-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-lg"></i><p class="text-[8px] font-bold">HOME</p></button>
-        <button onclick="showPage('users-page')" class="flex flex-col items-center gap-1"><i class="fa-solid fa-user-group text-lg"></i><p class="text-[8px] font-bold">STAFF</p></button>
-        <button onclick="showPage('settings-page')" class="flex flex-col items-center gap-1"><i class="fas fa-sliders text-lg"></i><p class="text-[8px] font-bold">TOOLS</p></button>
+        <button onclick="showPage('dashboard-page'); updateNav('nav-home')" class="nav-item active" id="nav-home">
+            <i class="fa-solid fa-house"></i><span>HOME</span>
+        </button>
+        <button onclick="showPage('users-page'); updateNav('nav-staff')" class="nav-item" id="nav-staff">
+            <i class="fa-solid fa-user-group"></i><span>STAFF</span>
+        </button>
+        <button onclick="showPage('settings-page'); updateNav('nav-tools')" class="nav-item" id="nav-tools">
+            <i class="fas fa-sliders"></i><span>TOOLS</span>
+        </button>
     </nav>
 
     <script type="module">
@@ -770,7 +707,12 @@
 
         window.logsWithBalData = [];
 
-        // Global Header Functions
+        // UI Helpers
+        window.updateNav = (activeId) => {
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(activeId).classList.add('active');
+        };
+
         window.toggleHeaderSearch = () => {
             document.getElementById('header-search-container').classList.toggle('open');
             document.getElementById('search-input').focus();
@@ -780,7 +722,6 @@
             const term = val.toLowerCase();
             const logs = document.querySelectorAll('#recent-logs > div');
             
-            // Expand recent logs container automatically when typing
             const logsContainer = document.getElementById('recent-logs');
             const icon = document.getElementById('recent-logs-icon');
             if(term.length > 0 && logsContainer.classList.contains('hidden')) {
@@ -788,22 +729,12 @@
                 icon.style.transform = 'rotate(180deg)';
             }
             
-            // Filter elements
             logs.forEach(log => {
                 const text = log.innerText.toLowerCase();
                 log.style.display = text.includes(term) ? 'block' : 'none';
             });
         };
 
-        window.switchPage = (pageId) => {
-            if (pageId === 'notices') {
-                alert("You are up to date! Enjoy your Smart Cloud Hub.");
-            } else {
-                showPage(pageId);
-            }
-        };
-
-        // Live Sync Animation Indicator
         setInterval(() => {
             const dot = document.getElementById('live-sync-dot');
             if (dot) {
@@ -863,6 +794,7 @@
                 document.body.classList.add('is-admin');
                 document.getElementById('global-header').style.display = 'flex';
                 showPage('dashboard-page');
+                updateNav('nav-home');
                 document.getElementById('navbar').classList.remove('hidden');
                 
                 document.getElementById('r-start').value = getDhakaFirstOfMonth(); 
@@ -883,7 +815,7 @@
         window.handleLogin = () => {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error"));
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("Error logging in. Check credentials."));
         };
 
         window.handleLogout = () => signOut(auth);
@@ -915,13 +847,13 @@
                 const matchString = `${u.name} ${gid} ${u.desig}`.toLowerCase();
 
                 if(matchString.includes(val)) {
-                    html += `<div onclick="selectStaff('${id}', '${u.name}', '${gid}')" class="search-item p-3 border-b border-slate-50 last:border-0 cursor-pointer">
-                        <p class="text-[11px] font-bold text-slate-700 uppercase">${u.name}</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tight">${gid} | ${u.desig}</p>
+                    html += `<div onclick="selectStaff('${id}', '${u.name}', '${gid}')" class="search-item">
+                        <p class="text-[11px] font-bold text-[var(--text-primary)] uppercase">${u.name}</p>
+                        <p class="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-tight">${gid} | ${u.desig}</p>
                     </div>`;
                 }
             });
-            res.innerHTML = html || '<p class="p-4 text-center text-[10px] text-slate-400 font-bold uppercase">No Personnel Found</p>';
+            res.innerHTML = html || '<p class="p-4 text-center text-[10px] text-[var(--text-secondary)] font-bold uppercase">No Personnel Found</p>';
             res.classList.remove('hidden');
         };
 
@@ -1022,6 +954,7 @@
             clearSelection();
             ['m-amt', 'm-note'].forEach(id => document.getElementById(id).value = '');
             showPage('dashboard-page');
+            updateNav('nav-home');
 
             window.openMemoModal(txnDataForMemo);
         };
@@ -1046,45 +979,45 @@
 
             let cbLabel = 'Current Balance';
             if (data.sb > 0) {
-                cbLabel = 'Current Balance <br><span class="text-[8px]">(অফিসের নিকট আপনি পাবেন)</span>';
+                cbLabel = 'Current Balance <br><span class="text-[8px] font-normal text-slate-500">(অফিসের নিকট আপনি পাবেন)</span>';
             } else if (data.sb < 0) {
-                cbLabel = 'Current Balance <br><span class="text-[8px]">(অফিস আপনার নিকট পাওনা রইলো)</span>';
+                cbLabel = 'Current Balance <br><span class="text-[8px] font-normal text-slate-500">(অফিস আপনার নিকট পাওনা রইলো)</span>';
             }
 
             const txnTypeStr = data.type === 'income' ? 'অফিসে জমা' : 'অফিস থেকে উত্তোলন';
 
             const html = `
-                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
+                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full font-sans" style="text-align: center; color: #0f172a;">
+                    <div class="text-center mb-6 mt-2 border-b border-slate-200 pb-4">
                         <div class="flex justify-between items-start mb-2">
                             <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
                             <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest text-slate-800">Imprest Account, G4S Cumilla Branch</h1>
                                 <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
                                 <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
                             </div>
                         </div>
                         <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Last Transaction Update</h2>
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-700 m-0 text-center">Last Transaction Update</h2>
                         </div>
                     </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(data.key)}</span></div>
+                    <div class="nexus-card mx-auto !bg-white !border-slate-300 !shadow-none" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-blue-600">${data.date}</span><span class="nexus-header-val !text-slate-700">TRXID: ${getTxnId(data.key)}</span></div>
                         <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${data.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${txnTypeStr} (${data.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">TRXN Amount</span><span class="nexus-val ${data.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(data.amount)}</span></div>
-                            <div class="nexus-row !bg-slate-50 items-center"><span class="nexus-key !text-blue-600 leading-tight !w-auto pr-2 min-w-[105px]">${cbLabel}</span><span class="nexus-val text-blue-600">: ${fmt(data.sb)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Last Transaction</span><span class="nexus-val">: ${lastTxnStr}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${data.note || '-'}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Date & Time</span><span class="nexus-val !text-slate-800">: ${tsDate}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Beneficiary</span><span class="nexus-val !text-slate-800">: ${data.staffName}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Staff ID</span><span class="nexus-val !text-slate-800">: ${g4sUserId}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Designation</span><span class="nexus-val !text-slate-800">: ${u ? u.desig : '-'}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Type (Category)</span><span class="nexus-val !text-slate-800">: ${txnTypeStr} (${data.cat || '-'})</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">TRXN Amount</span><span class="nexus-val font-black ${data.type==='income'?'!text-teal-600':'!text-rose-600'}">: ${fmt(data.amount)}</span></div>
+                            <div class="nexus-row !bg-slate-50 items-center"><span class="nexus-key !text-blue-600 leading-tight !w-auto pr-2 min-w-[105px]">${cbLabel}</span><span class="nexus-val !text-blue-600 font-black">: ${fmt(data.sb)}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Last Transaction</span><span class="nexus-val !text-slate-700">: ${lastTxnStr}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Note</span><span class="nexus-val !text-slate-700">: ${data.note || '-'}</span></div>
                         </div>
                     </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    <div class="mt-8 text-center text-slate-800 pb-2 border-t border-slate-200 pt-4">
+                        <p class="text-xl font-black uppercase tracking-widest inline-block pb-1 mb-1">Abdullahil Kuafi</p>
+                        <p class="text-[9px] font-bold text-slate-500 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
                     </div>
                 </div>
             `;
@@ -1117,7 +1050,7 @@
                             title: `Transaction Memo ${getTxnId(key)}`,
                             text: `Last Transaction Update for ${window.currentMemoData.staffName}`
                         });
-                    } catch (err) { console.log('Share action cancelled or failed', err); }
+                    } catch (err) { console.log('Share action cancelled', err); }
                 } else {
                     const link = document.createElement('a');
                     link.download = `Memo_${getTxnId(key)}.png`;
@@ -1131,63 +1064,37 @@
             const key = window.currentMemoData.key;
             const element = document.getElementById('memo-pdf-content');
 
-            const originalWidth = element.style.width;
-            const originalHeight = element.style.height;
-            const originalMargin = element.style.margin;
-            const originalPadding = element.style.padding;
-            const originalMaxWidth = element.style.maxWidth;
-            const originalMinHeight = element.style.minHeight;
-            const originalDisplay = element.style.display;
-            const originalFlexDirection = element.style.flexDirection;
-            const originalJustifyContent = element.style.justifyContent;
-            const originalBoxSizing = element.style.boxSizing;
-            const originalBg = element.style.backgroundColor;
+            const originals = {
+                width: element.style.width, height: element.style.height, margin: element.style.margin,
+                padding: element.style.padding, maxWidth: element.style.maxWidth, minHeight: element.style.minHeight,
+                display: element.style.display, flexDirection: element.style.flexDirection, justifyContent: element.style.justifyContent,
+                boxSizing: element.style.boxSizing, bg: element.style.backgroundColor
+            };
 
-            element.style.width = '794px'; 
-            element.style.height = '1122px';
-            element.style.minHeight = '1122px';
-            element.style.margin = '0';
-            element.style.padding = '40px'; 
-            element.style.maxWidth = 'none';
-            element.style.display = 'flex';
-            element.style.flexDirection = 'column';
-            element.style.justifyContent = 'center';
-            element.style.boxSizing = 'border-box';
-            element.style.backgroundColor = '#ffffff';
+            element.style.width = '794px'; element.style.height = '1122px'; element.style.minHeight = '1122px';
+            element.style.margin = '0'; element.style.padding = '40px'; element.style.maxWidth = 'none';
+            element.style.display = 'flex'; element.style.flexDirection = 'column'; element.style.justifyContent = 'center';
+            element.style.boxSizing = 'border-box'; element.style.backgroundColor = '#ffffff';
 
             const opt = {
-                margin: 0,
-                filename: `Memo_${getTxnId(key)}.pdf`,
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: 0, filename: `Memo_${getTxnId(key)}.pdf`, image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 794 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).output('blob').then(async (blob) => {
-                element.style.width = originalWidth;
-                element.style.height = originalHeight;
-                element.style.margin = originalMargin;
-                element.style.padding = originalPadding;
-                element.style.maxWidth = originalMaxWidth;
-                element.style.minHeight = originalMinHeight;
-                element.style.display = originalDisplay;
-                element.style.flexDirection = originalFlexDirection;
-                element.style.justifyContent = originalJustifyContent;
-                element.style.boxSizing = originalBoxSizing;
-                element.style.backgroundColor = originalBg;
+                Object.assign(element.style, {
+                    width: originals.width, height: originals.height, margin: originals.margin, padding: originals.padding,
+                    maxWidth: originals.maxWidth, minHeight: originals.minHeight, display: originals.display,
+                    flexDirection: originals.flexDirection, justifyContent: originals.justifyContent, boxSizing: originals.boxSizing,
+                    backgroundColor: originals.bg
+                });
 
                 const file = new File([blob], opt.filename, { type: "application/pdf" });
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
-                        await navigator.share({
-                            files: [file],
-                            title: `Transaction Memo ${getTxnId(key)}`,
-                            text: `Transaction Memo PDF for ${window.currentMemoData.staffName}`
-                        });
-                    } catch (err) { 
-                        console.log('Share action cancelled or failed', err); 
-                    }
+                        await navigator.share({ files: [file], title: `Transaction Memo ${getTxnId(key)}`, text: `PDF Memo for ${window.currentMemoData.staffName}` });
+                    } catch (err) { console.log('Share action cancelled', err); }
                 } else {
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
@@ -1217,47 +1124,27 @@
                 const tsDate = match.ts ? new Date(match.ts).toLocaleString('en-GB') : 'N/A';
 
                 container.innerHTML = `
-                <div id="lookup-pdf-content-${match.key}" class="bg-white p-6 rounded-xl mx-auto w-full" style="text-align: center;">
-                    <div class="text-center mb-6 mt-2">
-                        <div class="flex justify-between items-start mb-2">
-                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
-                            <div class="text-right flex-1">
-                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest"><span class="text-blue-600">Imprest</span> <span class="text-rose-600">Account,</span> <span class="text-teal-600">G4S</span> <span class="text-purple-600">Cumilla Branch</span></h1>
-                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
-                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
-                            </div>
-                        </div>
-                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
-                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-800 m-0 text-center">Lookup Result</h2>
-                        </div>
+                <div class="nexus-card">
+                    <div class="nexus-header"><span class="nexus-header-label">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
+                    <div class="nexus-body">
+                        <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Type</span><span class="nexus-val">: ${match.type==='income'?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${match.cat || '-'})</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-[var(--accent)]':'text-[var(--danger)]'}">: ${fmt(match.amount)}</span></div>
+                        <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                     </div>
-                    <div class="nexus-card mx-auto" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
-                        <div class="nexus-header !bg-blue-50 !border-blue-200"><span class="nexus-header-label !text-blue-600">${match.date}</span><span class="nexus-header-val">TRXID: ${getTxnId(match.key)}</span></div>
-                        <div class="nexus-body">
-                            <div class="nexus-row"><span class="nexus-key">Date & Time</span><span class="nexus-val">: ${tsDate}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${match.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Staff ID</span><span class="nexus-val">: ${g4sUserId}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u ? u.desig : '-'}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val">: ${match.type==='income'?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${match.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(match.amount)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
-                        </div>
-                    </div>
-                    <div class="mt-8 text-center opacity-20 pointer-events-none pb-2">
-                        <p class="text-xl font-black text-slate-800 uppercase tracking-widest inline-block border-b-2 border-slate-400 pb-1 mb-1">Abdullahil Kuafi</p>
-                        <p class="text-[9px] font-bold text-slate-600 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
-                    </div>
-                </div>
-                `;
+                </div>`;
             } else {
-                container.innerHTML = `<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
+                container.innerHTML = `<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
             }
         };
 
         window.setT = (t) => {
             currentType = t;
-            document.getElementById('ti').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'income' ? 'bg-teal-500 text-white shadow-lg shadow-teal-100' : 'bg-slate-100 text-teal-600'}`;
-            document.getElementById('te').className = `flex-1 py-4 rounded-2xl font-bold flex flex-col items-center gap-1 ${t === 'expense' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-slate-100 text-orange-600'}`;
+            document.getElementById('ti').className = `flex-1 py-3 rounded-xl font-bold border flex flex-col items-center gap-1 transition-all ${t === 'income' ? 'bg-[rgba(61,237,151,0.15)] border-[rgba(61,237,151,0.4)] text-[var(--accent)] shadow-[0_4px_15px_rgba(61,237,151,0.15)]' : 'bg-[var(--bg-elevated)] border-[var(--border-color)] text-[var(--text-secondary)]'}`;
+            document.getElementById('te').className = `flex-1 py-3 rounded-xl font-bold border flex flex-col items-center gap-1 transition-all ${t === 'expense' ? 'bg-[rgba(244,63,94,0.15)] border-[rgba(244,63,94,0.4)] text-[var(--danger)] shadow-[0_4px_15px_rgba(244,63,94,0.15)]' : 'bg-[var(--bg-elevated)] border-[var(--border-color)] text-[var(--text-secondary)]'}`;
         };
 
         const startSync = (uid) => {
@@ -1280,7 +1167,7 @@
                             <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
-                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600 font-black">: ${fmt(u.balance)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-[var(--accent)]">Balance</span><span class="nexus-val text-[var(--accent)] font-black">: ${fmt(u.balance)}</span></div>
                         </div>
                     </div>`;
                     opts += `<option value="${id}">${u.name} (${g4sUserId})</option>`;
@@ -1291,16 +1178,16 @@
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
-                            <div class="nexus-row"><span class="nexus-key !text-blue-600">Balance</span><span class="nexus-val text-blue-600">: ${fmt(u.balance)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key !text-[var(--accent)]">Balance</span><span class="nexus-val text-[var(--accent)] font-black">: ${fmt(u.balance)}</span></div>
                         </div>
-                        <div class="nexus-footer flex divide-x divide-slate-100">
-                            <span onclick="editUser('${id}')" class="flex-1 text-blue-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
-                            <span onclick="delUser('${id}')" class="flex-1 text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
+                        <div class="nexus-footer">
+                            <span onclick="editUser('${id}')" class="text-[#38bdf8]"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
+                            <span onclick="delUser('${id}')" class="text-[var(--danger)] border-l border-[var(--border-color)]"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
                         </div>
                     </div>`;
                 });
-                document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
-                document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('staff-list').innerHTML = sh || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
+                document.getElementById('mgmt-staff-list').innerHTML = mh || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Personnel Data</p>';
                 document.getElementById('r-staff').innerHTML = opts;
                 renderHome();
             });
@@ -1336,12 +1223,12 @@
 
             const debtStatusEl = document.getElementById('debt-status');
             if (cb > 0) {
-                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]"></span> কাফি দিবে';
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 flex items-center gap-1";
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-[var(--danger)] shadow-[0_0_5px_var(--danger)]"></span> কাফি দিবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-[rgba(244,63,94,0.2)] text-[var(--danger)] flex items-center gap-1";
                 debtStatusEl.classList.remove('hidden');
             } else if (cb < 0) {
-                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></span> কাফি পাবে';
-                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 flex items-center gap-1";
+                debtStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_5px_var(--accent)]"></span> কাফি পাবে';
+                debtStatusEl.className = "px-1.5 py-0.5 rounded text-[10px] font-bold bg-[rgba(61,237,151,0.2)] text-[var(--accent)] flex items-center gap-1";
                 debtStatusEl.classList.remove('hidden');
             } else {
                 debtStatusEl.classList.add('hidden');
@@ -1349,40 +1236,41 @@
 
             let rh = '';
             [...logsWithBal].reverse().slice(0, 10).forEach(l => {
+                const isInc = l.type === 'income';
                 rh += `
-                <div class="relative overflow-hidden p-4 rounded-[20px] mb-3 border ${l.type==='income'?'border-teal-100 bg-gradient-to-r from-teal-50/50 to-white':'border-orange-100 bg-gradient-to-r from-orange-50/50 to-white'} shadow-[0_4px_15px_-5px_rgba(0,0,0,0.05)] transition-transform active:scale-[0.98]">
+                <div class="relative overflow-hidden p-4 rounded-[20px] mb-3 bg-[var(--bg-card)] border border-[var(--border-color)] shadow-[var(--card-shadow)] transition-transform active:scale-[0.98]">
                     <div class="flex justify-between items-center z-10 relative">
                         <div class="flex items-center gap-3">
                             <div class="relative">
-                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center ${l.type==='income'?'bg-teal-100/80 text-teal-600':'bg-orange-100/80 text-orange-500'} shadow-inner">
-                                    <i class="fa-solid ${l.type==='income'?'fa-arrow-down':'fa-arrow-up'} text-lg"></i>
+                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center ${isInc?'bg-[rgba(61,237,151,0.1)] text-[var(--accent)] border border-[rgba(61,237,151,0.2)]':'bg-[rgba(244,63,94,0.1)] text-[var(--danger)] border border-[rgba(244,63,94,0.2)]'}">
+                                    <i class="fa-solid ${isInc?'fa-arrow-down':'fa-arrow-up'} text-lg"></i>
                                 </div>
-                                <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center ${l.type==='income'?'bg-teal-500':'bg-rose-500'}">
-                                    <i class="fa-solid ${l.type==='income'?'fa-plus':'fa-minus'} text-[8px] text-white"></i>
+                                <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border border-[var(--bg-main)] flex items-center justify-center ${isInc?'bg-[var(--accent)]':'bg-[var(--danger)]'}">
+                                    <i class="fa-solid ${isInc?'fa-plus':'fa-minus'} text-[8px] text-[#0b0f19]"></i>
                                 </div>
                             </div>
                             <div>
-                                <p class="text-[13px] font-bold text-slate-800">${l.staffName}</p>
-                                <p class="text-[9px] font-bold text-slate-400 mt-0.5 uppercase tracking-wider">${l.cat || 'Transaction'} • ${l.date}</p>
+                                <p class="text-[13px] font-bold text-[var(--text-primary)]">${l.staffName}</p>
+                                <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wider">${l.cat || 'Transaction'} • ${l.date}</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-[15px] font-black ${l.type==='income'?'text-teal-600':'text-rose-600'}">${l.type==='income'?'+':'-'} ${fmt(l.amount)}</p>
-                            <p class="text-[9px] font-bold text-slate-500 mt-0.5 uppercase tracking-wide">C.Bal: ${fmt(l.cb)}</p>
+                            <p class="text-[15px] font-black ${isInc?'text-[var(--accent)]':'text-[var(--danger)]'}">${isInc?'+':'-'} ${fmt(l.amount)}</p>
+                            <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wide">C.Bal: ${fmt(l.cb)}</p>
                         </div>
                     </div>
-                    <div class="mt-3 pt-3 border-t ${l.type==='income'?'border-teal-100/50':'border-orange-100/50'} flex justify-between items-center z-10 relative">
-                        <span class="text-[9px] font-mono text-slate-400 bg-white/60 px-2 py-1 rounded shadow-sm border border-slate-100">ID: ${getTxnId(l.key)}</span>
-                        <button onclick="shareTransaction('${l.key}')" class="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 ${l.type==='income'?'text-teal-600 bg-teal-100/50':'text-orange-600 bg-orange-100/50'} px-3 py-1 rounded-lg hover:opacity-80">
+                    <div class="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-between items-center z-10 relative">
+                        <span class="text-[9px] font-mono text-[var(--text-secondary)] bg-[var(--bg-elevated)] px-2 py-1 rounded shadow-inner border border-[var(--border-color)]">ID: ${getTxnId(l.key)}</span>
+                        <button onclick="shareTransaction('${l.key}')" class="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 ${isInc?'text-[var(--accent)] bg-[rgba(61,237,151,0.1)]':'text-[var(--danger)] bg-[rgba(244,63,94,0.1)]'} px-3 py-1 rounded-lg hover:opacity-80">
                             <i class="fa-solid fa-share-nodes"></i> Share Memo
                         </button>
                     </div>
                     <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-6xl pointer-events-none">
-                        <i class="fa-solid ${l.type==='income'?'fa-wallet':'fa-money-bill-transfer'}"></i>
+                        <i class="fa-solid ${isInc?'fa-wallet text-white':'fa-money-bill-transfer text-white'}"></i>
                     </div>
                 </div>`;
             });
-            document.getElementById('recent-logs').innerHTML = rh || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No recent transactions</p>';
+            document.getElementById('recent-logs').innerHTML = rh || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No recent transactions</p>';
 
             window.renderHistory();
         };
@@ -1395,22 +1283,25 @@
             if(!window.logsWithBalData) return;
 
             [...window.logsWithBalData].reverse().forEach(l => {
+                const isInc = l.type === 'income';
                 if ((!start || l.date >= start) && (!end || l.date <= end)) {
                     mLogH += `
                     <div class="nexus-card">
-                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-slate-600">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
+                        <div class="nexus-header"><span class="nexus-header-label !text-[var(--text-secondary)]">${l.date}</span><span class="nexus-header-val">ID: ${getTxnId(l.key)}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Beneficiary</span><span class="nexus-val">: ${l.staffName}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Type (Category)</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${l.type==='income'?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${l.cat || '-'})</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${l.type==='income'?'text-teal-600':'text-rose-600'}">: ${fmt(l.amount)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Individual Bal</span><span class="nexus-val text-blue-600">: ${fmt(l.sb)}</span></div>
-                            <div class="nexus-row"><span class="nexus-key">Central Bal</span><span class="nexus-val text-slate-900">: ${fmt(l.cb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Category</span><span class="nexus-val ${isInc?'text-[var(--accent)]':'text-[var(--danger)]'}">: ${isInc?'অফিসে জমা':'অফিস থেকে উত্তোলন'} (${l.cat || '-'})</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val font-black ${isInc?'text-[var(--accent)]':'text-[var(--danger)]'}">: ${fmt(l.amount)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Indv. Bal</span><span class="nexus-val text-[#38bdf8]">: ${fmt(l.sb)}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Cent. Bal</span><span class="nexus-val text-[var(--text-primary)]">: ${fmt(l.cb)}</span></div>
                         </div>
-                        <div class="nexus-footer"><span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-rose-600 text-[10px] font-bold uppercase cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span></div>
+                        <div class="nexus-footer">
+                            <span onclick="delTxn('${l.key}', '${l.staffId}', ${l.amount}, '${l.type}')" class="text-[var(--danger)]"><i class="fa-solid fa-trash-can mr-1"></i> Delete History Item</span>
+                        </div>
                     </div>`;
                 }
             });
-            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-slate-400 text-xs py-10 uppercase font-bold tracking-wider">No history found</p>';
+            document.getElementById('mgmt-txn-list').innerHTML = mLogH || '<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No history found</p>';
         };
 
         window.generateReport = () => {
@@ -1448,13 +1339,13 @@
                 hMeta.classList.add('hidden');
                 hMeta.innerHTML = '';
                 thead.innerHTML = `
-                    <th class="p-2 border border-slate-200 text-left">DATE</th>
-                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
-                    <th class="p-2 border border-slate-200 text-left">PERSONNEL</th>
-                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
-                    <th class="p-2 border border-slate-200 text-right">C. BALANCE</th>
+                    <th class="p-2 border border-slate-300 text-left">DATE</th>
+                    <th class="p-2 border border-slate-300 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-300 text-left">PERSONNEL</th>
+                    <th class="p-2 border border-slate-300 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-300 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-300 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-300 text-right">C. BALANCE</th>
                 `;
             } else {
                 const u = staffData[sid];
@@ -1465,11 +1356,11 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-xs font-black uppercase tracking-widest text-slate-800">${u.name}</h2>
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">${u.desig}</p>
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">ID: ${g4sUserId}</p>
+                            <p class="text-[9px] font-bold text-slate-600 uppercase tracking-wider mt-0.5">${u.desig}</p>
+                            <p class="text-[9px] font-bold text-slate-600 uppercase tracking-wider">ID: ${g4sUserId}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Contact</p>
+                            <p class="text-[9px] font-bold text-slate-600 uppercase tracking-wider">Contact</p>
                             <p class="text-[9px] font-bold text-slate-800">${u.phone}</p>
                         </div>
                     </div>
@@ -1477,20 +1368,20 @@
                 hMeta.classList.remove('hidden');
 
                 thead.innerHTML = `
-                    <th class="p-2 border border-slate-200 text-left">DATE</th>
-                    <th class="p-2 border border-slate-200 text-left">TRXID</th>
-                    <th class="p-2 border border-slate-200 text-left">CATEGORY</th>
-                    <th class="p-2 border border-slate-200 text-left">PARTICULARS</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH IN</th>
-                    <th class="p-2 border border-slate-200 text-right">CASH OUT</th>
-                    <th class="p-2 border border-slate-200 text-right">BALANCE</th>
+                    <th class="p-2 border border-slate-300 text-left">DATE</th>
+                    <th class="p-2 border border-slate-300 text-left">TRXID</th>
+                    <th class="p-2 border border-slate-300 text-left">CATEGORY</th>
+                    <th class="p-2 border border-slate-300 text-left">PARTICULARS</th>
+                    <th class="p-2 border border-slate-300 text-right">CASH IN</th>
+                    <th class="p-2 border border-slate-300 text-right">CASH OUT</th>
+                    <th class="p-2 border border-slate-300 text-right">BALANCE</th>
                 `;
             }
 
             let tbody = `
-                <tr class="text-[9px] font-bold bg-slate-50/50">
-                    <td class="p-2 border border-slate-200" colspan="6">Opening Balance as on ${start}</td>
-                    <td class="p-2 border border-slate-200 text-right text-blue-600">${fmt(isMaster ? prevBalCentral : prevBalIndividual)}</td>
+                <tr class="text-[9px] font-bold bg-slate-50">
+                    <td class="p-2 border border-slate-300 text-slate-700" colspan="${isMaster? 6 : 6}">Opening Balance as on ${start}</td>
+                    <td class="p-2 border border-slate-300 text-right text-blue-700">${fmt(isMaster ? prevBalCentral : prevBalIndividual)}</td>
                 </tr>
             `;
 
@@ -1512,24 +1403,24 @@
                 if (isMaster) {
                     tbody += `
                     <tr class="text-[9px]">
-                        <td class="p-2 border border-slate-200">${l.date}</td>
-                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
-                        <td class="p-2 border border-slate-200">${l.staffName}</td>
-                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right font-bold text-slate-900">${fmt(runCen)}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700">${l.date}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-300 text-slate-800 font-semibold">${l.staffName}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right text-teal-700">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right text-rose-700">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right font-bold text-slate-900">${fmt(runCen)}</td>
                     </tr>`;
                 } else {
                     tbody += `
                     <tr class="text-[9px]">
-                        <td class="p-2 border border-slate-200">${l.date}</td>
-                        <td class="p-2 border border-slate-200 font-mono">${getTxnId(l.key)}</td>
-                        <td class="p-2 border border-slate-200">${l.cat || '-'}</td>
-                        <td class="p-2 border border-slate-200">${l.note || '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-teal-600">${isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right text-rose-600">${!isInc ? fmt(l.amount) : '-'}</td>
-                        <td class="p-2 border border-slate-200 text-right font-bold text-blue-600">${fmt(runInd)}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700">${l.date}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700 font-mono">${getTxnId(l.key)}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700">${l.cat || '-'}</td>
+                        <td class="p-2 border border-slate-300 text-slate-700">${l.note || '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right text-teal-700">${isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right text-rose-700">${!isInc ? fmt(l.amount) : '-'}</td>
+                        <td class="p-2 border border-slate-300 text-right font-bold text-blue-700">${fmt(runInd)}</td>
                     </tr>`;
                 }
             });
@@ -1538,9 +1429,9 @@
 
             const finalBal = isMaster ? runCen : runInd;
             document.getElementById('report-summary').innerHTML = `
-                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash In: <span class="text-teal-600">${fmt(ti)}</span></p>
-                <p class="text-[10px] uppercase font-bold text-slate-600">Total Cash Out: <span class="text-rose-600">${fmt(te)}</span></p>
-                <p class="text-xs uppercase font-black text-slate-900 border-t border-slate-200 pt-2 mt-2">Closing Balance as on ${end}: <span class="text-blue-600">${fmt(finalBal)}</span></p>
+                <p class="text-[10px] uppercase font-bold text-slate-700">Total Cash In: <span class="text-teal-700">${fmt(ti)}</span></p>
+                <p class="text-[10px] uppercase font-bold text-slate-700">Total Cash Out: <span class="text-rose-700">${fmt(te)}</span></p>
+                <p class="text-xs uppercase font-black text-slate-900 border-t border-slate-300 pt-2 mt-2">Closing Balance as on ${end}: <span class="text-blue-700">${fmt(finalBal)}</span></p>
             `;
         };
 
