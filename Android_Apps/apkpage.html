@@ -1,1 +1,171 @@
-thf
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Downloads | Abdullahil Kuafi</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --accent: #4CAF50;
+            --accent-hover: #45a049;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .app-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .app-title {
+            font-size: 1.3rem;
+            margin: 0 0 8px;
+            font-weight: 600;
+        }
+
+        .app-version {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 600px) {
+            main {
+                padding: 20px 15px;
+            }
+            .app-card {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header will load here -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Download Section -->
+    <main>
+        <div class="download-grid">
+            
+            <!-- G4S Cash App -->
+            <div class="app-card">
+                <div class="app-icon">📱</div>
+                <h2 class="app-title">G4S Cash</h2>
+                <div class="app-version">Version 1.0.1 | Android APK</div>
+                <a href="https://kaficumilla.shop/Files/Android_App/G4S%20Cash_1.0.1.apk" class="download-btn" download>Download APK</a>
+            </div>
+            
+            <!-- Template for another app (Just copy this block for future apps) -->
+            <!-- 
+            <div class="app-card">
+                <div class="app-icon">🛠️</div>
+                <h2 class="app-title">App Name 2</h2>
+                <div class="app-version">Version 1.0.0 | Android APK</div>
+                <a href="#" class="download-btn" download>Download APK</a>
+            </div> 
+            -->
+
+        </div>
+    </main>
+
+    <!-- Footer will load here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script to dynamically pull in header.html and footer.html -->
+    <script>
+        // Load Header
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Header not found');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            })
+            .catch(error => console.log('Header load error:', error));
+
+        // Load Footer
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Footer not found');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.log('Footer load error:', error));
+    </script>
+</body>
+</html>
