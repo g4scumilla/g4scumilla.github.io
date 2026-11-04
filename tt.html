@@ -107,12 +107,28 @@
         .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease, background 0.2s ease; }
         .sync-dot.polling { transform: scale(1.6); box-shadow: 0 0 10px var(--accent); }
 
-        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; overflow: hidden; transition: opacity 0.3s ease; width: 100%; }
+        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; overflow: hidden; width: 100%; }
         .notice-update-label { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; z-index: 2; }
         .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
         @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
-        .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; }
-        .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+        
+        /* Smooth CSS Marquee */
+        .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); }
+        
+        .notice-marquee-text { 
+            font-size: 13.5px; 
+            font-weight: 600; 
+            color: var(--text-primary); 
+            white-space: nowrap; 
+            display: inline-block; 
+            padding-left: 100%; 
+            animation: scroll-rtl 12s linear infinite; 
+        }
+        
+        @keyframes scroll-rtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
 
         /* ==================== BUTTONS & INPUTS ==================== */
         .btn-action { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--accent); background: var(--accent); color: white; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; width: 100%; }
@@ -214,9 +230,9 @@
                     <span class="pulse-dot"></span> Update:
                 </div>
                 <div class="notice-marquee-container">
-                    <marquee behavior="scroll" direction="left" scrollamount="4" id="home-notice-text" class="notice-marquee-text">
+                    <div id="home-notice-text" class="notice-marquee-text">
                         FinanceFlow Pro Imprest Vault is active and securely synced.
-                    </marquee>
+                    </div>
                 </div>
             </div>
         </header>
