@@ -246,6 +246,7 @@
                 <i class="fas fa-plus text-2xl"></i>
             </button>
 
+            <!-- Debit/Balance Card (Always Dark for premium feel) -->
             <div class="flex justify-center mb-8 group perspective mt-2">
                 <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-[0_15px_35px_-5px_rgba(15,23,42,0.3)] relative overflow-hidden text-white border border-[rgba(255,255,255,0.1)] flex flex-col justify-between transform transition-transform duration-500">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
@@ -1364,7 +1365,7 @@
                     
                     <div class="flex justify-between items-start mb-2">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${isInc ? 'bg-[rgba(16,185,129,0.1)] text-[var(--accent)]' : 'bg-[rgba(239,68,68,0.1)] text-[var(--danger)]'}">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isInc ? 'bg-[rgba(16,185,129,0.1)] text-[var(--accent)]' : 'bg-[rgba(239,68,68,0.1)] text-[var(--danger)]'}">
                                 <i class="fa-solid ${isInc ? 'fa-arrow-down' : 'fa-arrow-up'} text-lg"></i>
                             </div>
                             <div>
@@ -1372,9 +1373,12 @@
                                 <p class="text-[10px] font-semibold text-[var(--text-secondary)] mt-0.5">${u ? u.desig : 'Staff'} • ${l.cat || 'TRX'}</p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[15px] font-black ${isInc ? 'text-[var(--accent)]' : 'text-[var(--danger)]'}">${isInc ? '+' : '-'} ${fmt(l.amount)}</p>
-                            <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5">Bal: ${fmt(l.cb)}</p>
+                        <div class="text-right shrink-0">
+                            <p class="text-[15px] font-black mb-1 leading-none ${isInc ? 'text-[var(--accent)]' : 'text-[var(--danger)]'}">${isInc ? '+' : '-'} ${fmt(l.amount)}</p>
+                            <div class="flex flex-col gap-0.5 items-end">
+                                <p class="text-[8.5px] font-bold text-[var(--text-secondary)] uppercase tracking-wide">Indv: <span class="text-[#0ea5e9]">${fmt(l.sb)}</span></p>
+                                <p class="text-[8.5px] font-bold text-[var(--text-secondary)] uppercase tracking-wide">Cent: <span class="text-[var(--text-primary)]">${fmt(l.cb)}</span></p>
+                            </div>
                         </div>
                     </div>
 
@@ -1385,7 +1389,7 @@
                     <div class="flex justify-between items-center mt-2 pt-2 border-t border-dashed border-[var(--border-color)]">
                         <div class="flex flex-col">
                             <span class="text-[8px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">${l.date}</span>
-                            <span class="text-[9px] font-mono text-[var(--text-primary)] mt-0.5">${getTxnId(l.key)}</span>
+                            <span class="text-[9px] font-mono text-[var(--text-primary)] mt-0.5">${getTxnId(l.key)} • ${g4sUserId}</span>
                         </div>
                         <button onclick="shareTransaction('${l.key}')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide flex items-center gap-1.5 transition-colors ${isInc ? 'bg-[rgba(16,185,129,0.08)] text-[var(--accent)] hover:bg-[rgba(16,185,129,0.15)]' : 'bg-[rgba(239,68,68,0.08)] text-[var(--danger)] hover:bg-[rgba(239,68,68,0.15)]'}">
                             <i class="fa-solid fa-share-nodes"></i> Share
