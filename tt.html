@@ -13,16 +13,16 @@
 
         /* ==================== CSS VARIABLES (LIGHT THEME DEFAULT) ==================== */
         :root {
-            --bg-main: #f8fafc;        /* Slate 50 */
-            --bg-card: #ffffff;        /* Pure White */
-            --bg-elevated: #ffffff;    /* Pure White */
-            --text-primary: #0f172a;   /* Slate 900 */
-            --text-secondary: #64748b; /* Slate 500 */
-            --accent: #10b981;         /* Emerald 500 */
-            --accent-secondary: #0ea5e9; /* Sky 500 */
-            --border-color: rgba(15, 23, 42, 0.1); /* Subtle dark border */
-            --danger: #ef4444;         /* Red 500 */
-            --warning: #f59e0b;        /* Amber 500 */
+            --bg-main: #f8fafc;        
+            --bg-card: #ffffff;        
+            --bg-elevated: #ffffff;    
+            --text-primary: #0f172a;   
+            --text-secondary: #64748b; 
+            --accent: #10b981;         
+            --accent-secondary: #0ea5e9; 
+            --border-color: rgba(15, 23, 42, 0.1); 
+            --danger: #ef4444;         
+            --warning: #f59e0b;        
 
             --app-max-width: 440px;
             --grid-cols: 3;
@@ -35,7 +35,6 @@
             --card-align: center;
         }
 
-        /* ==================== BASE STYLES ==================== */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
@@ -54,109 +53,77 @@
         @media (min-width: 1024px) { body { --app-max-width: 1080px; } }
         @media (min-width: 1366px) { body { --app-max-width: 1380px; } }
 
-        .app-shell {
-            width: 100%;
-            max-width: var(--app-max-width);
-            min-height: 100vh;
-            position: relative;
-            padding: 0 14px;
-            transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
+        .app-shell { width: 100%; max-width: var(--app-max-width); min-height: 100vh; position: relative; padding: 0 14px; transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
         .page { display: none !important; min-height: 100vh; animation: fadeIn 0.3s ease-out; padding-bottom: 120px; }
         .page.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ==================== GLOBAL HEADER ==================== */
         .app-global-header {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
+            position: -webkit-sticky; position: sticky; top: 0; z-index: 100;
+            display: flex; flex-direction: column;
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 16px;
+            margin-bottom: 16px; margin-left: -14px; margin-right: -14px;
             box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.05);
-            margin-left: -14px;
-            margin-right: -14px;
         }
 
         .header-main-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
         .header-left-group { display: flex; align-items: center; gap: 12px; }
         .android-header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
         .android-header-title { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; color: var(--text-primary); }
-        
         .android-header-title a { color: inherit; text-decoration: none; }
 
         .header-actions-right { display: flex; align-items: center; gap: 8px; }
-
         .header-search-container { width: 0; overflow: hidden; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .header-search-container.open { width: 170px; }
         .header-search-input { width: 100%; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-size: 12px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
-        .header-search-input::placeholder { color: var(--text-secondary); }
-
         .header-icon-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .header-icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(16, 185, 129, 0.05); }
 
         .live-sync-indicator { display: none; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.25); }
         body.is-admin .live-sync-indicator { display: inline-flex; }
-
-        .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease, background 0.2s ease; }
+        .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transition: transform 0.2s ease; }
         .sync-dot.polling { transform: scale(1.6); box-shadow: 0 0 10px var(--accent); }
 
-        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; overflow: hidden; width: 100%; }
+        .header-notice-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; overflow: hidden; width: 100%; }
         .notice-update-label { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; z-index: 2; }
         .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
         @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
         
         .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); }
-        
         .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; display: inline-block; padding-left: 100%; animation: scroll-rtl 12s linear infinite; }
-        
-        @keyframes scroll-rtl {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
+        @keyframes scroll-rtl { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        .urgent-notice .notice-update-label { color: var(--danger); }
+        .urgent-notice .pulse-dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
         /* ==================== STICKY PAGE HEADERS ==================== */
         .sticky-page-header {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 98px; /* Docks smoothly under the global header */
-            z-index: 90;
+            position: -webkit-sticky; position: sticky; top: 98px; z-index: 90;
             background: rgba(248, 250, 252, 0.90);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 14px;
-            margin: -16px -14px 20px -14px; /* Pulls full width & counteracts page padding */
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 14px; margin: -16px -14px 20px -14px; 
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             box-shadow: 0 6px 15px -8px rgba(15, 23, 42, 0.08);
         }
-        .sticky-page-header h2 { margin-bottom: 0 !important; }
 
         /* ==================== BUTTONS & INPUTS ==================== */
         .btn-action { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--accent); background: var(--accent); color: white; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; width: 100%; }
         .btn-action:hover { box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25); transform: translateY(-2px); }
         .btn-outline { background: var(--bg-elevated); border-color: var(--border-color); color: var(--text-primary); }
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: var(--danger); }
 
         .form-group { margin-bottom: 16px; }
         .form-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
         .form-input, .form-select { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-size: 13px; outline: none; transition: all 0.2s; font-weight: 600; }
         .form-input:focus, .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1); }
-        .form-input::placeholder { color: rgba(100, 116, 139, 0.5); font-weight: 400; }
 
-        /* ==================== NEXUS CARDS & LISTS ==================== */
+        /* ==================== NEXUS CARDS ==================== */
         .nexus-card { background: var(--bg-card); border-radius: var(--card-radius); border: var(--card-border); overflow: hidden; margin-bottom: 16px; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
-        .nexus-card:hover { border-color: rgba(16, 185, 129, 0.3); }
         .nexus-header { background: var(--bg-main); padding: 12px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); align-items: center; }
         .nexus-header-label { font-size: 10.5px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
         .nexus-header-val { font-size: 11px; font-weight: 700; color: var(--text-primary); font-family: monospace; }
@@ -176,7 +143,7 @@
         .setting-row:hover { opacity: 0.8; }
         .setting-info h4 { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
         .setting-info p { font-size: 11.5px; color: var(--text-secondary); }
-        .setting-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); color: var(--accent); display: flex; items-center; justify-content: center; align-items: center; font-size: 16px; }
+        .setting-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
         /* ==================== MODALS ==================== */
         .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 500; padding: 16px; }
@@ -190,7 +157,7 @@
         .nav-item i { font-size: 18px; margin-bottom: 2px; }
         .nav-item.active { color: var(--accent); background: rgba(16, 185, 129, 0.1); }
 
-        /* PDF specific overrides - strictly white backgrounds */
+        /* PDF Overrides */
         #pdf-content, #memo-pdf-content { background: #ffffff !important; color: #000000 !important; }
         #pdf-content *, #memo-pdf-content * { color: inherit; border-color: #e2e8f0; }
         #pdf-content .nexus-card, #memo-pdf-content .nexus-card { background: #ffffff; border: 1px solid #cbd5e1; box-shadow: none; border-radius: 8px; }
@@ -236,13 +203,13 @@
                 </div>
             </div>
 
-            <div class="header-notice-row" id="home-notice-showcase" onclick="alert('System is running optimally on FinanceFlow Pro.')">
+            <div class="header-notice-row" id="home-notice-showcase">
                 <div class="notice-update-label">
                     <span class="pulse-dot"></span> Update:
                 </div>
                 <div class="notice-marquee-container">
                     <div id="home-notice-text" class="notice-marquee-text">
-                        FinanceFlow Pro Imprest Vault is active and securely synced.
+                        Welcome to FinanceFlow Pro Imprest Vault. System is live and securely synced.
                     </div>
                 </div>
             </div>
@@ -275,12 +242,10 @@
         <!-- DASHBOARD -->
         <div id="dashboard-page" class="page pt-4">
             
-            <!-- Floating Action Button for New Entry -->
             <button onclick="showPage('entry-page')" class="fixed bottom-24 right-4 w-14 h-14 bg-[var(--accent)] rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(16,185,129,0.4)] z-40 transition-transform active:scale-95 border border-[rgba(16,185,129,0.5)]">
                 <i class="fas fa-plus text-2xl"></i>
             </button>
 
-            <!-- Debit/Balance Card (Always Dark for premium feel) -->
             <div class="flex justify-center mb-8 group perspective mt-2">
                 <div class="w-full max-w-sm aspect-[1.586/1] bg-gradient-to-br from-[#1e202e] via-[#2a2d3e] to-[#12131c] rounded-[24px] p-6 shadow-[0_15px_35px_-5px_rgba(15,23,42,0.3)] relative overflow-hidden text-white border border-[rgba(255,255,255,0.1)] flex flex-col justify-between transform transition-transform duration-500">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
@@ -332,7 +297,6 @@
                 </div>
             </div>
 
-            <!-- Month Summary -->
             <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[24px] p-5 mb-8 shadow-[var(--card-shadow)]">
                 <h3 class="font-black text-[var(--text-primary)] tracking-widest mb-4 text-[10px] uppercase flex items-center gap-2 justify-center">
                     <i class="fa-solid fa-calendar-day text-[var(--accent)]"></i>
@@ -428,21 +392,18 @@
 
         <!-- STAFF ACCOUNTS PAGE -->
         <div id="users-page" class="page pt-4">
-            
             <div class="sticky-page-header">
-                <div class="w-12 h-12 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] rounded-xl flex items-center justify-center text-[var(--accent)] shadow-sm shrink-0"><i class="fa-solid fa-users-viewfinder text-xl"></i></div>
+                <div class="w-10 h-10 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] rounded-xl flex items-center justify-center text-[var(--accent)] shadow-sm shrink-0"><i class="fa-solid fa-users-viewfinder text-lg"></i></div>
                 <div>
                     <p class="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-widest leading-tight">Directory</p>
                     <h2 class="text-xl font-bold text-[var(--text-primary)] leading-tight">Staff Accounts</h2>
                 </div>
             </div>
-
             <div id="staff-list" class="space-y-4"></div>
         </div>
 
         <!-- TOOLS PAGE -->
         <div id="settings-page" class="page pt-4">
-            
             <div class="sticky-page-header">
                 <h2 class="text-xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
                     <i class="fa-solid fa-gears text-[var(--accent)]"></i> System Tools
@@ -493,6 +454,18 @@
                     </div>
                     <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
                 </div>
+
+                <!-- Admin Notice Tool (Hidden for regular users) -->
+                <div id="admin-notice-tool" class="setting-row hidden" onclick="showPage('notice-mgmt-page')">
+                    <div class="setting-info flex items-center gap-4">
+                        <div class="setting-icon !bg-[rgba(245,158,11,0.1)] !text-[var(--warning)]"><i class="fas fa-bullhorn"></i></div>
+                        <div>
+                            <h4>Notice Management</h4>
+                            <p>Broadcast updates to dashboard</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-[var(--text-secondary)]"></i>
+                </div>
             </div>
             
             <button onclick="handleLogout()" class="btn-action btn-danger py-4 mt-6 rounded-[20px]">
@@ -500,9 +473,31 @@
             </button>
         </div>
 
+        <!-- NOTICE MANAGEMENT PAGE -->
+        <div id="notice-mgmt-page" class="page pt-4">
+            <div class="sticky-page-header">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold text-[var(--text-primary)]">Manage Notice</h2>
+            </div>
+            
+            <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-[24px] shadow-[var(--card-shadow)] mb-6">
+                <div class="form-group">
+                    <label class="form-label">Notice Text</label>
+                    <textarea id="notice-text-input" class="form-input h-24 resize-none" placeholder="Enter broadcast message..."></textarea>
+                </div>
+                <div class="form-group flex items-center gap-2 mb-6">
+                    <input type="checkbox" id="notice-urgent-input" class="w-4 h-4 accent-[var(--danger)]">
+                    <label for="notice-urgent-input" class="text-sm font-bold text-[var(--danger)] !mb-0 !normal-case">Mark as Urgent (Red)</label>
+                </div>
+                <button onclick="saveNotice()" class="btn-action mb-3"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Notice</button>
+                <button onclick="deleteNotice()" class="btn-action btn-danger"><i class="fa-solid fa-trash-can"></i> Remove Notice</button>
+            </div>
+        </div>
+
         <!-- TRXID LOOKUP PAGE -->
         <div id="trxid-lookup-page" class="page pt-4">
-            
             <div class="sticky-page-header">
                 <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
@@ -522,7 +517,6 @@
 
         <!-- STAFF MANAGEMENT PAGE -->
         <div id="staff-mgmt-page" class="page pt-4">
-            
             <div class="sticky-page-header justify-between">
                 <div class="flex items-center gap-3">
                     <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
@@ -549,7 +543,6 @@
 
         <!-- TRANSACTION HISTORY PAGE -->
         <div id="history-page" class="page pt-4">
-            
             <div class="sticky-page-header">
                 <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
@@ -572,7 +565,6 @@
 
         <!-- REPORTS PAGE -->
         <div id="reports-page" class="page pt-4">
-            
             <div class="sticky-page-header">
                 <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
@@ -668,11 +660,11 @@
             </div>
         </div>
 
-        <!-- TRANSACTION MEMO MODAL -->
+        <!-- TRANSACTION / STAFF MEMO MODAL -->
         <div id="memo-modal" class="modal-backdrop">
             <div class="modal-card no-pad">
                 <div class="flex justify-between items-center p-4 border-b border-[var(--border-color)] bg-[var(--bg-main)] z-20">
-                    <h3 class="font-bold text-[var(--text-primary)] text-sm"><i class="fa-solid fa-receipt text-[var(--accent)] mr-2"></i> Memo Preview</h3>
+                    <h3 class="font-bold text-[var(--text-primary)] text-sm"><i class="fa-solid fa-receipt text-[var(--accent)] mr-2"></i> Document Preview</h3>
                     <button onclick="closeModal('memo-modal')" class="text-[var(--text-secondary)] hover:text-[var(--danger)] transition-colors text-lg"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
@@ -728,6 +720,7 @@
         let editingStaffId = null;
 
         window.logsWithBalData = [];
+        window.currentMemoData = null;
 
         // UI Helpers
         window.updateNav = (activeId) => {
@@ -782,17 +775,14 @@
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         };
-
         const getDhakaFirstOfMonth = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
         };
-
         const getDhakaMonthLabel = () => {
             const d = getDhakaDateObj();
             return d.toLocaleString('default', { month: 'long', year: 'numeric' });
         };
-
         const getDhakaMonthKey = () => {
             const d = getDhakaDateObj();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -810,11 +800,37 @@
             }
         };
 
+        // Notice Management Functions
+        window.saveNotice = () => {
+            const text = document.getElementById('notice-text-input').value;
+            const urgent = document.getElementById('notice-urgent-input').checked;
+            if(!text) return alert("Please enter some text for the notice");
+            update(ref(db, `users/${auth.currentUser.uid}/settings/notice`), { text, urgent })
+                .then(() => alert("Notice published successfully to Dashboard!"));
+        };
+
+        window.deleteNotice = () => {
+            remove(ref(db, `users/${auth.currentUser.uid}/settings/notice`))
+                .then(() => {
+                    document.getElementById('notice-text-input').value = '';
+                    document.getElementById('notice-urgent-input').checked = false;
+                    alert("Notice removed from Dashboard.");
+                });
+        };
+
         onAuthStateChanged(auth, (user) => {
             document.getElementById('auth-guard').style.display = 'none';
             if (user) {
                 document.body.classList.add('is-admin');
                 document.getElementById('global-header').style.display = 'flex';
+                
+                // Show Notice Management ONLY to the admin account
+                if (user.email === 'themadkafi@gmail.com') {
+                    document.getElementById('admin-notice-tool').classList.remove('hidden');
+                } else {
+                    document.getElementById('admin-notice-tool').classList.add('hidden');
+                }
+
                 showPage('dashboard-page');
                 updateNav('nav-home');
                 document.getElementById('navbar').classList.remove('hidden');
@@ -981,7 +997,6 @@
             window.openMemoModal(txnDataForMemo);
         };
 
-        window.currentMemoData = null;
         window.openMemoModal = (data) => {
             window.currentMemoData = data;
             const staffKeys = Object.keys(staffData).sort();
@@ -1047,8 +1062,55 @@
             openModal('memo-modal');
         };
 
+        window.shareStaffMemo = (id) => {
+            const u = staffData[id];
+            if(!u) return;
+            const staffKeys = Object.keys(staffData).sort();
+            const g4sUserId = `G4SXXXX${(staffKeys.indexOf(id) + 1).toString().padStart(2, '0')}`;
+            
+            window.currentMemoData = { isStaff: true, id, name: u.name }; 
+
+            let cbLabel = 'Current Balance';
+            if (u.balance > 0) cbLabel += ' <br><span class="text-[8px] font-normal text-slate-500">(অফিসের নিকট আপনি পাবেন)</span>';
+            else if (u.balance < 0) cbLabel += ' <br><span class="text-[8px] font-normal text-slate-500">(অফিস আপনার নিকট পাওনা রইলো)</span>';
+
+            const html = `
+                <div id="memo-pdf-content" class="bg-white p-5 rounded-xl mx-auto w-full font-sans" style="text-align: center; color: #0f172a;">
+                    <div class="text-center mb-6 mt-2 border-b border-slate-200 pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <img src="https://raw.githubusercontent.com/g4scumilla/g4scumilla.github.io/main/Files%2FImg%2Flogo.png" alt="G4S Logo" class="h-10 w-auto object-contain">
+                            <div class="text-right flex-1">
+                                <h1 class="font-black text-sm mb-0.5 uppercase tracking-widest text-slate-800">Imprest Account, G4S Cumilla Branch</h1>
+                                <p class="font-bold text-slate-500 mb-0.5 text-[9px]">44/A, Judge Court Road, Cumilla -3500</p>
+                                <p class="font-bold text-slate-500 text-[9px]">Abdullahil Kuafi (+88 01313209156)</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-100 border border-slate-200 rounded" style="display: table; margin: 16px auto; padding: 6px 16px;">
+                            <h2 class="font-black text-xs uppercase tracking-widest text-slate-700 m-0 text-center">Personnel Standing Profile</h2>
+                        </div>
+                    </div>
+                    <div class="nexus-card mx-auto !bg-white !border-slate-300 !shadow-none !rounded-xl" style="max-width: 500px; text-align: left; margin-bottom: 24px;">
+                        <div class="nexus-header !bg-slate-50 !border-slate-200"><span class="nexus-header-label !text-blue-600">Generated: ${getDhakaDate()}</span><span class="nexus-header-val !text-slate-700">ID: ${g4sUserId}</span></div>
+                        <div class="nexus-body">
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Beneficiary</span><span class="nexus-val !text-slate-800">${u.name}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Designation</span><span class="nexus-val !text-slate-800">${u.desig}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Contact No.</span><span class="nexus-val !text-slate-800">${u.phone}</span></div>
+                            <div class="nexus-row !border-slate-100"><span class="nexus-key !text-slate-500">Email Address</span><span class="nexus-val !text-slate-800">${u.email}</span></div>
+                            <div class="nexus-row !bg-slate-50 items-center mt-2"><span class="nexus-key !text-blue-600 leading-tight !w-auto pr-2 min-w-[105px]">${cbLabel}</span><span class="nexus-val !text-blue-600 font-black text-right">${fmt(u.balance)}</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center text-slate-800 pb-2 border-t border-slate-200 pt-4">
+                        <p class="text-xl font-black uppercase tracking-widest inline-block pb-1 mb-1">Abdullahil Kuafi</p>
+                        <p class="text-[9px] font-bold text-slate-500 mt-1 uppercase tracking-[0.2em]">https://kaficumilla.shop</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('memo-content-container').innerHTML = html;
+            openModal('memo-modal');
+        };
+
         window.shareMemoImage = async () => {
-            const key = window.currentMemoData.key;
+            const data = window.currentMemoData;
             const element = document.getElementById('memo-pdf-content');
             const originalWidth = element.style.width;
             const originalMargin = element.style.margin;
@@ -1063,19 +1125,19 @@
             element.style.margin = originalMargin;
             element.style.maxWidth = '';
 
+            const filename = data.isStaff ? `Staff_Profile_${data.id}.png` : `Memo_${getTxnId(data.key)}.png`;
+            const shareTitle = data.isStaff ? `Staff Profile - ${data.name}` : `Transaction Memo ${getTxnId(data.key)}`;
+            const shareText = data.isStaff ? `Current Standing for ${data.name}` : `Last Transaction Update for ${data.staffName}`;
+
             canvas.toBlob(async (blob) => {
-                const file = new File([blob], `Memo_${getTxnId(key)}.png`, { type: "image/png" });
+                const file = new File([blob], filename, { type: "image/png" });
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
-                        await navigator.share({
-                            files: [file],
-                            title: `Transaction Memo ${getTxnId(key)}`,
-                            text: `Last Transaction Update for ${window.currentMemoData.staffName}`
-                        });
+                        await navigator.share({ files: [file], title: shareTitle, text: shareText });
                     } catch (err) { console.log('Share action cancelled', err); }
                 } else {
                     const link = document.createElement('a');
-                    link.download = `Memo_${getTxnId(key)}.png`;
+                    link.download = filename;
                     link.href = canvas.toDataURL("image/png");
                     link.click();
                 }
@@ -1083,7 +1145,7 @@
         };
 
         window.shareMemoPDF = () => {
-            const key = window.currentMemoData.key;
+            const data = window.currentMemoData;
             const element = document.getElementById('memo-pdf-content');
 
             const originals = {
@@ -1098,8 +1160,12 @@
             element.style.display = 'flex'; element.style.flexDirection = 'column'; element.style.justifyContent = 'center';
             element.style.boxSizing = 'border-box'; element.style.backgroundColor = '#ffffff';
 
+            const filename = data.isStaff ? `Staff_Profile_${data.id}.pdf` : `Memo_${getTxnId(data.key)}.pdf`;
+            const shareTitle = data.isStaff ? `Staff Profile - ${data.name}` : `Transaction Memo ${getTxnId(data.key)}`;
+            const shareText = data.isStaff ? `PDF Status for ${data.name}` : `PDF Memo for ${data.staffName}`;
+
             const opt = {
-                margin: 0, filename: `Memo_${getTxnId(key)}.pdf`, image: { type: 'jpeg', quality: 1 },
+                margin: 0, filename: filename, image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 2, useCORS: true, windowWidth: 794 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
@@ -1115,7 +1181,7 @@
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
-                        await navigator.share({ files: [file], title: `Transaction Memo ${getTxnId(key)}`, text: `PDF Memo for ${window.currentMemoData.staffName}` });
+                        await navigator.share({ files: [file], title: shareTitle, text: shareText });
                     } catch (err) { console.log('Share action cancelled', err); }
                 } else {
                     const link = document.createElement('a');
@@ -1157,6 +1223,9 @@
                         <div class="nexus-row"><span class="nexus-key">Amount</span><span class="nexus-val ${match.type==='income'?'text-[var(--accent)]':'text-[var(--danger)]'}">: ${fmt(match.amount)}</span></div>
                         <div class="nexus-row"><span class="nexus-key">Note</span><span class="nexus-val">: ${match.note || '-'}</span></div>
                     </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="shareTransaction('${match.key}')" class="btn-action flex-1"><i class="fa-solid fa-share-nodes"></i> Share Memo</button>
                 </div>`;
             } else {
                 container.innerHTML = `<p class="text-center text-[var(--text-secondary)] text-xs py-10 uppercase font-bold tracking-wider">No Transaction Found</p>`;
@@ -1170,6 +1239,31 @@
         };
 
         const startSync = (uid) => {
+            
+            // Notice Listener
+            onValue(ref(db, `users/${uid}/settings/notice`), s => {
+                const data = s.val();
+                const showcase = document.getElementById('home-notice-showcase');
+                const marquee = document.getElementById('home-notice-text');
+                if (data && data.text) {
+                    marquee.innerText = data.text;
+                    if(data.urgent) {
+                        showcase.classList.add('urgent-notice');
+                        marquee.style.color = 'var(--danger)';
+                    } else {
+                        showcase.classList.remove('urgent-notice');
+                        marquee.style.color = 'var(--text-primary)';
+                    }
+                    showcase.style.display = 'flex';
+                    if(document.getElementById('notice-text-input')) document.getElementById('notice-text-input').value = data.text;
+                    if(document.getElementById('notice-urgent-input')) document.getElementById('notice-urgent-input').checked = data.urgent || false;
+                } else {
+                    showcase.style.display = 'none';
+                    if(document.getElementById('notice-text-input')) document.getElementById('notice-text-input').value = '';
+                    if(document.getElementById('notice-urgent-input')) document.getElementById('notice-urgent-input').checked = false;
+                }
+            });
+
             onValue(ref(db, `users/${uid}/staff`), s => {
                 staffData = s.val() || {};
                 const staffKeys = Object.keys(staffData).sort();
@@ -1199,11 +1293,14 @@
                         <div class="nexus-header"><span class="nexus-header-label">${g4sUserId}</span></div>
                         <div class="nexus-body">
                             <div class="nexus-row"><span class="nexus-key">Name</span><span class="nexus-val">: ${u.name}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Designation</span><span class="nexus-val">: ${u.desig}</span></div>
                             <div class="nexus-row"><span class="nexus-key">Phone</span><span class="nexus-val">: ${u.phone}</span></div>
+                            <div class="nexus-row"><span class="nexus-key">Email</span><span class="nexus-val">: ${u.email}</span></div>
                             <div class="nexus-row"><span class="nexus-key !text-[var(--accent)]">Balance</span><span class="nexus-val text-[var(--accent)] font-black">: ${fmt(u.balance)}</span></div>
                         </div>
                         <div class="nexus-footer">
                             <span onclick="editUser('${id}')" class="text-[#0ea5e9]"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</span>
+                            <span onclick="shareStaffMemo('${id}')" class="text-[var(--accent)] border-l border-[var(--border-color)]"><i class="fa-solid fa-share-nodes mr-1"></i> Share</span>
                             <span onclick="delUser('${id}')" class="text-[var(--danger)] border-l border-[var(--border-color)]"><i class="fa-solid fa-trash-can mr-1"></i> Delete</span>
                         </div>
                     </div>`;
@@ -1259,6 +1356,9 @@
             let rh = '';
             [...logsWithBal].reverse().slice(0, 10).forEach(l => {
                 const isInc = l.type === 'income';
+                const u = staffData[l.staffId];
+                const g4sUserId = u ? `G4SXXXX${(Object.keys(staffData).sort().indexOf(l.staffId) + 1).toString().padStart(2, '0')}` : 'N/A';
+                
                 rh += `
                 <div class="relative overflow-hidden p-4 rounded-[20px] mb-3 bg-[var(--bg-card)] border border-[var(--border-color)] shadow-[var(--card-shadow)] transition-transform active:scale-[0.98]">
                     <div class="flex justify-between items-center z-10 relative">
@@ -1273,7 +1373,8 @@
                             </div>
                             <div>
                                 <p class="text-[13px] font-bold text-[var(--text-primary)]">${l.staffName}</p>
-                                <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wider">${l.cat || 'Transaction'} • ${l.date}</p>
+                                <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wider">${u ? u.desig : 'Staff'} • ${l.cat || 'TRX'}</p>
+                                <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wider">${l.date}</p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -1281,10 +1382,13 @@
                             <p class="text-[9px] font-bold text-[var(--text-secondary)] mt-0.5 uppercase tracking-wide">C.Bal: ${fmt(l.cb)}</p>
                         </div>
                     </div>
+                    
+                    ${l.note ? `<div class="mt-3 pt-3 border-t border-[var(--border-color)] z-10 relative"><p class="text-[10px] text-[var(--text-secondary)]"><span class="font-bold text-[var(--text-primary)]">Note:</span> ${l.note}</p></div>` : ''}
+                    
                     <div class="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-between items-center z-10 relative">
-                        <span class="text-[9px] font-mono text-[var(--text-secondary)] bg-[var(--bg-main)] px-2 py-1 rounded shadow-inner border border-[var(--border-color)]">ID: ${getTxnId(l.key)}</span>
+                        <span class="text-[9px] font-mono text-[var(--text-secondary)] bg-[var(--bg-main)] px-2 py-1 rounded shadow-inner border border-[var(--border-color)]">ID: ${getTxnId(l.key)} • ${g4sUserId}</span>
                         <button onclick="shareTransaction('${l.key}')" class="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 ${isInc?'text-[var(--accent)] bg-[rgba(16,185,129,0.1)]':'text-[var(--danger)] bg-[rgba(239,68,68,0.1)]'} px-3 py-1 rounded-lg hover:opacity-80">
-                            <i class="fa-solid fa-share-nodes"></i> Share Memo
+                            <i class="fa-solid fa-share-nodes"></i> Share
                         </button>
                     </div>
                     <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-6xl pointer-events-none">
