@@ -18,7 +18,7 @@
             --bg-elevated: #ffffff;    /* Pure White */
             --text-primary: #0f172a;   /* Slate 900 */
             --text-secondary: #64748b; /* Slate 500 */
-            --accent: #10b981;         /* Emerald 500 for better light-mode contrast */
+            --accent: #10b981;         /* Emerald 500 */
             --accent-secondary: #0ea5e9; /* Sky 500 */
             --border-color: rgba(15, 23, 42, 0.1); /* Subtle dark border */
             --danger: #ef4444;         /* Red 500 */
@@ -69,6 +69,7 @@
 
         /* ==================== GLOBAL HEADER ==================== */
         .app-global-header {
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -112,23 +113,33 @@
         .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulseGlow 1.5s infinite; }
         @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.55; } }
         
-        /* Smooth CSS Marquee */
         .notice-marquee-container { flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center; width: 100%; mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent); }
         
-        .notice-marquee-text { 
-            font-size: 13.5px; 
-            font-weight: 600; 
-            color: var(--text-primary); 
-            white-space: nowrap; 
-            display: inline-block; 
-            padding-left: 100%; 
-            animation: scroll-rtl 12s linear infinite; 
-        }
+        .notice-marquee-text { font-size: 13.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; display: inline-block; padding-left: 100%; animation: scroll-rtl 12s linear infinite; }
         
         @keyframes scroll-rtl {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
+
+        /* ==================== STICKY PAGE HEADERS ==================== */
+        .sticky-page-header {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 98px; /* Docks smoothly under the global header */
+            z-index: 90;
+            background: rgba(248, 250, 252, 0.90);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px;
+            margin: -16px -14px 20px -14px; /* Pulls full width & counteracts page padding */
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px -8px rgba(15, 23, 42, 0.08);
+        }
+        .sticky-page-header h2 { margin-bottom: 0 !important; }
 
         /* ==================== BUTTONS & INPUTS ==================== */
         .btn-action { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--accent); background: var(--accent); color: white; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; width: 100%; }
@@ -238,7 +249,7 @@
         </header>
 
         <!-- LOGIN -->
-        <div id="login-page" class="page flex-col items-center justify-center p-2 pt-16">
+        <div id="login-page" class="page flex-col items-center justify-center pt-16">
             <div class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] p-8 rounded-[32px] shadow-[var(--card-shadow)] text-center">
                 <div class="w-20 h-20 bg-[rgba(16,185,129,0.1)] rounded-3xl mx-auto flex items-center justify-center mb-6 border border-[rgba(16,185,129,0.2)] shadow-[0_0_20px_rgba(16,185,129,0.1)]">
                     <i class="fa-solid fa-building-columns text-4xl text-[var(--accent)]"></i>
@@ -262,7 +273,7 @@
         </div>
 
         <!-- DASHBOARD -->
-        <div id="dashboard-page" class="page pt-2">
+        <div id="dashboard-page" class="page pt-4">
             
             <!-- Floating Action Button for New Entry -->
             <button onclick="showPage('entry-page')" class="fixed bottom-24 right-4 w-14 h-14 bg-[var(--accent)] rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(16,185,129,0.4)] z-40 transition-transform active:scale-95 border border-[rgba(16,185,129,0.5)]">
@@ -350,8 +361,9 @@
 
         <!-- NEW ENTRY PAGE -->
         <div id="entry-page" class="page pt-4">
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+            
+            <div class="sticky-page-header">
+                <button onclick="showPage('dashboard-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-xl font-bold text-[var(--text-primary)]">Post Transaction</h2>
@@ -416,21 +428,26 @@
 
         <!-- STAFF ACCOUNTS PAGE -->
         <div id="users-page" class="page pt-4">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] rounded-xl flex items-center justify-center text-[var(--accent)] shadow-sm"><i class="fa-solid fa-users-viewfinder text-xl"></i></div>
+            
+            <div class="sticky-page-header">
+                <div class="w-12 h-12 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] rounded-xl flex items-center justify-center text-[var(--accent)] shadow-sm shrink-0"><i class="fa-solid fa-users-viewfinder text-xl"></i></div>
                 <div>
-                    <p class="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">Directory</p>
-                    <h2 class="text-xl font-bold text-[var(--text-primary)]">Staff Accounts</h2>
+                    <p class="text-[9px] text-[var(--text-secondary)] font-bold uppercase tracking-widest leading-tight">Directory</p>
+                    <h2 class="text-xl font-bold text-[var(--text-primary)] leading-tight">Staff Accounts</h2>
                 </div>
             </div>
+
             <div id="staff-list" class="space-y-4"></div>
         </div>
 
         <!-- TOOLS PAGE -->
         <div id="settings-page" class="page pt-4">
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-3 text-[var(--text-primary)]">
-                <i class="fa-solid fa-gears text-[var(--accent)]"></i> System Tools
-            </h2>
+            
+            <div class="sticky-page-header">
+                <h2 class="text-xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
+                    <i class="fa-solid fa-gears text-[var(--accent)]"></i> System Tools
+                </h2>
+            </div>
             
             <div class="tools-section-card">
                 <div onclick="showPage('reports-page')" class="setting-row">
@@ -485,12 +502,14 @@
 
         <!-- TRXID LOOKUP PAGE -->
         <div id="trxid-lookup-page" class="page pt-4">
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+            
+            <div class="sticky-page-header">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-xl font-bold text-[var(--text-primary)]">TRXID Lookup</h2>
             </div>
+
             <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-5 rounded-[24px] shadow-[var(--card-shadow)] mb-6">
                 <div class="form-group relative !mb-0">
                     <label class="form-label">Enter Transaction ID</label>
@@ -503,14 +522,15 @@
 
         <!-- STAFF MANAGEMENT PAGE -->
         <div id="staff-mgmt-page" class="page pt-4">
-            <div class="flex items-center justify-between mb-6">
+            
+            <div class="sticky-page-header justify-between">
                 <div class="flex items-center gap-3">
-                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+                    <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <h2 class="text-xl font-bold text-[var(--text-primary)]">Manage Staff</h2>
                 </div>
-                <button onclick="toggleAddStaff()" class="btn-action !w-auto !py-2 !px-3 !text-[10px] !rounded-lg uppercase tracking-wider">
+                <button onclick="toggleAddStaff()" class="btn-action !w-auto !py-2 !px-3 !text-[10px] !rounded-lg uppercase tracking-wider shrink-0">
                     + Add New
                 </button>
             </div>
@@ -529,12 +549,14 @@
 
         <!-- TRANSACTION HISTORY PAGE -->
         <div id="history-page" class="page pt-4">
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+            
+            <div class="sticky-page-header">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-xl font-bold text-[var(--text-primary)]">Master History</h2>
             </div>
+
             <div class="bg-[var(--bg-card)] border border-[var(--border-color)] p-4 rounded-[20px] shadow-[var(--card-shadow)] mb-6 grid grid-cols-2 gap-3">
                 <div class="form-group !mb-0">
                     <label class="form-label">Start Date</label>
@@ -550,8 +572,9 @@
 
         <!-- REPORTS PAGE -->
         <div id="reports-page" class="page pt-4">
-            <div class="flex items-center gap-3 mb-6">
-                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)]">
+            
+            <div class="sticky-page-header">
+                <button onclick="showPage('settings-page')" class="w-10 h-10 flex items-center justify-center bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-sm text-[var(--text-primary)] shrink-0">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2 class="text-xl font-bold text-[var(--text-primary)]">Ledger Reports</h2>
